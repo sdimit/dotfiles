@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# PROCEDURE: 
+# - list all sessions
+# - except for current one (matched by a final square bracket, rather than the string '(attached)')
+# - get only their number
+# - remove the colon
+# - and send individually to tmux kill-session
+
+tmux ls | grep \]$ | awk '{ print $1 }' | sed 's/\://' | xargs -L1 tmux kill-session -t

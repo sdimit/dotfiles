@@ -1,0 +1,271 @@
+[user] # {{{
+	name = Stéphane
+	email = stephane@10to8.com
+  # user tokens are set as environment variables in ~/.secrets
+
+[github] 
+  user = istib
+
+# }}}
+
+[core] # {{{
+  autocrlf = false
+  pager = less -FRSX
+  editor = vim
+	excludesfile = ~/dotfiles/git/gitignore
+	quotepath = false
+  whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+# }}}
+
+[color]# {{{
+  ui = true
+  pager = true
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = auto
+
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red
+  new = green
+  whitespace = red reverse
+# }}}
+
+[alias]
+  
+  # ADD {{{
+
+  a = add                           # add
+  p = add --patch           # stage commits chunk by chunk
+  aa = add --all                    # specify folder add all in "folder"
+
+# }}}
+
+  # COMMIT {{{
+
+  c = commit -m                     # commit with message
+  ca = commit -am                   # commit all with message
+
+  amend = commit --amend            # ammend your last commit
+  am = commit --amend               # ammend your last commit
+  oops = !"git add -A -v && git commit --amend -C HEAD"
+    # Add modified files to previous commit
+
+# }}}
+
+  # BRANCH {{{
+
+  b = branch -v                     # branch (verbose)
+  bd = branch -d                    # delete branch
+  bD = branch -D
+  bn = checkout -b                  # create and switch to a new branch
+
+# }}}
+
+  # CHECKOUT {{{
+  
+  co = checkout                     # checkout
+	cob = checkout -b
+	com = checkout master
+
+# }}}
+
+  # CHERRY-PICK {{{
+
+  cp = cherry-pick -x               # grab a change from a branch
+
+  # }}}
+
+  # DIFF {{{
+  
+  d = diff                          # diff unstaged changes
+  dc = diff --cached                # diff staged changes
+  last = diff HEAD^                 # diff last committed change
+	dv = !git diff -w "$@" | vim -R -
+
+# }}}
+
+  # STATUS {{{
+  
+  s = status
+
+# }}}
+
+  # LOG {{{
+  
+  l = log --decorate --graph --date=short --pretty='format:%C(blue)%ad%Creset %C(yellow)%h%C(red)%d%Creset %C()%s %C(black) [%an]%Creset'
+  lr = log -5 --decorate --graph --date=short --pretty='format:%C(blue)%ad%Creset %C(yellow)%h%C(red)%d%Creset %C()%s %C(black) [%an]%Creset'
+  gl = log     --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
+
+  changes = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\" --name-status
+  changelog = log --pretty=format:\" * %s\"
+
+  filelog = log -u                  # show changes to a file
+  fileentire = log --follow -p      # entire history
+
+  ls  = log --topo-order --stat --pretty=format:'%C(bold)%C(yellow)Commit:%C(reset) %C(yellow)%H%C(red)%d%n%C(bold)%C(yellow)Author:%C(reset) %C(cyan)%an <%ae>%n%C(bold)%C(yellow)Date:%C(reset)   %C(blue)%ai (%ar)%C(reset)%n%+B'
+
+  done = log --committer=stephane@10to8.com --pretty=format:'%Cgreen%ar (%h)%n%Creset> %s %b%n' --since='3 days ago' --no-merges
+
+# }}}
+
+  # PUSH AND PULL {{{
+  
+  pl = pull                         # pull
+
+  # push
+  ps = push                         # push
+  pom = push origin master
+  poh = push origin HEAD
+
+# }}}
+
+  # MERGE {{{
+
+  mom = merge origin/master
+
+  # }}}
+
+  # REBASE {{{
+
+	rba = rebase --abort
+	rbc = rebase --continue
+	rbi = rebase --interactive
+	rbs = rebase --skip
+  rom = rebase origin/master
+
+  # }}}
+
+  # remote
+  r = remote -v                     # show remotes (verbose)
+
+  rao = remote add origin
+
+  # reset
+  unstage = reset HEAD              # remove files from index (tracking)
+  uncommit = reset --soft HEAD^     # go back before last commit, with files in uncommitted state
+
+  mt = mergetool                    # fire up the merge tool
+
+  # stash
+  ss = stash save                   # stash changes
+  sl = stash list                   # list stashes
+  sa = stash apply                  # apply stash (restore changes)
+  sd = stash drop                   # drop stashes (destroy changes)
+
+  # tag
+  t = tag -n                        # show tags with <n> lines of each tag message
+
+  # clean
+  sparkling = clean -f
+
+  # SUBMODULES {{{
+  
+  # Show status and diff of dirty submodules
+  subdiff = !"git submodule foreach --recursive --quiet '[ \"$(git status -s)\" ] && echo \"--- $name ---\" && git status -s && git diff --unified=1 || :'"
+
+    # Pull all submodules
+  subpull = !"git-subpull-async"
+
+    # Update all submodules
+  subupdate = !"git submodule sync && git submodule update --init --recursive"
+
+    # Checkout master branch of all submodules
+  subcheckout = !"git submodule foreach git checkout master"
+
+    # Reset all submodules
+  subreset = !"git submodule foreach --recursive git checkout -- . && git submodule foreach --recursive git clean -f"
+
+    # Show current branch of each submodule
+  subbranch = !"git submodule foreach --recursive 'git rev-parse --abbrev-ref HEAD'"
+  
+  # }}}
+
+  # TOOLS {{{
+    
+    # show list of contributors in descending order by number of commits
+  rank = shortlog -sn --no-merges
+
+    # given any git object, try to show it briefly
+  whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
+
+  switch = !legit switch \"$@\"
+  branches = !legit branches
+  sprout = !legit sprout \"$@\"
+  unpublish = !legit unpublish \"$@\"
+  harvest = !legit harvest \"$@\"
+  sync = !legit sync \"$@\"
+  publish = !legit publish \"$@\"
+  graft = !legit graft \"$@\"
+
+  alias = !git config --get-regexp '^alias\\.' | sed -e 's/^alias\\.//' -e 's/ /	/'
+
+  # }}}
+
+[format]
+  # pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
+
+[apply]
+  whitespace = nowarn
+
+[branch]
+  autosetupmerge = true
+
+[push]
+  # 'git push' will push the current branch to its tracking branch
+  # the usual default is to push all branches
+  default = tracking
+  # default = current
+
+[advice]
+  statusHints = false
+
+[diff]
+  # Git diff will use (i)ndex, (w)ork tree, (c)ommit and (o)bject
+  # instead of a/b/c/d as prefixes for patches
+  mnemonicprefix = true
+	tool = vimdiff
+
+# MERGING {{{
+
+[merge]
+  summary = true
+  verbosity = 1
+  tool = vimdiff
+
+[mergetool]
+	keepBackup = true
+	prompt = false
+
+[rerere]
+  # Remember my merges
+  # http://gitfu.wordpress.com/2008/04/20/git-rerere-rereremember-what-you-did-last-time/
+  enabled = true
+
+#}}}
+
+# GITHUB {{{
+
+[url "git@github.com:"]
+	insteadOf = "gh:"
+	pushInsteadOf = "github:"
+	pushInsteadOf = "git://github.com/"
+[url "git://github.com/"]
+	insteadOf = "github:"
+[url "git@gist.github.com:"]
+	insteadOf = "gst:"
+	pushInsteadOf = "gist:"
+	pushInsteadOf = "git://gist.github.com/"
+[url "git://gist.github.com/"]
+	insteadOf = "gist:"
+
+#}}}
+
+# vim: ft=config

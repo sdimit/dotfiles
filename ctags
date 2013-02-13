@@ -1,0 +1,54 @@
+--langdef=latex
+--langmap=latex:.tex
+--regex-latex=/^\\tableofcontents/TABLE OF CONTENTS/s,toc/
+--regex-latex=/^\\frontmatter/FRONTMATTER/s,frontmatter/
+--regex-latex=/^\\mainmatter/MAINMATTER/s,mainmatter/
+--regex-latex=/^\\backmatter/BACKMATTER/s,backmatter/
+--regex-latex=/^\\bibliography\{/BIBLIOGRAPHY/s,bibliography/
+--regex-latex=/^\\part[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/PART \3/s,part/
+--regex-latex=/^\\part[[:space:]]*\*[[:space:]]*\{([^}]+)\}/PART \1/s,part/
+--regex-latex=/^\\chapter[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/CHAP \2/s,chapter/
+--regex-latex=/^\\chapter[[:space:]]*\*[[:space:]]*\{([^}]+)\}/CHAP \1/s,chapter/
+--regex-latex=/^\\section[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/\. \2/s,section/
+--regex-latex=/^\\section[[:space:]]*\*[[:space:]]*\{([^}]+)\}/\. \1/s,section/
+--regex-latex=/^\\subsection[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/\.\. \2/s,subsection/
+--regex-latex=/^\\subsection[[:space:]]*\*[[:space:]]*\{([^}]+)\}/\.\. \1/s,subsection/
+--regex-latex=/^\\subsubsection[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/\.\.\. \2/s,subsubsection/
+--regex-latex=/^\\subsubsection[[:space:]]*\*[[:space:]]*\{([^}]+)\}/\.\.\. \1/s,subsubsection/
+--regex-latex=/^\\includegraphics[[:space:]]*(\[[^]]*\])?[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/\3/g,graphic+listing/
+--regex-latex=/^\\lstinputlisting[[:space:]]*(\[[^]]*\])?[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/\3/g,graphic+listing/
+--regex-latex=/\\label[[:space:]]*\{([^}]+)\}/\1/l,label/
+--regex-latex=/\\ref[[:space:]]*\{([^}]+)\}/\1/r,ref/
+--regex-latex=/\\pageref[[:space:]]*\{([^}]+)\}/\1/p,pageref/
+
+--langdef=markdown
+--langmap=markdown:.md.mdown.mkdown.markdown
+--regex-markdown=/^# (.*)(#)?/\1/1,header1/
+--regex-markdown=/^#{2} (.*)(#{2})?/\1/2,header2/
+--regex-markdown=/^#{3} (.*)(#{3})?/\1/3,header3/
+--regex-markdown=/^#{4} (.*)(#{4})?/\1/4,header4/
+--regex-markdown=/^#{5} (.*)(#{5})?/\1/5,header5/
+--regex-markdown=/^#{6} (.*)(#{6})?/\1/6,header6/
+--regex-markdown=/^#{7} (.*)(#{7})?/\1/7,header7/
+
+
+--langdef=coffee
+--langmap=coffee:.coffee
+--regex-coffee=/(^|=[ \t])*class ([A-Za-z]+\.)*([A-Za-z]+)( extends [A-Za-z.]+)?$/\3/c,class/
+--regex-coffee=/^[ \t]*(module\.)?(exports\.)?@?([A-Za-z.]+):.*[-=]>.*$/\3/m,method/
+--regex-coffee=/^[ \t]*(module\.)?(exports\.)?([A-Za-z.]+)[ \t]+=.*[-=]>.*$/\3/f,function/
+--regex-coffee=/^[ \t]*([A-Za-z.]+)[ \t]+=[^->\n]*$/\1/v,variable/
+--regex-coffee=/^[ \t]*@([A-Za-z.]+)[ \t]+=[^->\n]*$/\1/f,field/
+--regex-coffee=/^[ \t]*@([A-Za-z.]+):[^->\n]*$/\1/f,static field/
+--regex-coffee=/^[ \t]*([A-Za-z.]+):[^->\n]*$/\1/f,field/
+--regex-coffee=/(constructor: \()@([A-Za-z.]+)/\2/f,field/
+--regex-coffee=/(constructor: \()@[A-Za-z.]+(, @([A-Za-z.]+)){0}/\3/f,field/
+--regex-coffee=/(constructor: \()@[A-Za-z.]+(, @([A-Za-z.]+)){1}/\3/f,field/
+--regex-coffee=/(constructor: \()@[A-Za-z.]+(, @([A-Za-z.]+)){2}/\3/f,field/
+--regex-coffee=/(constructor: \()@[A-Za-z.]+(, @([A-Za-z.]+)){3}/\3/f,field/
+--regex-coffee=/(constructor: \()@[A-Za-z.]+(, @([A-Za-z.]+)){4}/\3/f,field/
+--regex-coffee=/(constructor: \()@[A-Za-z.]+(, @([A-Za-z.]+)){5}/\3/f,field/
+--regex-coffee=/(constructor: \()@[A-Za-z.]+(, @([A-Za-z.]+)){6}/\3/f,field/
+--regex-coffee=/(constructor: \()@[A-Za-z.]+(, @([A-Za-z.]+)){7}/\3/f,field/
+--regex-coffee=/(constructor: \()@[A-Za-z.]+(, @([A-Za-z.]+)){8}/\3/f,field/
+--regex-coffee=/(constructor: \()@[A-Za-z.]+(, @([A-Za-z.]+)){9}/\3/f,field/
