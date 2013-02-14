@@ -40,7 +40,7 @@ PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -
 
 # PATHS {{{
 
-export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/texbin:/Applications:~/bin:/usr/local/share/python:$HOME/.rvm/bin
+export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/texbin:/Applications:~/bin:/usr/local/share/python:$HOME/.rvm/bin
 
 export NODE_PATH=/usr/local/lib/node_modules
 
@@ -702,7 +702,7 @@ alias gdc='git diff --cached'
 
 
 alias grs='git reset' 
-alias grsh='git reset --hard'
+alias grsh='git reset --hard && git clean -f'
 
 alias gcln='git clean'
 alias gclndf='git clean -df'

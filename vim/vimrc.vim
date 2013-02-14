@@ -860,13 +860,6 @@ inoremap jj <esc>l
 inoremap jk <esc>l
 cnoremap jj <c-c>
 
-imap <c-k> _
-imap <c-h> ->
-imap <c-j> =>
-" easier way to reach for hash key
-imap <c-d> #
-inoremap £ #
-
 " add space at cursor without exiting normal mode
 nnoremap ,<space> i<space><esc>
 nnoremap ,,<space> a<space><esc>
@@ -885,8 +878,8 @@ vnoremap L g_
 noremap $ %
 
 " " painless moving in insert mode
-" inoremap <c-l> <right>
-" inoremap <c-h> <left>
+inoremap <c-l> <right>
+inoremap <c-h> <left>
 
 " or using traditional terminal mapping of swapping two letters
 inoremap <c-t> <esc>hxpa
@@ -2299,7 +2292,7 @@ let g:tlWindowPosition=1
 " SNIPPETS {{{
 
 " Snippets are activated by Shift+Tab
-let g:snippetsEmu_key = "<S-Tab>"
+" let g:snippetsEmu_key = "<S-Tab>"
 
 " Insert date
 iab <expr> dmy strftime("%d-%m-%Y")
@@ -2453,5 +2446,13 @@ nmap <silent> ,w :w<cr>:RunLastVimTmuxCommand<cr>
 " }}}
 
 source ~/dotfiles/vim/personal.vim
+
+" RSI bindings
+imap <c-k> _
+imap <c-j> ->
+" easier way to reach for hash key
+imap <c-d> #
+inoremap £ #
+
 
 " vim:set foldmethod=marks; set foldenable
