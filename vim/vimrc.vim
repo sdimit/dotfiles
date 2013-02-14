@@ -1046,34 +1046,22 @@ hi def link clojureComment     Search
 
 " COFFEESCRIPT {{{
 
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType coffee setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType coffee setl foldmethod=indent nofoldenable
-autocmd BufRead *.js setlocal makeprg=node\ %
-autocmd BufRead *.coffee setlocal makeprg=node\ %:r
 autocmd BufRead *.coffee set filetype=coffee
+autocmd BufWritePost,FileWritePost *.coffee :silent !coffee -c -b <afile>
 
-" Compile CoffeeScript on save
-autocmd BufWritePost,FileWritePost *.coffee :silent !iced -c -b <afile>
+autocmd FileType javascript, coffee setlocal omnifunc=javascriptcomplete#CompleteJS setlocal makeprg=node\ %
 
-" convert js (using npm bundle)
+" convert js into coffeescript on the fly (using eponymous npm bundle)
 nmap ,jc :Js2Coffee<cr>
 vmap ,jc :Js2Coffee<cr>
 
 " hide JS files
 " let NERDTreeIgnore+=['\.js']
 
+" jump to JS file number
 command -nargs=1 C CoffeeCompile | :<args>
 
-" vmap ,jj <esc>:'<,'>:CoffeeCompile<CR>
-" nmap ,jj :CoffeeCompile watch<cr>
-
-" vmap ,l yoconsole.log <c-r>"<esc>
-
-let coffee_compile_vert = 1
-
-" Coffeescript support
-" See: https://github.com/majutsushi/tagbar/issues/34
+" Coffeescript tagbar support
 let g:tagbar_type_coffee = {
   \ 'ctagstype' : 'coffee',
   \ 'kinds' : [
@@ -1456,32 +1444,32 @@ augroup ft_markdown
     autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
     autocmd BufNewFile,BufRead *.txt set filetype=markdown
 
-    autocmd Filetype markdown set formatoptions+=2,l
-    autocmd Filetype markdown set formatoptions-=c
-    autocmd Filetype markdown set smartcase
-    autocmd Filetype markdown set textwidth=80
+    autocmd FileType markdown set formatoptions+=2,l
+    autocmd FileType markdown set formatoptions-=c
+    autocmd FileType markdown set smartcase
+    autocmd FileType markdown set textwidth=80
 
-    autocmd Filetype markdown,tex set noautoindent nosmartindent nocindent linebreak nonumber nofoldenable
-    " autocmd Filetype markdown,tex silent setlocal spell spelllang=en_us
+    autocmd FileType markdown,tex set noautoindent nosmartindent nocindent linebreak nonumber nofoldenable
+    " autocmd FileType markdown,tex silent setlocal spell spelllang=en_us
     autocmd FileType markdown,tex let &scrolloff=999-&scrolloff
 
     " margins and no statusline
-    autocmd Filetype markdown,tex hi! link FoldColumn Normal
-    autocmd Filetype markdown,tex set laststatus=0
-    autocmd Filetype markdown,tex silent set foldcolumn=5
-    autocmd Filetype markdown,tex silent set wrapmargin=20
+    autocmd FileType markdown,tex hi! link FoldColumn Normal
+    autocmd FileType markdown,tex set laststatus=0
+    autocmd FileType markdown,tex silent set foldcolumn=5
+    autocmd FileType markdown,tex silent set wrapmargin=20
 
     " headings:
-    autocmd Filetype markdown nnoremap <buffer> <leader>1 yypVr=
-    autocmd Filetype markdown nnoremap <buffer> <leader>hh yypVr=
-    autocmd Filetype markdown nnoremap <buffer> <leader>2 yypVr-
-    autocmd Filetype markdown nnoremap <buffer> <leader>3 I### <ESC>
+    autocmd FileType markdown nnoremap <buffer> <leader>1 yypVr=
+    autocmd FileType markdown nnoremap <buffer> <leader>hh yypVr=
+    autocmd FileType markdown nnoremap <buffer> <leader>2 yypVr-
+    autocmd FileType markdown nnoremap <buffer> <leader>3 I### <ESC>
 
     " separation line:
-    autocmd Filetype markdown nnoremap <buffer> <leader>ll o* * *<cr><cr><esc>
+    autocmd FileType markdown nnoremap <buffer> <leader>ll o* * *<cr><cr><esc>
 
     " markdown links: (first yank the URL and then select the linked text in visual mode, then hit ',ml')
-    autocmd Filetype markdown vnoremap <buffer> <leader>ml S]%a()<esc>P<esc>
+    autocmd FileType markdown vnoremap <buffer> <leader>ml S]%a()<esc>P<esc>
 
 augroup END
 
