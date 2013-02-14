@@ -861,7 +861,11 @@ inoremap jk <esc>l
 cnoremap jj <c-c>
 
 imap <c-k> _
+imap <c-h> ->
+imap <c-j> =>
+" easier way to reach for hash key
 imap <c-d> #
+inoremap £ #
 
 " add space at cursor without exiting normal mode
 nnoremap ,<space> i<space><esc>
@@ -872,18 +876,6 @@ nnoremap ; :
 " but preserve g; shortcut (remember: opposite is g,)
 nnoremap g: g;
 
-" easier end of line minus one (for surround)
-vnoremap _ $h
-
-" easier way to reach for hash key
-inoremap £ #
-
-" inoremap ,. -<space>
-" inoremap ., #
-" inoremap ./ *<space>
-" inoremap ,/ _<space>
-
-
 " Easier within-line navigation, and I never use the default behavior
 noremap H ^
 noremap L $
@@ -892,28 +884,19 @@ vnoremap L g_
 " so we can $ to duplicate % (just because i keep confusing them)
 noremap $ %
 
-" easier markdown listing
-" nnoremap ,. I-<space>
-" nnoremap ./ I*<space>
+" " painless moving in insert mode
+" inoremap <c-l> <right>
+" inoremap <c-h> <left>
 
-" painless moving in insert mode
-inoremap <c-l> <right>
-inoremap <c-h> <left>
-
-" or using traditional terminal mapping
+" or using traditional terminal mapping of swapping two letters
 inoremap <c-t> <esc>hxpa
-" there's also the simple 'xp' to swap next two characters around
-
-" nnoremap ,z hhxpl
 nnoremap <c-t> hhxpl
-" nnoremap ,,z hxpl
 
 " flip last two words  (simpler option is 'dwwP')
-inoremap ,<c-t> <esc>BEdiWbPa<space><esc>Ea<space>
-nnoremap ,<c-t> BEdiWbPa<space><esc>Ea<space><esc>
-"
-" TODO: use anonymous paste register to avoid polluting yankring
+inoremap ,<c-t> <esc>BE"zdiWb"zPa<space><esc>$
+nnoremap ,<c-t> BE"zdiWb"zPa<space><esc>$
 
+" TODO: use anonymous paste register to avoid polluting yankring
 
 nnoremap Y y$
 
@@ -1047,9 +1030,11 @@ hi def link clojureComment     Search
 " COFFEESCRIPT {{{
 
 autocmd BufRead *.coffee set filetype=coffee
-autocmd BufWritePost,FileWritePost *.coffee :silent !coffee -c -b <afile>
+autocmd BufWritePost,FileWritePost *.coffee :silent !iced -c -b <afile>
 
-autocmd FileType javascript, coffee setlocal omnifunc=javascriptcomplete#CompleteJS setlocal makeprg=node\ %
+autocmd FileType javascript,coffee setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType javascript,coffee setlocal makeprg=node\ %:r
+" autocmd BufRead *.coffee setlocal makeprg=node\ %:r
 
 " convert js into coffeescript on the fly (using eponymous npm bundle)
 nmap ,jc :Js2Coffee<cr>
