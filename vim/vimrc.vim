@@ -936,14 +936,14 @@ command! -bang Qa qa<bang>
 
 " CONFIG {{{
 
-nmap ,ve :Vedit ~/dotfiles/vim/vimrc.vim<cr>
+nmap ,ve :tabedit ~/dotfiles/vim/vimrc.vim<cr>
 nmap ,V :NERDTree ~/dotfiles/vim/bundle/<cr>
 " automatically reread Vim's configuration after writing it
 " autocmd! BufWritePost ~/dotfiles/vim/vimrc.vim source ~/dotfiles/vim/vimrc.vim
 
-nmap ,ze :Vedit ~/dotfiles/zsh/zshrc<cr>
-nmap ,Ge :Vedit ~/dotfiles/git/gitconfig<cr>
-nmap ,te :Vedit ~/dotfiles/tmux/tmux.conf<cr>
+nmap ,ze :tabedit ~/dotfiles/zsh/zshrc<cr>
+nmap ,Ge :tabedit ~/dotfiles/git/gitconfig<cr>
+nmap ,te :tabedit ~/dotfiles/tmux/tmux.conf<cr>
 
 " ,vc - (Vim Command) copies the command under your cursor and executes it in vim
 vnoremap <leader>vc y:execute @@<cr>
@@ -1038,6 +1038,9 @@ vmap ,jc :Js2Coffee<cr>
 
 " jump to JS file number
 command -nargs=1 C CoffeeCompile | :<args>
+
+" build ctags for coffeescript only
+nnoremap ,tT :!/usr/local/Cellar/ctags/5.8/bin/ctags -R --languages==coffee,javascript --exclude=libs/* --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
 
 " Coffeescript tagbar support
 let g:tagbar_type_coffee = {
@@ -2370,8 +2373,6 @@ nmap ,tc :tabclose<cr>
 
 " Rebuild ctags
 nnoremap ,tt :!/usr/local/Cellar/ctags/5.8/bin/ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
-" Just for CS:
-nnoremap ,tT :!/usr/local/Cellar/ctags/5.8/bin/ctags -R --languages==coffee,javascript --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
 
 " Jump to next tag match
 nmap ]t :bd<cr>:tnext<cr>
