@@ -250,6 +250,7 @@ alias ql="quick-look"
 
 alias whereami='doko'
 alias hc='http-console'
+alias homesick="$HOME/.homeshick"
 
 # open files directly in editor
 alias -s tex=vim
@@ -707,6 +708,7 @@ alias gpom='git push origin master'
 alias gd='git diff'
 alias gdiff='git diff'
 alias gdc='git diff --cached'
+alias gdcf='git dcf'
 
 
 alias grs='git reset' 

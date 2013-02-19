@@ -3,65 +3,77 @@
 set nocompatible
 filetype off
 
-" set rtp+=~/.vim/bundle/vundle/
-" call vundle#rc()
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
 
-" Bundle 'gmarik/vundle'
+Bundle 'gmarik/vundle'
 
-" Bundle 'tpope/vim-fugitive'
-" Bundle 'vim-scripts/AutoTag'
-" Bundle 'chrisbra/NrrwRgn'
-" Bundle 'mileszs/ack.vim'
-" Bundle 'jordansissel/vim-ackmore'
-" Bundle 'kchmck/vim-coffee-script'
-" Bundle 'tpope/vim-commentary'
-" Bundle 'vim-scripts/dbext.vim'
-" Bundle 'spolu/dwm.vim'
-" Bundle 'vim-scripts/DirDiff.vim'
-" Bundle 'sjl/gundo.vim'
-" Bundle 'nathanaelkane/vim-indent-guides'
-" Bundle 'vim-scripts/LustyExplorer'
-" Bundle 'vim-scripts/LustyJuggler'
-" Bundle 'tpope/vim-unimpaired'
-" Bundle 'zeekay/vim-js2coffee'
-" Bundle 'vim-scripts/vimwiki'
-" Bundle 'kien/ctrlp.vim'
-" Bundle 'tpope/vim-markdown'
-" Bundle 'scrooloose/nerdtree'
-" Bundle 'jistr/vim-nerdtree-tabs'
-" Bundle 'Raimondi/delimitMate'
-" Bundle 'vim-scripts/closetag.vim'
+" File Management
+Bundle 'vim-scripts/LustyExplorer'
+Bundle 'vim-scripts/LustyJuggler'
+Bundle 'kien/ctrlp.vim'
+Bundle 'scrooloose/nerdtree'
+Bundle 'jistr/vim-nerdtree-tabs'
+
+" Web Dev
+Bundle 'kchmck/vim-coffee-script'
+Bundle 'zeekay/vim-js2coffee'
+Bundle 'tristen/vim-sparkup'
+Bundle 'vim-scripts/closetag.vim'
+
+" Working with code
+Bundle 'tpope/vim-fugitive'
+Bundle 'gregsexton/gitv'
+Bundle 'tpope/vim-surround'
+Bundle 'majutsushi/tagbar'
+Bundle 'vim-scripts/AutoTag'
+
+Bundle 'Shougo/neocomplcache'
+Bundle 'SirVer/ultisnips'
 " Bundle 'garbas/vim-snipmate'
 " Bundle 'honza/snipmate-snippets'
-" Bundle 'altercation/vim-colors-solarized'
-" Bundle 'tristen/vim-sparkup'
-" Bundle 'tpope/vim-surround'
-" Bundle 'scrooloose/syntastic'
-" Bundle 'godlygeek/tabular'
-" Bundle 'majutsushi/tagbar'
-" Bundle 'vim-scripts/TaskList.vim'
-" Bundle 'davidoc/taskpaper.vim'
-" Bundle 'vim-scripts/tComment'
-" Bundle 'MarcWeber/vim-addon-mw-utils'
-" Bundle 'vim-scripts/ZoomWin'
-" Bundle 'tsaleh/vim-supertab'
-" Bundle 'vim-scripts/argtextobj.vim'
-" Bundle 'kana/vim-textobj-entire'
-" Bundle 'kana/vim-textobj-fold'
-" Bundle 'kana/vim-textobj-indent'
-" Bundle 'kana/vim-textobj-lastpat'
-" Bundle 'lucapette/vim-textobj-underscore'
-" Bundle 'kana/vim-textobj-user'
-" Bundle 'vim-scripts/utl.vim'
-" Bundle 'Shougo/neocomplcache'
-" Bundle 'Lokaltog/vim-powerline'
-" Bundle 'tpope/vim-repeat'
-" Bundle 'kana/vim-scratch'
-" Bundle 'bronson/vim-visual-star-search'
 
-runtime bundle/pathogen/autoload/pathogen.vim
-call pathogen#infect()
-call pathogen#helptags()
+Bundle 'tpope/vim-commentary'
+Bundle 'vim-scripts/a.vim'
+Bundle 'godlygeek/tabular'
+Bundle 'AndrewRadev/switch.vim'
+Bundle 'danro/rename.vim'
+Bundle 'kshenoy/vim-signature'
+Bundle 'ervandew/screen'
+Bundle 'vim-scripts/YankRing.vim'
+Bundle 'tpope/vim-unimpaired'
+Bundle 'kana/vim-textobj-entire'
+Bundle 'kana/vim-textobj-fold'
+Bundle 'kana/vim-textobj-indent'
+Bundle 'kana/vim-textobj-user'
+Bundle 'lucapette/vim-textobj-underscore'
+Bundle 'benmills/vimux'
+Bundle 'tpope/vim-markdown'
+Bundle 'sjl/gundo.vim'
+Bundle 'tpope/vim-repeat'
+Bundle 'chrisbra/NrrwRgn'
+Bundle 'vim-scripts/ZoomWin'
+Bundle 'vim-scripts/DirDiff.vim'
+Bundle 'marcweber/vim-addon-mw-utils'
+Bundle 'vim-scripts/utl.vim'
+" Bundle 'vim-scripts/dbext.vim'
+" jasmine.vim/
+" json/
+" vim-bridge
+" vimpdb
+
+" Search
+Bundle 'mileszs/ack.vim'
+" Bundle 'jordansissel/vim-ackmore'
+Bundle 'bronson/vim-visual-star-search'
+" indexed-search/
+" rootfinder
+" reporoot
+" rooter
+
+" Appearance
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'Lokaltog/vim-powerline'
 
 " }}}
 
@@ -177,6 +189,9 @@ nnoremap <expr> gV "`[".getregtype(v:register)[0]."`]"
 " Preserve indentation while pasting text from the OS X clipboard
 nnoremap <leader><leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
 map <leader>y "*y
+
+" Yank entire buffer with gy
+nmap gy :%y+<cr>
 
 " If you visually select something and hit paste
 " that thing gets yanked into your buffer. This
@@ -436,6 +451,8 @@ nnoremap <silent> ,cn :let @* = expand("%:t")<CR>
 
 " expand current directory into command line
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
+
+cnoremap w' w<CR>
 
 " Make the current file executable
 nmap <leader>% :Silent chmod +x %<cr>
@@ -770,6 +787,7 @@ hi! link zshFunction Function
 hi! link MatchParen DiffText
 
 hi! link SignColumn   LineNr
+hi! link VertSplit   LineNr
 hi! link ShowMarksHLl DiffAdd
 hi! link ShowMarksHLu DiffChange
 hi! ColorColumn ctermfg=0 ctermbg=8
@@ -1677,6 +1695,8 @@ map gf :wincmd f<cr>
 " use ,gf to go to file in a vertical split
 nnoremap <silent> ,gf :vertical botright wincmd f<CR>
 
+nmap <c-n> :bnext<cr>
+nmap <c-p> :bprev<cr>
 
 nmap <silent> :' :vnew<cr>
 nmap <silent> :" :vnew<cr><c-w>o
@@ -1815,7 +1835,7 @@ nmap <F1> :NERDTreeTabsToggle<cr>
 noremap <leader>. :execute "NERDTree ".expand("%:p:h")<cr>
 " noremap <Leader>z :edit .<cr>
 
-noremap <Leader>z :NERDTreeFromBookmark<space>
+noremap <Leader>b :NERDTreeFromBookmark<space>
 nmap <silent> <leader>i :LustyFilesystemExplorer ~/Inbox<CR>
 
 " current file in NERDTree
@@ -1940,6 +1960,7 @@ set wildignore+=tmp/**
 
 " Nicer highlighting of completion popup
 highlight Pmenu ctermfg=234 ctermbg=24
+
 
 " ================ neocomplcache =======================
 " A better autocomplete system!

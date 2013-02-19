@@ -89,6 +89,7 @@
   dc = diff --cached                # diff staged changes
   last = diff HEAD^                 # diff last committed change
 	dv = !git diff -w "$@" | vim -R -
+  dcf = diff -- **/*.coffee         # diff coffeescript only
 
 # }}}
 
