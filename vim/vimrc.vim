@@ -63,7 +63,8 @@ Bundle 'vim-scripts/utl.vim'
 " vimpdb
 
 " Search
-Bundle 'mileszs/ack.vim'
+" Bundle 'mileszs/ack.vim'
+Bundle 'henrik/git-grep-vim'
 " Bundle 'jordansissel/vim-ackmore'
 Bundle 'bronson/vim-visual-star-search'
 " indexed-search/
@@ -2231,18 +2232,11 @@ if executable("ack")
   set grepprg=ack\ -H\ --nogroup\ --nocolor
 endif
 
-nnoremap Kc :AckCurrentWord LAck!<CR>
-nnoremap KC :AckCurrentWord Ack!<CR>
-vnoremap Kc :AckVisualRange LAck!<CR>
-vnoremap KC :AckVisualRange Ack!<CR>
+nnoremap KC :GitGrep <c-r><c-w><CR>
+vnoremap KC "sy:GitGrep "<c-r>s"<CR>
 
-nnoremap KA :Ack! ""<left>
-nnoremap KL :AckFromSearch!<cr>
-
-nnoremap <script> KT :TaskList<CR>
-" list all tasks in reposity use TaskList.vim plugin:
-
-nnoremap ,f [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
+nnoremap KA :GitGrep ""<left>
+nnoremap KL :GitGrep "<c-r>/"<cr>
 
 " HIGHLIGHTING
 
