@@ -2409,13 +2409,7 @@ let g:tagbar_compact = 1
 " capture cursor on popup
 let g:tagbar_autofocus = 1
 
-<<<<<<< HEAD
-nnoremap :k :CtrlPTag<cr>
-=======
-let g:tagbar_ctags_bin="/usr/local/Cellar/ctags/5.8/bin/ctags"
-
 noremap :k :CtrlPFunky<cr>
->>>>>>> dea23785fa7fc8dff2f4337b3a5f79847e7f2d30
 
 " if 1 " has('eval')
 "   let g:Tlist_Ctags_Cmd="ctags --exclude='*.js'"
