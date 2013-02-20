@@ -53,13 +53,14 @@ Bundle 'sjl/gundo.vim'
 Bundle 'tpope/vim-repeat'
 Bundle 'chrisbra/NrrwRgn'
 Bundle 'vim-scripts/ZoomWin'
-Bundle 'vim-scripts/DirDiff.vim'
-Bundle 'marcweber/vim-addon-mw-utils'
+" Bundle 'vim-scripts/DirDiff.vim'
+Bundle 'MarcWeber/vim-addon-mw-utils'
+Bundle 'nvie/vim-pyunit'
 Bundle 'vim-scripts/utl.vim'
+Bundle 'nvie/vim_bridge'
+Bundle 'claco/jasmine.vim'
 " Bundle 'vim-scripts/dbext.vim'
-" jasmine.vim/
 " json/
-" vim-bridge
 " vimpdb
 
 " Search
@@ -1059,7 +1060,7 @@ vmap ,jc :Js2Coffee<cr>
 command -nargs=1 C CoffeeCompile | :<args>
 
 " build ctags for coffeescript only
-nnoremap ,tT :!/usr/local/Cellar/ctags/5.8/bin/ctags -R --languages==coffee,javascript --exclude=libs/* --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
+nnoremap ,tT :!ctags -R --languages==coffee,javascript --exclude=libs/* --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
 
 " Coffeescript tagbar support
 let g:tagbar_type_coffee = {
@@ -2387,7 +2388,7 @@ nmap ,tc :tabclose<cr>
 " TAGS {{{
 
 " Rebuild ctags
-nnoremap ,tt :!/usr/local/Cellar/ctags/5.8/bin/ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
+nnoremap ,tt :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
 
 " Jump to next tag match
 nmap ]t :bd<cr>:tnext<cr>
@@ -2405,8 +2406,6 @@ let g:tagbar_compact = 1
 
 " capture cursor on popup
 let g:tagbar_autofocus = 1
-
-let g:tagbar_ctags_bin="/usr/local/Cellar/ctags/5.8/bin/ctags"
 
 nnoremap :k :CtrlPTag<cr>
 
