@@ -12,6 +12,7 @@ Bundle 'gmarik/vundle'
 Bundle 'vim-scripts/LustyExplorer'
 Bundle 'vim-scripts/LustyJuggler'
 Bundle 'kien/ctrlp.vim'
+Bundle 'tacahiroy/ctrlp-funky'
 Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
 
@@ -53,9 +54,9 @@ Bundle 'sjl/gundo.vim'
 Bundle 'tpope/vim-repeat'
 Bundle 'chrisbra/NrrwRgn'
 Bundle 'vim-scripts/ZoomWin'
-Bundle 'vim-scripts/DirDiff.vim'
-Bundle 'marcweber/vim-addon-mw-utils'
+Bundle 'MarcWeber/vim-addon-mw-utils'
 Bundle 'vim-scripts/utl.vim'
+" Bundle 'vim-scripts/DirDiff.vim'
 " Bundle 'vim-scripts/dbext.vim'
 " jasmine.vim/
 " json/
@@ -1837,6 +1838,7 @@ noremap <leader>. :execute "NERDTree ".expand("%:p:h")<cr>
 " noremap <Leader>z :edit .<cr>
 
 noremap <Leader>b :NERDTreeFromBookmark<space>
+noremap <Leader>B :CtrlPBookmarkDir<cr>
 nmap <silent> <leader>i :LustyFilesystemExplorer ~/Inbox<CR>
 
 " current file in NERDTree
@@ -2408,7 +2410,7 @@ let g:tagbar_autofocus = 1
 
 let g:tagbar_ctags_bin="/usr/local/Cellar/ctags/5.8/bin/ctags"
 
-nnoremap :k :CtrlPTag<cr>
+noremap :k :CtrlPFunky<cr>
 
 " if 1 " has('eval')
 "   let g:Tlist_Ctags_Cmd="ctags --exclude='*.js'"
