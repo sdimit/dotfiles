@@ -251,6 +251,7 @@ alias ql="quick-look"
 alias whereami='doko'
 alias hc='http-console'
 alias homesick="$HOME/.homeshick"
+alias aws="ssh amazon"
 
 # open files directly in editor
 alias -s tex=vim

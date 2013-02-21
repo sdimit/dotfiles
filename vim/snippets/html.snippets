@@ -1,0 +1,90 @@
+snippet ic "ic"
+<i class="icon-${1}"></i>
+endsnippet
+
+snippet htp "htp"
+<script type="text/template" id="${1}Tmpl">
+	${2}
+</script>
+endsnippet
+
+snippet nodisp "nodisp"
+style="display: none;"
+endsnippet
+
+snippet option "option"
+<option>${1}</option>
+endsnippet
+
+# for knockout.js
+snippet db "db"
+data-bind="${1}"
+endsnippet
+
+snippet dbt "dbt"
+data-bind="text: ${1}"
+endsnippet
+
+snippet dbw "dbw"
+data-bind="with: ${1}"
+endsnippet
+
+snippet dbf "dbf"
+data-bind="foreach: ${1}"
+endsnippet
+
+snippet pdb "pdb"
+<p data-bind="${1}"></p>
+endsnippet
+
+snippet pdbt "pdbt"
+<p data-bind="text: ${1}"></p>
+endsnippet
+
+snippet pdbw "pdbw"
+<p data-bind="with: ${1}"></p>
+endsnippet
+
+snippet pdbf "pdbf"
+<p data-bind="foreach: ${1}"></p>
+endsnippet
+
+snippet ddb "ddb"
+<div data-bind="${1}"></div>
+endsnippet
+
+snippet ddbt "ddbt"
+<div data-bind="text: ${1}"></div>
+endsnippet
+
+snippet ddbw "ddbw"
+<div data-bind="with: ${1}"></div>
+endsnippet
+
+snippet ddbf "ddbf"
+<div data-bind="foreach: ${1}"></div>
+endsnippet
+
+snippet sdb "sdb"
+<span data-bind="${1}"></span>
+endsnippet
+
+snippet sdbt "sdbt"
+<span data-bind="text: ${1}"></span>
+endsnippet
+
+snippet sdbw "sdbw"
+<span data-bind="with: ${1}"></span>
+endsnippet
+
+snippet sdbf "sdbf"
+<span data-bind="foreach: ${1}"></span>
+endsnippet
+
+snippet idb "idb"
+<input type="text" id="${1}" data-bind="value: ${2}"/>
+endsnippet
+
+snippet dba "dba"
+<pre data-bind="text: ko.toJSON($data, 2 ,null)"></pre>
+endsnippet

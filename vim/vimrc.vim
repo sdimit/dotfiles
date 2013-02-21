@@ -17,8 +17,6 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
 
 " Web Dev
-Bundle 'kchmck/vim-coffee-script'
-Bundle 'zeekay/vim-js2coffee'
 Bundle 'tristen/vim-sparkup'
 Bundle 'vim-scripts/closetag.vim'
 
@@ -28,6 +26,14 @@ Bundle 'gregsexton/gitv'
 Bundle 'tpope/vim-surround'
 Bundle 'majutsushi/tagbar'
 Bundle 'vim-scripts/AutoTag'
+" Bundle 'scrooloose/syntastic'
+Bundle 'edsono/vim-matchit'
+
+" Languages
+Bundle 'klen/python-mode'
+Bundle 'groenewege/vim-less'
+Bundle 'kchmck/vim-coffee-script'
+Bundle 'zeekay/vim-js2coffee'
 
 Bundle 'Shougo/neocomplcache'
 Bundle 'SirVer/ultisnips'
@@ -49,27 +55,27 @@ Bundle 'kana/vim-textobj-indent'
 Bundle 'kana/vim-textobj-user'
 Bundle 'lucapette/vim-textobj-underscore'
 Bundle 'benmills/vimux'
-Bundle 'tpope/vim-markdown'
+
 Bundle 'sjl/gundo.vim'
 Bundle 'tpope/vim-repeat'
 Bundle 'chrisbra/NrrwRgn'
 Bundle 'vim-scripts/ZoomWin'
 Bundle 'MarcWeber/vim-addon-mw-utils'
-Bundle 'nvie/vim-pyunit'
+" Bundle 'nvie/vim-pyunit'
 Bundle 'vim-scripts/utl.vim'
 Bundle 'nvie/vim_bridge'
 Bundle 'claco/jasmine.vim'
 Bundle 'vim-scripts/utl.vim'
+Bundle 'leshill/vim-json'
 " Bundle 'vim-scripts/dbext.vim'
-" json/
 " vimpdb
 
 " Search
-" Bundle 'mileszs/ack.vim'
 Bundle 'henrik/git-grep-vim'
-" Bundle 'jordansissel/vim-ackmore'
 Bundle 'bronson/vim-visual-star-search'
-" indexed-search/
+Bundle 'henrik/vim-indexed-search'
+" Bundle 'mileszs/ack.vim'
+" Bundle 'jordansissel/vim-ackmore'
 " rootfinder
 " reporoot
 " rooter
@@ -77,6 +83,10 @@ Bundle 'bronson/vim-visual-star-search'
 " Appearance
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'Lokaltog/vim-powerline'
+
+" Prose
+Bundle 'tpope/vim-markdown'
+Bundle 'vim-scripts/vimwiki'
 
 " }}}
 
@@ -147,16 +157,15 @@ set whichwrap=b,s,<,>,[,],l,h
 
 " window size (will only make it bigger)
 if &columns < 85
-    set columns=85
+  set columns=85
 endif
 
 " Jump to last cursor position unless it's invalid or in an event handler
 autocmd BufReadPost *
-\ if line("'\"") > 0 && line("'\"") <= line("$") |
-\   exe "normal g`\"" |
-\ endif
+      \ if line("'\"") > 0 && line("'\"") <= line("$") |
+      \   exe "normal g`\"" |
+      \ endif
 
-" shortcut to turn off line numbers
 map <silent> <leader>n :set number!<CR>
 
 nmap ,u :GundoToggle<CR>
@@ -165,25 +174,17 @@ let g:yankring_history_dir = '$HOME'
 let g:yankring_history_file = '.yankring-history'
 let g:yankring_max_history = 300
 
+" GUNDO 
 " open on the right so as not to compete with the nerdtree
 let g:gundo_right = 1
 
 " a little wider for wider screens
 let g:gundo_width = 60
 
-" Don’t reset cursor to start of line when moving around.
-set nostartofline
-
-" change text inside quotes
-nnoremap X ci"
-
 " YANKING AND PASTING
 
 " paste with trailing space
-nmap <leader>P Pa<space><esc>l
 nmap <leader>p a<space><c-r>"<esc>
-
-nmap <leader><leader>P o<c-r>"<esc>
 
 " select pasted text
 nnoremap <expr> gV "`[".getregtype(v:register)[0]."`]"
@@ -193,25 +194,26 @@ nnoremap <expr> gV "`[".getregtype(v:register)[0]."`]"
 nnoremap <leader><leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
 map <leader>y "*y
 
+nnoremap Y y$
+
+" Duplicate a selection
+vnoremap V y'>p
+
 " Yank entire buffer with gy
 nmap gy :%y+<cr>
-
-" If you visually select something and hit paste
-" that thing gets yanked into your buffer. This
-" generally is annoying when you're copying one item
-" and repeatedly pasting it. This changes the paste
-" command in visual mode so that it doesn't overwrite
-" whatever in pasting it.
-"
-vnoremap p "_dP
 
 " Press Shift+P while in visual mode to replace the overwriting without
 " overwriting the default register
 vmap P p :call setreg('"', getreg('0')) <CR>
 
-
 " visually select the last pasted text
 nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
+
+" RSI bindings
+imap <c-k> _
+imap <c-j> ->
+imap <c-d> #
+inoremap £ #
 
 
 " ALIGN/TABULARISE
@@ -222,47 +224,79 @@ vmap <Leader>a:       :Tabularize /:<cr>
 vmap <Leader>a::      :Tabularize /:\zs<cr>
 vmap <Leader>a,       :Tabularize /,<cr>
 vmap <Leader>a{       :Tabularize /{<cr>
-vmap <Leader>a<Bar>   :Tabularize /<cr>
 
 " easier blank line insertions
 nnoremap <leader>o :<C-u>exe 'normal m`'.v:count1.'o<C-v><C-[>``'<CR>
 nnoremap <leader>O :<C-u>exe 'normal m`'.v:count1.'O<C-v><C-[>``'<CR>
+
+
+" Fix for navigating long lines
+" Wrapped lines goes down/up to next row, rather than next line in file.
+nnoremap j gj
+nnoremap k gk
+
+" saner ESC key (and stay at position instead of going back to previous caret - strange vim default behaviour)
+inoremap jj <esc>l
+inoremap jk <esc>l
+cnoremap jj <c-c>
+
+" add space at cursor without exiting normal mode
+nnoremap ,<space> i<space><esc>
+
+" avoid shift key for invoking command line
+nnoremap ; :
+" but preserve g; shortcut (remember: opposite is g,)
+" nnoremap g: g;
+
+" Easier within-line navigation
+noremap H ^
+noremap L $
+vnoremap L g_
+
+" so we can use $ to duplicate % (just because i keep confusing them)
+noremap $ %
+
+" " painless moving in insert mode
+" inoremap <c-l> <right>
+" inoremap <c-h> <left>
+
+" or using traditional terminal mapping of swapping two letters
+inoremap <c-t> <esc>hxpa
+nnoremap <c-t> hhxpl
+
+" append to current word
+inoremap <c-e> <esc>Ea
+
+" scrolling up/down with capital letters too (avoids joining lines instead) in visual mode
+vnoremap J j
+vnoremap K k
+
+" Visual shifting (does not exit Visual mode)
+vnoremap < <gv
+vnoremap > >gv
+
+" delete last character of line
+nnoremap d. $x0
+
+" delete first character of line
+nnoremap d, 0x$
+
+" clear line and stay in normal mode
+nnoremap dD cc<esc>
 
 " SWITCH plugin
 
 nmap - :Switch<cr>
 " vmap <leader>s :Switch<cr>
 
-" ,cf - Copy Filename of current file into system (not vi) paste buffer
-" ,yw - yank a word from anywhere within the word (so you don't have to go to the beginning of it)
-" ,ow - overwrite a word with whatever is in your yank buffer - you can be anywhere on the word. saves having to visually select it
-"
-source ~/dotfiles/vim/switch.vim
-
-" Turns visually selected camelCase into camel_case
-vnoremap ,case :s/\v\C(([a-z]+)([A-Z]))/\2_\l\3/g<CR>
-
-
-
-
-" " INCREMENT
-" " ================================================================================
-" function! AddSubtract(char, back)
-"   let pattern = &nrformats =~ 'alpha' ? '[[:alpha:][:digit:]]' : '[[:digit:]]'
-"   call search(pattern, 'cw' . a:back)
-"   execute 'normal! ' . v:count1 . a:char
-"   silent! call repeat#set(":\<C-u>call AddSubtract('" .a:char. "', '" .a:back. "')\<CR>")
-" endfunction
-
-" nnoremap <silent> ,i :<C-u>call AddSubtract("\<C-a>", '')<CR>
-" nnoremap <silent> ,,i :<C-u>call AddSubtract("\<C-x>", '')<CR>
-
-
-vnoremap u <nop>
-vnoremap gu u
+" FIXME 
+" source ~/dotfiles/vim/switch.vim
 
 " Keep the cursor in place while joining lines
 " nnoremap <silent> J mzJ`z:delmarks z<cr>
+
+" join lines from insert mode
+" imap <c-j> <esc>Ji
 
 " Split line (sister to [J]oin lines)
 " The normal use of S is covered by cc, so don't worry about shadowing it.
@@ -273,138 +307,67 @@ vnoremap - =
 " Toggle 'keep current line in the center of the screen' mode
 nnoremap <leader>C :let &scrolloff=999-&scrolloff<cr>
 
-" <C-R>= to enter simple calculator mode
-
 " improved A normal mode key (jumps to right indentation)
 
 nmap <expr> A MyA()
 nnoremap ZA A
 function! MyA()
-    let l:prev_indent = indent(line('.') - 1)
-    let l:indent_diff = l:prev_indent - indent(line('.'))
-    let l:is_empty = len(getline('.')) == 0
-    if l:indent_diff >= 0 && l:is_empty
-        return 'ddko'
+  let l:prev_indent = indent(line('.') - 1)
+  let l:indent_diff = l:prev_indent - indent(line('.'))
+  let l:is_empty = len(getline('.')) == 0
+  if l:indent_diff >= 0 && l:is_empty
+    return 'ddko'
 
-    elseif l:is_empty
-        return 'I'
-    else
-        return 'ZA'
-    endif
+  elseif l:is_empty
+    return 'I'
+  else
+    return 'ZA'
+  endif
 endfunction
-
-" Can't be bothered to understand ESC vs <c-c> in insert mode
-imap <c-c> <esc>
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" MULTIPURPOSE TAB KEY
-" Indent if we're at the beginning of a line. Else, do completion.
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-function! InsertTabWrapper()
-    let col = col('.') - 1
-    if !col || getline('.')[col - 1] !~ '\k'
-        return "\<tab>"
-    else
-        return "\<c-p>"
-    endif
-endfunction
-inoremap <tab> <c-r>=InsertTabWrapper()<cr>
-inoremap <s-tab> <c-n>
-
-" http://stackoverflow.com/questions/6228079/remove-newlines-from-a-register-in-vim/6235707#6235707
-nnoremap <expr> gV    "`[".getregtype(v:register)[0]."`]"
-
-
-" Indent guides
-
-let g:indent_guides_auto_colors = 0
-let g:indent_guides_start_level = 2
-let g:indent_guides_guide_size = 1
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
-
-" ,ig - toggle visual indentation guides
 
 map <leader>cl :set cursorline!<cr>
 map <leader>cc :set cursorcolumn!<cr>
 
-" GUndo
-nmap <silent> <F4> :GundoToggle<CR>
-imap <silent> <F4> <esc>:GundoToggle<CR>
-
-" useful for right hand
-imap <enter> <esc>
-
 " Adds spaces around current block of lines
-map <silent> <Leader><Space> :call <SID>AddSpaces()<Enter>
+map <silent> <leader><space> :call <SID>AddSpaces()<Enter>
 " Removes spaces around current block of lines
-map <silent> <Leader><BS>    :call <SID>RemoveSpaces()<Enter>
+map <silent> <leader><bs>    :call <SID>RemoveSpaces()<Enter>
 
 function s:AddSpaces() range
-	let separation = 2
-	let blanks     = repeat([''], separation)
-	call append(a:lastline, blanks)
-	call append(a:firstline - 1, blanks)
+  let separation = 2
+  let blanks     = repeat([''], separation)
+  call append(a:lastline, blanks)
+  call append(a:firstline - 1, blanks)
 endfunction
 
 function s:RemoveSpaces()
-	if getline('.') == ''
-		let fromline = prevnonblank(line('.')) + 1
-		let toline   = nextnonblank(line('.')) - 1
-		call s:DeleteLines(fromline, toline, 0)
-		return
-	endif
+  if getline('.') == ''
+    let fromline = prevnonblank(line('.')) + 1
+    let toline   = nextnonblank(line('.')) - 1
+    call s:DeleteLines(fromline, toline, 0)
+    return
+  endif
 
-	let toline = search('^$', 'bnW')
-	if toline != 0
-		let fromline = prevnonblank(toline) + 1
-		call s:DeleteLines(fromline, toline)
-	endif
+  let toline = search('^$', 'bnW')
+  if toline != 0
+    let fromline = prevnonblank(toline) + 1
+    call s:DeleteLines(fromline, toline)
+  endif
 
-	let fromline = search('^$', 'nW')
-	if fromline != 0
-		let toline = nextnonblank(fromline) - 1
-		call s:DeleteLines(fromline, toline)
-	endif
+  let fromline = search('^$', 'nW')
+  if fromline != 0
+    let toline = nextnonblank(fromline) - 1
+    call s:DeleteLines(fromline, toline)
+  endif
 endfunction
 
 function s:DeleteLines(fromline, toline, ...)
-	let toline = a:toline < 1 ? line('$') : a:toline
-	silent execute a:fromline . ',' . toline . 'delete'
-	if a:0 == 0 || a:0 == 1 && a:1
-		normal ``
-	endif
+  let toline = a:toline < 1 ? line('$') : a:toline
+  silent execute a:fromline . ',' . toline . 'delete'
+  if a:0 == 0 || a:0 == 1 && a:1
+    normal ``
+  endif
 endfunction
-
-" }}}
-
-" ERRORS {{{
-
-" command! ErrorsToggle call ErrorsToggle()
-" function! ErrorsToggle() " {{{
-"   if exists("w:is_error_window")
-"     unlet w:is_error_window
-"     exec "q"
-"   else
-"     exec "Errors"
-"     lopen
-"     let w:is_error_window = 1
-"   endif
-" endfunction " }}}
-
-" command! -bang -nargs=? QFixToggle call QFixToggle(<bang>0)
-" function! QFixToggle(forced) " {{{
-"   if exists("g:qfix_win") && a:forced == 0
-"     cclose
-"     unlet g:qfix_win
-"   else
-"     copen 10
-"     let g:qfix_win = bufnr("$")
-"   endif
-" endfunction " }}}
-
-" " nmap <silent> <F4> :ErrorsToggle<cr>
-" nmap <silent> <F4> :QFixToggle<cr>
 
 " }}}
 
@@ -425,28 +388,38 @@ set nowb
 set autoread                   " Reload files changed outside vim
 
 " Aggresive file saving
-" avoiding thousands of daily ':w's
-  " for smoother web editing
-  " (hence heavy reliance on VCS)
-
 au InsertLeave * silent! :w
 " Save when buffers lose focus too (for changes made in normal mode)
 au BufLeave * silent! :w
 
+cnoremap w' w<CR>
 
-" nnoremap s :w!<cr>
+" shift key fixes
+command! -bang -nargs=* -complete=file E e<bang> <args>
+command! -bang -nargs=* -complete=file W w<bang> <args>
+command! -bang -nargs=* -complete=file Wq wq<bang> <args>
+command! -bang -nargs=* -complete=file WQ wq<bang> <args>
+command! -bang Wa wa<bang>
+command! -bang WA wa<bang>
+command! -bang Q q<bang>
+command! -bang QA qa<bang>
+command! -bang Qa qa<bang>
 
-nnoremap ,Q :q!<cr>
-
-" Kill buffer (but unlike :q! doesn't involve leaving vim)
+" Kill buffer
 nnoremap ,q :bd!<cr>
 " Kill buffer and delete file
 nnoremap ,,q :!rm %<cr>:bd!<cr>
+" Quit vim
+nnoremap ,Q :qa!<cr>
 
 " Filesystem
 nmap <leader>mk :!mkdir -p <c-r>=expand("%:p:h")."/"<cr>
 nmap <leader>rm :!rm %<cr>
-nmap <leader>x :!chmod 755 %<cr>
+" Make the current file executable
+nmap <leader>x :Silent chmod +x %<cr>
+
+" Rename (using plugin)
+nmap ,rn :Rename %<tab>
 
 " copy current filename into system clipboard - mnemonic: (c)urrent(f)ilename
 nnoremap <silent> ,cf :let @* = expand("%:~")<CR>
@@ -455,24 +428,20 @@ nnoremap <silent> ,cn :let @* = expand("%:t")<CR>
 " expand current directory into command line
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 
-cnoremap w' w<CR>
-
-" Make the current file executable
-nmap <leader>% :Silent chmod +x %<cr>
 
 " Opens an edit command with the path of the currently edited file filled in
 nnoremap <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 
 " Use ranger as vim file manager
-function! Ranger()
-  silent !ranger --choosefile=/tmp/chosen
-  if filereadable('/tmp/chosen')
-    exec 'edit ' . system('cat /tmp/chosen')
-    call system('rm /tmp/chosen')
-  endif
-  redraw!
-endfunction
-nmap <tab><tab> :call Ranger()<cr>
+" function! Ranger()
+"   silent !ranger --choosefile=/tmp/chosen
+"   if filereadable('/tmp/chosen')
+"     exec 'edit ' . system('cat /tmp/chosen')
+"     call system('rm /tmp/chosen')
+"   endif
+"   redraw!
+" endfunction
+" nmap <tab><tab> :call Ranger()<cr>
 
 set suffixesadd+=.py
 set suffixesadd+=.js
@@ -492,9 +461,6 @@ function! CloseWindowOrKillBuffer()
 endfunction
 
 nnoremap <silent> Q :call CloseWindowOrKillBuffer()<CR>
-
-" w!! to write a file as sudo
-cmap w!! w !sudo tee % >/dev/null
 
 set autochdir
 " if exists('+autochdir')
@@ -602,22 +568,8 @@ nnoremap <silent> zm zM<cr>
 
 " FORMAT {{{
 
-" <C-t>           tabularize
-
-" guu     : lowercase line
-" gUU     : uppercase line
-" Vu
-" Lowercase line
-" VU
-" Uppercase line
-" g~~
-" Invert case
-" vEU
-" Switch word to uppercase
-" vE~
-" Modify word case
-
 set wrap
+set linebreak                  " Wrap lines at convenient points
 
 " toggle line wrapping
 nmap <leader><leader>w :set wrap!<cr>
@@ -645,25 +597,22 @@ nmap ,fft ggVG:!par
 
 " create a left margin
 function! LeftMargin()
-    hi! link FoldColumn Normal
-    silent set foldcolumn=12
-    silent set wrapmargin=20
-    silent set nonumber
-    " :ggVGgq<cr>
+  hi! link FoldColumn Normal
+  silent set foldcolumn=12
+  silent set wrapmargin=20
+  silent set nonumber
+  " :ggVGgq<cr>
 endfunction
 
 function! NoLeftMargin()
-    hi! link FoldColumn Normal
-    silent set foldcolumn=0
-    silent set wrapmargin=0
-    silent set number
+  hi! link FoldColumn Normal
+  silent set foldcolumn=0
+  silent set wrapmargin=0
+  silent set number
 endfunction
 
 " map <silent> <F6> :<C-U>execute LeftMargin()<CR>
 " map <silent> <F7> :<C-U>execute NoLeftMargin()<CR>
-
-" g <C-g>           word count
-
 
 "  Clean code function
 function! CleanCode()
@@ -674,29 +623,13 @@ function! CleanCode()
 endfunction
 nmap <leader>co :call CleanCode()<cr>
 
-
-" via: http://rails-bestpractices.com/posts/60-remove-trailing-whitespace
-" Strip trailing whitespace
-function! <SID>StripTrailingWhitespaces()
-    " Preparation: save last search, and cursor position.
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    " Do the business:
-    %s/\s\+$//e
-    " Clean up: restore previous search history, and cursor position
-    let @/=_s
-    call cursor(l, c)
-endfunction
-command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
-
-nmap ,,W :StripTrailingWhitespaces<CR>
-
 " }}}
 
 " INDENT {{{
 
-set autoindent                 " copy indent from current when starting a new line
+  
+filetype indent on
+" set autoindent                 " copy indent from current when starting a new line
 set smartindent
 set smarttab
 set expandtab                  " convert tabs into spaces
@@ -706,25 +639,24 @@ set softtabstop=2
 set tabstop=2
 
 " temporarily change tab size
-nnoremap <Leader>2 :setlocal ts=2 sts=2 sw=2 et<Enter>
-nnoremap <Leader>4 :setlocal ts=4 sts=4 sw=4 et<Enter>
-
-filetype indent on
-
-" Indent whole file, remove trailing whitespaces then save
-nmap <leader>I <Esc>:nohl<cr>mygg=G,I'y:w<cr>
-
-" Remove trailing whitespaces and ^M chars
-" nmap <leader>W :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))<cr>
+nnoremap <leader><leader>2 :setlocal ts=2 sts=2 sw=2 et<cr>
+nnoremap <leader><leader>4 :setlocal ts=4 sts=4 sw=4 et<cr>
 
 " }}}
 
 " LOOK {{{
 
 set laststatus=2               " show the statusline in all windows
+set noruler
+set showmode                   " Don't show current mode down the bottom
+set gcr=a:blinkon0             " Disable cursor blink
+set cursorline
+set linespace=0             " don't insert extra pixel lines betweens rows
+set lazyredraw              " do not redraw while running macros
+" set ttyfast                 " fast redraw screen
+
 
 set t_Co=256
-
 colorscheme solarized
 set background=dark
 let g:solarized_termtrans = 1
@@ -732,36 +664,19 @@ let g:solarized_contrast = 'high'
 
 nmap ,cs :colorscheme<space>
 
-set noruler
-set showmode                   " Don't show current mode down the bottom
-set gcr=a:blinkon0             " Disable cursor blink
-set cursorline
-
-" show file path in title bar
-set title
-set titlestring=%F
+" " show file path in title bar
+" set title
+" set titlestring=%F
 
 " ,hi           - show current Highlight group. if you don't like the color of something, use this, then use hi! link [groupname] [anothergroupname] in your vimrc.after to remap the color. You can see available colors using :hi
-
-" Screen Drawing
-"===============
-
-set linespace=0             " don't insert extra pixel lines betweens rows
-set lazyredraw              " do not redraw while running macros
-" set ttyfast                 " fast redraw screen
 
 " Character Display
 "==================
 
-" set list                " show nonprinting chars (set with listchars)
 nnoremap <leader>$ :set list!<cr>
-" set list listchars=extends:», tab:▸, trail:›
-" set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
 set listchars=tab:,.,trail:.,extends:#,nbsp:. " Highlight problematic whitespace
 
-
 set noshowmatch         " don't match brackets (using matchparen instd)
-
 
 if has("gui_running")
 
@@ -783,6 +698,9 @@ endif
 
 set mouse=a
 
+" manually enforce new highlights. FIXME
+nmap ,H 'FV'G,vc
+
 " Custom color overwrites
 hi! link txtBold Identifier
 hi! link zshVariableDef Identifier
@@ -802,9 +720,6 @@ map ,hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 let g:Powerline_symbols='fancy'
 let g:Powerline_theme='istib'
 let g:Powerline_colorscheme='istib'
-
-
-set linebreak                  " Wrap lines at convenient points
 
 " Unfuck my screen
 nnoremap <leader>u :syntax sync fromstart<cr>:redraw!<cr>
@@ -861,100 +776,6 @@ endfunction
 
 " }}}
 
-" BINDINGS {{{
-
-" ========================================
-" RSI Prevention - keyboard remaps
-" ========================================
-" Certain things we do every day as programmers stress
-" out our hands. For example, typing underscores and
-" dashes are very common, and in position that require
-" a lot of hand movement. Vim to the rescue
-
-" Fix for navigating long lines
-" Wrapped lines goes down/up to next row, rather than next line in file.
-nnoremap j gj
-nnoremap k gk
-
-" saner ESC key (and stay at position instead of going back to previous caret - strange vim default behaviour)
-inoremap jj <esc>l
-inoremap jk <esc>l
-cnoremap jj <c-c>
-
-" add space at cursor without exiting normal mode
-nnoremap ,<space> i<space><esc>
-nnoremap ,,<space> a<space><esc>
-
-" avoid shift key for invoking command line
-nnoremap ; :
-" but preserve g; shortcut (remember: opposite is g,)
-nnoremap g: g;
-
-" Easier within-line navigation, and I never use the default behavior
-noremap H ^
-noremap L $
-vnoremap L g_
-
-" so we can $ to duplicate % (just because i keep confusing them)
-noremap $ %
-
-" " painless moving in insert mode
-inoremap <c-l> <right>
-inoremap <c-h> <left>
-
-" or using traditional terminal mapping of swapping two letters
-inoremap <c-t> <esc>hxpa
-nnoremap <c-t> hhxpl
-
-" flip last two words  (simpler option is 'dwwP')
-inoremap ,<c-t> <esc>BE"zdiWb"zPa<space><esc>$
-nnoremap ,<c-t> BE"zdiWb"zPa<space><esc>$
-
-" TODO: use anonymous paste register to avoid polluting yankring
-
-nnoremap Y y$
-
-" Visual mode: V
-" Duplicate a selection
-vnoremap V y'>p
-
-" append to current word (note: c-a would make a little bit more sense as it'd be consistent with a and A, but it is reserved to tmux)
-inoremap <c-e> <esc>Ea
-" nnoremap <c-e> Ea
-
-" scrolling up/down with capital letters too (avoids joining lines instead) in visual mode
-vnoremap J j
-vnoremap K k
-
-" Visual shifting (does not exit Visual mode)
-vnoremap < <gv
-vnoremap > >gv
-
-" delete last character of word
-nnoremap d> ex
-
-" delete last character of line
-nnoremap d. $x0
-
-" delete first character of line
-nnoremap d, 0x$
-
-" clear line and stay in normal mode
-nnoremap dD cc<esc>
-
-" shift key fixes
-command! -bang -nargs=* -complete=file E e<bang> <args>
-command! -bang -nargs=* -complete=file W w<bang> <args>
-command! -bang -nargs=* -complete=file Wq wq<bang> <args>
-command! -bang -nargs=* -complete=file WQ wq<bang> <args>
-command! -bang Wa wa<bang>
-command! -bang WA wa<bang>
-command! -bang Q q<bang>
-command! -bang QA qa<bang>
-command! -bang Qa qa<bang>
-
-" }}}
-
 " CONFIG {{{
 
 nmap ,ve :tabedit ~/dotfiles/vim/vimrc.vim<cr>
@@ -977,6 +798,9 @@ nmap <silent> ,VC :so %<CR>
 
 set undodir=~/.vim/backups     " Keep undo history across sessions, by storing in file.
 set undofile
+
+" GUndo
+nmap <silent> <F4> :GundoToggle<CR>
 
 "}}}
 
@@ -1065,32 +889,32 @@ nnoremap ,tT :!ctags -R --languages==coffee,javascript --exclude=libs/* --c++-ki
 
 " Coffeescript tagbar support
 let g:tagbar_type_coffee = {
-  \ 'ctagstype' : 'coffee',
-  \ 'kinds' : [
-  \   'n:namespace',
-  \   'c:class',
-  \   'o:object',
-  \   'm:methods',
-  \   'f:functions',
-  \   'i:instance variables',
-  \   'v:var:1',
-  \ ],
-  \ 'sro' : ".",
-  \ 'scope2kind' : {
-  \   'o' : 'object',
-  \   'f' : 'function',
-  \   'm' : 'method',
-  \   'v' : 'var',
-  \   'i' : 'ivar'
-  \ },
-  \ 'kind2scope' : {
-  \  'function' : 'f',
-  \  'method' : 'm',
-  \  'var' : 'v',
-  \  'ivar' : 'i',
-  \ 'object' : 'o'
-  \}
-\ }
+      \ 'ctagstype' : 'coffee',
+      \ 'kinds' : [
+      \   'n:namespace',
+      \   'c:class',
+      \   'o:object',
+      \   'm:methods',
+      \   'f:functions',
+      \   'i:instance variables',
+      \   'v:var:1',
+      \ ],
+      \ 'sro' : ".",
+      \ 'scope2kind' : {
+      \   'o' : 'object',
+      \   'f' : 'function',
+      \   'm' : 'method',
+      \   'v' : 'var',
+      \   'i' : 'ivar'
+      \ },
+      \ 'kind2scope' : {
+      \  'function' : 'f',
+      \  'method' : 'm',
+      \  'var' : 'v',
+      \  'ivar' : 'i',
+      \ 'object' : 'o'
+      \}
+      \ }
 
 " }}}
 
@@ -1155,69 +979,69 @@ let g:makeprg_django_project = 'python\ manage.py\ test\ -v\ 0'
 set errorformat=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 
 function! RunTestsForFile(args)
-    if @% =~ '\.py$'
-        let expandstr = '%:p:h' " dirname
-        while expand(expandstr) != '/'
-            let testpath = expand(expandstr)
-            if len(getfperm(testpath . '/tests')) > 0 || len(getfperm(testpath . '/tests.py')) > 0
-                call RunTests(expand(expandstr . ':t'), a:args)
-                return
-            endif
-            let expandstr .= ':h'
-        endwhile
-    endif
-    call RunTests('', a:args)
+  if @% =~ '\.py$'
+    let expandstr = '%:p:h' " dirname
+    while expand(expandstr) != '/'
+      let testpath = expand(expandstr)
+      if len(getfperm(testpath . '/tests')) > 0 || len(getfperm(testpath . '/tests.py')) > 0
+        call RunTests(expand(expandstr . ':t'), a:args)
+        return
+      endif
+      let expandstr .= ':h'
+    endwhile
+  endif
+  call RunTests('', a:args)
 endfunction
 
 function! RunTests(target, args)
-    silent ! echo
-    silent ! echo -e "\033[1;36mRunning all unit tests\033[0m"
-    silent w
-    if len(a:target)
-        execute 'set makeprg=' . g:makeprg_django_app
-    else
-        execute 'set makeprg=' . g:makeprg_django_project
-    endif
-    exec "make! " . a:target . " " . a:args
+  silent ! echo
+  silent ! echo -e "\033[1;36mRunning all unit tests\033[0m"
+  silent w
+  if len(a:target)
+    execute 'set makeprg=' . g:makeprg_django_app
+  else
+    execute 'set makeprg=' . g:makeprg_django_project
+  endif
+  exec "make! " . a:target . " " . a:args
 endfunction
 
 function! JumpToError()
-    let has_valid_error = 0
-    for error in getqflist()
-        if error['valid']
-            let has_valid_error = 1
-            break
-        endif
-    endfor
-    if has_valid_error
-        for error in getqflist()
-            if error['valid']
-                break
-            endif
-        endfor
-        let error_message = substitute(error['text'], '^ *', '', 'g')
-        silent cc!
-        exec ":sbuffer " . error['bufnr']
-        call RedBar()
-        echo error_message
-    else
-        call GreenBar()
-        echo "All tests passed"
+  let has_valid_error = 0
+  for error in getqflist()
+    if error['valid']
+      let has_valid_error = 1
+      break
     endif
+  endfor
+  if has_valid_error
+    for error in getqflist()
+      if error['valid']
+        break
+      endif
+    endfor
+    let error_message = substitute(error['text'], '^ *', '', 'g')
+    silent cc!
+    exec ":sbuffer " . error['bufnr']
+    call RedBar()
+    echo error_message
+  else
+    call GreenBar()
+    echo "All tests passed"
+  endif
 endfunction
 
 function! RedBar()
-    hi RedBar ctermfg=white ctermbg=red guibg=red
-    echohl RedBar
-    echon repeat(" ",&columns - 1)
-    echohl
+  hi RedBar ctermfg=white ctermbg=red guibg=red
+  echohl RedBar
+  echon repeat(" ",&columns - 1)
+  echohl
 endfunction
 
 function! GreenBar()
-    hi GreenBar ctermfg=white ctermbg=green guibg=green
-    echohl GreenBar
-    echon repeat(" ",&columns - 1)
-    echohl
+  hi GreenBar ctermfg=white ctermbg=green guibg=green
+  echohl GreenBar
+  echon repeat(" ",&columns - 1)
+  echohl
 endfunction
 
 " nnoremap <leader>a :call RunTests('', '')<cr>:redraw<cr>:call JumpToError()<cr>
@@ -1268,9 +1092,9 @@ if has("autocmd")
 
   " Navigate up one level from fugitive trees and blobs
   autocmd User fugitive
-    \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
-    \   nnoremap <buffer> u :edit %:h<CR> |
-    \ endif
+        \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
+        \   nnoremap <buffer> u :edit %:h<CR> |
+        \ endif
 endif
 
 " SHORTCUTS WITHIN :Gstatus
@@ -1322,8 +1146,8 @@ let g:Gitv_DoNotMapCtrlKey = 1
 cabbrev git Git
 
 augroup ft_fugitive
-    au!
-    au BufNewFile,BufRead .git/index setlocal nolist
+  au!
+  au BufNewFile,BufRead .git/index setlocal nolist
 augroup END
 
 " autocmd FileType gitcommit DiffGitCached | wincmd p
@@ -1422,17 +1246,17 @@ nmap ,,' F"r`a`<esc>f"xa''<esc>
 autocmd Filetype tex nnoremap OO ,ll<cr>
 
 let g:tagbar_type_tex = {
-    \ 'ctagstype' : 'latex',
-    \ 'kinds'     : [
-        \ 's:sections',
-        \ 'g:graphics:0:0',
-        \ 'l:labels',
-        \ 'r:refs:1:0',
-        \ 'p:pagerefs:1:0'
-    \ ],
-    \ 'sort'    : 0,
-    \ 'deffile' : expand('<sfile>:p:h:h') . '/ctags/latex.cnf'
-\ }
+      \ 'ctagstype' : 'latex',
+      \ 'kinds'     : [
+      \ 's:sections',
+      \ 'g:graphics:0:0',
+      \ 'l:labels',
+      \ 'r:refs:1:0',
+      \ 'p:pagerefs:1:0'
+      \ ],
+      \ 'sort'    : 0,
+      \ 'deffile' : expand('<sfile>:p:h:h') . '/ctags/latex.cnf'
+      \ }
 
 " }}}
 
@@ -1441,37 +1265,30 @@ let g:tagbar_type_tex = {
 " Sane(!) text-editing options
 
 augroup ft_markdown
-    au!
+  au!
 
-    autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
-    autocmd BufNewFile,BufRead *.txt set filetype=markdown
+  autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
+  autocmd BufNewFile,BufRead *.txt set filetype=markdown
 
-    autocmd FileType markdown set formatoptions+=2,l
-    autocmd FileType markdown set formatoptions-=c
-    autocmd FileType markdown set smartcase
-    autocmd FileType markdown set textwidth=80
+  autocmd FileType markdown set formatoptions+=2,l formatoptions-=c smartcase
 
-    autocmd FileType markdown,tex set noautoindent nosmartindent nocindent linebreak nonumber nofoldenable
-    " autocmd FileType markdown,tex silent setlocal spell spelllang=en_us
-    autocmd FileType markdown,tex let &scrolloff=999-&scrolloff
+  autocmd FileType markdown,tex set noautoindent nosmartindent nocindent linebreak nonumber nofoldenable
+  autocmd FileType markdown,tex let &scrolloff=999-&scrolloff
 
-    " margins and no statusline
-    autocmd FileType markdown,tex hi! link FoldColumn Normal
-    autocmd FileType markdown,tex set laststatus=0
-    autocmd FileType markdown,tex silent set foldcolumn=5
-    autocmd FileType markdown,tex silent set wrapmargin=20
+  " margins and no statusline
+  autocmd FileType markdown,tex hi! link FoldColumn Normal
+  autocmd FileType markdown,tex set laststatus=0 " foldcolumn=5 wrapmargin=20
 
-    " headings:
-    autocmd FileType markdown nnoremap <buffer> <leader>1 yypVr=
-    autocmd FileType markdown nnoremap <buffer> <leader>hh yypVr=
-    autocmd FileType markdown nnoremap <buffer> <leader>2 yypVr-
-    autocmd FileType markdown nnoremap <buffer> <leader>3 I### <ESC>
+  " headings:
+  autocmd FileType markdown nnoremap <buffer> <leader>1 yypVr=
+  autocmd FileType markdown nnoremap <buffer> <leader>2 yypVr-
+  autocmd FileType markdown nnoremap <buffer> <leader>3 I### <ESC>
 
-    " separation line:
-    autocmd FileType markdown nnoremap <buffer> <leader>ll o* * *<cr><cr><esc>
+  " separation line:
+  autocmd FileType markdown nnoremap <buffer> <leader>ll o* * *<cr><cr><esc>
 
-    " markdown links: (first yank the URL and then select the linked text in visual mode, then hit ',ml')
-    autocmd FileType markdown vnoremap <buffer> <leader>ml S]%a()<esc>P<esc>
+  " markdown links: (first yank the URL and then select the linked text in visual mode, then hit ',ml')
+  autocmd FileType markdown vnoremap <buffer> <leader>l S]%a()<esc>P<esc>
 
 augroup END
 
@@ -1483,17 +1300,17 @@ hi! link markdownItalic Function
 nnoremap <leader>mm :silent !open -a Marked.app '%:p'<cr>
 
 let g:tagbar_type_markdown = {
-    \ 'ctagstype': 'markdown',
-    \ 'kinds': [
-          \ '1:header1',
-          \ '2:header2',
-          \ '3:header3',
-          \ '4:header4',
-          \ '5:header5',
-          \ '6:header6',
-          \ '7:header7'
-    \ ]
-    \ }
+      \ 'ctagstype': 'markdown',
+      \ 'kinds': [
+      \ '1:header1',
+      \ '2:header2',
+      \ '3:header3',
+      \ '4:header4',
+      \ '5:header5',
+      \ '6:header6',
+      \ '7:header7'
+      \ ]
+      \ }
 
 " }}}
 
@@ -1778,14 +1595,14 @@ nnoremap <silent> zx :bn<CR>
 "========
 
 let g:ctrlp_custom_ignore = {
-    \ 'file': '\.exe$\|\.so$\|\.dll$' }
+      \ 'file': '\.exe$\|\.so$\|\.dll$' }
 
 let g:ctrlp_user_command = {
-    \ 'types': {
-        \ 1: ['.git', 'cd %s && git ls-files'],
-    \ },
-    \ 'fallback': 'find %s -type f'
-\ }
+      \ 'types': {
+      \ 1: ['.git', 'cd %s && git ls-files'],
+      \ },
+      \ 'fallback': 'find %s -type f'
+      \ }
 
 let g:ctrlp_working_path_mode = 2
 
@@ -1852,65 +1669,18 @@ let g:nerdtree_tabs_focus_on_files = 1
 
 " }}}
 
-" CMDLINE {{{
+" COMMAND MODE {{{
 
 set history=1000               " Store lots of :cmdline history
 set cmdheight=2                " avoid 'Press ENTER to continue'
 
-" Leave the return key alone when in command line windows, since it's used
-" to run commands there.
-
-" autocmd! CmdwinEnter * :unmap <cr>
-" autocmd! CmdwinLeave * :call MapCR()
-" function! MapCR()
-"   nnoremap <cr> :nohlsearch<cr>
-" endfunction
-" call MapCR()
-
-" @: to repeat the last executed command
-
-
-" Command line:
-"
-" ctrl-w          delete word
-" ctrl-u          delete line
-" ctrl-v          enter ex mode
-"
-" Registers
-" =========
-" "/  Last search
-" "_  Black hole register
-" ":  most recent executed command
-" "%  name of current file
-" ".  last inserted text
-
+" shortcut to reverse search history (like c-r in terminal)
+nmap q: :<c-f>?
 
 cmap <c-h> <left>
 cmap <c-l> <right>
 cmap <c-j> <c-n>
 cmap <c-k> <c-p>
-
-" SUPER MODE
-
-" CTRL-R CTRL-W   : pull word under the cursor into a command line or search
-" CTRL-R CTRL-A   : pull whole word including punctuation
-" CTRL-R -        : pull small register
-" CTRL-R [0-9a-z] : pull named registers
-" CTRL-R %        : pull file name (also #)
-
-" insert result from command into buffer!
-" :r! cmd
-" ex :r! ls | grep pattern
-
-"  Entering !! in normal mode is translated to  :.!
-"  Appending a command sends the current line to the command replacing it with command's result
-" !!date              : Replace current line with date
-" !!which command     : Replace current line with the absolute path to command
-" !!tr -d AEIO        : translate current line deleting all occurrences of A, E, I, and O from the current line
-
-
-" stolen from pope's vim-rsi
-cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
 
 inoremap <expr> <C-E> col('.')>strlen(getline('.'))?"\<Lt>C-E>":"\<Lt>End>"
 
@@ -1943,7 +1713,7 @@ imap gyy <esc>:t-1<cr>gCcgi
 
 " COMPLETION {{{
 
-" ^X ^L           whole line completion!
+let g:UltiSnipsSnippetDirectories=["snippets"]
 
 " tab completion for e.g. :e is awesome with these
 set wildmode=list:longest,full
@@ -2079,13 +1849,7 @@ highlight SignColumn ctermbg=0 ctermfg=9
 
 " }}}
 
-" MOTION {{{
-
-" join lines from insert mode
-imap <c-j> <esc>Ji
-
-" bubble up and down (unimpaired)
-" [e and ]e
+" NAVIGATION {{{
 
 " next text object
 " ================================================================================
@@ -2101,11 +1865,11 @@ function! s:NextTextObject(motion, dir)
   let c = nr2char(getchar())
 
   if c ==# "b"
-      let c = "("
+    let c = "("
   elseif c ==# "B"
-      let c = "{"
+    let c = "{"
   elseif c ==# "d"
-      let c = "["
+    let c = "["
   endif
 
   exe "normal! ".a:dir.c."v".a:motion.c
@@ -2114,10 +1878,6 @@ endfunction
 " http://stackoverflow.com/questions/6926034/creating-a-mapping-for-insert-mode-but-not-for-autocomplete-submode/6926691#6926691
 inoremap <expr> <c-e> pumvisible() ? "\<c-e>" : "\<c-o>A"
 inoremap <C-a> <C-o>I
-
-" }}}
-
-" NAVIGATION {{{
 
 " prefer exact caret location to mere line jumps
 nmap '' ``
@@ -2139,8 +1899,8 @@ nnoremap <c-o> <c-o>zz
 
 " Make sure Vim returns to the same line when you reopen a file.
 augroup line_return
-    au!
-    au BufReadPost *
+  au!
+  au BufReadPost *
         \ if line("'\"") > 0 && line("'\"") <= line("$") |
         \     execute 'normal! g`"zvzz' |
         \ endif
@@ -2148,64 +1908,26 @@ augroup END
 
 " Only show cursorline in the current window and in normal mode.
 augroup cline
-    au!
-    au WinLeave * set nocursorline
-    au WinEnter * set cursorline
-    au InsertEnter * set nocursorline
-    au InsertLeave * set cursorline
+  au!
+  au WinLeave * set nocursorline
+  au WinEnter * set cursorline
+  au InsertEnter * set nocursorline
+  au InsertLeave * set cursorline
 augroup END
-"
-
-" DVM.VIM plugin
-"
-nmap <c-e><c-r> <Plug>DWMRotateCounterclockwise
-nmap <C-r><C-e> <Plug>DWMRotateClockwise
-
-nmap <c-e><c-n> <Plug>DWMNew
-nmap <c-e><c-c> <Plug>DWMClose
-nmap <c-e><c-f> <Plug>DWMFocus
-
-nmap <c-e><c-l> <Plug>DWMGrowMaster
-nmap <c-e><c-h> <Plug>DWMShrinkMaster
-"
-" }}}
-
-" NUMBERS {{{
-
-" Motion for numbers.  Handy for CSS. 
-onoremap N :<c-u>call <SID>NumberTextObject(0)<cr>
-xnoremap N :<c-u>call <SID>NumberTextObject(0)<cr>
-onoremap aN :<c-u>call <SID>NumberTextObject(1)<cr>
-xnoremap aN :<c-u>call <SID>NumberTextObject(1)<cr>
-onoremap iN :<c-u>call <SID>NumberTextObject(1)<cr>
-xnoremap iN :<c-u>call <SID>NumberTextObject(1)<cr>
-
-function! s:NumberTextObject(whole)
-    normal! v
-    while getline('.')[col('.')] =~# '\v[0-9]'
-        normal! l
-    endwhile
-    if a:whole
-        normal! o
-        while col('.') > 1 && getline('.')[col('.') - 2] =~# '\v[0-9]'
-            normal! h
-        endwhile
-    endif
-endfunction
 
 " }}}
 
 " PYTHON {{{
 
 augroup ft_python
-    au!
-    autocmd BufNewFile,BufRead *.py set filetype=python
-    autocmd FileType python set expandtab
-    autocmd FileType python set tabstop=4
-    autocmd FileType python set softtabstop=4
-    autocmd FileType python set shiftwidth=4
-    " compile
-    autocmd Filetype python nmap <buffer> <leader>cc :w<Esc>:!python %<CR>
+  au!
+  autocmd BufNewFile,BufRead *.py set filetype=python
+  autocmd FileType python set expandtab
+  autocmd FileType python set tabstop=4
+  autocmd FileType python set softtabstop=4
+  autocmd FileType python set shiftwidth=4
+  " compile
+  autocmd Filetype python nmap <buffer> <leader>cc :w<Esc>:!python %<CR>
 augroup END
 
 autocmd BufRead *.py set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
@@ -2251,55 +1973,39 @@ noremap <silent> <leader>/ :nohls<CR>
 
 
 " highlight whole line of search result
-nnoremap ,/l :let @/ = '.*\%(' . @/ . '\m\).*'<cr>
+" nnoremap ,/l :let @/ = '.*\%(' . @/ . '\m\).*'<cr>
 " or just word
-nnoremap ,/w :let @/ = '(@/)'<cr>
+" nnoremap ,/w :let @/ = '(@/)'<cr>
 
 " Keep search matches in the middle of the window.
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
 " quick replace
-nnoremap RR :%s//<left>
 nnoremap rr :%s//<left>
-vnoremap RR :s//<left>
 vnoremap rr :s//<left>
 
 " replace current word
-nnoremap RC :%s/<c-r><c-w>/
 nnoremap rc :%s/<c-r><c-w>/
-vnoremap RC :s/<c-r><c-w>/
 vnoremap rc :s/<c-r><c-w>/
+" ...with similar
+nnoremap RC :%s/<c-r><c-w>/<c-r><c-w>/
+vnoremap RC :s/<c-r><c-w>/<c-r><c-w>/
 
 " replace yanked
-nnoremap RY :%s/<c-r>"/<c-r>"
 nnoremap ry :%s/<c-r>"/
-vnoremap RY :s/<c-r>"/<c-r>"
 vnoremap ry :s/<c-r>"/
+" ...with similar
+nnoremap RY :%s/<c-r>"/<c-r>"
+vnoremap RY :s/<c-r>"/<c-r>"
 
 " replace visual
-vnoremap RV "xy:%s/<c-r>x/<c-r>x
 vnoremap rv "xy:%s/<c-r>x/
-
-" replace from last search
-" nnoremap <Leader>s :%s///<Left>
-" vnoremap <Leader>s :s///<Left>
+vnoremap RV "xy:%s/<c-r>x/<c-r>x
 
 " substitute repeat
 nnoremap & :&&<cr>
 xnoremap & :&&<cr>
-
-" Visual Mode */#
-
-function! s:VSetSearch()
-  let temp = @@
-  norm! gvy
-  let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
-  let @@ = temp
-endfunction
-
-vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR><c-o>
-vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR><c-o>
 
 " toggle quickfix window
 nmap <silent> ,fc :cclose<CR>
@@ -2307,22 +2013,6 @@ nmap <silent> ,fo :copen<CR>
 
 " open quickfix at bottom of the window
 let g:tlWindowPosition=1
-
-" }}}
-
-" SNIPPETS {{{
-
-" Snippets are activated by Shift+Tab
-" let g:snippetsEmu_key = "<S-Tab>"
-
-" Insert date
-iab <expr> dmy strftime("%d-%m-%Y")
-iab <expr> ymd strftime("%Y-%m-%d")
-iab <expr> mdy strftime("%m-%d-%Y")
-iab <expr> ydm strftime("%Y-%d-%m")
-
-" Insert date and time
-iab <expr> dtt strftime("%Y-%m-%d %X %a")
 
 " }}}
 
@@ -2375,6 +2065,7 @@ set synmaxcol=800
 nmap ,<tab> :tabnew<cr>
 
 nmap ,tc :tabclose<cr>
+nmap <tab><tab> :tabnext<cr>
 
 " gt              Move to next tab
 " gT              Move to previous tab
@@ -2388,6 +2079,9 @@ nmap ,tc :tabclose<cr>
 " }}}
 
 " TAGS {{{
+
+" Look for tags file in parent directories, upto "/"
+set tags=./tags;tags;/
 
 " Rebuild ctags
 nnoremap ,tt :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
@@ -2411,37 +2105,13 @@ let g:tagbar_autofocus = 1
 
 noremap :k :CtrlPFunky<cr>
 
-" if 1 " has('eval')
-"   let g:Tlist_Ctags_Cmd="ctags --exclude='*.js'"
-" endif
-
-set tags=./tags;
-" Look for tags file in parent directories, upto "/"
-set tags+=tags;/
-
 " }}}
 
 " TERMINAL {{{
 
-" nmap ,ct :ConqueTermVSplit zsh<cr>
-
 set shell=/bin/zsh
 
-" }}}
-
-" VIMWIKI {{{
-
-" keep track of several wikis
-" let g:vimwikilist=""
-" ,ww index (,wt in tab)
-" ,wi diary index
-" ,w,w diary today (,w,t in tab)
-" ,wh convert current page to HTML (,whh: and open)
-
-" }}}
-
-" TMUX {{{
-
+" TMUX 
 " Prompt for a command to run
 nmap <leader>tp :PromptVimTmuxCommand<cr>
 
@@ -2460,16 +2130,20 @@ nmap <leader>rs :InterruptVimTmuxRunner<cr>
 " run tests in tmux
 nmap <silent> ,w :w<cr>:RunLastVimTmuxCommand<cr>
 
+
+" }}}
+
+" VIMWIKI {{{
+
+" keep track of several wikis
+" let g:vimwikilist=""
+" ,ww index (,wt in tab)
+" ,wi diary index
+" ,w,w diary today (,w,t in tab)
+" ,wh convert current page to HTML (,whh: and open)
+
 " }}}
 
 source ~/dotfiles/vim/personal.vim
-
-" RSI bindings
-imap <c-k> _
-imap <c-j> ->
-" easier way to reach for hash key
-imap <c-d> #
-inoremap £ #
-
 
 " vim:set foldmethod=marks; set foldenable

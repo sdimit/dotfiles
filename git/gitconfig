@@ -11,7 +11,8 @@
 [core] # {{{
   autocrlf = false
   pager = less -FRSX
-  editor = vim
+  # editor = vim
+
 	excludesfile = ~/dotfiles/git/gitignore
 	quotepath = false
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
