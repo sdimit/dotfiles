@@ -28,9 +28,11 @@ Bundle 'majutsushi/tagbar'
 Bundle 'vim-scripts/AutoTag'
 " Bundle 'scrooloose/syntastic'
 Bundle 'edsono/vim-matchit'
+Bundle 'mattn/zencoding-vim'
+Bundle 'airblade/vim-gitgutter'
 
 " Languages
-Bundle 'klen/python-mode'
+" Bundle 'klen/python-mode'
 Bundle 'groenewege/vim-less'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'zeekay/vim-js2coffee'
@@ -55,6 +57,7 @@ Bundle 'kana/vim-textobj-indent'
 Bundle 'kana/vim-textobj-user'
 Bundle 'lucapette/vim-textobj-underscore'
 Bundle 'benmills/vimux'
+Bundle 'rosenfeld/conque-term'
 
 Bundle 'sjl/gundo.vim'
 Bundle 'tpope/vim-repeat'
@@ -79,7 +82,7 @@ Bundle 'henrik/vim-indexed-search'
 " rootfinder
 " reporoot
 " rooter
-
+" Bundle "wikitopian/hardmode"
 " Appearance
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'Lokaltog/vim-powerline'
@@ -97,7 +100,6 @@ filetype plugin on
 
 let mapleader=","
 let maplocalleader=","
-
 
 set visualbell " no sounds
 set nowarn
@@ -168,8 +170,6 @@ autocmd BufReadPost *
 
 map <silent> <leader>n :set number!<CR>
 
-nmap ,u :GundoToggle<CR>
-
 let g:yankring_history_dir = '$HOME'
 let g:yankring_history_file = '.yankring-history'
 let g:yankring_max_history = 300
@@ -184,7 +184,7 @@ let g:gundo_width = 60
 " YANKING AND PASTING
 
 " paste with trailing space
-nmap <leader>p a<space><c-r>"<esc>
+nmap <leader>P a<space><c-r>"<esc>
 
 " select pasted text
 nnoremap <expr> gV "`[".getregtype(v:register)[0]."`]"
@@ -198,9 +198,6 @@ nnoremap Y y$
 
 " Duplicate a selection
 vnoremap V y'>p
-
-" Yank entire buffer with gy
-nmap gy :%y+<cr>
 
 " Press Shift+P while in visual mode to replace the overwriting without
 " overwriting the default register
@@ -224,6 +221,7 @@ vmap <Leader>a:       :Tabularize /:<cr>
 vmap <Leader>a::      :Tabularize /:\zs<cr>
 vmap <Leader>a,       :Tabularize /,<cr>
 vmap <Leader>a{       :Tabularize /{<cr>
+vmap <Leader>ac       :Tabularize /#<cr>
 
 " easier blank line insertions
 nnoremap <leader>o :<C-u>exe 'normal m`'.v:count1.'o<C-v><C-[>``'<CR>
@@ -241,7 +239,7 @@ inoremap jk <esc>l
 cnoremap jj <c-c>
 
 " add space at cursor without exiting normal mode
-nnoremap ,<space> i<space><esc>
+nnoremap <leader><space> i<space><esc>
 
 " avoid shift key for invoking command line
 nnoremap ; :
@@ -308,22 +306,21 @@ vnoremap - =
 nnoremap <leader>C :let &scrolloff=999-&scrolloff<cr>
 
 " improved A normal mode key (jumps to right indentation)
+" nmap <expr> A MyA()
+" nnoremap ZA A
+" function! MyA()
+"   let l:prev_indent = indent(line('.') - 1)
+"   let l:indent_diff = l:prev_indent - indent(line('.'))
+"   let l:is_empty = len(getline('.')) == 0
+"   if l:indent_diff >= 0 && l:is_empty
+"     return 'ddko'
 
-nmap <expr> A MyA()
-nnoremap ZA A
-function! MyA()
-  let l:prev_indent = indent(line('.') - 1)
-  let l:indent_diff = l:prev_indent - indent(line('.'))
-  let l:is_empty = len(getline('.')) == 0
-  if l:indent_diff >= 0 && l:is_empty
-    return 'ddko'
-
-  elseif l:is_empty
-    return 'I'
-  else
-    return 'ZA'
-  endif
-endfunction
+"   elseif l:is_empty
+"     return 'I'
+"   else
+"     return 'ZA'
+"   endif
+" endfunction
 
 map <leader>cl :set cursorline!<cr>
 map <leader>cc :set cursorcolumn!<cr>
@@ -406,11 +403,11 @@ command! -bang QA qa<bang>
 command! -bang Qa qa<bang>
 
 " Kill buffer
-nnoremap ,q :bd!<cr>
+nnoremap <leader>q :bd!<cr>
 " Kill buffer and delete file
-nnoremap ,,q :!rm %<cr>:bd!<cr>
+nnoremap <leader><leader>q :!rm %<cr>:bd!<cr>
 " Quit vim
-nnoremap ,Q :qa!<cr>
+nnoremap <leader>Q :qa!<cr>
 
 " Filesystem
 nmap <leader>mk :!mkdir -p <c-r>=expand("%:p:h")."/"<cr>
@@ -422,8 +419,8 @@ nmap <leader>x :Silent chmod +x %<cr>
 nmap ,rn :Rename %<tab>
 
 " copy current filename into system clipboard - mnemonic: (c)urrent(f)ilename
-nnoremap <silent> ,cf :let @* = expand("%:~")<CR>
-nnoremap <silent> ,cn :let @* = expand("%:t")<CR>
+nnoremap <silent> <leader>cf :let @* = expand("%:~")<CR>
+nnoremap <silent> <leader>cn :let @* = expand("%:t")<CR>
 
 " expand current directory into command line
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
@@ -471,7 +468,7 @@ set autochdir
 " endif
 
 " open (OSX-way) current file: most useful with html file opening in default browser
-nmap ,o :!open %<cr>
+nmap <leader>o :!open %<cr>
 
 nmap <F5> :make<cr>
 
@@ -584,10 +581,10 @@ nmap <leader><leader>w :set wrap!<cr>
 
 " format paragraph: gq
 nmap ffp vip:!par 100<cr>
-nmap ,ffp vip:!par
+nmap <leader>ffp vip:!par
 " format document
 nmap fft ggVG:!par 100<cr>''
-nmap ,fft ggVG:!par
+nmap <leader>fft ggVG:!par
 
 
 " Alignment
@@ -634,9 +631,9 @@ set smartindent
 set smarttab
 set expandtab                  " convert tabs into spaces
 
-set shiftwidth=2
-set softtabstop=2
-set tabstop=2
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
 
 " temporarily change tab size
 nnoremap <leader><leader>2 :setlocal ts=2 sts=2 sw=2 et<cr>
@@ -662,7 +659,7 @@ set background=dark
 let g:solarized_termtrans = 1
 let g:solarized_contrast = 'high'
 
-nmap ,cs :colorscheme<space>
+nmap <leader>cs :colorscheme<space>
 
 " " show file path in title bar
 " set title
@@ -699,7 +696,7 @@ endif
 set mouse=a
 
 " manually enforce new highlights. FIXME
-nmap ,H 'FV'G,vc
+nmap <leader>H 'FV'G,vc
 
 " Custom color overwrites
 hi! link txtBold Identifier
@@ -714,7 +711,7 @@ hi! link ShowMarksHLu DiffChange
 hi! ColorColumn ctermfg=0 ctermbg=8
 
 " Get the current highlight group. Useful for then remapping the color
-map ,hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
+map <leader>hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
 
 " POWERLINE
 let g:Powerline_symbols='fancy'
@@ -778,19 +775,18 @@ endfunction
 
 " CONFIG {{{
 
-nmap ,ve :tabedit ~/dotfiles/vim/vimrc.vim<cr>
-nmap ,V :NERDTree ~/dotfiles/vim/bundle/<cr>
+nmap <leader>ve :tabedit ~/dotfiles/vim/vimrc.vim<cr>
+nmap <leader>V :NERDTree ~/dotfiles/vim/bundle/<cr>
 " automatically reread Vim's configuration after writing it
 " autocmd! BufWritePost ~/dotfiles/vim/vimrc.vim source ~/dotfiles/vim/vimrc.vim
 
-nmap ,ze :tabedit ~/dotfiles/zsh/zshrc<cr>
-nmap ,Ge :tabedit ~/dotfiles/git/gitconfig<cr>
-nmap ,te :tabedit ~/dotfiles/tmux/tmux.conf<cr>
+nmap <leader>ze :tabedit ~/dotfiles/zsh/zshrc<cr>
+nmap <leader>Ge :tabedit ~/dotfiles/git/gitconfig<cr>
+nmap <leader>te :tabedit ~/dotfiles/tmux/tmux.conf<cr>
 
 " ,vc - (Vim Command) copies the command under your cursor and executes it in vim
 vnoremap <leader>vc y:execute @@<cr>
 nnoremap <leader>vc ^vg_y:execute @@<cr>
-nmap <silent> ,VC :so %<CR>
 
 "}}}
 
@@ -875,8 +871,8 @@ autocmd FileType javascript,coffee setlocal makeprg=node\ %:r
 " autocmd BufRead *.coffee setlocal makeprg=node\ %:r
 
 " convert js into coffeescript on the fly (using eponymous npm bundle)
-nmap ,jc :Js2Coffee<cr>
-vmap ,jc :Js2Coffee<cr>
+nmap <leader>jc :Js2Coffee<cr>
+vmap <leader>jc :Js2Coffee<cr>
 
 " hide JS files
 " let NERDTreeIgnore+=['\.js']
@@ -885,7 +881,7 @@ vmap ,jc :Js2Coffee<cr>
 command -nargs=1 C CoffeeCompile | :<args>
 
 " build ctags for coffeescript only
-nnoremap ,tT :!ctags -R --languages==coffee,javascript --exclude=libs/* --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
+nnoremap <leader>tT :!ctags -R --languages==coffee,javascript --exclude=libs/* --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
 
 " Coffeescript tagbar support
 let g:tagbar_type_coffee = {
@@ -1051,7 +1047,8 @@ endfunction
 
 " GIT {{{
 
-nnoremap <F3> :Gstatus<cr>
+nnoremap <F3>        :Gstatus<cr>
+nnoremap <leader>gg  :Gstatus<cr>
 nnoremap <leader>gd  :Gdiff<cr>
 nnoremap <leader>gS  :Gdiff stash@{}<left>
 nnoremap <leader>gl  :Glog<cr><cr><leader>fo
@@ -1071,7 +1068,6 @@ nnoremap <leader>GA  :Git add .<cr>
 nnoremap <leader>gb  :Gblame<cr>
 nnoremap <leader>gh  :Gbrowse<cr>
 vnoremap <leader>gh  :Gbrowse<cr>
-nnoremap <leader>gg  :Ggrep<space>
 nnoremap <leader>gco :Gcheckout<cr>
 nnoremap <leader>gci :Gcommit<cr>
 nnoremap <leader>gm  :Gmove<cr>
@@ -1123,23 +1119,6 @@ endif
 "   R     reload status
 "   S     |:Gvsplit|
 
-
-" Open a split for each dirty file in git
-function! OpenChangedFiles()
-  only " Close all windows, unless they're modified
-  let status = system('git status -s | grep "^ \?\(M\|A\)" | cut -d " " -f 3')
-  let filenames = split(status, "\n")
-  if len(filenames) > 0
-    exec "edit " . filenames[0]
-    for filename in filenames[1:]
-      exec "sp " . filename
-    endfor
-  end
-endfunction
-command! OpenChangedFiles :call OpenChangedFiles()
-
-nnoremap ,GO :OpenChangedFiles<CR>
-
 " stop gitv messing with my window navigation
 let g:Gitv_DoNotMapCtrlKey = 1
 
@@ -1179,8 +1158,8 @@ autocmd BufRead,BufNewFile *.json set filetype=json
 autocmd Syntax json source ~/.vim/bundle/json/syntax/json.vim
 
 " format JSON
-nmap ,jp :%!python -m json.tool<cr>:set ft=json<cr>
-vmap ,jp :!python -m json.tool<cr>:set ft=json<cr>
+nmap <leader>jp :%!python -m json.tool<cr>:set ft=json<cr>
+vmap <leader>jp :!python -m json.tool<cr>:set ft=json<cr>
 
 augroup json_autocmd
   autocmd!
@@ -1225,17 +1204,10 @@ set iskeyword+=:
 " nmap ,c i\cite{}<F4>
 imap <silent> <F4> <Esc>:call Tex_Complete("default","text")<CR>
 
-" wrap selection in cite call
-vmap ,c S}i\cite<esc>
-
 " restore folds automatically
 " au BufWinLeave *.tex silent mkview!
 " au BufWinEnter *.tex silent loadview
 " TODO: make this on 'enter file' not buffer
-
-" shape single quotations in latex compliant
-nmap ,' F'r`
-nmap ,,' F"r`a`<esc>f"xa''<esc>
 
 " to surround selection with markup:
 " hit the following in VISUAL mode: (without hitting S for surround.vim first)
@@ -1403,17 +1375,8 @@ hi! link rnowebDelimiter pandocStrikeoutTable
 " fold SWeave chunck
 nmap zZ ?<<<CR>V/@<CR>zf
 
-
-
-" surround selection as argument to function call
-:vmap ,b S)i
-
-" surround selection with braces for LaTex section call
-:vmap ,B SBi
-
 " lines beginning with a single # are aligned at a specific column
 let r_indent_comment_column = 30
-
 
 augroup filetypedetect
   au! BufRead,BufNewFile *.r         setfiletype r
@@ -1441,24 +1404,24 @@ let g:surround_61 = "<%= \r %>"   " =
 vmap s S
 
 " ,# Surround a word with #{ruby interpolation}
-map ,# ysiw#
+map <leader># ysiw#
 " ,# Surround a word with quotes
-map ," ysiw"
+map <leader>" ysiw"
 
 
 " wrap words
-nmap ,( vES)
-nmap ,) v$hS)
-nmap ," vES"
+nmap <leader>( vES)
+nmap <leader>) v$hS)
+nmap <leader>" vES"
 
 " handlebar surround
-vmap ,} S}gvS}
+vmap <leader>} S}gvS}
 
 " nice for lisp dialects
-imap ,( <esc>vES)i
-imap ,) <esc>v$hS)i
-imap ," <esc>vES"i
-imap ,' <esc>vES'i
+imap <leader>( <esc>vES)i
+imap <leader>) <esc>v$hS)i
+imap <leader>" <esc>vES"i
+imap <leader>' <esc>vES'i
 
 " }}}
 
@@ -1515,9 +1478,6 @@ map gf :wincmd f<cr>
 " use ,gf to go to file in a vertical split
 nnoremap <silent> ,gf :vertical botright wincmd f<CR>
 
-nmap <c-n> :bnext<cr>
-nmap <c-p> :bprev<cr>
-
 nmap <silent> :' :vnew<cr>
 nmap <silent> :" :vnew<cr><c-w>o
 nmap <silent> ;' :vnew<cr><c-w>o
@@ -1571,16 +1531,10 @@ let g:LustyJugglerShowKeys = 'a'
 let g:LustyJugglerAltTabMode = 1
 let g:LustyJugglerSuppressRubyWarning = 1
 
-" NB: line numbers below apply to version 4.3
-
-" swapped bindings for 'ascend one directory at prompt' (C-w) and 'clear input' (C-u) directly in the plugin file (because it accessed raw binding codes). relevant lines in plugin file: 903 and 848
-
-" TODO: same for 'open selected match in a new h[o]rizontal split' (C-o) to C-s
-
 " added <space> mapping to open file/folder (add '32' on line 847,  and change 32 to 33 on line 840)
 " TODO: fork original source!!
 
-nmap <silent> :j :LustyBufferExplorer<CR>
+" nmap <silent> :j :LustyBufferExplorer<CR>
 nnoremap <c-g> :CtrlPMixed<cr>
 
 " quick switch to last (Cmd-Tab like)
@@ -1607,6 +1561,7 @@ let g:ctrlp_user_command = {
 let g:ctrlp_working_path_mode = 2
 
 " ctrl + m for MRU (which FSR also maps to enter, neat)
+nmap <leader>p :CtrlPMRU<cr>
 nmap <c-f> :CtrlPMRU<cr>
 
 " TIP: create new files using C-E from within CtrlP picker
@@ -1656,6 +1611,7 @@ noremap <leader>. :execute "NERDTree ".expand("%:p:h")<cr>
 " noremap <Leader>z :edit .<cr>
 
 noremap <Leader>b :NERDTreeFromBookmark<space>
+noremap <c-b> :NERDTreeFromBookmark<space>
 noremap <Leader>B :CtrlPBookmarkDir<cr>
 nmap <silent> <leader>i :LustyFilesystemExplorer ~/Inbox<CR>
 
@@ -1705,7 +1661,7 @@ vmap <c-\> \\\
 
 " yank and past visual before toggle comment
 vmap gyy ygvgc'>gp'.
-nmap gyy mz:t-1<cr>gCc`zmz
+nmap gyy mz:t-1<cr><c-\>`z:delmarks z<cr>
 imap gyy <esc>:t-1<cr>gCcgi
 " Using :t-1 instead of yyP to preserve registers
 
@@ -1784,8 +1740,9 @@ set completeopt=longest,menuone,preview
 
 " DIFF {{{
 
+nmap <leader>D :windo diffthis<cr>
+
 set fillchars=diff:⣿,vert:│
-" set fillchars=diff:_,vert:│
 
 " IN VIMDIFF BUFFER
 
@@ -1796,14 +1753,10 @@ set fillchars=diff:⣿,vert:│
 
 " in three-way vimdiff
 
-" :diffget //2 - fetches the hunk from the target parent (on the left)
-" :diffget //3 - fetches the hunk from the merge parent (on the right)
-
-
-nmap d2 :diffget //2<cr>
+nmap d2 :diffget //2<cr> 
+" fetches the hunk from the target parent (on the left)
 nmap d3 :diffget //3<cr>
-
-nmap ,D :windo diffthis<cr>
+" fetches the hunk from the merge parent (on the right)
 
 " " Linediff plugin
 " nmap ,d :Linediff<cr>
@@ -1885,10 +1838,6 @@ nmap '' ``
 " select last change
 nmap gV `[v`]
 
-" jump to actual paragraph edges, not the empty lines between
-nnoremap ,( {{j
-nnoremap ,) }}k
-
 " Bring cursor to center (use :sus to actually bring vim to background)0
 nnoremap <c-z> zvzz
 
@@ -1966,7 +1915,7 @@ nnoremap KL :GitGrep "<c-r>/"<cr>
 " HIGHLIGHTING
 
 " toggle highlighting on/off
-nnoremap <silent> ,h :set hlsearch! hlsearch?<CR>
+nnoremap <silent> <leader>h :set hlsearch! hlsearch?<CR>
 
 " clear highlights
 noremap <silent> <leader>/ :nohls<CR>
@@ -2008,8 +1957,8 @@ nnoremap & :&&<cr>
 xnoremap & :&&<cr>
 
 " toggle quickfix window
-nmap <silent> ,fc :cclose<CR>
-nmap <silent> ,fo :copen<CR>
+nmap <silent> <leader>fc :cclose<CR>
+nmap <silent> <leader>fo :copen<CR>
 
 " open quickfix at bottom of the window
 let g:tlWindowPosition=1
@@ -2018,13 +1967,13 @@ let g:tlWindowPosition=1
 
 " SPELLING {{{
 
-nmap <silent> ,,s :setlocal spell!<cr>
+nmap <silent> <leader><leader>s :setlocal spell!<cr>
 
 " auto-correct current word
 " imap <silent> ,s <esc>z=1<cr><cr>ea
 " nmap <silent> ,s z=1<cr><cr>
 " ...and go to next spelling mistake
-nmap <silent> ,S z=1<cr><cr>]s
+nmap <silent> <leader>S z=1<cr><cr>]s
 
 " }}}
 
@@ -2033,7 +1982,7 @@ nmap <silent> ,S z=1<cr><cr>]s
 syntax on
 syntax enable                  " turn on syntax highlighting
 
-nmap ,ft :set filetype=
+nmap <leader>ft :set filetype=
 
 let g:syntastic_check_on_open=0
 
@@ -2050,7 +1999,7 @@ let g:syntastic_auto_loc_list=0
 let g:syntastic_quiet_warnings=0
 
 " for html template files, you may want to disable syntastic's automatic checks using the passive mode:
-nmap ,ns :SyntasticToggleMode<cr>
+nmap <leader>ns :SyntasticToggleMode<cr>
 
 " Use tabs if it's a CSV file
 autocmd BufNewFile,BufRead *.csv set noexpandtab nosmarttab
@@ -2062,9 +2011,9 @@ set synmaxcol=800
 
 " TABS {{{
 
-nmap ,<tab> :tabnew<cr>
+nmap <leader><tab> :tabnew<cr>
 
-nmap ,tc :tabclose<cr>
+nmap <leader>tc :tabclose<cr>
 nmap <tab><tab> :tabnext<cr>
 
 " gt              Move to next tab
@@ -2084,7 +2033,7 @@ nmap <tab><tab> :tabnext<cr>
 set tags=./tags;tags;/
 
 " Rebuild ctags
-nnoremap ,tt :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
+nnoremap <leader>tt :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
 
 " Jump to next tag match
 nmap ]t :bd<cr>:tnext<cr>
@@ -2128,7 +2077,7 @@ nmap <leader>tx :CloseVimTmuxPanes<cr>
 nmap <leader>rs :InterruptVimTmuxRunner<cr>
 
 " run tests in tmux
-nmap <silent> ,w :w<cr>:RunLastVimTmuxCommand<cr>
+nmap <silent> <leader>w :w<cr>:RunLastVimTmuxCommand<cr>
 
 
 " }}}
@@ -2145,5 +2094,6 @@ nmap <silent> ,w :w<cr>:RunLastVimTmuxCommand<cr>
 " }}}
 
 source ~/dotfiles/vim/personal.vim
+source ~/dotfiles/vim/colors.vim
 
 " vim:set foldmethod=marks; set foldenable

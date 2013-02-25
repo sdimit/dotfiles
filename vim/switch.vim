@@ -2,7 +2,10 @@ let g:switch_definitions =
       \ [
       \   ['true', 'false'],
       \   ['left', 'right'],
-      \   ['div', 'span']
+      \   ['div', 'span'],
+      \   ['show', 'hide'],
+      \   ['height', 'width'],
+      \   ['max', 'min']
       \ ]
 " let g:switch_definitions =
 "       \ [
