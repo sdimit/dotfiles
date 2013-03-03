@@ -56,14 +56,15 @@ set statusline="  %t%= %A %10u:%-7g %15s %20d  "
 nmap <c-b> :marks<cr>
 
 mark h ~
-mark 1 ~/10to8/native/native/src/core/
-mark w ~/10to8/native/native/src/core/web/static/
-mark a ~/10to8/native/native/src/core/web/static/js/app/
 mark p ~/Projects/
 mark i ~/Inbox/
 mark d ~/Documents/
 mark s ~/dotfiles/
+mark v ~/dotfiles/vim/
 mark r ~/Reference/
+mark 1 ~/10to8/native/native/src/core/
+mark w ~/10to8/native/native/src/core/web/
+mark a ~/10to8/native/native/src/core/web/static/js/prototype/
 
 
 " }}}
@@ -183,4 +184,4 @@ set norunexec
 
 " }}}
 
-" vim: ft=vim
+" vim: set ts=4 sw=4 tw=0 filetype=vim et :
