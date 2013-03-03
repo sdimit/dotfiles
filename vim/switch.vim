@@ -5,7 +5,9 @@ let g:switch_definitions =
       \   ['div', 'span'],
       \   ['show', 'hide'],
       \   ['height', 'width'],
-      \   ['max', 'min']
+      \   ['top', 'bottom'],
+      \   ['max', 'min'],
+      \   ['login', 'signup']
       \ ]
 " let g:switch_definitions =
 "       \ [

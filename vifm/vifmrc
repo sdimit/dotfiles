@@ -179,7 +179,7 @@ set novimhelp
 set norunexec
 
 " Don't do too many requests to slow file systems
-set slowfs=curlftpfs
+" set slowfs=curlftpfs
 
 
 " }}}
