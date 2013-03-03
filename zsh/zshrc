@@ -598,7 +598,7 @@ export PYTHONPATH=usr/local/lib/python2.7/site-packages:$PYTHONPATH
 
 alias pm='python manage.py'
 alias pmr='python manage.py runserver'
-alias pmc='python manage.py collectstatic --noinput'
+alias pmc='python manage.py collectstatic --noinput -l'
 alias pms='python manage.py syncdb --noinput'
 alias pmg='python manage.py gen_data'
 alias pmt='python manage.py test --noinput'
@@ -638,10 +638,15 @@ then
   source $completion
 fi
 
-alias g="git"
+alias g="noglob git"
+
+
+# open changed files in git index
+ch () {
+  vim `git status | grep modified | awk '{print $3}'`
+}
 
 # use shortcuts from gitconfig (to avoid confusion), and make slightly shorter
-
 alias ga='git a'
 alias gaa='git aa'
 alias gam='git am'
