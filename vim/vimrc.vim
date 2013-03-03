@@ -8,90 +8,89 @@ call vundle#rc()
 
 Bundle 'gmarik/vundle'
 
-" File Management
-Bundle 'vim-scripts/LustyExplorer'
-Bundle 'vim-scripts/LustyJuggler'
+" file management
 Bundle 'kien/ctrlp.vim'
-Bundle 'tacahiroy/ctrlp-funky'
+Bundle 'istib/vifm.vim'
+Bundle 'vim-scripts/LustyExplorer'
 Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
 
-" Web Dev
-Bundle 'tristen/vim-sparkup'
-Bundle 'vim-scripts/closetag.vim'
+" tag supprot
+Bundle 'majutsushi/tagbar'
 
-" Working with code
+" git tools
 Bundle 'tpope/vim-fugitive'
 Bundle 'gregsexton/gitv'
-Bundle 'tpope/vim-surround'
-Bundle 'majutsushi/tagbar'
-" Bundle 'vim-scripts/taglist.vim'
-Bundle 'vim-scripts/AutoTag'
-" Bundle 'scrooloose/syntastic'
-Bundle 'edsono/vim-matchit'
-Bundle 'mattn/zencoding-vim'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'AndrewRadev/linediff.vim'
-Bundle 'Shougo/neocomplcache'
+
+" snippets and completion
 Bundle 'SirVer/ultisnips'
-Bundle 'tpope/vim-speeddating'
-" Bundle 'vim-scripts/marvim'
+Bundle 'Shougo/neocomplcache'
 
-" Languages
-" Bundle 'klen/python-mode'
-Bundle 'groenewege/vim-less'
-Bundle 'kchmck/vim-coffee-script'
-Bundle 'zeekay/vim-js2coffee'
-
-
+" general helpers
 Bundle 'tpope/vim-commentary'
-Bundle 'vim-scripts/a.vim'
+Bundle 'vim-scripts/YankRing.vim'
+Bundle 'tpope/vim-unimpaired'
+Bundle 'xaizek/vim-emacscommandline'
+Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-repeat'
+" Bundle 'scrooloose/syntastic'
 Bundle 'godlygeek/tabular'
 Bundle 'AndrewRadev/switch.vim'
 Bundle 'danro/rename.vim'
 Bundle 'kshenoy/vim-signature'
+
+" python
+Bundle 'klen/python-mode'
+Bundle 'nvie/vim-pyunit'
+" vimpdb
+
+" coffeescript
+Bundle 'kchmck/vim-coffee-script'
+Bundle 'zeekay/vim-js2coffee'
+Bundle 'claco/jasmine.vim'
+
+" web development
+Bundle 'tristen/vim-sparkup'
+Bundle 'mattn/zencoding-vim'
+Bundle 'vim-scripts/closetag.vim'
+Bundle 'edsono/vim-matchit'
+Bundle 'vim-scripts/AutoTag'
+Bundle 'leshill/vim-json'
+Bundle 'groenewege/vim-less'
+
+" helpers to handle rpl and unit tests in tmux
 Bundle 'ervandew/screen'
-Bundle 'vim-scripts/YankRing.vim'
-Bundle 'tpope/vim-unimpaired'
+Bundle 'benmills/vimux'
+Bundle 'nvie/vim_bridge'
+
 Bundle 'kana/vim-textobj-entire'
 Bundle 'kana/vim-textobj-fold'
 Bundle 'kana/vim-textobj-indent'
 Bundle 'kana/vim-textobj-user'
-Bundle 'lucapette/vim-textobj-underscore'
-Bundle 'benmills/vimux'
-Bundle 'rosenfeld/conque-term'
+Bundle 'MarcWeber/vim-addon-mw-utils'
+Bundle 'vim-scripts/utl.vim'
+Bundle 'tpope/vim-speeddating'
+" Bundle 'vim-scripts/marvim'
 
 Bundle 'sjl/gundo.vim'
-Bundle 'tpope/vim-repeat'
 Bundle 'chrisbra/NrrwRgn'
 Bundle 'vim-scripts/ZoomWin'
-Bundle 'MarcWeber/vim-addon-mw-utils'
-" Bundle 'nvie/vim-pyunit'
-Bundle 'vim-scripts/utl.vim'
-Bundle 'nvie/vim_bridge'
-Bundle 'claco/jasmine.vim'
-Bundle 'vim-scripts/utl.vim'
-Bundle 'leshill/vim-json'
 " Bundle 'vim-scripts/dbext.vim'
-" vimpdb
 
 " Search
 Bundle 'henrik/git-grep-vim'
 Bundle 'bronson/vim-visual-star-search'
 Bundle 'henrik/vim-indexed-search'
-" Bundle 'mileszs/ack.vim'
-" Bundle 'jordansissel/vim-ackmore'
-" rootfinder
-" reporoot
-" rooter
-" Bundle "wikitopian/hardmode"
+
 " Appearance
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'Lokaltog/vim-powerline'
 
 " Prose
 Bundle 'tpope/vim-markdown'
-Bundle 'jceb/vim-orgmode'
+" Bundle 'jceb/vim-orgmode'
 " Bundle 'vim-scripts/vimwiki'
 
 " }}}
@@ -420,18 +419,13 @@ cnoremap %% <C-R>=expand('%:h').'/'<cr>
 
 
 " Opens an edit command with the path of the currently edited file filled in
-nnoremap <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <leader>E :e <C-R>=expand("%:p:h") . "/" <CR>
 
-" Use ranger as vim file manager
-" function! Ranger()
-"   silent !ranger --choosefile=/tmp/chosen
-"   if filereadable('/tmp/chosen')
-"     exec 'edit ' . system('cat /tmp/chosen')
-"     call system('rm /tmp/chosen')
-"   endif
-"   redraw!
-" endfunction
-" nmap <tab><tab> :call Ranger()<cr>
+" Use vifm as vim file manager
+nnoremap <leader>e :EditVifm<cr>
+nnoremap <leader>v :VsplitVifm<cr>
+nnoremap <leader>s :SplitVifm<cr>
+nnoremap <leader>d :DiffVifm<cr>
 
 set suffixesadd+=.py
 set suffixesadd+=.js
@@ -877,7 +871,11 @@ autocmd FileType javascript,coffee setlocal omnifunc=javascriptcomplete#Complete
 autocmd FileType javascript,coffee setlocal makeprg=node\ %:r
 " autocmd BufRead *.coffee setlocal makeprg=node\ %:r
 
+" open corresponding js file
+" nmap <leader>jj :vertical expand("%:p:r")<CR>
+
 " convert js into coffeescript on the fly (using eponymous npm bundle)
+
 nmap <leader>jc :Js2Coffee<cr>
 vmap <leader>jc :Js2Coffee<cr>
 
@@ -934,15 +932,15 @@ let g:tagbar_type_coffee = {
 
 " DBEXT {{{
 
-vnoremap <leader>es :let g:dbext_default_use_sep_result_buffer=1<CR>:DBExecVisualSQL<cr>
-nnoremap <leader>es :let g:dbext_default_use_sep_result_buffer=1<CR>:DBExecSQLUnderCursor<cr>
+" vnoremap <leader>es :let g:dbext_default_use_sep_result_buffer=1<CR>:DBExecVisualSQL<cr>
+" nnoremap <leader>es :let g:dbext_default_use_sep_result_buffer=1<CR>:DBExecSQLUnderCursor<cr>
 
 
-vnoremap <leader>ES :let g:dbext_default_use_sep_result_buffer=0<CR>:DBExecVisualSQL<cr>
-nnoremap <leader>ES :let g:dbext_default_use_sep_result_buffer=0<CR>:DBExecSQLUnderCursor<cr>
+" vnoremap <leader>ES :let g:dbext_default_use_sep_result_buffer=0<CR>:DBExecVisualSQL<cr>
+" nnoremap <leader>ES :let g:dbext_default_use_sep_result_buffer=0<CR>:DBExecSQLUnderCursor<cr>
 
-nnoremap <leader>SLT :let g:dbext_default_use_sep_result_buffer=0<CR>:DBListTable<cr>
-"
+" nnoremap <leader>SLT :let g:dbext_default_use_sep_result_buffer=0<CR>:DBListTable<cr>
+" "
 " ,sbp -> prompt from DB params
 
 " ,se -> execute selected SQL query
@@ -1525,11 +1523,7 @@ nnoremap + <C-w>+
 " LUSTYJUGGLER AND LUSTYEXPLORER
 "================================
 "
-let g:LustyJugglerDefaultMappings = 0
 let g:LustyExplorerDefaultMappings = 0
-let g:LustyJugglerShowKeys = 'a'
-let g:LustyJugglerAltTabMode = 1
-let g:LustyJugglerSuppressRubyWarning = 1
 
 " added <space> mapping to open file/folder (add '32' on line 847,  and change 32 to 33 on line 840)
 " TODO: fork original source!!
@@ -1537,8 +1531,6 @@ let g:LustyJugglerSuppressRubyWarning = 1
 " nmap <silent> :j :LustyBufferExplorer<CR>
 nnoremap <c-g> :CtrlPBufTagAll<cr>
 
-" quick switch to last (Cmd-Tab like)
-nmap <silent> :l :LustyJugglePrevious<CR>
 nmap <silent> :: :LustyFilesystemExplorerFromHere<CR>
 
 "Move back and forth through previous and next buffers
@@ -1633,10 +1625,14 @@ set cmdheight=2                " avoid 'Press ENTER to continue'
 " shortcut to reverse search history (like c-r in terminal)
 nmap q: :<c-f>?
 
-cmap <c-h> <left>
-cmap <c-l> <right>
-cmap <c-j> <c-n>
-cmap <c-k> <c-p>
+" filter command line history with c-p and c-n
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
+
+cnoremap <c-h> <left>
+cnoremap <c-l> <right>
+cnoremap <c-j> <c-n>
+cnoremap <c-k> <c-p>
 
 inoremap <expr> <C-E> col('.')>strlen(getline('.'))?"\<Lt>C-E>":"\<Lt>End>"
 
@@ -2051,8 +2047,6 @@ let g:tagbar_compact = 1
 
 " capture cursor on popup
 let g:tagbar_autofocus = 1
-
-noremap :k :CtrlPFunky<cr>
 
 " }}}
 
