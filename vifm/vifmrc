@@ -124,13 +124,11 @@ nmap <cr> :!!open %f<cr>
 "
 " FILETYPES {{{
 
-" The file type is for the default programs to be used with
-" a file extension.
-" :filetype pattern1,pattern2 defaultprogram,program2
-" :fileviewer pattern1,pattern2 consoleviewer
-" The other programs for the file type can be accessed with the :file command
-" The command macros %f, %F, %d, %F may be used in the commands.
-" The %a macro is ignored.  To use a % you must put %%.
+" syntax highlighting with pygmentize. requires latest vifm for color escaping
+fileview * pygmentize -O style=monokai 
+
+" open everything with terminal vim by default, and override exceptions below
+filetype * vim %f
 
 " Web
 filetype *.html,*.htm links %f %i &
@@ -149,6 +147,7 @@ set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,phistory,dirstack,reg
 set vicmd='/Applications/MacVim.app/Contents/MacOS/Vim'
 
 set trash
+" use OSX Trash dir
 set trashdir="~/.Trash"
 set history=100
 
