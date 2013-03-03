@@ -25,11 +25,17 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'gregsexton/gitv'
 Bundle 'tpope/vim-surround'
 Bundle 'majutsushi/tagbar'
+" Bundle 'vim-scripts/taglist.vim'
 Bundle 'vim-scripts/AutoTag'
 " Bundle 'scrooloose/syntastic'
 Bundle 'edsono/vim-matchit'
 Bundle 'mattn/zencoding-vim'
 Bundle 'airblade/vim-gitgutter'
+Bundle 'AndrewRadev/linediff.vim'
+Bundle 'Shougo/neocomplcache'
+Bundle 'SirVer/ultisnips'
+Bundle 'tpope/vim-speeddating'
+" Bundle 'vim-scripts/marvim'
 
 " Languages
 " Bundle 'klen/python-mode'
@@ -37,10 +43,6 @@ Bundle 'groenewege/vim-less'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'zeekay/vim-js2coffee'
 
-Bundle 'Shougo/neocomplcache'
-Bundle 'SirVer/ultisnips'
-" Bundle 'garbas/vim-snipmate'
-" Bundle 'honza/snipmate-snippets'
 
 Bundle 'tpope/vim-commentary'
 Bundle 'vim-scripts/a.vim'
@@ -89,7 +91,8 @@ Bundle 'Lokaltog/vim-powerline'
 
 " Prose
 Bundle 'tpope/vim-markdown'
-Bundle 'vim-scripts/vimwiki'
+Bundle 'jceb/vim-orgmode'
+" Bundle 'vim-scripts/vimwiki'
 
 " }}}
 
@@ -183,8 +186,8 @@ let g:gundo_width = 60
 
 " YANKING AND PASTING
 
-" paste with trailing space
-nmap <leader>P a<space><c-r>"<esc>
+" paste with preceding space
+nmap <leader>p a<space><c-r>"<esc>
 
 " select pasted text
 nnoremap <expr> gV "`[".getregtype(v:register)[0]."`]"
@@ -212,16 +215,6 @@ imap <c-j> ->
 imap <c-d> #
 inoremap £ #
 
-
-" ALIGN/TABULARISE
-
-vmap <Leader>a=       :Tabularize /=<cr>
-vmap <Leader>a"       :Tabularize /"<cr>
-vmap <Leader>a:       :Tabularize /:<cr>
-vmap <Leader>a::      :Tabularize /:\zs<cr>
-vmap <Leader>a,       :Tabularize /,<cr>
-vmap <Leader>a{       :Tabularize /{<cr>
-vmap <Leader>ac       :Tabularize /#<cr>
 
 " easier blank line insertions
 nnoremap <leader>o :<C-u>exe 'normal m`'.v:count1.'o<C-v><C-[>``'<CR>
@@ -627,7 +620,7 @@ nmap <leader>co :call CleanCode()<cr>
   
 filetype indent on
 " set autoindent                 " copy indent from current when starting a new line
-set smartindent
+set nosmartindent
 set smarttab
 set expandtab                  " convert tabs into spaces
 
@@ -639,6 +632,18 @@ set tabstop=4
 nnoremap <leader><leader>2 :setlocal ts=2 sts=2 sw=2 et<cr>
 nnoremap <leader><leader>4 :setlocal ts=4 sts=4 sw=4 et<cr>
 
+" ALIGN/TABULARISE
+
+vmap <Leader>a=       :Tabularize /=<cr>
+vmap <Leader>a"       :Tabularize /"<cr>
+vmap <Leader>a:       :Tabularize /:<cr>
+vmap <Leader>a::      :Tabularize /:\zs<cr>
+vmap <Leader>a,       :Tabularize /,<cr>
+vmap <Leader>a-       :Tabularize /-<cr>
+vmap <Leader>a{       :Tabularize /{<cr>
+vmap <Leader>ac       :Tabularize /#<cr>
+
+
 " }}}
 
 " LOOK {{{
@@ -647,7 +652,7 @@ set laststatus=2               " show the statusline in all windows
 set noruler
 set showmode                   " Don't show current mode down the bottom
 set gcr=a:blinkon0             " Disable cursor blink
-set cursorline
+set nocursorline
 set linespace=0             " don't insert extra pixel lines betweens rows
 set lazyredraw              " do not redraw while running macros
 " set ttyfast                 " fast redraw screen
@@ -715,8 +720,10 @@ map <leader>hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
 
 " POWERLINE
 let g:Powerline_symbols='fancy'
-let g:Powerline_theme='istib'
-let g:Powerline_colorscheme='istib'
+" let g:Powerline_theme='istib'
+" let g:Powerline_colorscheme='istib'
+let g:Powerline_theme='solarized256'
+let g:Powerline_colorscheme='solarized256'
 
 " Unfuck my screen
 nnoremap <leader>u :syntax sync fromstart<cr>:redraw!<cr>
@@ -796,7 +803,7 @@ set undodir=~/.vim/backups     " Keep undo history across sessions, by storing i
 set undofile
 
 " GUndo
-nmap <silent> <F4> :GundoToggle<CR>
+" nmap <silent> <F4> :GundoToggle<CR>
 
 "}}}
 
@@ -1121,13 +1128,6 @@ endif
 " stop gitv messing with my window navigation
 let g:Gitv_DoNotMapCtrlKey = 1
 
-cabbrev git Git
-
-augroup ft_fugitive
-  au!
-  au BufNewFile,BufRead .git/index setlocal nolist
-augroup END
-
 " autocmd FileType gitcommit DiffGitCached | wincmd p
 
 "}}}
@@ -1146,6 +1146,8 @@ augroup END
 
 " shortcut to operate on tag inside
 omap t it
+" prevent c-n mapping conflict
+let g:sparkupNextMapping=""
 
 
 " }}}
@@ -1413,7 +1415,7 @@ nmap <leader>) v$hS)
 nmap <leader>" vES"
 
 " handlebar surround
-vmap <leader>} S}gvS}
+" vmap <leader>} S}gvS}
 
 " nice for lisp dialects
 imap <leader>( <esc>vES)i
@@ -1533,7 +1535,7 @@ let g:LustyJugglerSuppressRubyWarning = 1
 " TODO: fork original source!!
 
 " nmap <silent> :j :LustyBufferExplorer<CR>
-nnoremap <c-g> :CtrlPMixed<cr>
+nnoremap <c-g> :CtrlPBufTagAll<cr>
 
 " quick switch to last (Cmd-Tab like)
 nmap <silent> :l :LustyJugglePrevious<CR>
@@ -1556,20 +1558,20 @@ let g:ctrlp_user_command = {
       \ 'fallback': 'find %s -type f'
       \ }
 
-let g:ctrlp_working_path_mode = 2
 
 " ctrl + m for MRU (which FSR also maps to enter, neat)
-nmap <leader>p :CtrlPMRU<cr>
 nmap <c-f> :CtrlPMRU<cr>
+nmap <leader>p :CtrlPMRU<cr>
 
 " TIP: create new files using C-E from within CtrlP picker
 
 " TODO: nnoremap :<space>
 
 " Default to file searches
-let g:ctrlp_by_filename = 1
+let g:ctrlp_by_filename = 0
 " switch to path search with ctrl-d inside plugin
 
+let g:ctrlp_working_path_mode = 2
 " We don't want to use Ctrl-p as the mapping because
 " it interferes with YankRing (paste, then hit ctrl-p)
 let g:ctrlp_map = ',0'
@@ -1653,6 +1655,7 @@ autocmd CmdwinEnter * nnoremap <buffer> <esc> :q<cr>
 " nmap <c-\> \\ip
 
 nmap <c-\> \\\
+imap <c-\> <esc>\\\i
 vmap <c-\> \\\
 
 " <c-/>a    comment as
@@ -1853,15 +1856,14 @@ augroup line_return
         \ endif
 augroup END
 
-" Only show cursorline in the current window and in normal mode.
-augroup cline
-  au!
-  au WinLeave * set nocursorline
-  au WinEnter * set cursorline
-  au InsertEnter * set nocursorline
-  au InsertLeave * set cursorline
-augroup END
-
+" " Only show cursorline in the current window and in normal mode.
+" augroup cline
+"   au!
+"   au WinLeave * set nocursorline
+"   au WinEnter * set cursorline
+"   au InsertEnter * set nocursorline
+"   au InsertLeave * set cursorline
+" augroup END
 " }}}
 
 " PYTHON {{{
@@ -1892,6 +1894,7 @@ set gdefault            " Add the g flag to search/replace by default
 
 " Open a Quickfix window for the last search.
 nnoremap <silent> KS :execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>
+vnoremap <silent> KS *:execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>
 
 nnoremap <silent> KB :LustyBufferGrep<CR>
 
@@ -2037,6 +2040,8 @@ nmap [t :bd<cr>:tprevious<cr>
 
 "open the taglist (method browser) using ,t
 nnoremap <silent> <F2> :TagbarToggle<CR><C-l>
+nnoremap <silent> T :TagbarToggle<CR><C-l>
+" noremap <silent> <F2> :TlistToggle<CR>
 
 let g:tagbar_width=36
 let g:tagbar_autoclose = 1
