@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# moves stuff (first arg) into new directory (second)
+mkdir $2
+cp $1 $2
+rm $1
+cd $2

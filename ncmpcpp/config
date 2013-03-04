@@ -1,0 +1,11 @@
+mpd_music_dir="Music/iTunes Music/"
+mpd_host="127.0.0.1"
+mpd_port="6000"
+fancy_scrolling = yes
+fetch_lyrics_for_current_song_in_background = yes
+jump_to_now_playing_song_at_start = yes
+ignore_leading_the = yes
+allow_physical_files_deletion = yes
+allow_physical_directories_deletion = yes
+user_interface = alternative
+        

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+rm ~/.oh-my-zsh/themes/$1.zsh-theme
+
+

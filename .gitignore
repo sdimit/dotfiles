@@ -1,1 +1,9 @@
-*
+vim/bundle/*
+kindle/*
+personal*
+bin/xnomad
+maestro/Keyboard Maestro Macros.plist
+maestro/Untitled Macro File.kmmacros
+newsbeuter/config
+newsbeuter/solarized-dark.txt
+newsbeuter/urls.txt

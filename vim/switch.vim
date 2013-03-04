@@ -7,5 +7,6 @@ let g:switch_definitions =
       \   ['height', 'width'],
       \   ['top', 'bottom'],
       \   ['max', 'min'],
-      \   ['login', 'signup']
+      \   ['login', 'signup'],
+      \   ['->', '=>']
       \ ]

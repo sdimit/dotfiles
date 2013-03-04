@@ -1,0 +1,4 @@
+#!/bin/sh
+
+IP=`curl --silent http://ip.appspot.com/`
+echo "External IP: ${IP}"
