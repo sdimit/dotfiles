@@ -780,4 +780,3 @@ if [[ -a ~/.secrets ]] then
 fi
 
 # }}}
-

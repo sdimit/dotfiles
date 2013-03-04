@@ -48,60 +48,65 @@ class ${1:name}
 		${3://body...}
 endsnippet
 
-# Funcion
+# Function
 snippet fun "fun"
 ${1:function_name} = (${2:argumen}) ->
 	${3: //body...}
 endsnippet
 
-# Asignation if
+# Anonymous Function
+snippet f "f"
+(${1:argumen}) -> ${2: //body...}
+endsnippet
+
+# if
 snippet =if "=if"
 ${1:variable} = ${2:valor} if ${3:condition}
 endsnippet
 
-# Asignation if and
+# if and
 snippet ifand "ifand"
 if ${1} and ${2}
 endsnippet
 
-# Asignation if then else
+# if then else
 snippet =ifthen "=ifthen"
 ${1: value} = if ${2:option} then ${3:asignation} else ${4:else}
 endsnippet
 
-# Asignation or=
+# or=
 snippet or= "or="
 ${1:options} or= ${2:defaults}
 endsnippet
 
-# Asignation forin
+# forin
 snippet forin "forin"
 ${1:countdown} = (${2:num} for ${3:num} in ${4:[10..1]})
 endsnippet
 
-# Asignation forof
+# forof
 snippet forof "forof"
 ${1:ages} = for ${2:key}, ${3:value} of ${4:yearsOld}
 	key + " is " + value
 endsnippet
 
-# Asignation while
+# while
 snippet while "while"
 ${1:action()} while ${2:condition}
 endsnippet
 
-# Asignation until
+# until
 snippet until "until"
 ${1:action()} until ${2:condition}
 endsnippet
 
-# Asignation forindo
+# forindo
 snippet forindo "forindo"
 for ${1:filename} in ${2:list}
 	do (${3:filename}) ->
 endsnippet
 
-# Asignation try
+# try
 snippet try "try"
 try
 	${1:expresion}
@@ -109,7 +114,7 @@ catch error
 	${2:error}
 endsnippet
 
-# Asignation tryfin
+# tryfin
 snippet tryfin "tryfin"
 try
 	${1:expresion}
@@ -119,24 +124,24 @@ finally
 	${3:cleanAll()}
 endsnippet
 
-# Asignation ?=
+# ?=
 snippet ?= "?="
 ${1:speed} ?= ${2:75}
 endsnippet
 
-# Asignation =?
+# =?
 snippet =? "=?"
 ${1:footprints} = ${2:yetis} ? ${3:bear}
 endsnippet
 
-# Asignation switch
+# switch
 snippet switch "switch"
 switch ${1:day}
 	when ${2:Mon} then ${3:go work}
 	else ${4:go relax}
 endsnippet
 
-# Asignation ##
+# ##
 snippet ## "##"
 ###
 	${1:comment}

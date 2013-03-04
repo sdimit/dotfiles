@@ -32,7 +32,6 @@ Bundle 'Shougo/neocomplcache'
 Bundle 'tpope/vim-commentary'
 Bundle 'vim-scripts/YankRing.vim'
 Bundle 'tpope/vim-unimpaired'
-Bundle 'xaizek/vim-emacscommandline'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
 " Bundle 'scrooloose/syntastic'
@@ -43,7 +42,7 @@ Bundle 'kshenoy/vim-signature'
 
 " python
 Bundle 'klen/python-mode'
-Bundle 'nvie/vim-pyunit'
+" Bundle 'nvie/vim-pyunit'
 " vimpdb
 
 " coffeescript
@@ -187,6 +186,9 @@ let g:gundo_width = 60
 " paste with preceding space
 nmap <leader>p a<space><c-r>"<esc>
 
+" paste in alternate file
+vnoremap ap y<c-^>P<c-^>
+
 " select pasted text
 nnoremap <expr> gV "`[".getregtype(v:register)[0]."`]"
 
@@ -208,8 +210,9 @@ vmap P p :call setreg('"', getreg('0')) <CR>
 nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 
 " RSI bindings
-imap <c-k> _
-imap <c-j> ->
+" imap <c-k> _
+" imap <c-j> ->
+imap -- ->
 imap <c-d> #
 inoremap £ #
 
@@ -238,8 +241,8 @@ nnoremap ; :
 " nnoremap g: g;
 
 " Easier within-line navigation
-noremap H ^
-noremap L $
+nnoremap H ^
+nnoremap L $
 vnoremap L g_
 
 " so we can use $ to duplicate % (just because i keep confusing them)
@@ -425,7 +428,10 @@ nnoremap <leader>e :EditVifm<cr>
 nnoremap <leader>v :VsplitVifm<cr>
 nnoremap <leader>s :SplitVifm<cr>
 nnoremap <leader>d :DiffVifm<cr>
+nnoremap <leader>T :TabVifm<cr>
 
+" shortcut to swap to alternate file
+nnoremap :l <c-^>
 set suffixesadd+=.py
 set suffixesadd+=.js
 
@@ -732,11 +738,6 @@ let g:Powerline_colorscheme='solarized256'
 " Unfuck my screen
 nnoremap <leader>u :syntax sync fromstart<cr>:redraw!<cr>
 
-" show/hide status bar.
-" FIXME: make a single key toggle
-nmap <silent> <F12> :set laststatus=2<cr>
-nmap <silent> <F11> :set laststatus=0<cr>
-
 " Resize splits when the window is resized
 au VimResized * :wincmd =
 
@@ -799,6 +800,7 @@ nmap <leader>te :tabedit ~/dotfiles/tmux/tmux.conf<cr>
 vnoremap <leader>vc y:execute @@<cr>
 nnoremap <leader>vc ^vg_y:execute @@<cr>
 
+vnoremap H :<del><del><del><del><del>help<space><c-r><c-w><cr>
 "}}}
 
 " UNDO {{{
@@ -870,6 +872,12 @@ hi def link clojureComment     Search
 "
 " sr StartRepl
 " sR StartLocalRepl
+" }}}
+
+" HASKELL {{{
+
+Bundle "lukerandall/haskellmode-vim"
+
 " }}}
 
 " COFFEESCRIPT {{{
@@ -1061,22 +1069,26 @@ endfunction
 
 " GIT {{{
 
-nnoremap <F3>        :Gstatus<cr>
 nnoremap <leader>gg  :Gstatus<cr>
+
 nnoremap <leader>gd  :Gdiff<cr>
 nnoremap <leader>gS  :Gdiff stash@{}<left>
+" load revisions of current file
 nnoremap <leader>gl  :Glog<cr><cr><leader>fo
-nnoremap <leader>GL  :Git log -p %<cr>
+" load repository in tab
+nnoremap <leader>gL  :Gitv<cr>
+" show git history for current file
+nnoremap <leader>GL  :Gitv!<cr>
+vnoremap <leader>GL  :Gitv! --all<cr>
+" search logs
 nnoremap <leader>gG  :Glog --grep=
 nnoremap <leader>gC  :Glog -S
-nnoremap <leader>gL  :Gitv<cr>
-nnoremap <leader>GL  :Gitv!<cr>
-vnoremap <leader>gL  :Gitv! --all<cr>
-nnoremap <leader>gw  :Gwrite<cr>
+" open git objects (such as current file on other branch)
 nnoremap <leader>gE  :Gedit<space>
 nnoremap <leader>ge  :Gvsplit<space>
 nnoremap <leader>gs  :Gsplit<space>
 nnoremap <leader>gr  :Gread<cr>
+nnoremap <leader>gw  :Gwrite<cr>
 nnoremap <leader>ga  :Git add --all<cr>:Gcommit<cr>
 nnoremap <leader>GA  :Git add .<cr>
 nnoremap <leader>gb  :Gblame<cr>
@@ -1085,7 +1097,7 @@ vnoremap <leader>gh  :Gbrowse<cr>
 nnoremap <leader>gco :Gcheckout<cr>
 nnoremap <leader>gci :Gcommit<cr>
 nnoremap <leader>gm  :Gmove<cr>
-nnoremap <leader>gR  :Gremove<cr>
+nnoremap <leader>gR  :Git checkout -- %<cr><cr>,u
 nnoremap <leader>gp  :Git push<CR>
 nnoremap <leader>gP  :Git pull<CR>
 nnoremap <leader>grsh :Git reset --hard<cr>
@@ -1257,7 +1269,7 @@ augroup ft_markdown
 
   " margins and no statusline
   autocmd FileType markdown,tex hi! link FoldColumn Normal
-  autocmd FileType markdown,tex set laststatus=0 " foldcolumn=5 wrapmargin=20
+  " autocmd FileType markdown,tex set laststatus=0 foldcolumn=5 wrapmargin=20
 
   " headings:
   autocmd FileType markdown nnoremap <buffer> <leader>1 yypVr=
@@ -1609,16 +1621,11 @@ let NERDTreeShowHidden=1
 
 nmap <F1> :NERDTreeTabsToggle<cr>
 
-noremap <leader>. :execute "NERDTree ".expand("%:p:h")<cr>
-" noremap <Leader>z :edit .<cr>
+" current file in NERDTree
+noremap <leader>. :NERDTreeFind<cr>
 
 noremap <Leader>b :NERDTreeFromBookmark<space>
-noremap <c-b> :NERDTreeFromBookmark<space>
-noremap <Leader>B :CtrlPBookmarkDir<cr>
-nmap <silent> <leader>i :LustyFilesystemExplorer ~/Inbox<CR>
-
-" current file in NERDTree
-noremap <Leader>f :NERDTreeFind<cr>
+noremap <c-b> :CtrlPBuffer<cr>
 
 " Auto open nerd tree on startup
 let g:nerdtree_tabs_open_on_gui_startup = 0
@@ -1749,7 +1756,8 @@ set completeopt=longest,menuone,preview
 
 nmap <leader>D :windo diffthis<cr>
 
-set fillchars=diff:⣿,vert:│
+" set fillchars=diff:⣿,vert:│
+set fillchars=diff:_,vert:│
 
 " IN VIMDIFF BUFFER
 
@@ -1884,6 +1892,7 @@ augroup END
 
 autocmd BufRead *.py set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
 
+let pymode_options=0
 " }}}
 
 " SEARCH {{{
@@ -1891,6 +1900,9 @@ autocmd BufRead *.py set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stde
 " Use sane regexes.
 nnoremap / /\v
 vnoremap / /\v
+
+" use enter to start search (expect in quickfix window)
+nnoremap <expr> <cr> (&buftype is# "quickfix" ? ":.cc<cr>" : "/")
 
 set incsearch           " Find the next match as we type the search
 set nohlsearch          " Highlight searches by default
@@ -1914,6 +1926,7 @@ nnoremap KC :GitGrep <c-r><c-w><CR>
 vnoremap KC "sy:GitGrep "<c-r>s"<CR>
 
 nnoremap KA :GitGrep ""<left>
+vnoremap KA "sy:GitGrep "<c-r>s"<CR>
 nnoremap KL :GitGrep "<c-r>/"<cr>
 
 " HIGHLIGHTING
@@ -2062,7 +2075,7 @@ let g:tagbar_autofocus = 1
 
 " TERMINAL {{{
 
-" set shell=zsh\ -i
+set shell=zsh
 
 " TMUX 
 " Prompt for a command to run

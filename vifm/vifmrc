@@ -184,4 +184,4 @@ set norunexec
 
 " }}}
 
-" vim: set ts=4 sw=4 tw=0 filetype=vim et :
+" vim: set ts=4 sw=4 tw=0 et :
