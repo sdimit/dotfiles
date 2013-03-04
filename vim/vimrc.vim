@@ -910,21 +910,11 @@ nnoremap <leader>tT :!ctags -R --languages==coffee,javascript --exclude=libs/* -
 let g:tagbar_type_coffee = {
       \ 'ctagstype' : 'coffee',
       \ 'kinds' : [
-      \   'n:namespace',
       \   'c:class',
-      \   'o:object',
-      \   'm:methods',
-      \   'f:functions',
-      \   'i:instance variables',
-      \   'v:var:1',
       \ ],
       \ 'sro' : ".",
       \ 'scope2kind' : {
       \   'o' : 'object',
-      \   'f' : 'function',
-      \   'm' : 'method',
-      \   'v' : 'var',
-      \   'i' : 'ivar'
       \ },
       \ 'kind2scope' : {
       \  'function' : 'f',
@@ -2059,7 +2049,7 @@ nmap [t :bd<cr>:tprevious<cr>
 
 "open the taglist (method browser) using ,t
 nnoremap <silent> <F2> :TagbarToggle<CR><C-l>
-nnoremap <silent> T :TagbarToggle<CR><C-l>
+nnoremap <silent> T :TagbarToggle<CR><C-l>/
 " noremap <silent> <F2> :TlistToggle<CR>
 
 let g:tagbar_width=36
