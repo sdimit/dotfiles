@@ -1,7 +1,9 @@
 " UI IMPROVEMENTS {{{
 
-" quick quit
-nmap q :q<cr>
+" quick quit and save directory for zsh
+nmap q :!echo `pwd` > /tmp/vifm-dir<CR>:q<CR>
+
+nmap <cr> /
 
 " quicklook on OSX
 nmap <space> :!ql "%f"<cr>

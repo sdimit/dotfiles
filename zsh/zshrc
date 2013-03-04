@@ -225,8 +225,6 @@ autoload -U edit-command-line
 zle -N edit-command-line
 bindkey '\C-x\C-e' edit-command-line
 
-# alias f="/usr/local/bin/ranger"
-alias f="vifm ."
 alias m="mutt"
 alias o="offlineimap -o"
 alias t="tig"
@@ -338,7 +336,17 @@ alias spoton="sudo mdutil -a -i on"
 
 # FILE MANAGEMENT {{{
 
+# open vifm and keep last navigated directory
+fm () {
+    printf \"\\033kvifm\\033\\134\"
+    vifm `pwd`
+    [ -e /tmp/vifm-dir ] && cd `cat /tmp/vifm-dir` && rm -f /tmp/vifm-dir
+    [ -e /tmp/vifm-vimfile ] && vim +"silent !rm /tmp/vifm-vimfile" +redraw! `cat /tmp/vifm-vimfile`
+    clear
+}
+
 # Show human friendly numbers and colors
+alias f='fm'
 alias df='df -h'
 alias ll='ls -alGh'
 alias ls='ls -Gh'
