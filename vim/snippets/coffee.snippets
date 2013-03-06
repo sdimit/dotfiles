@@ -1,4 +1,12 @@
 # for knockout
+snippet js "js"
+ko.toJS ${1}
+endsnippet
+
+snippet kdb "ddb"
+<pre data-bind="text: ko.toJSON($data, null, 2)"></pre>
+endsnippet
+
 snippet db "db"
 data-bind="${1}"
 endsnippet
@@ -14,6 +22,19 @@ endsnippet
 snippet idb "idb"
 <input type="text" id="${1}" data-bind="value: ${2}"/>
 endsnippet
+
+snippet dbt "dbt"
+data-bind="text: ${1}"
+endsnippet
+
+snippet dbw "dbw"
+data-bind="with: ${1}"
+endsnippet
+
+snippet dbf "dbf"
+data-bind="foreach: ${1}"
+endsnippet
+
 
 # for jquery
 snippet . "."

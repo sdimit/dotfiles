@@ -92,6 +92,8 @@ Bundle 'tpope/vim-markdown'
 " Bundle 'jceb/vim-orgmode'
 " Bundle 'vim-scripts/vimwiki'
 
+Bundle "lukerandall/haskellmode-vim"
+
 " }}}
 
 " GENERAL {{{
@@ -100,6 +102,10 @@ filetype plugin on
 
 let mapleader=","
 let maplocalleader=","
+
+" Kinesis settings
+" let mapleader="\<space>"
+" let maplocalleader="\<space>"
 
 set visualbell " no sounds
 set nowarn
@@ -212,7 +218,6 @@ nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 " RSI bindings
 " imap <c-k> _
 " imap <c-j> ->
-imap -- ->
 imap <c-d> #
 inoremap £ #
 
@@ -236,7 +241,7 @@ cnoremap jj <c-c>
 nnoremap <leader><space> i<space><esc>
 
 " avoid shift key for invoking command line
-nnoremap ; :
+" nnoremap ; :
 " but preserve g; shortcut (remember: opposite is g,)
 " nnoremap g: g;
 
@@ -410,7 +415,7 @@ nmap <leader>rm :!rm %<cr>
 nmap <leader>x :Silent chmod +x %<cr>
 
 " Rename (using plugin)
-nmap ,rn :Rename %<tab>
+nmap <leader>rn :Rename <c-r>=expand("%:t")<cr>
 
 " copy current filename into system clipboard - mnemonic: (c)urrent(f)ilename
 nnoremap <silent> <leader>cf :let @* = expand("%:~")<CR>
@@ -462,7 +467,7 @@ set autochdir
 " open (OSX-way) current file: most useful with html file opening in default browser
 nmap <leader>o :!open %<cr>
 
-nmap <F5> :make<cr>
+nmap ,M :make<cr>
 
 " Open URL
 command -bar -nargs=1 OpenURL :!open <args>
@@ -551,6 +556,7 @@ nnoremap vaf vaz
 " 'Refocus' folds
 
 nnoremap <space> za
+" nnoremap <bs> za
 nnoremap <silent> zm zM<cr>
 
 " Append modeline after last line in buffer.
@@ -611,9 +617,6 @@ function! NoLeftMargin()
   silent set number
 endfunction
 
-" map <silent> <F6> :<C-U>execute LeftMargin()<CR>
-" map <silent> <F7> :<C-U>execute NoLeftMargin()<CR>
-
 "  Clean code function
 function! CleanCode()
   %retab          " Replace tabs with spaces
@@ -665,10 +668,10 @@ set gcr=a:blinkon0             " Disable cursor blink
 set nocursorline
 set linespace=0             " don't insert extra pixel lines betweens rows
 set lazyredraw              " do not redraw while running macros
-" set ttyfast                 " fast redraw screen
+set ttyfast                 " fast redraw screen
 
 
-set t_Co=256
+" set t_Co=256
 colorscheme solarized
 set background=dark
 let g:solarized_termtrans = 1
@@ -800,7 +803,7 @@ nmap <leader>te :tabedit ~/dotfiles/tmux/tmux.conf<cr>
 vnoremap <leader>vc y:execute @@<cr>
 nnoremap <leader>vc ^vg_y:execute @@<cr>
 
-vnoremap H :<del><del><del><del><del>help<space><c-r><c-w><cr>
+vnoremap H "xy<esc>:!open dash://<c-r>x<cr>
 "}}}
 
 " UNDO {{{
@@ -809,7 +812,7 @@ set undodir=~/.vim/backups     " Keep undo history across sessions, by storing i
 set undofile
 
 " GUndo
-" nmap <silent> <F4> :GundoToggle<CR>
+nmap <silent> ,U :GundoToggle<CR>
 
 "}}}
 
@@ -872,12 +875,6 @@ hi def link clojureComment     Search
 "
 " sr StartRepl
 " sR StartLocalRepl
-" }}}
-
-" HASKELL {{{
-
-Bundle "lukerandall/haskellmode-vim"
-
 " }}}
 
 " COFFEESCRIPT {{{
@@ -969,9 +966,7 @@ let g:dbext_default_window_width = 50
 
 " DJANGO {{{
 
-" autocmd FileType python set ft=python.django " For SnipMate
 " autocmd BufRead,BufNewFile *.html set filetype=html
-" prevent automatic django filetype (for snippets)
 nmap _dt :set ft=htmldjango.html<cr>
 nmap _ht :set ft=html<cr>
 
@@ -1066,10 +1061,10 @@ nnoremap <leader>gS  :Gdiff stash@{}<left>
 " load revisions of current file
 nnoremap <leader>gl  :Glog<cr><cr><leader>fo
 " load repository in tab
-nnoremap <leader>gL  :Gitv<cr>
+nnoremap <leader>l  :Gitv<cr>
 " show git history for current file
-nnoremap <leader>GL  :Gitv!<cr>
-vnoremap <leader>GL  :Gitv! --all<cr>
+nnoremap <leader>L  :Gitv!<cr>
+vnoremap <leader>L  :Gitv! --all<cr>
 " search logs
 nnoremap <leader>gG  :Glog --grep=
 nnoremap <leader>gC  :Glog -S
@@ -1212,7 +1207,7 @@ set iskeyword+=:
 
 " customize keybindings a little
 " nmap ,c i\cite{}<F4>
-imap <silent> <F4> <Esc>:call Tex_Complete("default","text")<CR>
+" imap <silent> <F4> <Esc>:call Tex_Complete("default","text")<CR>
 
 " restore folds automatically
 " au BufWinLeave *.tex silent mkview!
@@ -1428,10 +1423,10 @@ nmap <leader>" vES"
 " vmap <leader>} S}gvS}
 
 " nice for lisp dialects
-imap <leader>( <esc>vES)i
-imap <leader>) <esc>v$hS)i
-imap <leader>" <esc>vES"i
-imap <leader>' <esc>vES'i
+" imap <leader>( <esc>vES)i
+" imap <leader>) <esc>v$hS)i
+" imap <leader>" <esc>vES"i
+" imap <leader>' <esc>vES'i
 
 " }}}
 
@@ -1509,8 +1504,8 @@ let g:nrrw_topbot_leftright = 'botright'
 
 " open selected in zoomed narrowregion buffer and center in buffer (used to
 " focus on current paragraph, eg.)
-vmap <silent> ;" :NR<cr><c-w>ogg14O<esc>50i<space><esc>i~~~~~~~~~~~~~~~~~<esc>0o<esc>G2o<esc>50i<space><esc>i~~~~~~~~~~~~~~~~~<esc>13o<esc>16G0<esc>
-nmap <silent> ;" vip:NR<cr><c-w>ogg14O<esc>50i<space><esc>i~~~~~~~~~~~~~~~~~<esc>0o<esc>G2o<esc>50i<space><esc>i~~~~~~~~~~~~~~~~~<esc>13o<esc>16G0
+vmap <silent> ,N :NR<cr><c-w>ogg14O<esc>50i<space><esc>i~~~~~~~~~~~~~~~~~<esc>0o<esc>G2o<esc>50i<space><esc>i~~~~~~~~~~~~~~~~~<esc>13o<esc>16G0<esc>
+nmap <silent> ,N vip:NR<cr><c-w>ogg14O<esc>50i<space><esc>i~~~~~~~~~~~~~~~~~<esc>0o<esc>G2o<esc>50i<space><esc>i~~~~~~~~~~~~~~~~~<esc>13o<esc>16G0
 " and exit gracefully
 nmap "; :1,15d<cr>:$-14,$d<cr><c-w>o:wq<cr>
 
@@ -1553,7 +1548,7 @@ nnoremap <silent> zx :bn<CR>
 "========
 
 let g:ctrlp_custom_ignore = {
-      \ 'file': '\.exe$\|\.so$\|\.dll$' }
+      \ 'file': '\.exe$\|\.so$\|\.dll$|\.map$' }
 
 let g:ctrlp_user_command = {
       \ 'types': {
@@ -1609,7 +1604,7 @@ let NERDTreeMouseMode=2
 let NERDTreeShowHidden=1
 
 
-nmap <F1> :NERDTreeTabsToggle<cr>
+nmap <tab><tab> :NERDTreeTabsToggle<cr>
 
 " current file in NERDTree
 noremap <leader>. :NERDTreeFind<cr>
@@ -1674,6 +1669,7 @@ imap gyy <esc>:t-1<cr>gCcgi
 " COMPLETION {{{
 
 let g:UltiSnipsSnippetDirectories=["snippets"]
+nnoremap <leader>s :UltiSnipsEdit<cr>
 
 " tab completion for e.g. :e is awesome with these
 set wildmode=list:longest,full
@@ -1736,6 +1732,9 @@ let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 
 " Filename completion
 inoremap <c-f> <c-x><c-f>
+inoremap <c-]> <c-x><C-]>
+inoremap <c-l> <c-x><C-l>
+set completefunc=syntaxcomplete#Complete
 
 " Better Completion
 set completeopt=longest,menuone,preview
@@ -1800,10 +1799,17 @@ set viminfo='100,f1            " Save up to 100 marks, enable capital marks
 " using vim-signature plugin
 
 " remove s/S from defaults
-let g:SignatureIncludeMarks = 'abcdefghijklmnopqrtuvwxyzABCDEFGHIJKLMNOPQRTUVWXYZ'
+let g:SignatureIncludeMarks = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 " lighter background color for marks
 highlight SignColumn ctermbg=0 ctermfg=9
+
+sign define white text=!! linehl=StatusLine
+
+function! SignFixme()
+  execute(":sign place ".line(".")." line=".line(".")." name=white file=".expand("%:p"))
+endfunction
+map <F5> :call SignFixme()<CR>
 
 " }}}
 
@@ -1974,13 +1980,13 @@ let g:tlWindowPosition=1
 
 " SPELLING {{{
 
-nmap <silent> <leader><leader>s :setlocal spell!<cr>
+" nmap <silent> <leader><leader>s :setlocal spell!<cr>
 
 " auto-correct current word
 " imap <silent> ,s <esc>z=1<cr><cr>ea
 " nmap <silent> ,s z=1<cr><cr>
 " ...and go to next spelling mistake
-nmap <silent> <leader>S z=1<cr><cr>]s
+" nmap <silent> <leader>S z=1<cr><cr>]s
 
 " }}}
 
@@ -1990,6 +1996,11 @@ syntax on
 syntax enable                  " turn on syntax highlighting
 
 nmap <leader>ft :set filetype=
+nmap <leader>fth :set filetype=html<cr>
+nmap <leader>ftd :set filetype=htmldjango<cr>
+nmap <leader>ftc :set filetype=coffee<cr>
+nmap <leader>ftj :set filetype=javascript<cr>
+nmap <leader>ftm :set filetype=markdown<cr>
 
 let g:syntastic_check_on_open=0
 
@@ -2006,7 +2017,7 @@ let g:syntastic_auto_loc_list=0
 let g:syntastic_quiet_warnings=0
 
 " for html template files, you may want to disable syntastic's automatic checks using the passive mode:
-nmap <leader>ns :SyntasticToggleMode<cr>
+" nmap <leader>ns :SyntasticToggleMode<cr>
 
 " Use tabs if it's a CSV file
 autocmd BufNewFile,BufRead *.csv set noexpandtab nosmarttab
@@ -2021,7 +2032,6 @@ set synmaxcol=800
 nmap <leader><tab> :tabnew<cr>
 
 nmap <leader>tc :tabclose<cr>
-nmap <tab><tab> :tabnext<cr>
 
 " gt              Move to next tab
 " gT              Move to previous tab
@@ -2047,10 +2057,8 @@ nmap ]t :bd<cr>:tnext<cr>
 " Jump to previous tag match
 nmap [t :bd<cr>:tprevious<cr>
 
-"open the taglist (method browser) using ,t
-nnoremap <silent> <F2> :TagbarToggle<CR><C-l>
-nnoremap <silent> T :TagbarToggle<CR><C-l>/
-" noremap <silent> <F2> :TlistToggle<CR>
+"open the taglist
+nnoremap <silent> T :TagbarToggle<CR><C-l>
 
 let g:tagbar_width=36
 let g:tagbar_autoclose = 1
@@ -2083,8 +2091,8 @@ nmap <leader>tx :CloseVimTmuxPanes<cr>
 " Interrupt any command running in the runner pane
 nmap <leader>rs :InterruptVimTmuxRunner<cr>
 
-" run tests in tmux
-nmap <silent> <leader>w :w<cr>:RunLastVimTmuxCommand<cr>
+" run tests in tmux (use :up[date] for cleaner saving)
+nmap <silent> <leader>w :up<cr>:RunLastVimTmuxCommand<cr>
 
 
 " }}}

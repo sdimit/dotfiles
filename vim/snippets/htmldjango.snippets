@@ -9,3 +9,36 @@ endsnippet
 snippet option "option"
 <option>${1}</option>
 endsnippet
+
+snippet kdb "ddb"
+<pre data-bind="text: ko.toJSON($data, null, 2)"></pre>
+endsnippet
+
+snippet db "db"
+data-bind="${1}"
+endsnippet
+
+snippet dbt "dbt"
+data-bind="text: ${1}"
+endsnippet
+
+snippet dbf "dbf"
+data-bind="foreach: ${1}"
+endsnippet
+
+snippet dbc "dbc"
+data-bind="click: ${1}"
+endsnippet
+
+snippet ddb "ddb"
+<div data-bind="${1}"></div>
+endsnippet
+
+snippet sdb "sdb"
+<span data-bind="${1}"></span>
+endsnippet
+
+snippet idb "idb"
+<input type="text" id="${1}" data-bind="value: ${2}"/>
+endsnippet
+

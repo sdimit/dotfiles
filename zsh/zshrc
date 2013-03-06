@@ -236,6 +236,7 @@ alias lb="open /Applications/LaunchBar.app"
 alias y="yeoman"
 
 alias ni="npm install -g"
+alias vmi="vim +BundleInstall"
 
 alias xx='exit'
 alias n="newsbeuter -o"

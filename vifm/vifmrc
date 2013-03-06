@@ -147,7 +147,7 @@ filetype *.md,*.txt,*.tex vim %f
 " Like in vi
 set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,phistory,dirstack,registers,bookmarks
 
-set vicmd='/Applications/MacVim.app/Contents/MacOS/Vim'
+set vicmd='/Applications/MacVim.app/Contents/MacOS/Vim -u ~/.vimrc'
 
 set trash
 " use OSX Trash dir
