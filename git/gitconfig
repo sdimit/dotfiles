@@ -12,6 +12,7 @@
   autocrlf = false
   pager = less -FRSX
   # editor = vim
+  browser = open
 
 	excludesfile = ~/dotfiles/git/gitignore
 	quotepath = false
