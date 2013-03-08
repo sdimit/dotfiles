@@ -1,57 +1,73 @@
 ## Jasmine Snippets
 
-snippet desc
+snippet desc ""
 	# ${1:Specification}
 
 	describe '${2:Model or When ...}', ->
 		${3}
 		return
+endsnippet
 		
-snippet it
+snippet it ""
 	it 'should ${1}', ->
 		${2}
+endsnippet
 
-snippet exp
+snippet exp ""
 	expect(${1:predicate})
+endsnippet
 
-snippet exp=
+snippet exp= ""
 	expect(${1:predicate}).toEqual ${2:value}
+endsnippet
 
-snippet expmatch
+snippet expmatch ""
 	expect(${1:predicate}).toMatch /${2:regex}/
+endsnippet
 
-snippet expdef
+snippet expdef ""
 	expect(${1:predicate}).toBeDefined
+endsnippet
 
-snippet expnull
+snippet expnull ""
 	expect(${1:predicate}).toBeNull
+endsnippet
 
-snippet exptrue
+snippet exptrue ""
 	expect(${1:predicate}).toBeThruthy
+endsnippet
 
-snippet expfalse
+snippet expfalse ""
 	expect(${1:predicate}).toBeFalsy()
+endsnippet
 
-snippet expcon
+snippet expcon ""
 	expect(${1:predicate}).toContain ${2:value}
+endsnippet
 
-snippet befe
+snippet befe ""
 	# Configuration 
 	beforeEach ->
 		${1}
+endsnippet
 
-snippet spyon
+snippet spyon ""
 	spyOn ${1:object}, ${2:method}
+endsnippet
 
-snippet expcall
+snippet expcall ""
 	expect(${1:predicate}).wasCalled
+endsnippet
 
-snippet expncall
+snippet expncall ""
 	expect(${1:predicate}).wasNotCalled
+endsnippet
 
-snippet expcallw
+snippet expcallw ""
 	expect(${1:predicate}).wasCalledWith ${2:arguments}
+endsnippet
 
-snippet expncallw
+snippet expncallw ""
 	expect(${1:predicate}).wasNotCalledWith ${2:arguments}
+endsnippet
 
