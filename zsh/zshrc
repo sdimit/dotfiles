@@ -13,7 +13,7 @@ plugins=(vi-mode zsh-syntax-highlighting history-substring-search django vundle 
 
 zstyle ':omz:load' omodule 'environment' 'terminal' 'editor' 'completion' 'history' 'directory' 'spectrum' 'alias' 'utility' 'prompt' 'history-substring-search'
 
-zstyle keymap 'vi'
+# zstyle keymap 'vi'
 
 # case-sensitivity for completion, history lookup
 zstyle ':omz:*:*' case-sensitive 'no'
@@ -63,42 +63,27 @@ source /usr/local/bin/virtualenvwrapper.sh
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Zle-Builtins
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Standard-Widgets
 
-bindkey -v 
+# bindkey -v 
 # vi mode
-bindkey "^F" vi-cmd-mode
-bindkey jk vi-cmd-mode
+# bindkey "^F" vi-cmd-mode
+# bindkey jk vi-cmd-mode
 
 bindkey '\ew' kill-region                           # [Esc-w] - Kill from the cursor to the mark
 bindkey '^r' history-incremental-search-backward    # [Ctrl-r] - Search backward incrementally for a specified string. The string may begin with ^ to anchor the search to the beginning of the line.
 
-bindkey '^[[A' up-line-or-search                    # start typing + [Up-Arrow] - fuzzy find history forward
-bindkey '^[[B' down-line-or-search                  # start typing + [Down-Arrow] - fuzzy find history backward
-
-bindkey '^[[H' beginning-of-line                    # [Home] - Go to beginning of line
-bindkey '^[[1~' beginning-of-line                   # [Home] - Go to beginning of line
-bindkey '^[OH' beginning-of-line                    # [Home] - Go to beginning of line
-bindkey '^[[F'  end-of-line                         # [End] - Go to end of line
-bindkey '^[[4~' end-of-line                         # [End] - Go to end of line
-bindkey '^[OF' end-of-line                          # [End] - Go to end of line
-
 # emacs style
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
-
-bindkey ' ' magic-space                             # [Space] - do history expansion
-
 bindkey '^f' forward-char
 bindkey '^b' backward-char
 
 bindkey '^[[1;5C' forward-word                      # [Ctrl-RightArrow] - move forward one word
 bindkey '^[[1;5D' backward-word                     # [Ctrl-LeftArrow] - move backward one word
 
-# Make the delete key (or Fn + Delete on the Mac) work instead of outputting a ~
-bindkey '^?' backward-delete-char                   # [Delete] - delete backward
-bindkey '^[[3~' delete-char                         # [fn-Delete] - delete forward
-bindkey '^[3;5~' delete-char
-bindkey '\e[3~' delete-char
+bindkey '^[[A' up-line-or-search                    # start typing + [Up-Arrow] - fuzzy find history forward
+bindkey '^[[B' down-line-or-search                  # start typing + [Down-Arrow] - fuzzy find history backward
 
+bindkey ' ' magic-space                             # [Space] - do history expansion
 # }}}
 
 # EDITOR {{{
