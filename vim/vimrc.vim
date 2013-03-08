@@ -39,6 +39,7 @@ Bundle 'godlygeek/tabular'
 Bundle 'AndrewRadev/switch.vim'
 Bundle 'danro/rename.vim'
 Bundle 'kshenoy/vim-signature'
+Bundle 'vim-scripts/highlight.vim'
 
 " python
 Bundle 'klen/python-mode'
@@ -85,6 +86,7 @@ Bundle 'henrik/vim-indexed-search'
 
 " Appearance
 Bundle 'altercation/vim-colors-solarized'
+Bundle 'sjl/badwolf'
 Bundle 'Lokaltog/vim-powerline'
 
 " Prose
@@ -106,6 +108,8 @@ let maplocalleader=","
 " Kinesis settings
 " let mapleader="\<space>"
 " let maplocalleader="\<space>"
+" nnoremap <bs> za
+
 
 set visualbell " no sounds
 set nowarn
@@ -180,7 +184,7 @@ let g:yankring_history_dir = '$HOME'
 let g:yankring_history_file = '.yankring-history'
 let g:yankring_max_history = 300
 
-" GUNDO 
+" GUNDO
 " open on the right so as not to compete with the nerdtree
 let g:gundo_right = 1
 
@@ -286,7 +290,7 @@ nnoremap dD cc<esc>
 nmap - :Switch<cr>
 " vmap <leader>s :Switch<cr>
 
-" FIXME 
+" FIXME
 " source ~/dotfiles/vim/switch.vim
 
 " Keep the cursor in place while joining lines
@@ -534,6 +538,7 @@ set foldtext=Foldingstyle()
 nmap <Leader>fm :set foldmethod=manual<cr>
 nmap <Leader>fi :set foldmethod=indent<cr>
 nmap <Leader>fk :set foldmethod=marker<cr>
+nmap <Leader>fe :set foldmethod=expr<cr>
 nmap <Leader>fs :set foldmethod=syntax<cr>
 
 nmap <leader>f0 :set foldlevel=0<CR>
@@ -556,7 +561,6 @@ nnoremap vaf vaz
 " 'Refocus' folds
 
 nnoremap <space> za
-" nnoremap <bs> za
 nnoremap <silent> zm zM<cr>
 
 " Append modeline after last line in buffer.
@@ -622,15 +626,14 @@ function! CleanCode()
   %retab          " Replace tabs with spaces
   %s/\r/\r/eg     " Turn DOS returns ^M into real returns
   %s=  *$==e      " Delete end of line blanks
-  echo "Cleaned up this mess."
 endfunction
-nmap <leader>co :call CleanCode()<cr>
+nmap <leader>co mz:call CleanCode()<cr>`z
 
 " }}}
 
 " INDENT {{{
 
-  
+
 filetype indent on
 " set autoindent                 " copy indent from current when starting a new line
 set nosmartindent
@@ -671,7 +674,7 @@ set lazyredraw              " do not redraw while running macros
 set ttyfast                 " fast redraw screen
 
 
-" set t_Co=256
+set t_Co=256
 colorscheme solarized
 set background=dark
 let g:solarized_termtrans = 1
@@ -804,6 +807,8 @@ vnoremap <leader>vc y:execute @@<cr>
 nnoremap <leader>vc ^vg_y:execute @@<cr>
 
 vnoremap H "xy<esc>:!open dash://<c-r>x<cr>
+autocmd FileType coffee vnoremap H "xy<esc>:!open dash://cf:<c-r>x<cr>
+autocmd FileType python vnoremap H "xy<esc>:!open dash://dj:<c-r>x<cr>
 "}}}
 
 " UNDO {{{
@@ -886,6 +891,8 @@ autocmd FileType javascript,coffee setlocal omnifunc=javascriptcomplete#Complete
 autocmd FileType javascript,coffee setlocal makeprg=node\ %:r
 " autocmd BufRead *.coffee setlocal makeprg=node\ %:r
 
+autocmd FileType coffee setl fdm=expr fde=getline(v:lnum)=~'\(->$\|=>\)$'&&indent(v:lnum)<indent(v:lnum+1)?'a1':'s1'
+" autocmd FileType coffee setl fdm=expr fde=getline(v:lnum)=~'^class'&&indent(v:lnum)<indent(v:lnum+1)?'a1':'s1'
 " open corresponding js file
 " nmap <leader>jj :vertical expand("%:p:r")<CR>
 
@@ -1103,6 +1110,9 @@ if has("autocmd")
         \   nnoremap <buffer> u :edit %:h<CR> |
         \ endif
 endif
+
+" get patch from diff (using the above)
+nmap <leader>do <leader>gddo<leader>gD
 
 " SHORTCUTS WITHIN :Gstatus
 "
@@ -1757,7 +1767,7 @@ set fillchars=diff:_,vert:│
 
 " in three-way vimdiff
 
-nmap d2 :diffget //2<cr> 
+nmap d2 :diffget //2<cr>
 " fetches the hunk from the target parent (on the left)
 nmap d3 :diffget //3<cr>
 " fetches the hunk from the merge parent (on the right)
@@ -1799,7 +1809,7 @@ set viminfo='100,f1            " Save up to 100 marks, enable capital marks
 " using vim-signature plugin
 
 " remove s/S from defaults
-let g:SignatureIncludeMarks = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+let g:SignatureIncludeMarks = 'abcdefghijklmnopqrstuvwxyABCDEFGHIJKLMNOPQRSTUVWXY'
 
 " lighter background color for marks
 highlight SignColumn ctermbg=0 ctermfg=9
@@ -1810,6 +1820,18 @@ function! SignFixme()
   execute(":sign place ".line(".")." line=".line(".")." name=white file=".expand("%:p"))
 endfunction
 map <F5> :call SignFixme()<CR>
+
+" <c-e><c-e> Highlight current line
+" <c-e><C-a> Advance color for next line highlight
+" <c-e><C-r> Clear last line highlight
+" <c-e><C-w> Highlight word under cursor (whole word match)
+" <c-e><C-l> Highlight all lines having word under cursor (whole word match)
+" <c-e><C-f> Highlight word under cursor (partial word match)
+" <c-e><C-k> Highlight all lines having word under cursor (partial word match)
+" <c-e><C-s> Highlight last search pattern
+" <c-e><C-j> Highlight all lines having last search pattern
+" <c-e><C-d> Clear last pattern highlight
+" <c-e><C-n> Clear all highlights
 
 " }}}
 
@@ -1899,6 +1921,7 @@ vnoremap / /\v
 
 " use enter to start search (expect in quickfix window)
 nnoremap <expr> <cr> (&buftype is# "quickfix" ? ":.cc<cr>" : "/")
+vnoremap <expr> <cr> (&buftype is# "quickfix" ? ":.cc<cr>" : "/")
 
 set incsearch           " Find the next match as we type the search
 set nohlsearch          " Highlight searches by default
@@ -1924,6 +1947,22 @@ vnoremap KC "sy:GitGrep "<c-r>s"<CR>
 nnoremap KA :GitGrep ""<left>
 vnoremap KA "sy:GitGrep "<c-r>s"<CR>
 nnoremap KL :GitGrep "<c-r>/"<cr>
+
+" Escape and paste a register
+" <c-x>{char} - paste register into search field, escaping sensitive chars
+" http://stackoverflow.com/questions/7400743/
+cnoremap <c-x> <c-r>=<SID>PasteEscaped()<cr>
+function! s:PasteEscaped()
+  echo "\\".getcmdline()."\""
+  let char = getchar()
+  if char == "\<esc>"
+    return ''
+  else
+    let register_content = getreg(nr2char(char))
+    let escaped_register = escape(register_content, '\'.getcmdtype())
+    return substitute(escaped_register, '\n', '\\n', 'g')
+  endif
+endfunction
 
 " HIGHLIGHTING
 
@@ -2075,7 +2114,7 @@ let g:tagbar_autofocus = 1
 
 set shell=zsh
 
-" TMUX 
+" TMUX
 " Prompt for a command to run
 nmap <leader>tp :PromptVimTmuxCommand<cr>
 
@@ -2092,7 +2131,7 @@ nmap <leader>tx :CloseVimTmuxPanes<cr>
 nmap <leader>rs :InterruptVimTmuxRunner<cr>
 
 " run tests in tmux (use :up[date] for cleaner saving)
-nmap <silent> <leader>w :up<cr>:RunLastVimTmuxCommand<cr>
+nmap <silent> <leader>w :up<cr>:silent! RunLastVimTmuxCommand<cr>
 
 
 " }}}
