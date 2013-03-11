@@ -7,6 +7,10 @@ ${2}
 " }}}
 endsnippet
 
+snippet hi "highlight"
+hi! ${1} ctermfg=${2} ctermbg=${3}
+endsnippet
+
 snippet header
 " File: ${1:`!v expand('%:t')`}
 " Author: ${2:`!v g:snips_author`}

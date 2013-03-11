@@ -40,6 +40,7 @@ Bundle 'AndrewRadev/switch.vim'
 Bundle 'danro/rename.vim'
 Bundle 'kshenoy/vim-signature'
 Bundle 'vim-scripts/highlight.vim'
+Bundle 'delimitMate.vim'
 
 " python
 Bundle 'klen/python-mode'
@@ -263,7 +264,7 @@ noremap $ %
 
 " or using traditional terminal mapping of swapping two letters
 inoremap <c-t> <esc>hxpa
-nnoremap <c-t> hhxpl
+" nnoremap <c-t> hhxpl
 
 " append to current word
 inoremap <c-e> <esc>Ea
@@ -535,11 +536,11 @@ endfunction
 set foldtext=Foldingstyle()
 
 
-nmap <Leader>fm :set foldmethod=manual<cr>
-nmap <Leader>fi :set foldmethod=indent<cr>
-nmap <Leader>fk :set foldmethod=marker<cr>
-nmap <Leader>fe :set foldmethod=expr<cr>
-nmap <Leader>fs :set foldmethod=syntax<cr>
+nmap <Leader>fm :set foldmethod=manual<cr>zM
+nmap <Leader>fi :set foldmethod=indent<cr>zM
+nmap <Leader>fk :set foldmethod=marker<cr>zM
+nmap <Leader>fe :set foldmethod=expr<cr>zM
+nmap <Leader>fs :set foldmethod=syntax<cr>zM
 
 nmap <leader>f0 :set foldlevel=0<CR>
 nmap <leader>f1 :set foldlevel=1<CR>
@@ -578,7 +579,7 @@ nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
 " FORMAT {{{
 
-set wrap
+set nowrap
 set linebreak                  " Wrap lines at convenient points
 
 " toggle line wrapping
@@ -885,11 +886,10 @@ hi def link clojureComment     Search
 " COFFEESCRIPT {{{
 
 autocmd BufRead *.coffee set filetype=coffee
-autocmd BufWritePost,FileWritePost *.coffee :silent !iced -c -b <afile>
+autocmd BufWritePost,FileWritePost *.coffee :silent !iced -c <afile>
 
 autocmd FileType javascript,coffee setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType javascript,coffee setlocal makeprg=node\ %:r
-" autocmd BufRead *.coffee setlocal makeprg=node\ %:r
 
 autocmd FileType coffee setl fdm=expr fde=getline(v:lnum)=~'\(->$\|=>\)$'&&indent(v:lnum)<indent(v:lnum+1)?'a1':'s1'
 " autocmd FileType coffee setl fdm=expr fde=getline(v:lnum)=~'^class'&&indent(v:lnum)<indent(v:lnum+1)?'a1':'s1'
@@ -897,7 +897,6 @@ autocmd FileType coffee setl fdm=expr fde=getline(v:lnum)=~'\(->$\|=>\)$'&&inden
 " nmap <leader>jj :vertical expand("%:p:r")<CR>
 
 " convert js into coffeescript on the fly (using eponymous npm bundle)
-
 nmap <leader>jc :Js2Coffee<cr>
 vmap <leader>jc :Js2Coffee<cr>
 
@@ -908,7 +907,7 @@ vmap <leader>jc :Js2Coffee<cr>
 command -nargs=1 C CoffeeCompile | :<args>
 
 " build ctags for coffeescript only
-nnoremap <leader>tT :!ctags -R --languages==coffee,javascript --exclude=libs/* --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
+nnoremap <leader>tT :!ctags -R --languages==coffee,javascript --exclude=libs/*,core/static/* --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
 
 " Coffeescript tagbar support
 let g:tagbar_type_coffee = {
@@ -1061,17 +1060,17 @@ endfunction
 
 " GIT {{{
 
-nnoremap <leader>gg  :Gstatus<cr>
+nnoremap <leader>G  :Gstatus<cr>
 
 nnoremap <leader>gd  :Gdiff<cr>
 nnoremap <leader>gS  :Gdiff stash@{}<left>
 " load revisions of current file
 nnoremap <leader>gl  :Glog<cr><cr><leader>fo
 " load repository in tab
-nnoremap <leader>l  :Gitv<cr>
+nnoremap <leader>L  :Gitv<cr>
 " show git history for current file
-nnoremap <leader>L  :Gitv!<cr>
-vnoremap <leader>L  :Gitv! --all<cr>
+nnoremap <leader>l  :Gitv!<cr>
+vnoremap <leader>l  :Gitv! --all<cr>
 " search logs
 nnoremap <leader>gG  :Glog --grep=
 nnoremap <leader>gC  :Glog -S
@@ -1082,7 +1081,7 @@ nnoremap <leader>gs  :Gsplit<space>
 nnoremap <leader>gr  :Gread<cr>
 nnoremap <leader>gw  :Gwrite<cr>
 nnoremap <leader>ga  :Git add --all<cr>:Gcommit<cr>
-nnoremap <leader>GA  :Git add .<cr>
+" nnoremap <leader>GA  :Git add .<cr>
 nnoremap <leader>gb  :Gblame<cr>
 nnoremap <leader>gh  :Gbrowse<cr>
 vnoremap <leader>gh  :Gbrowse<cr>
@@ -1423,6 +1422,12 @@ map <leader># ysiw#
 " ,# Surround a word with quotes
 map <leader>" ysiw"
 
+" shortcuts for typical surround elements
+vmap ' s'
+vmap " s"
+vmap ` s`
+vmap ] s]
+vmap ) s)
 
 " wrap words
 nmap <leader>( vES)
@@ -1493,13 +1498,7 @@ map gf :wincmd f<cr>
 " use ,gf to go to file in a vertical split
 nnoremap <silent> ,gf :vertical botright wincmd f<CR>
 
-nmap <silent> :' :vnew<cr>
-nmap <silent> :" :vnew<cr><c-w>o
-nmap <silent> ;' :vnew<cr><c-w>o
-
-" GOLDEN RATIO
-
-let g:golden_ratio_autocommand = 1
+nmap <silent> `` :vnew<cr>
 
 "NARROW REGION
 
@@ -1546,7 +1545,7 @@ let g:LustyExplorerDefaultMappings = 0
 " TODO: fork original source!!
 
 " nmap <silent> :j :LustyBufferExplorer<CR>
-nnoremap <c-g> :CtrlPBufTagAll<cr>
+nnoremap <c-g> :CtrlPTag<cr>
 
 nmap <silent> :: :LustyFilesystemExplorerFromHere<CR>
 
@@ -1580,7 +1579,6 @@ nmap <leader>p :CtrlPMRU<cr>
 let g:ctrlp_by_filename = 0
 " switch to path search with ctrl-d inside plugin
 
-let g:ctrlp_working_path_mode = 2
 " We don't want to use Ctrl-p as the mapping because
 " it interferes with YankRing (paste, then hit ctrl-p)
 let g:ctrlp_map = ',0'
@@ -2089,7 +2087,7 @@ nmap <leader>tc :tabclose<cr>
 set tags=./tags;tags;/
 
 " Rebuild ctags
-nnoremap <leader>tt :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
+nnoremap <leader>tt :!ctags --recurse --fields=+iaS --extra=+q .<CR><CR>
 
 " Jump to next tag match
 nmap ]t :bd<cr>:tnext<cr>
@@ -2101,6 +2099,7 @@ nnoremap <silent> T :TagbarToggle<CR><C-l>
 
 let g:tagbar_width=36
 let g:tagbar_autoclose = 1
+let g:tagbar_sort = 0
 
 " omit odd empty lines
 let g:tagbar_compact = 1
