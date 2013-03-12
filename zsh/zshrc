@@ -167,7 +167,7 @@ alias ka="killall"
 alias ka9="killall -9"
 
 alias psa="ps aux"
-alias psg="ps aux | grep "
+function psg() { ps -axf | grep -v grep | grep "$@" -i --color=auto; }
 alias psr='ps aux | grep ruby'
 
 # }}}
@@ -295,9 +295,7 @@ alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"
 # find files by filename in OSX
 # (leverages `mdfind` which is indexed and grep the results
 # -- there's most likely a better way of doing)
-function mfind() { 
-  mdfind "$1" | grep "$1" | less;
-}
+function fname() { find . -iname "*$@*"; }
 
 # File size
 alias fs="stat -c \"%s bytes\""
@@ -382,6 +380,22 @@ alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; rm -rfv ~/.Trash"
 alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
 alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 
+# `editlast` opens the last modified file in the editor
+editlast() {
+  if stat --version 2>/dev/null| grep -q GNU; then
+    STAT_OPTION='-c'
+    STAT_FORMAT='%Y %n'
+  else
+    STAT_OPTION='-f'
+    STAT_FORMAT='%m %N'
+  fi
+  FILE="$(
+    git ls-files --cached --other --exclude-standard "$@" -z |
+      xargs -0 stat "$STAT_OPTION" "$STAT_FORMAT" |
+      sort -n | tail -1 | cut -d ' ' -f 2-
+  )"
+  "${EDITOR:-vi}" "$FILE"
+}
 
 
 # }}}
