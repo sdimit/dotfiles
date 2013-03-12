@@ -15,7 +15,7 @@ Bundle 'vim-scripts/LustyExplorer'
 Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
 
-" tag supprot
+" tag support
 Bundle 'majutsushi/tagbar'
 
 " git tools
@@ -23,6 +23,7 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'gregsexton/gitv'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'AndrewRadev/linediff.vim'
+Bundle 'jasoncodes/ctrlp-modified.vim'
 
 " snippets and completion
 Bundle 'SirVer/ultisnips'
@@ -37,10 +38,12 @@ Bundle 'tpope/vim-repeat'
 " Bundle 'scrooloose/syntastic'
 Bundle 'godlygeek/tabular'
 Bundle 'AndrewRadev/switch.vim'
+Bundle 'AndrewRadev/inline_edit.vim'
 Bundle 'danro/rename.vim'
 Bundle 'kshenoy/vim-signature'
 Bundle 'vim-scripts/highlight.vim'
-Bundle 'delimitMate.vim'
+Bundle 'tpope/vim-obsession'
+" Bundle 'delimitMate.vim'
 
 " python
 Bundle 'klen/python-mode'
@@ -219,6 +222,10 @@ vmap P p :call setreg('"', getreg('0')) <CR>
 
 " visually select the last pasted text
 nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
+
+" InlineEdit
+"
+nnoremap <leader>ie :InlineEdit<cr>
 
 " RSI bindings
 " imap <c-k> _
@@ -472,7 +479,7 @@ set autochdir
 " open (OSX-way) current file: most useful with html file opening in default browser
 nmap <leader>o :!open %<cr>
 
-nmap ,M :make<cr>
+" nmap ,M :make<cr>
 
 " Open URL
 command -bar -nargs=1 OpenURL :!open <args>
@@ -737,10 +744,11 @@ map <leader>hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
 
 " POWERLINE
 let g:Powerline_symbols='fancy'
-" let g:Powerline_theme='istib'
-" let g:Powerline_colorscheme='istib'
-let g:Powerline_theme='solarized256'
-let g:Powerline_colorscheme='solarized256'
+" let g:Powerline_theme='default'
+let g:Powerline_theme='istib'
+let g:Powerline_colorscheme='istib'
+" let g:Powerline_theme='solarized256'
+" let g:Powerline_colorscheme='solarized256'
 
 " Unfuck my screen
 nnoremap <leader>u :syntax sync fromstart<cr>:redraw!<cr>
@@ -906,26 +914,30 @@ vmap <leader>jc :Js2Coffee<cr>
 " jump to JS file number
 command -nargs=1 C CoffeeCompile | :<args>
 
-" build ctags for coffeescript only
-nnoremap <leader>tT :!ctags -R --languages==coffee,javascript --exclude=libs/*,core/static/* --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
-
+" " Coffeescript tagbar support
+" let g:tagbar_type_coffee = {
+"       \ 'ctagstype' : 'coffee',
+"       \ 'kinds' : [
+"       \   'c:class',
+"       \ ],
+"       \ 'sro' : ".",
+"       \ 'scope2kind' : {
+"       \   'o' : 'object',
+"       \ },
+"       \ 'kind2scope' : {
+"       \  'function' : 'f',
+"       \  'method' : 'm',
+"       \  'var' : 'v',
+"       \  'ivar' : 'i',
+"       \ 'object' : 'o'
+"       \}
+"       \ }
 " Coffeescript tagbar support
 let g:tagbar_type_coffee = {
       \ 'ctagstype' : 'coffee',
       \ 'kinds' : [
       \   'c:class',
-      \ ],
-      \ 'sro' : ".",
-      \ 'scope2kind' : {
-      \   'o' : 'object',
-      \ },
-      \ 'kind2scope' : {
-      \  'function' : 'f',
-      \  'method' : 'm',
-      \  'var' : 'v',
-      \  'ivar' : 'i',
-      \ 'object' : 'o'
-      \}
+      \ ]
       \ }
 
 " }}}
@@ -1093,6 +1105,14 @@ nnoremap <leader>gp  :Git push<CR>
 nnoremap <leader>gP  :Git pull<CR>
 nnoremap <leader>grsh :Git reset --hard<cr>
 nnoremap <leader>go :Git oops<cr>
+
+nnoremap <leader>gt  :GitGutterLineHighlightsToggle<cr>
+
+nnoremap ]g  :GitGutterNextHunk<cr>
+nnoremap [g  :GitGutterPrevHunk<cr>
+
+" quickly access modified files in local git repo
+nnoremap <c-y> :CtrlPModified<cr>
 
 " Send visual selection to gist.github.com as a private, filetyped Gist
 " Requires the gist CLI
@@ -1677,7 +1697,7 @@ imap gyy <esc>:t-1<cr>gCcgi
 " COMPLETION {{{
 
 let g:UltiSnipsSnippetDirectories=["snippets"]
-nnoremap <leader>s :UltiSnipsEdit<cr>
+nnoremap <leader>ue :UltiSnipsEdit<cr>
 
 " tab completion for e.g. :e is awesome with these
 set wildmode=list:longest,full
@@ -1917,6 +1937,10 @@ let pymode_options=0
 nnoremap / /\v
 vnoremap / /\v
 
+" completion in search bar
+cnoremap <c-e> <C-\>esherlock#completeBackward()<CR>
+cnoremap <c-d> <C-\>esherlock#completeForward()<CR>
+
 " use enter to start search (expect in quickfix window)
 nnoremap <expr> <cr> (&buftype is# "quickfix" ? ":.cc<cr>" : "/")
 vnoremap <expr> <cr> (&buftype is# "quickfix" ? ":.cc<cr>" : "/")
@@ -2001,6 +2025,10 @@ vnoremap RY :s/<c-r>"/<c-r>"
 " replace visual
 vnoremap rv "xy:%s/<c-r>x/
 vnoremap RV "xy:%s/<c-r>x/<c-r>x
+
+" replace last
+vnoremap rl :s/~/
+vnoremap RL :s/~/
 
 " substitute repeat
 nnoremap & :&&<cr>
@@ -2087,7 +2115,7 @@ nmap <leader>tc :tabclose<cr>
 set tags=./tags;tags;/
 
 " Rebuild ctags
-nnoremap <leader>tt :!ctags --recurse --fields=+iaS --extra=+q .<CR><CR>
+nnoremap <leader>tt :!ctags --recurse --fields=+iaS --exclude=core/static --extra=+q .<CR><CR>
 
 " Jump to next tag match
 nmap ]t :bd<cr>:tnext<cr>
@@ -2097,7 +2125,7 @@ nmap [t :bd<cr>:tprevious<cr>
 "open the taglist
 nnoremap <silent> T :TagbarToggle<CR><C-l>
 
-let g:tagbar_width=36
+let g:tagbar_width=44
 let g:tagbar_autoclose = 1
 let g:tagbar_sort = 0
 

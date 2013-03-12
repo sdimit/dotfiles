@@ -15,7 +15,7 @@ hi! link TabLine LineNr
 hi! link TabLineSel pandocStrikeoutTable
 hi! link TabLineFill LineNr
 hi! link Folded VertSplit
-" hi! Folded ctermfg=235
+hi! Folded ctermfg=235
 hi! link VertSplit CursorLineNr
 hi! link txtBold Identifier
 hi! link zshVariableDef Identifier
@@ -26,4 +26,4 @@ hi! link ShowMarksHLl DiffAdd
 hi! link ShowMarksHLu DiffChange
 
 " Enforce the colors set here
-au BufEnter * so ~/dotfiles/vim/colors.vim
+au VimEnter * so ~/dotfiles/vim/colors.vim
