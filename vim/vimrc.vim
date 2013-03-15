@@ -238,7 +238,6 @@ inoremap £ #
 nnoremap <leader>o :<C-u>exe 'normal m`'.v:count1.'o<C-v><C-[>``'<CR>
 nnoremap <leader>O :<C-u>exe 'normal m`'.v:count1.'O<C-v><C-[>``'<CR>
 
-
 " Fix for navigating long lines
 " Wrapped lines goes down/up to next row, rather than next line in file.
 nnoremap j gj
@@ -443,7 +442,6 @@ nnoremap <leader>E :e <C-R>=expand("%:p:h") . "/" <CR>
 " Use vifm as vim file manager
 nnoremap <leader>e :EditVifm<cr>
 nnoremap <leader>v :VsplitVifm<cr>
-nnoremap <leader>s :SplitVifm<cr>
 nnoremap <leader>d :DiffVifm<cr>
 nnoremap <leader>T :TabVifm<cr>
 
@@ -744,11 +742,8 @@ map <leader>hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
 
 " POWERLINE
 let g:Powerline_symbols='fancy'
-" let g:Powerline_theme='default'
-let g:Powerline_theme='istib'
-let g:Powerline_colorscheme='istib'
-" let g:Powerline_theme='solarized256'
-" let g:Powerline_colorscheme='solarized256'
+let g:Powerline_theme='solarized256'
+let g:Powerline_colorscheme='solarized256'
 
 " Unfuck my screen
 nnoremap <leader>u :syntax sync fromstart<cr>:redraw!<cr>
@@ -815,7 +810,15 @@ nmap <leader>te :tabedit ~/dotfiles/tmux/tmux.conf<cr>
 vnoremap <leader>vc y:execute @@<cr>
 nnoremap <leader>vc ^vg_y:execute @@<cr>
 
-vnoremap H "xy<esc>:!open dash://<c-r>x<cr>
+" google search with selection
+vnoremap ,G "xy<esc>:!open "http://www.google.com/search?q=<c-r>x"<cr>
+" google feeling lucky
+vnoremap ,L "xy<esc>:!open "http://www.google.com/search?btnI&q=<c-r>x"<cr>
+" stack overflow
+vnoremap ,S "xy<esc>:!open "http://www.stackoverflow.com/search?q=<c-r>x"<cr>
+" Dash search (brilliant OSX help tool)
+vnoremap ,H "xy<esc>:!open dash://<c-r>x<cr>
+" language specific
 autocmd FileType coffee vnoremap H "xy<esc>:!open dash://cf:<c-r>x<cr>
 autocmd FileType python vnoremap H "xy<esc>:!open dash://dj:<c-r>x<cr>
 "}}}
@@ -1072,7 +1075,7 @@ endfunction
 
 " GIT {{{
 
-nnoremap <leader>G  :Gstatus<cr>
+nnoremap <leader>s  :Gstatus<cr>
 
 nnoremap <leader>gd  :Gdiff<cr>
 nnoremap <leader>gS  :Gdiff stash@{}<left>
@@ -1097,6 +1100,8 @@ nnoremap <leader>ga  :Git add --all<cr>:Gcommit<cr>
 nnoremap <leader>gb  :Gblame<cr>
 nnoremap <leader>gh  :Gbrowse<cr>
 vnoremap <leader>gh  :Gbrowse<cr>
+nnoremap <leader>gH  :Gbrowse!<cr>
+vnoremap <leader>gH  :Gbrowse!<cr>
 nnoremap <leader>gco :Gcheckout<cr>
 nnoremap <leader>gci :Gcommit<cr>
 nnoremap <leader>gm  :Gmove<cr>
@@ -1132,6 +1137,9 @@ endif
 
 " get patch from diff (using the above)
 nmap <leader>do <leader>gddo<leader>gD
+
+nnoremap d2 :diffget //2<cr>
+nnoremap d3 :diffget //3<cr>
 
 " SHORTCUTS WITHIN :Gstatus
 "
@@ -1443,11 +1451,11 @@ map <leader># ysiw#
 map <leader>" ysiw"
 
 " shortcuts for typical surround elements
-vmap ' s'
-vmap " s"
-vmap ` s`
-vmap ] s]
-vmap ) s)
+" vnoremap ' s'
+" vnoremap " s"
+" vnoremap ` s`
+" vnoremap ] s]
+" vnoremap ) s)
 
 " wrap words
 nmap <leader>( vES)
@@ -1936,10 +1944,6 @@ let pymode_options=0
 " Use sane regexes.
 nnoremap / /\v
 vnoremap / /\v
-
-" completion in search bar
-cnoremap <c-e> <C-\>esherlock#completeBackward()<CR>
-cnoremap <c-d> <C-\>esherlock#completeForward()<CR>
 
 " use enter to start search (expect in quickfix window)
 nnoremap <expr> <cr> (&buftype is# "quickfix" ? ":.cc<cr>" : "/")
