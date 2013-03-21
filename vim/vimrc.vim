@@ -11,7 +11,6 @@ Bundle 'gmarik/vundle'
 " file management
 Bundle 'kien/ctrlp.vim'
 Bundle 'istib/vifm.vim'
-Bundle 'vim-scripts/LustyExplorer'
 Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
 
@@ -23,7 +22,7 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'gregsexton/gitv'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'AndrewRadev/linediff.vim'
-Bundle 'jasoncodes/ctrlp-modified.vim'
+Bundle 'lengarvey/ctrlp-recent-or-modified.vim'
 
 " snippets and completion
 Bundle 'SirVer/ultisnips'
@@ -64,7 +63,7 @@ Bundle 'vim-scripts/AutoTag'
 Bundle 'leshill/vim-json'
 Bundle 'groenewege/vim-less'
 
-" helpers to handle rpl and unit tests in tmux
+" helpers to handle REPLs and running unit tests in tmux
 Bundle 'ervandew/screen'
 Bundle 'benmills/vimux'
 Bundle 'nvie/vim_bridge'
@@ -90,7 +89,6 @@ Bundle 'henrik/vim-indexed-search'
 
 " Appearance
 Bundle 'altercation/vim-colors-solarized'
-Bundle 'sjl/badwolf'
 Bundle 'Lokaltog/vim-powerline'
 
 " Prose
@@ -98,7 +96,7 @@ Bundle 'tpope/vim-markdown'
 " Bundle 'jceb/vim-orgmode'
 " Bundle 'vim-scripts/vimwiki'
 
-Bundle "lukerandall/haskellmode-vim"
+" Bundle 'lukerandall/haskellmode-vim'
 
 " }}}
 
@@ -232,6 +230,7 @@ nnoremap <leader>ie :InlineEdit<cr>
 " imap <c-j> ->
 imap <c-d> #
 inoremap £ #
+vmap £ #
 
 
 " easier blank line insertions
@@ -258,6 +257,7 @@ nnoremap <leader><space> i<space><esc>
 
 " Easier within-line navigation
 nnoremap H ^
+vnoremap H ^
 nnoremap L $
 vnoremap L g_
 
@@ -400,6 +400,8 @@ au InsertLeave * silent! :w
 au BufLeave * silent! :w
 
 cnoremap w' w<CR>
+
+nnoremap <leader>M :set modifiable<cr>
 
 " shift key fixes
 command! -bang -nargs=* -complete=file E e<bang> <args>
@@ -588,7 +590,7 @@ set nowrap
 set linebreak                  " Wrap lines at convenient points
 
 " toggle line wrapping
-nmap <leader><leader>w :set wrap!<cr>
+nnoremap <leader>W :set wrap!<cr>
 
 
 " use external command for formatting paragraphs
@@ -599,11 +601,11 @@ nmap <leader><leader>w :set wrap!<cr>
 
 
 " format paragraph: gq
-nmap ffp vip:!par 100<cr>
-nmap <leader>ffp vip:!par
+nmap <leader>fp vip:!par 100<cr>
+nmap <leader>FP vip:!par
 " format document
-nmap fft ggVG:!par 100<cr>''
-nmap <leader>fft ggVG:!par
+nmap <leader>ft ggVG:!par 100<cr>''
+nmap <leader>FT ggVG:!par
 
 
 " Alignment
@@ -663,7 +665,8 @@ vmap <Leader>a::      :Tabularize /:\zs<cr>
 vmap <Leader>a,       :Tabularize /,<cr>
 vmap <Leader>a-       :Tabularize /-<cr>
 vmap <Leader>a{       :Tabularize /{<cr>
-vmap <Leader>ac       :Tabularize /#<cr>
+vmap <Leader>a#       :Tabularize /#<cr>
+vmap <Leader>a£       :Tabularize /#<cr>
 
 
 " }}}
@@ -683,6 +686,7 @@ set ttyfast                 " fast redraw screen
 set t_Co=256
 colorscheme solarized
 set background=dark
+nnoremap <leader>S call togglebg#map("<F5>")
 let g:solarized_termtrans = 1
 let g:solarized_contrast = 'high'
 
@@ -699,6 +703,7 @@ nmap <leader>cs :colorscheme<space>
 
 nnoremap <leader>$ :set list!<cr>
 set listchars=tab:,.,trail:.,extends:#,nbsp:. " Highlight problematic whitespace
+set list
 
 set noshowmatch         " don't match brackets (using matchparen instd)
 
@@ -811,16 +816,16 @@ vnoremap <leader>vc y:execute @@<cr>
 nnoremap <leader>vc ^vg_y:execute @@<cr>
 
 " google search with selection
-vnoremap ,G "xy<esc>:!open "http://www.google.com/search?q=<c-r>x"<cr>
+vnoremap <leader>G "xy<esc>:!open "http://www.google.com/search?q=<c-r>x"<cr>
 " google feeling lucky
-vnoremap ,L "xy<esc>:!open "http://www.google.com/search?btnI&q=<c-r>x"<cr>
+vnoremap <leader>L "xy<esc>:!open "http://www.google.com/search?btnI&q=<c-r>x"<cr>
 " stack overflow
-vnoremap ,S "xy<esc>:!open "http://www.stackoverflow.com/search?q=<c-r>x"<cr>
+vnoremap <leader>S "xy<esc>:!open "http://www.stackoverflow.com/search?q=<c-r>x"<cr>
 " Dash search (brilliant OSX help tool)
-vnoremap ,H "xy<esc>:!open dash://<c-r>x<cr>
+vnoremap <leader>H "xy<esc>:!open dash://<c-r>x<cr>
 " language specific
-autocmd FileType coffee vnoremap H "xy<esc>:!open dash://cf:<c-r>x<cr>
-autocmd FileType python vnoremap H "xy<esc>:!open dash://dj:<c-r>x<cr>
+autocmd FileType coffee vnoremap <leader>H "xy<esc>:!open dash://cf:<c-r>x<cr>
+autocmd FileType python vnoremap <leader>H "xy<esc>:!open dash://dj:<c-r>x<cr>
 "}}}
 
 " UNDO {{{
@@ -917,24 +922,6 @@ vmap <leader>jc :Js2Coffee<cr>
 " jump to JS file number
 command -nargs=1 C CoffeeCompile | :<args>
 
-" " Coffeescript tagbar support
-" let g:tagbar_type_coffee = {
-"       \ 'ctagstype' : 'coffee',
-"       \ 'kinds' : [
-"       \   'c:class',
-"       \ ],
-"       \ 'sro' : ".",
-"       \ 'scope2kind' : {
-"       \   'o' : 'object',
-"       \ },
-"       \ 'kind2scope' : {
-"       \  'function' : 'f',
-"       \  'method' : 'm',
-"       \  'var' : 'v',
-"       \  'ivar' : 'i',
-"       \ 'object' : 'o'
-"       \}
-"       \ }
 " Coffeescript tagbar support
 let g:tagbar_type_coffee = {
       \ 'ctagstype' : 'coffee',
@@ -991,9 +978,48 @@ let g:dbext_default_window_width = 50
 nmap _dt :set ft=htmldjango.html<cr>
 nmap _ht :set ft=html<cr>
 
+
 " surround helpers for templating:
 " s- :     <% %>
 " s= :     <%= %>
+
+
+let g:last_relative_dir = ''
+nnoremap <leader>1 :call RelatedFile ("models.py")<cr>
+nnoremap <leader>2 :call RelatedFile ("views.py")<cr>
+nnoremap <leader>3 :call RelatedFile ("urls.py")<cr>
+nnoremap <leader>4 :call RelatedFile ("admin.py")<cr>
+nnoremap <leader>5 :call RelatedFile ("tests.py")<cr>
+nnoremap <leader>6 :call RelatedFile ( "templates/" )<cr>
+nnoremap <leader>7 :call RelatedFile ( "templatetags/" )<cr>
+nnoremap <leader>8 :call RelatedFile ( "management/" )<cr>
+nnoremap <leader>0 :e settings.py<cr>
+nnoremap <leader>9 :e urls.py<cr>
+
+fun! RelatedFile(file)
+    " This is to check that the directory looks djangoish
+    if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
+        exec "edit %:h/" . a:file
+        let g:last_relative_dir = expand("%:h") . '/'
+        return ''
+    endif
+    if g:last_relative_dir != ''
+        exec "edit " . g:last_relative_dir . a:file
+        return ''
+    endif
+    echo "Cant determine where relative file is : " . a:file
+    return ''
+endfun
+
+fun SetAppDir()
+    if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
+        let g:last_relative_dir = expand("%:h") . '/'
+        return ''
+    endif
+endfun
+autocmd BufEnter *.py call SetAppDir()
+
+
 
 " django testing from within vim. not 'tested'(!) yet
 " see http://gremu.net/blog/2010/integrate-your-python-test-runner-vim/
@@ -1087,8 +1113,8 @@ nnoremap <leader>L  :Gitv<cr>
 nnoremap <leader>l  :Gitv!<cr>
 vnoremap <leader>l  :Gitv! --all<cr>
 " search logs
-nnoremap <leader>gG  :Glog --grep=
-nnoremap <leader>gC  :Glog -S
+nnoremap <leader>gg  :Glog --grep=
+nnoremap <leader>gc  :Glog -S
 " open git objects (such as current file on other branch)
 nnoremap <leader>gE  :Gedit<space>
 nnoremap <leader>ge  :Gvsplit<space>
@@ -1450,6 +1476,9 @@ map <leader># ysiw#
 " ,# Surround a word with quotes
 map <leader>" ysiw"
 
+" switch between ' and "
+vnoremap <leader>' ""yls<c-r>={'"': "'", "'": '"'}[@"]<cr><esc>
+
 " shortcuts for typical surround elements
 " vnoremap ' s'
 " vnoremap " s"
@@ -1564,18 +1593,14 @@ nnoremap <silent> ss <C-w>s
 nnoremap _ <C-w>-
 nnoremap + <C-w>+
 
-" LUSTYJUGGLER AND LUSTYEXPLORER
-"================================
-"
-let g:LustyExplorerDefaultMappings = 0
-
-" added <space> mapping to open file/folder (add '32' on line 847,  and change 32 to 33 on line 840)
-" TODO: fork original source!!
-
-" nmap <silent> :j :LustyBufferExplorer<CR>
+" tags
 nnoremap <c-g> :CtrlPTag<cr>
 
-nmap <silent> :: :LustyFilesystemExplorerFromHere<CR>
+" change list
+nnoremap <c-q> :CtrlPChangeAll<cr>
+nnoremap <c-r> :CtrlPLine<cr>
+
+nmap <silent> :: :CtrlPCurWD<CR>
 
 "Move back and forth through previous and next buffers
 nnoremap <silent> xz :bp<CR>
@@ -1615,7 +1640,7 @@ let g:ctrlp_open_new_file = 'v'
 let g:ctrlp_open_multiple_files = 'v'
 
 " open switcher with project root directory (determined by location of .git folder)
-let g:ctrlp_working_path_mode = 2
+" let g:ctrlp_working_path_mode = 2
 
 " open files in existing buffers if they are already opened
 let g:ctrlp_switch_buffer = 0
@@ -1640,7 +1665,7 @@ let NERDTreeMouseMode=2
 let NERDTreeShowHidden=1
 
 
-nmap <tab><tab> :NERDTreeTabsToggle<cr>
+" nmap <tab><tab> :NERDTreeTabsToggle<cr>
 
 " current file in NERDTree
 noremap <leader>. :NERDTreeFind<cr>
@@ -1914,14 +1939,15 @@ augroup line_return
         \ endif
 augroup END
 
-" " Only show cursorline in the current window and in normal mode.
-" augroup cline
-"   au!
-"   au WinLeave * set nocursorline
-"   au WinEnter * set cursorline
-"   au InsertEnter * set nocursorline
-"   au InsertLeave * set cursorline
-" augroup END
+" Only show cursorline in the current window and in normal mode.
+augroup cline
+  au!
+  au WinLeave * set nocursorline
+  au WinEnter * set cursorline
+  au InsertEnter * set nocursorline
+  au InsertLeave * set cursorline
+augroup END
+
 " }}}
 
 " PYTHON {{{
@@ -1955,13 +1981,13 @@ set ignorecase          " case insensitive search for lowercase...
 set smartcase           " ...but if mixed case, go case-sensitive
 set gdefault            " Add the g flag to search/replace by default
 
-" Open a Quickfix window for the last search.
-nnoremap <silent> KS :execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>
-vnoremap <silent> KS *:execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>
+" Open a (CtrlP'ed) Quickfix window for the last search.
+nnoremap <silent> KS :execute 'vimgrep /'.@/.'/g %'<CR>:CtrlPQuickfix<CR>
+vnoremap <silent> KS *:execute 'vimgrep /'.@/.'/g %'<CR>:CtrlPQuickfix<CR>
 
-nnoremap <silent> KB :LustyBufferGrep<CR>
+" do visual-search and KS at once
+vmap 8 *KS
 
-"
 " Use Ack instead of Grep when available
 if executable("ack")
   set grepprg=ack\ -H\ --nogroup\ --nocolor
@@ -2039,6 +2065,7 @@ nnoremap & :&&<cr>
 xnoremap & :&&<cr>
 
 " toggle quickfix window
+nnoremap qq :CtrlPQuickfix<cr>
 nmap <silent> <leader>fc :cclose<CR>
 nmap <silent> <leader>fo :copen<CR>
 

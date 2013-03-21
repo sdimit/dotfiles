@@ -20,7 +20,7 @@ snippet sdb "sdb"
 endsnippet
 
 snippet idb "idb"
-<input type="text" id="${1}" data-bind="value: ${2}"/>
+<input type="${1:text}" data-bind="value: ${2}"/>
 endsnippet
 
 snippet dbt "dbt"
@@ -173,6 +173,9 @@ snippet ## "##"
 ###
 endsnippet
 
+snippet ic "ic"
+<i class="icon-${1}"></i>
+endsnippet
 
 ## Jasmine Snippets
 
@@ -246,4 +249,5 @@ endsnippet
 snippet expncallw
 	expect(${1:predicate}).wasNotCalledWith ${2:arguments}
 endsnippet
+
 
