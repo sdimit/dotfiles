@@ -40,12 +40,12 @@ PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -
 
 # PATHS {{{
 
-export PATH=/bin:/usr/bin:/usr/local/bin:~/bin
+# make python binaries first
+export PATH=/usr/local/share/python
+export PATH=$PATH:/bin:/usr/bin:/usr/local/bin:~/bin
 export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
 export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
 export PATH=$PATH:/usr/X11/bin:/usr/texbin:/Applications
-# python
-export PATH=$PATH:/usr/local/share/python
 # ruby
 export PATH=$PATH:$HOME/.rvm/bin
 # node
@@ -72,10 +72,13 @@ bindkey '\ew' kill-region                           # [Esc-w] - Kill from the cu
 bindkey '^r' history-incremental-search-backward    # [Ctrl-r] - Search backward incrementally for a specified string. The string may begin with ^ to anchor the search to the beginning of the line.
 
 # emacs style
-bindkey '^a' beginning-of-line
-bindkey '^e' end-of-line
-bindkey '^f' forward-char
-bindkey '^b' backward-char
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
+bindkey '^K' kill-line
+bindkey '^F' forward-char
+bindkey '^B' backward-char
+bindkey '^T' transpose-chars
+bindkey '^Y' yank
 
 bindkey '^[[1;5C' forward-word                      # [Ctrl-RightArrow] - move forward one word
 bindkey '^[[1;5D' backward-word                     # [Ctrl-LeftArrow] - move backward one word
@@ -235,7 +238,7 @@ alias ql="quick-look"
 alias whereami='doko'
 alias hc='http-console'
 alias homesick="$HOME/.homeshick"
-alias aws="ssh amazon"
+alias aws="ssh -t amazon 'tmux attach -t 0'"
 
 # open files directly in editor
 alias -s tex=vim
@@ -601,6 +604,7 @@ alias p='python'
 export PYTHONDONTWRITEBYTECODE=1
 
 export PYTHONPATH=usr/local/lib/python2.7/site-packages:$PYTHONPATH
+export PIP_DOWNLOAD_CACHE=$HOME/Library/Caches/pip-downloads
 
 # Django stuff
 
