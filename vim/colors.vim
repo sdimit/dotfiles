@@ -10,12 +10,15 @@ hi! ColorColumn ctermfg=0 ctermbg=8
 hi! Pmenu ctermfg=234 ctermbg=24
 hi! LineNr ctermbg=12
 hi! link SignColumn CursorLineNr
+hi! link IncSearch Search
 hi! link LineNr VertSplit
 hi! link TabLine LineNr
 hi! link TabLineSel pandocStrikeoutTable
 hi! link TabLineFill LineNr
+
 hi! link Folded VertSplit
-hi! Folded ctermfg=235
+" hi! Folded ctermfg=235
+
 hi! link VertSplit CursorLineNr
 hi! link txtBold Identifier
 hi! link zshVariableDef Identifier

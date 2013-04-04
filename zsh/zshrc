@@ -42,15 +42,15 @@ PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -
 
 # make python binaries first
 export PATH=/usr/local/share/python
+# normal bin
 export PATH=$PATH:/bin:/usr/bin:/usr/local/bin:~/bin
 export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
-export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
+# OSX stuff
 export PATH=$PATH:/usr/X11/bin:/usr/texbin:/Applications
 # ruby
 export PATH=$PATH:$HOME/.rvm/bin
 # node
 export NODE_PATH=/usr/local/lib/node_modules
-
 # virtualenv
 export WORKON_HOME=$HOME/.virtualenvs
 source /usr/local/bin/virtualenvwrapper.sh
@@ -68,7 +68,6 @@ source /usr/local/bin/virtualenvwrapper.sh
 # bindkey "^F" vi-cmd-mode
 # bindkey jk vi-cmd-mode
 
-bindkey '\ew' kill-region                           # [Esc-w] - Kill from the cursor to the mark
 bindkey '^r' history-incremental-search-backward    # [Ctrl-r] - Search backward incrementally for a specified string. The string may begin with ^ to anchor the search to the beginning of the line.
 
 # emacs style
@@ -91,7 +90,6 @@ bindkey ' ' magic-space                             # [Space] - do history expan
 
 # EDITOR {{{
 
-# seriously, though, what else?
 export EDITOR="/Applications/MacVim.app/Contents/MacOS/Vim"
 
 alias vim=$EDITOR
@@ -162,12 +160,15 @@ setopt extendedglob
 
 alias top="top -o cpu"
 alias tu='top -o cpu' # cpu
-alias tm='top -o vsize' # memory
+alias tmem='top -o vsize' # memory
 
 alias k="kill"
 alias k9="kill -9"
 alias ka="killall"
 alias ka9="killall -9"
+
+# kill process matching argument
+function gkill() { ps -axf | grep -v grep | grep "$@" | awk '{print $2}' | xargs kill }
 
 alias psa="ps aux"
 function psg() { ps -axf | grep -v grep | grep "$@" -i --color=auto; }

@@ -42,6 +42,7 @@ Bundle 'danro/rename.vim'
 Bundle 'kshenoy/vim-signature'
 Bundle 'vim-scripts/highlight.vim'
 Bundle 'tpope/vim-obsession'
+Bundle 'terryma/vim-expand-region'
 " Bundle 'delimitMate.vim'
 
 " python
@@ -53,6 +54,7 @@ Bundle 'klen/python-mode'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'zeekay/vim-js2coffee'
 Bundle 'claco/jasmine.vim'
+Bundle 'mintplant/vim-literate-coffeescript'
 
 " web development
 Bundle 'tristen/vim-sparkup'
@@ -104,13 +106,8 @@ Bundle 'tpope/vim-markdown'
 
 filetype plugin on
 
-let mapleader=","
-let maplocalleader=","
-
-" Kinesis settings
-" let mapleader="\<space>"
-" let maplocalleader="\<space>"
-" nnoremap <bs> za
+let mapleader="\<space>"
+let maplocalleader="\<space>"
 
 
 set visualbell " no sounds
@@ -229,6 +226,7 @@ nnoremap <leader>ie :InlineEdit<cr>
 " imap <c-k> _
 " imap <c-j> ->
 imap <c-d> #
+imap <c-h> ->
 inoremap £ #
 vmap £ #
 
@@ -246,9 +244,6 @@ nnoremap k gk
 inoremap jj <esc>l
 inoremap jk <esc>l
 cnoremap jj <c-c>
-
-" add space at cursor without exiting normal mode
-nnoremap <leader><space> i<space><esc>
 
 " avoid shift key for invoking command line
 " nnoremap ; :
@@ -335,47 +330,6 @@ nnoremap <leader>C :let &scrolloff=999-&scrolloff<cr>
 map <leader>cl :set cursorline!<cr>
 map <leader>cc :set cursorcolumn!<cr>
 
-" Adds spaces around current block of lines
-map <silent> <leader><space> :call <SID>AddSpaces()<Enter>
-" Removes spaces around current block of lines
-map <silent> <leader><bs>    :call <SID>RemoveSpaces()<Enter>
-
-function s:AddSpaces() range
-  let separation = 2
-  let blanks     = repeat([''], separation)
-  call append(a:lastline, blanks)
-  call append(a:firstline - 1, blanks)
-endfunction
-
-function s:RemoveSpaces()
-  if getline('.') == ''
-    let fromline = prevnonblank(line('.')) + 1
-    let toline   = nextnonblank(line('.')) - 1
-    call s:DeleteLines(fromline, toline, 0)
-    return
-  endif
-
-  let toline = search('^$', 'bnW')
-  if toline != 0
-    let fromline = prevnonblank(toline) + 1
-    call s:DeleteLines(fromline, toline)
-  endif
-
-  let fromline = search('^$', 'nW')
-  if fromline != 0
-    let toline = nextnonblank(fromline) - 1
-    call s:DeleteLines(fromline, toline)
-  endif
-endfunction
-
-function s:DeleteLines(fromline, toline, ...)
-  let toline = a:toline < 1 ? line('$') : a:toline
-  silent execute a:fromline . ',' . toline . 'delete'
-  if a:0 == 0 || a:0 == 1 && a:1
-    normal ``
-  endif
-endfunction
-
 " }}}
 
 " FILES {{{
@@ -394,12 +348,10 @@ set nowb
 
 set autoread                   " Reload files changed outside vim
 
-" Aggresive file saving
-au InsertLeave * silent! :w
+" Aggresive file saving (but use :update rather than :write)
+au InsertLeave * silent! :up
 " Save when buffers lose focus too (for changes made in normal mode)
-au BufLeave * silent! :w
-
-cnoremap w' w<CR>
+au BufLeave * silent! :up
 
 nnoremap <leader>M :set modifiable<cr>
 
@@ -444,7 +396,7 @@ nnoremap <leader>E :e <C-R>=expand("%:p:h") . "/" <CR>
 " Use vifm as vim file manager
 nnoremap <leader>e :EditVifm<cr>
 nnoremap <leader>v :VsplitVifm<cr>
-nnoremap <leader>d :DiffVifm<cr>
+nnoremap <leader>F :DiffVifm<cr>
 nnoremap <leader>T :TabVifm<cr>
 
 " shortcut to swap to alternate file
@@ -549,26 +501,21 @@ nmap <Leader>fk :set foldmethod=marker<cr>zM
 nmap <Leader>fe :set foldmethod=expr<cr>zM
 nmap <Leader>fs :set foldmethod=syntax<cr>zM
 
-nmap <leader>f0 :set foldlevel=0<CR>
-nmap <leader>f1 :set foldlevel=1<CR>
-nmap <leader>f2 :set foldlevel=2<CR>
-nmap <leader>f3 :set foldlevel=3<CR>
-nmap <leader>f4 :set foldlevel=4<CR>
-nmap <leader>f5 :set foldlevel=5<CR>
-nmap <leader>f6 :set foldlevel=6<CR>
-nmap <leader>f7 :set foldlevel=7<CR>
-nmap <leader>f8 :set foldlevel=8<CR>
-nmap <leader>f9 :set foldlevel=9<CR>
+nmap <leader>0 :set foldmethod=indent<cr>:set foldlevel=0<CR>
+nmap <leader>1 :set foldmethod=indent<cr>:set foldlevel=1<CR>
+nmap <leader>2 :set foldmethod=indent<cr>:set foldlevel=2<CR>
+nmap <leader>3 :set foldmethod=indent<cr>:set foldlevel=3<CR>
+nmap <leader>4 :set foldmethod=indent<cr>:set foldlevel=4<CR>
 
 " fold HTML tag
-nnoremap zt Vatzf
+nnoremap zt :set foldmethod=manual<cr>Vatzf
 
 " select all fold
 nnoremap vaf vaz
 
 " 'Refocus' folds
 
-nnoremap <space> za
+" nnoremap <space> za
 nnoremap <silent> zm zM<cr>
 
 " Append modeline after last line in buffer.
@@ -648,9 +595,9 @@ set nosmartindent
 set smarttab
 set expandtab                  " convert tabs into spaces
 
-set shiftwidth=4
-set softtabstop=4
-set tabstop=4
+set shiftwidth=2
+set softtabstop=2
+set tabstop=2
 
 " temporarily change tab size
 nnoremap <leader><leader>2 :setlocal ts=2 sts=2 sw=2 et<cr>
@@ -686,7 +633,6 @@ set ttyfast                 " fast redraw screen
 set t_Co=256
 colorscheme solarized
 set background=dark
-nnoremap <leader>S call togglebg#map("<F5>")
 let g:solarized_termtrans = 1
 let g:solarized_contrast = 'high'
 
@@ -902,7 +848,7 @@ hi def link clojureComment     Search
 " COFFEESCRIPT {{{
 
 autocmd BufRead *.coffee set filetype=coffee
-autocmd BufWritePost,FileWritePost *.coffee :silent !iced -c <afile>
+autocmd BufWritePost,FileWritePost *.coffee :silent !coffee -c <afile>
 
 autocmd FileType javascript,coffee setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType javascript,coffee setlocal makeprg=node\ %:r
@@ -983,18 +929,20 @@ nmap _ht :set ft=html<cr>
 " s- :     <% %>
 " s= :     <%= %>
 
+" augroup django
+"   autocmd!
+"   autocmd FileType python nnoremap <leader>1 :call RelatedFile ("models.py")<cr>
+"   autocmd FileType python nnoremap <leader>2 :call RelatedFile ("views.py")<cr>
+"   autocmd FileType python nnoremap <leader>3 :call RelatedFile ("urls.py")<cr>
+"   autocmd FileType python nnoremap <leader>4 :call RelatedFile ("admin.py")<cr>
+"   autocmd FileType python nnoremap <leader>5 :call RelatedFile ("tests.py")<cr>
+"   autocmd FileType python nnoremap <leader>6 :call RelatedFile ( "templates/" )<cr>
+"   autocmd FileType python nnoremap <leader>7 :call RelatedFile ( "templatetags/" )<cr>
+"   autocmd FileType python nnoremap <leader>0 :e settings.py<cr>
+"   autocmd FileType python nnoremap <leader>9 :e urls.py<cr>
+" augroup END
 
 let g:last_relative_dir = ''
-nnoremap <leader>1 :call RelatedFile ("models.py")<cr>
-nnoremap <leader>2 :call RelatedFile ("views.py")<cr>
-nnoremap <leader>3 :call RelatedFile ("urls.py")<cr>
-nnoremap <leader>4 :call RelatedFile ("admin.py")<cr>
-nnoremap <leader>5 :call RelatedFile ("tests.py")<cr>
-nnoremap <leader>6 :call RelatedFile ( "templates/" )<cr>
-nnoremap <leader>7 :call RelatedFile ( "templatetags/" )<cr>
-nnoremap <leader>8 :call RelatedFile ( "management/" )<cr>
-nnoremap <leader>0 :e settings.py<cr>
-nnoremap <leader>9 :e urls.py<cr>
 
 fun! RelatedFile(file)
     " This is to check that the directory looks djangoish
@@ -1102,8 +1050,9 @@ endfunction
 " GIT {{{
 
 nnoremap <leader>s  :Gstatus<cr>
+nnoremap <leader>S  :Gstatus<cr><c-w>T
 
-nnoremap <leader>gd  :Gdiff<cr>
+nnoremap <leader>d  :Gdiff<cr>
 nnoremap <leader>gS  :Gdiff stash@{}<left>
 " load revisions of current file
 nnoremap <leader>gl  :Glog<cr><cr><leader>fo
@@ -1121,6 +1070,7 @@ nnoremap <leader>ge  :Gvsplit<space>
 nnoremap <leader>gs  :Gsplit<space>
 nnoremap <leader>gr  :Gread<cr>
 nnoremap <leader>gw  :Gwrite<cr>
+nnoremap <leader>gW  :Gwrite<cr>:tabclose<cr>
 nnoremap <leader>ga  :Git add --all<cr>:Gcommit<cr>
 " nnoremap <leader>GA  :Git add .<cr>
 nnoremap <leader>gb  :Gblame<cr>
@@ -1154,6 +1104,9 @@ if has("autocmd")
   " Auto-close fugitive buffers
   autocmd BufReadPost fugitive://* set bufhidden=delete
 
+  " Unset 'list' in :Gstatus window (which usually contains tab characters).
+  autocmd BufReadPost .git/index set nolist
+
   " Navigate up one level from fugitive trees and blobs
   autocmd User fugitive
         \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
@@ -1162,7 +1115,7 @@ if has("autocmd")
 endif
 
 " get patch from diff (using the above)
-nmap <leader>do <leader>gddo<leader>gD
+" nmap <leader>do <leader>gddo<leader>gD
 
 nnoremap d2 :diffget //2<cr>
 nnoremap d3 :diffget //3<cr>
@@ -1972,8 +1925,8 @@ nnoremap / /\v
 vnoremap / /\v
 
 " use enter to start search (expect in quickfix window)
-nnoremap <expr> <cr> (&buftype is# "quickfix" ? ":.cc<cr>" : "/")
-vnoremap <expr> <cr> (&buftype is# "quickfix" ? ":.cc<cr>" : "/")
+" nnoremap <expr> <cr> (&buftype is# "quickfix" ? ":.cc<cr>" : "/")
+" vnoremap <expr> <cr> (&buftype is# "quickfix" ? ":.cc<cr>" : "/")
 
 set incsearch           " Find the next match as we type the search
 set nohlsearch          " Highlight searches by default
@@ -1987,6 +1940,7 @@ vnoremap <silent> KS *:execute 'vimgrep /'.@/.'/g %'<CR>:CtrlPQuickfix<CR>
 
 " do visual-search and KS at once
 vmap 8 *KS
+vmap n *
 
 " Use Ack instead of Grep when available
 if executable("ack")
