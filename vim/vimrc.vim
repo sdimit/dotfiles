@@ -22,28 +22,30 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'gregsexton/gitv'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'AndrewRadev/linediff.vim'
-Bundle 'lengarvey/ctrlp-recent-or-modified.vim'
+" Bundle 'lengarvey/ctrlp-recent-or-modified.vim'
+Bundle 'mattn/gist-vim'
 
 " snippets and completion
 Bundle 'SirVer/ultisnips'
 Bundle 'Shougo/neocomplcache'
+" Bundle 'scrooloose/syntastic'
 
 " general helpers
 Bundle 'tpope/vim-commentary'
+Bundle 'tomtom/tcomment_vim'
 Bundle 'vim-scripts/YankRing.vim'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
-" Bundle 'scrooloose/syntastic'
+Bundle 'Indent-Guides'
 Bundle 'godlygeek/tabular'
 Bundle 'AndrewRadev/switch.vim'
 Bundle 'AndrewRadev/inline_edit.vim'
 Bundle 'danro/rename.vim'
 Bundle 'kshenoy/vim-signature'
 Bundle 'vim-scripts/highlight.vim'
-Bundle 'tpope/vim-obsession'
 Bundle 'terryma/vim-expand-region'
-" Bundle 'delimitMate.vim'
+Bundle 'delimitMate.vim'
 
 " python
 Bundle 'klen/python-mode'
@@ -54,7 +56,8 @@ Bundle 'klen/python-mode'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'zeekay/vim-js2coffee'
 Bundle 'claco/jasmine.vim'
-Bundle 'mintplant/vim-literate-coffeescript'
+" Bundle 'mintplant/vim-literate-coffeescript'
+Bundle 'vitaly/vim-syntastic-coffee'
 
 " web development
 Bundle 'tristen/vim-sparkup'
@@ -64,23 +67,35 @@ Bundle 'edsono/vim-matchit'
 Bundle 'vim-scripts/AutoTag'
 Bundle 'leshill/vim-json'
 Bundle 'groenewege/vim-less'
+Bundle 'nginx.vim'
+Bundle 'jaxbot/brolink.vim'
+Bundle 'nono/vim-handlebars'
+Bundle 'wavded/vim-stylus'
+
+" latex
+" Bundle 'jcf/vim-latex'
 
 " helpers to handle REPLs and running unit tests in tmux
 Bundle 'ervandew/screen'
-Bundle 'benmills/vimux'
-Bundle 'nvie/vim_bridge'
+" Bundle 'benmills/vimux'
+" Bundle 'nvie/vim_bridge'
+Bundle 'tpope/vim-dispatch'
+Bundle 'tpope/vim-tbone'
 
 Bundle 'kana/vim-textobj-entire'
 Bundle 'kana/vim-textobj-fold'
 Bundle 'kana/vim-textobj-indent'
 Bundle 'kana/vim-textobj-user'
+Bundle 'kana/vim-textobj-diff'
+Bundle 'gilligan/textobj-gitgutter'
+
 Bundle 'MarcWeber/vim-addon-mw-utils'
 Bundle 'vim-scripts/utl.vim'
 Bundle 'tpope/vim-speeddating'
 " Bundle 'vim-scripts/marvim'
 
 Bundle 'sjl/gundo.vim'
-Bundle 'chrisbra/NrrwRgn'
+" Bundle 'chrisbra/NrrwRgn'
 Bundle 'vim-scripts/ZoomWin'
 " Bundle 'vim-scripts/dbext.vim'
 
@@ -88,13 +103,13 @@ Bundle 'vim-scripts/ZoomWin'
 Bundle 'henrik/git-grep-vim'
 Bundle 'bronson/vim-visual-star-search'
 Bundle 'henrik/vim-indexed-search'
+Bundle 'nelstrom/vim-qargs'
 
 " Appearance
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'Lokaltog/vim-powerline'
 
-" Prose
-Bundle 'tpope/vim-markdown'
+Bundle 'jtratner/vim-flavored-markdown'
 " Bundle 'jceb/vim-orgmode'
 " Bundle 'vim-scripts/vimwiki'
 
@@ -218,22 +233,19 @@ vmap P p :call setreg('"', getreg('0')) <CR>
 " visually select the last pasted text
 nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 
+nmap YY vHLy
+
 " InlineEdit
-"
 nnoremap <leader>ie :InlineEdit<cr>
 
 " RSI bindings
-" imap <c-k> _
-" imap <c-j> ->
 imap <c-d> #
-imap <c-h> ->
-inoremap £ #
+imap <c-h> =>
+imap £ #
+nmap £ #
 vmap £ #
+omap £ #
 
-
-" easier blank line insertions
-nnoremap <leader>o :<C-u>exe 'normal m`'.v:count1.'o<C-v><C-[>``'<CR>
-nnoremap <leader>O :<C-u>exe 'normal m`'.v:count1.'O<C-v><C-[>``'<CR>
 
 " Fix for navigating long lines
 " Wrapped lines goes down/up to next row, rather than next line in file.
@@ -292,14 +304,10 @@ nnoremap dD cc<esc>
 nmap - :Switch<cr>
 " vmap <leader>s :Switch<cr>
 
-" FIXME
-" source ~/dotfiles/vim/switch.vim
+source ~/dotfiles/vim/switch.vim
 
 " Keep the cursor in place while joining lines
-" nnoremap <silent> J mzJ`z:delmarks z<cr>
-
-" join lines from insert mode
-" imap <c-j> <esc>Ji
+nnoremap <silent> J mzJ`z:delmarks z<cr>
 
 " Split line (sister to [J]oin lines)
 " The normal use of S is covered by cc, so don't worry about shadowing it.
@@ -310,37 +318,21 @@ vnoremap - =
 " Toggle 'keep current line in the center of the screen' mode
 nnoremap <leader>C :let &scrolloff=999-&scrolloff<cr>
 
-" improved A normal mode key (jumps to right indentation)
-" nmap <expr> A MyA()
-" nnoremap ZA A
-" function! MyA()
-"   let l:prev_indent = indent(line('.') - 1)
-"   let l:indent_diff = l:prev_indent - indent(line('.'))
-"   let l:is_empty = len(getline('.')) == 0
-"   if l:indent_diff >= 0 && l:is_empty
-"     return 'ddko'
-
-"   elseif l:is_empty
-"     return 'I'
-"   else
-"     return 'ZA'
-"   endif
-" endfunction
-
 map <leader>cl :set cursorline!<cr>
 map <leader>cc :set cursorcolumn!<cr>
+
+
+" fix slight delay after pressing ESC then O
+" http://ksjoberg.com/vim-esckeys.html
+" set noesckeys
+set timeout timeoutlen=1000 ttimeoutlen=100
 
 " }}}
 
 " FILES {{{
 
-" go to preceding/next file in directory (unimpaired)
+" go to preceding/next file in directory (unimpaired plugin)
 " [o and ]o
-
-" :e!           : return to unmodified file
-" :w /some/path/%:r   : save file in another directory, but with the same name
-"
-" ,gf - same as vim normal gf (go to file), but in a vertical split
 
 set noswapfile                 " turn off swap files
 set nobackup
@@ -369,18 +361,20 @@ command! -bang Qa qa<bang>
 " Kill buffer
 nnoremap <leader>q :bd!<cr>
 " Kill buffer and delete file
-nnoremap <leader><leader>q :!rm %<cr>:bd!<cr>
+nnoremap <leader>rm :!rm %<cr>:bd!<cr>
 " Quit vim
 nnoremap <leader>Q :qa!<cr>
 
 " Filesystem
 nmap <leader>mk :!mkdir -p <c-r>=expand("%:p:h")."/"<cr>
-nmap <leader>rm :!rm %<cr>
 " Make the current file executable
 nmap <leader>x :Silent chmod +x %<cr>
 
 " Rename (using plugin)
 nmap <leader>rn :Rename <c-r>=expand("%:t")<cr>
+
+" Change directory to the path of the current file
+map <leader>cd :cd %:p:h<cr>
 
 " copy current filename into system clipboard - mnemonic: (c)urrent(f)ilename
 nnoremap <silent> <leader>cf :let @* = expand("%:~")<CR>
@@ -401,6 +395,7 @@ nnoremap <leader>T :TabVifm<cr>
 
 " shortcut to swap to alternate file
 nnoremap :l <c-^>
+
 set suffixesadd+=.py
 set suffixesadd+=.js
 
@@ -427,9 +422,6 @@ set autochdir
 " else
 "   autocmd BufEnter * silent! lcd %:p:h:gs/ /\\ /
 " endif
-
-" open (OSX-way) current file: most useful with html file opening in default browser
-nmap <leader>o :!open %<cr>
 
 " nmap ,M :make<cr>
 
@@ -536,13 +528,15 @@ nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 set nowrap
 set linebreak                  " Wrap lines at convenient points
 
+set formatoptions+=j            "fo:    remove comment leader when joining lines
+
 " toggle line wrapping
 nnoremap <leader>W :set wrap!<cr>
 
 
 " use external command for formatting paragraphs
 " set formatprg=par\ -w80\ T2\ \|\ sed\ 's/\ \ /\\t/g'
-"set formatprg="iconv -f UTF-8 -t WINDOWS-1251 |"
+" set formatprg="iconv -f UTF-8 -t WINDOWS-1251 |"
 "            \."par -w80 |"
 "            \."iconv -f WINDOWS-1251 -t UTF-8"
 
@@ -583,6 +577,9 @@ function! CleanCode()
   %s=  *$==e      " Delete end of line blanks
 endfunction
 nmap <leader>co mz:call CleanCode()<cr>`z
+
+" add space inside current parenthesis
+map <leader>( vi(xi  <esc>P <esc>
 
 " }}}
 
@@ -673,23 +670,8 @@ endif
 
 set mouse=a
 
-" manually enforce new highlights. FIXME
-nmap <leader>H 'FV'G,vc
-
-" Custom color overwrites
-hi! link txtBold Identifier
-hi! link zshVariableDef Identifier
-hi! link zshFunction Function
-hi! link MatchParen DiffText
-
-hi! link SignColumn   LineNr
-hi! link VertSplit   LineNr
-hi! link ShowMarksHLl DiffAdd
-hi! link ShowMarksHLu DiffChange
-hi! ColorColumn ctermfg=0 ctermbg=8
-
 " Get the current highlight group. Useful for then remapping the color
-map <leader>hi :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
+map <leader>HI :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
 
 " POWERLINE
 let g:Powerline_symbols='fancy'
@@ -805,8 +787,6 @@ let g:vimclojure#WantNailgun         = 0
 let g:vimclojure#NailgunClient       = "~/.vim/bundle/vimclojure/bin/ng"
 " TODO: fix this
 
-" background shading for comments
-hi def link clojureComment     Search
 
 
 " aw AddToLispWords
@@ -848,15 +828,15 @@ hi def link clojureComment     Search
 " COFFEESCRIPT {{{
 
 autocmd BufRead *.coffee set filetype=coffee
-autocmd BufWritePost,FileWritePost *.coffee :silent !coffee -c <afile>
+" autocmd BufWritePost,FileWritePost *.coffee :silent !coffee -c -m <afile>
 
 autocmd FileType javascript,coffee setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType javascript,coffee setlocal makeprg=node\ %:r
 
 autocmd FileType coffee setl fdm=expr fde=getline(v:lnum)=~'\(->$\|=>\)$'&&indent(v:lnum)<indent(v:lnum+1)?'a1':'s1'
-" autocmd FileType coffee setl fdm=expr fde=getline(v:lnum)=~'^class'&&indent(v:lnum)<indent(v:lnum+1)?'a1':'s1'
+
 " open corresponding js file
-" nmap <leader>jj :vertical expand("%:p:r")<CR>
+nmap <leader>jj :vertical expand("%:p:r")<CR>
 
 " convert js into coffeescript on the fly (using eponymous npm bundle)
 nmap <leader>jc :Js2Coffee<cr>
@@ -873,6 +853,8 @@ let g:tagbar_type_coffee = {
       \ 'ctagstype' : 'coffee',
       \ 'kinds' : [
       \   'c:class',
+      \   'm:methods',
+      \   'f:functions',
       \ ]
       \ }
 
@@ -881,7 +863,7 @@ let g:tagbar_type_coffee = {
 " CSS {{{
 
 " Compile LessCSS on save
-" autocmd BufWritePost,FileWritePost *.less :silent !lessc <afile> <afile>:p:r.css
+autocmd BufWritePost,FileWritePost *.less :silent !lessc <afile> <afile>:p:r.css
 
 " :ColorToggle - turn on #abc123 color highlighting
 
@@ -1053,6 +1035,7 @@ nnoremap <leader>s  :Gstatus<cr>
 nnoremap <leader>S  :Gstatus<cr><c-w>T
 
 nnoremap <leader>d  :Gdiff<cr>
+nnoremap <leader>gd  :Gdiff origin/master:%<left><left>
 nnoremap <leader>gS  :Gdiff stash@{}<left>
 " load revisions of current file
 nnoremap <leader>gl  :Glog<cr><cr><leader>fo
@@ -1085,7 +1068,8 @@ nnoremap <leader>gR  :Git checkout -- %<cr><cr>,u
 nnoremap <leader>gp  :Git push<CR>
 nnoremap <leader>gP  :Git pull<CR>
 nnoremap <leader>grsh :Git reset --hard<cr>
-nnoremap <leader>go :Git oops<cr>
+nnoremap <leader>gO :Git oops<cr>
+nnoremap <leader>go :Gcommit<cr>cA
 
 nnoremap <leader>gt  :GitGutterLineHighlightsToggle<cr>
 
@@ -1100,12 +1084,20 @@ nnoremap <c-y> :CtrlPModified<cr>
 " vnoremap <leader>G :w !gist -p -t %:e \| pbcopy<cr>
 " vnoremap <leader>UG :w !gist -p \| pbcopy<cr>
 
+" TODO finish this
+
+function! Greset()
+  let wordUnderCursor = expand("<cword>")
+  Git reset -- wordUnderCursor
+endfunction
+
 if has("autocmd")
   " Auto-close fugitive buffers
   autocmd BufReadPost fugitive://* set bufhidden=delete
 
   " Unset 'list' in :Gstatus window (which usually contains tab characters).
   autocmd BufReadPost .git/index set nolist
+  autocmd BufReadPost .git/index nnoremap <leader>r :call Greset()<cr>
 
   " Navigate up one level from fugitive trees and blobs
   autocmd User fugitive
@@ -1148,6 +1140,8 @@ nnoremap d3 :diffget //3<cr>
 
 " stop gitv messing with my window navigation
 let g:Gitv_DoNotMapCtrlKey = 1
+
+let g:Gitv_WipeAllOnClose = 0
 
 " autocmd FileType gitcommit DiffGitCached | wincmd p
 
@@ -1199,10 +1193,8 @@ augroup END
 au BufReadPost *.tex set syntax=tex
 " instead of plaintex
 
+" au BufReadPost *.tex set makeprg=xelatex\ \\\\-interaction=nonstopmode\ \\\\input\\{$*}
 let g:Tex_CompileRule_pdf = 'xelatex -interaction=nonstopmode $*'
-
-hi! link initexComment Structure
-
 let g:tex_flavor='latex'
 let g:Tex_BIBINPUTS='~/DPhil/'
 " let g:Tex_MainFileExpression = '~/DPhil/dphil.tex'
@@ -1215,20 +1207,9 @@ let g:Tex_Menus=0
 " get rid of F7 mapping
 let g:Tex_PromptedCommands=""
 
-set grepprg=grep\ -nH\ $*
-set iskeyword+=:
-
-" some indentation for style
-" set sw=2
-
 " customize keybindings a little
 " nmap ,c i\cite{}<F4>
 " imap <silent> <F4> <Esc>:call Tex_Complete("default","text")<CR>
-
-" restore folds automatically
-" au BufWinLeave *.tex silent mkview!
-" au BufWinEnter *.tex silent loadview
-" TODO: make this on 'enter file' not buffer
 
 " to surround selection with markup:
 " hit the following in VISUAL mode: (without hitting S for surround.vim first)
@@ -1260,10 +1241,12 @@ let g:tagbar_type_tex = {
 augroup ft_markdown
   au!
 
-  autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
+  " autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
+  au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
+
   autocmd BufNewFile,BufRead *.txt set filetype=markdown
 
-  autocmd FileType markdown set formatoptions+=2,l formatoptions-=c smartcase
+  autocmd FileType markdown set formatoptions+=2,l formatoptions-=c smartcase wrap
 
   autocmd FileType markdown,tex set noautoindent nosmartindent nocindent linebreak nonumber nofoldenable
   autocmd FileType markdown,tex let &scrolloff=999-&scrolloff
@@ -1284,10 +1267,6 @@ augroup ft_markdown
   autocmd FileType markdown vnoremap <buffer> <leader>l S]%a()<esc>P<esc>
 
 augroup END
-
-
-hi! link markdownBold Function
-hi! link markdownItalic Function
 
 " preview
 nnoremap <leader>mm :silent !open -a Marked.app '%:p'<cr>
@@ -1387,8 +1366,6 @@ let vimrplugin_underscore = 0
 " replace '<' with '<<>>=\n@' in rnoweb files
 let vimrplugin_rnowebchunk = 1
 
-" more explicit shading for Sweave sections
-hi! link rnowebDelimiter pandocStrikeoutTable
 
 " background shading for comments
 " hi def link rComment     Search
@@ -1432,63 +1409,11 @@ map <leader>" ysiw"
 " switch between ' and "
 vnoremap <leader>' ""yls<c-r>={'"': "'", "'": '"'}[@"]<cr><esc>
 
-" shortcuts for typical surround elements
-" vnoremap ' s'
-" vnoremap " s"
-" vnoremap ` s`
-" vnoremap ] s]
-" vnoremap ) s)
-
-" wrap words
-nmap <leader>( vES)
-nmap <leader>) v$hS)
-nmap <leader>" vES"
-
-" handlebar surround
-" vmap <leader>} S}gvS}
-
 " nice for lisp dialects
 " imap <leader>( <esc>vES)i
 " imap <leader>) <esc>v$hS)i
 " imap <leader>" <esc>vES"i
 " imap <leader>' <esc>vES'i
-
-" }}}
-
-" TASKPAPER {{{
-
-let g:task_paper_follow_move = 0
-let g:task_paper_date_format = "%d-%m-%Y"
-
-hi! link taskpaperDone Comment
-hi! link taskpaperCancelled Comment
-
-" ,tT     Show tasks marked as today
-" ,td     Mark task as done
-" ,tx     Mark task as cancelled
-" ,tt     Mark task as today
-" ,tm     Move task to specified project
-" ,tP     Focus on the current project
-" ,tg     Go to specified project
-" ,t/     Search for items including keyword
-" ,ts     Search for items including tag
-" ,tD     Archive @done items
-" ,tX     Show tasks marked as cancelled
-" ,tp     Fold all projects
-" ,t.     Fold all notes
-" ,tj     Go to next project
-" ,tk     Go to previous project
-
-"}}}
-
-" TIMESTAMP {{{
-
-" timestamp.vim
-let g:timestamp_modelines=15
-let g:timestamp_rep='%Y-%m-%d'
-let g:timestamp_regexp='\c\%(\<\%(last \)\?\%(changed?\|modified\):\s\+\)\@<=\%(\d\{4}\D.\{-}\d\{2}\|TIMESTAMP\)'
-
-au filetype md let g:timestamp_regexp='\c\%(date\):\s\+\)\@<=\%(\d\{4}\D.\{-}\d\{2}\|TIMESTAMP\)'
 
 " }}}
 
@@ -1503,14 +1428,12 @@ set splitbelow
 
 " go file, but avoiding error message about leaving unsaved buffer
 " map gf :edit <cfile><CR>
-map gf :wincmd f<cr>
+nnoremap gf :wincmd f<cr>
 
 " use ,gf to go to file in a vertical split
 nnoremap <silent> ,gf :vertical botright wincmd f<CR>
 
-nmap <silent> `` :vnew<cr>
-
-"NARROW REGION
+" NARROW REGION
 
 let g:nrrw_rgn_vert = 1
 let g:nrrw_rgn_wdth = 50
@@ -1541,17 +1464,22 @@ nnoremap <silent> <C-j> <C-w>j
 " Create window splits easier.
 nnoremap <silent> vv <C-w>v
 nnoremap <silent> ss <C-w>s
+nnoremap <silent> tt :tabedit %<cr>
 
 " resizing shortcuts
 nnoremap _ <C-w>-
 nnoremap + <C-w>+
+
+" Faster scrolling
+nnoremap <C-e> 3<C-e>
+nnoremap <C-y> 3<C-y>
 
 " tags
 nnoremap <c-g> :CtrlPTag<cr>
 
 " change list
 nnoremap <c-q> :CtrlPChangeAll<cr>
-nnoremap <c-r> :CtrlPLine<cr>
+" nnoremap <c-r> :CtrlPLine<cr>
 
 nmap <silent> :: :CtrlPCurWD<CR>
 
@@ -1563,7 +1491,9 @@ nnoremap <silent> zx :bn<CR>
 "========
 
 let g:ctrlp_custom_ignore = {
-      \ 'file': '\.exe$\|\.so$\|\.dll$|\.map$' }
+      \ 'dir':  'private|core\/static',
+      \ 'file': '\.map$',
+      \ }
 
 let g:ctrlp_user_command = {
       \ 'types': {
@@ -1572,14 +1502,10 @@ let g:ctrlp_user_command = {
       \ 'fallback': 'find %s -type f'
       \ }
 
-
-" ctrl + m for MRU (which FSR also maps to enter, neat)
 nmap <c-f> :CtrlPMRU<cr>
 nmap <leader>p :CtrlPMRU<cr>
 
 " TIP: create new files using C-E from within CtrlP picker
-
-" TODO: nnoremap :<space>
 
 " Default to file searches
 let g:ctrlp_by_filename = 0
@@ -1702,9 +1628,16 @@ set wildignore+=tmp/**
 
 set wildignore+=tmp/**
 
-" Nicer highlighting of completion popup
-highlight Pmenu ctermfg=234 ctermbg=24
-
+" augroup is_keyword
+"   " clear commands before resetting
+"   autocmd!
+"   " make sure `complete` works as expected for CSS class names whithout
+"   " messing with motions (eg. '.foo-bar__baz') and we make sure all
+"   " delimiters (_,-,$,%,.) are treated as word separators for motions
+"   autocmd FileType * setl iskeyword=@,48-57,192-255
+"   autocmd InsertEnter * setl iskeyword=@,48-57,192-255,$,%,-,_
+"   autocmd InsertLeave * setl iskeyword=@,48-57,192-255
+" augroup END
 
 " ================ neocomplcache =======================
 " A better autocomplete system!
@@ -1745,7 +1678,6 @@ endif
 let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 
 " Filename completion
-inoremap <c-f> <c-x><c-f>
 inoremap <c-]> <c-x><C-]>
 inoremap <c-l> <c-x><C-l>
 set completefunc=syntaxcomplete#Complete
@@ -1762,6 +1694,9 @@ nmap <leader>D :windo diffthis<cr>
 " set fillchars=diff:⣿,vert:│
 set fillchars=diff:_,vert:│
 
+" Find merge conflict markers
+map <leader>fc /\v^[<=>]{7}( .*\|$)<cr>
+
 " IN VIMDIFF BUFFER
 
 " do - diff obtain
@@ -1777,13 +1712,11 @@ nmap d3 :diffget //3<cr>
 " fetches the hunk from the merge parent (on the right)
 
 " " Linediff plugin
-" nmap ,d :Linediff<cr>
-" nmap ,,D :LinediffReset<cr>
-" vmap ,d :Linediff<cr>
-" vmap ,,D :LinediffReset<cr>
+nmap <leader>X :Linediff<cr>
+vmap <leader>X :Linediff<cr>
 
 " Close any corresponding diff buffer
-function! MyCloseDiff()
+function! CloseDiff()
   if (&diff == 0 || getbufvar('#', '&diff') == 0)
         \ && (bufname('%') !~ '^fugitive:' && bufname('#') !~ '^fugitive:')
     echom "Not in diff view."
@@ -1802,7 +1735,58 @@ function! MyCloseDiff()
     bd #
   endif
 endfunction
-nnoremap <silent> <Leader>gD :call MyCloseDiff()<cr>
+nnoremap <silent> <Leader>gD :call CloseDiff()<cr>
+
+" Disable one diff window during a three-way diff allowing you to cut out the
+" noise of a three-way diff and focus on just the changes between two versions
+" at a time. Inspired by Steve Losh's Splice
+function! DiffToggle(window)
+    " Save the cursor position and turn on diff for all windows
+    let l:save_cursor = getpos('.')
+    windo :diffthis
+
+    " Turn off diff for the specified window (but keep scrollbind) and move
+    " the cursor to the left-most diff window
+    exe a:window . "wincmd w"
+    diffoff
+    set scrollbind
+    set cursorbind
+    exe a:window . "wincmd " . (a:window == 1 ? "l" : "h")
+
+    " Update the diff and restore the cursor position
+    diffupdate
+    call setpos('.', l:save_cursor)
+endfunction
+" Toggle diff view on the left, center, or right windows
+nmap <silent> <leader>dl :call DiffToggle(1)<cr>
+nmap <silent> <leader>dc :call DiffToggle(2)<cr>
+nmap <silent> <leader>dr :call DiffToggle(3)<cr>
+
+
+" Diff two registers {{{
+" Open a diff of two registers in a new tabpage. Close the tabpage when
+" finished. If no registers are specified it diffs the most recent yank with
+" the most recent deletion.
+" Usage:
+"   :DiffRegs
+"   :DiffRegs @a @b
+
+function! DiffRegsFunc(...)
+    let l:left = a:0 == 2 ? a:1 : "@0"
+    let l:right = a:0 == 2 ? a:2 : "@1"
+
+    tabnew
+    exe 'put! ='. l:left
+    vnew
+    exe 'put! ='. l:right
+
+    windo call Scratch()
+    windo diffthis
+    winc t
+endfunction
+com -nargs=* DiffRegs call DiffRegsFunc(<f-args>)
+
+" }}}
 
 " }}}
 
@@ -1815,15 +1799,14 @@ set viminfo='100,f1            " Save up to 100 marks, enable capital marks
 " remove s/S from defaults
 let g:SignatureIncludeMarks = 'abcdefghijklmnopqrstuvwxyABCDEFGHIJKLMNOPQRSTUVWXY'
 
-" lighter background color for marks
-highlight SignColumn ctermbg=0 ctermfg=9
-
 sign define white text=!! linehl=StatusLine
 
-function! SignFixme()
+function! AddSign()
   execute(":sign place ".line(".")." line=".line(".")." name=white file=".expand("%:p"))
 endfunction
-map <F5> :call SignFixme()<CR>
+
+map <leader>sa :call AddSign()<CR>
+map <leader>sr :sign unplace<CR>
 
 " <c-e><c-e> Highlight current line
 " <c-e><C-a> Advance color for next line highlight
@@ -1836,6 +1819,21 @@ map <F5> :call SignFixme()<CR>
 " <c-e><C-j> Highlight all lines having last search pattern
 " <c-e><C-d> Clear last pattern highlight
 " <c-e><C-n> Clear all highlights
+
+
+
+" Use a bar-shaped cursor for insert mode, even through tmux.
+if exists('$TMUX')
+    let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+    let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
+ 
+ 
+ 
+ 
 
 " }}}
 
@@ -1865,9 +1863,9 @@ function! s:NextTextObject(motion, dir)
   exe "normal! ".a:dir.c."v".a:motion.c
 endfunction
 
-" http://stackoverflow.com/questions/6926034/creating-a-mapping-for-insert-mode-but-not-for-autocomplete-submode/6926691#6926691
-inoremap <expr> <c-e> pumvisible() ? "\<c-e>" : "\<c-o>A"
-inoremap <C-a> <C-o>I
+" " http://stackoverflow.com/questions/6926034/creating-a-mapping-for-insert-mode-but-not-for-autocomplete-submode/6926691#6926691
+" inoremap <expr> <c-e> pumvisible() ? "\<c-e>" : "\<c-o>A"
+" inoremap <C-a> <C-o>I
 
 " prefer exact caret location to mere line jumps
 nmap '' ``
@@ -2102,6 +2100,9 @@ set tags=./tags;tags;/
 " Rebuild ctags
 nnoremap <leader>tt :!ctags --recurse --fields=+iaS --exclude=core/static --extra=+q .<CR><CR>
 
+" Restore case-sensitivity for jumping to tags (set ic disables it)
+nnoremap <silent> <C-]> :set noic<cr>g<C-]><silent>:set ic<cr>
+
 " Jump to next tag match
 nmap ]t :bd<cr>:tnext<cr>
 " Jump to previous tag match
@@ -2147,6 +2148,16 @@ nmap <silent> <leader>w :up<cr>:silent! RunLastVimTmuxCommand<cr>
 
 
 " }}}
+
+" NGINX {{{
+
+autocmd BufRead nginx.conf set filetype=nginx
+
+" }}}
+
+nmap <leader>BDB /data-bind=\".*\"<cr><c-e><c-s>
+nmap <leader>BCL /console\.log<cr><c-e><c-s>
+nmap <leader>BCC /^class<cr><c-e><c-l>
 
 " VIMWIKI {{{
 

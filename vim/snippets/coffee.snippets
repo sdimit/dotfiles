@@ -1,10 +1,45 @@
-# for knockout
+snippet but "button"
+<button class="btn std" data-bind="click: ${1}">${2}</button>
+endsnippet
+
+snippet ajax "ajax"
+$.ajax
+  url: ${0}
+  type: ${1:"POST"}
+  headers:
+      ${2:{'Content-Type': 'application/json'}}
+  success: (result) ->
+      ${3:console.log(result)}
+endsnippet
+
+snippet post "post"
+$.ajax
+  url: ${0}
+  type: "POST"
+  headers:
+      {'Content-Type': 'application/json'}
+  data:
+      ${3:JSON.stringify(data)}
+endsnippet
+
 snippet js "js"
 ko.toJS ${1}
 endsnippet
 
+snippet o ""
+ko.observable(${1})
+endsnippet
+
+snippet oa ""
+ko.observableArray(${1:[]})
+endsnippet
+
+snippet c ""
+ko.computed(${1})
+endsnippet
+
 snippet kdb "ddb"
-<pre data-bind="text: ko.toJSON($data, null, 2)"></pre>
+<pre data-bind="text: ko.toJSON(${1:$data}, null, 2)"></pre>
 endsnippet
 
 snippet db "db"

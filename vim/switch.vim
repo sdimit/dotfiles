@@ -10,5 +10,6 @@ let g:switch_definitions =
       \   ['login', 'signup'],
       \   ['event_template', 'location', 'staff', 'customer'],
       \   ['EventTemplates', 'Locations', 'Staff', 'Customers'],
-      \   ['->', '=>']
+      \   ['=>', '->'],
+      \   [' =', ':']
       \ ]

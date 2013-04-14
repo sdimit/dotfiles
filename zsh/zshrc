@@ -63,7 +63,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Zle-Builtins
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Standard-Widgets
 
-# bindkey -v 
+# bindkey -v
 # vi mode
 # bindkey "^F" vi-cmd-mode
 # bindkey jk vi-cmd-mode
@@ -168,7 +168,7 @@ alias ka="killall"
 alias ka9="killall -9"
 
 # kill process matching argument
-function gkill() { ps -axf | grep -v grep | grep "$@" | awk '{print $2}' | xargs kill }
+function grepkill() { ps -axf | grep -v grep | grep "$@" | awk '{print $2}' | xargs kill }
 
 alias psa="ps aux"
 function psg() { ps -axf | grep -v grep | grep "$@" -i --color=auto; }
@@ -223,6 +223,9 @@ alias spotify="osascript ~/bin/SpotifyControl.scpt"
 alias lb="open /Applications/LaunchBar.app"
 
 alias y="yeoman"
+#
+# Don't prompt to save when exiting R
+alias R='R --no-save'
 
 alias ni="npm install -g"
 alias vmi="vim +BundleInstall"
@@ -346,12 +349,12 @@ alias rmdir="rm -rf"
 alias md='mkdir -p'
 
 # mkdir & cd to it
-function mcd() { 
-  mkdir -p "$1" && cd "$1"; 
+function mcd() {
+  mkdir -p "$1" && cd "$1";
 }
 
 # delete current dir
-function rmd() { 
+function rmd() {
   # TODO
   # cd .. && rm -rf (what to put here??)
 }
@@ -361,7 +364,7 @@ function i() {
 }
 
 # (f)ind by (n)ame
-# usage: fn foo 
+# usage: fn foo
 # to find all files containing 'foo' in the name
 function fn() { ls **/*$1* }
 
@@ -410,10 +413,10 @@ alias gz='tar -zcvf'
 
 # Get gzipped file size
 function gz() {
-	echo "orig size (bytes): "
-	cat "$1" | wc -c
-	echo "gzipped size (bytes): "
-	gzip -c "$1" | wc -c
+  echo "orig size (bytes): "
+  cat "$1" | wc -c
+  echo "gzipped size (bytes): "
+  gzip -c "$1" | wc -c
 }
 
 # creates an archive from given directory
@@ -479,14 +482,14 @@ alias lsg='ls | grep '
 
 # Always use color output for `ls`
 if [[ "$OSTYPE" =~ ^darwin ]]; then
-	alias ls="command ls -G"
+  alias ls="command ls -G"
 else
-	alias ls="command ls --color"
-	export LS_COLORS='no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:'
+  alias ls="command ls --color"
+  export LS_COLORS='no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:'
 fi
 
 # (f)ind by (n)ame
-# usage: fn foo 
+# usage: fn foo
 # to find all files containing 'foo' in the name
 function fn() { ls **/*$1* }
 
@@ -514,8 +517,13 @@ setopt share_history # share command history data
 bindkey '^R' history-incremental-search-backward
 bindkey '^S' history-incremental-search-forward
 bindkey '^P' history-search-backward
-bindkey '^N' history-search-forward 
+bindkey '^N' history-search-forward
 bindkey "^P" history-search-backward
+
+bindkey -M viins '^p' history-beginning-search-backward
+bindkey -M vicmd '^p' history-beginning-search-backward
+bindkey -M viins '^n' history-beginning-search-forward
+bindkey -M vicmd '^n' history-beginning-search-forward
 
 # }}}
 
@@ -573,7 +581,7 @@ alias cfgrep="grep --include='*.coffee' $*"
 # NETWORK {{{
 
 alias serve='http-server'
-# alias hosts='sudo vim /etc/hosts' 
+# alias hosts='sudo vim /etc/hosts'
 
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en1"
@@ -592,7 +600,7 @@ function hosts() {
 
 # One of @janmoesen’s ProTips
 for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
-	alias "$method"="lwp-request -m '$method'"
+  alias "$method"="lwp-request -m '$method'"
 done
 
 # }}}
@@ -607,28 +615,19 @@ export PYTHONDONTWRITEBYTECODE=1
 export PYTHONPATH=usr/local/lib/python2.7/site-packages:$PYTHONPATH
 export PIP_DOWNLOAD_CACHE=$HOME/Library/Caches/pip-downloads
 
-# Django stuff
-
-alias pm='python manage.py'
-alias pmr='python manage.py runserver'
-alias pmc='python manage.py collectstatic --noinput -l'
-alias pms='python manage.py syncdb --noinput'
-alias pmg='python manage.py gen_data'
-alias pmt='python manage.py test --noinput'
-
 # }}}
 
 # JSON {{{
 
 # Syntax-highlight JSON strings or files
 function json() {
-	if [ -p /dev/stdin ]; then
-		# piping, e.g. `echo '{"foo":42}' | json`
-		python -mjson.tool | pygmentize -l javascript
-	else
-		# e.g. `json '{"foo":42}'`
-		python -mjson.tool <<< "$*" | pygmentize -l javascript
-	fi
+  if [ -p /dev/stdin ]; then
+    # piping, e.g. `echo '{"foo":42}' | json`
+    python -mjson.tool | pygmentize -l javascript
+  else
+    # e.g. `json '{"foo":42}'`
+    python -mjson.tool <<< "$*" | pygmentize -l javascript
+  fi
 }
 
 # `cat` with beautiful colors. requires Pygments installed.
@@ -658,6 +657,13 @@ alias g="noglob git"
 ch () {
   vim `git status | grep modified | awk '{print $3}'`
 }
+# open fugitive status window
+vs() {
+  vim . -c 'Gstatus | bufdo tab split'
+}
+vl() {
+  vim . -c 'Gitv'
+}
 
 # use shortcuts from gitconfig (to avoid confusion), and make slightly shorter
 alias ga='git a'
@@ -678,7 +684,7 @@ alias gbn='git bn'
 alias gbd='git bd'
 alias gbl='git branches'
 
-alias gs='git s'
+alias gs="git s"
 alias gss='git ss'
 alias gsa='git sa'
 alias gsd='git sd'
@@ -693,6 +699,10 @@ alias gr='git rebase'
 alias gra='git rebase --abort'
 alias grc='git rebase --continue'
 alias gri='git rebase --interactive'
+
+# edit modified
+alias em='$EDITOR $(git ls-files -m)'
+
 
 # git log {{{
 
@@ -714,15 +724,15 @@ AWK
 }
 # }}}
 
-alias gf='git fetch'
-alias gpl='git pull'
-alias gplr='git pull --rebase'
+alias gf='fact && git fetch'
+alias gpl='fact && git pull'
+alias gplr='fact && git pull --rebase'
 
-alias gplm='git pull && git merge origin/master'
+alias gplm='fact && git pull && git merge origin/master'
 
-alias gp='git push'
-alias gpm='git push origin master'
-alias gpom='git push origin master'
+alias gp='fact && git push'
+alias gpm='fact && git push origin master'
+alias gpom='fact && git push origin master'
 
 alias gd='git diff'
 alias gdiff='git diff'
@@ -730,7 +740,7 @@ alias gdc='git diff --cached'
 alias gdcf='git dcf'
 
 
-alias grs='git reset' 
+alias grs='git reset'
 alias grsh='git reset --hard && git clean -f'
 
 alias gcln='git clean'
@@ -748,15 +758,15 @@ alias gcl='pbpaste | xargs git clone'
 
 # git function to add last parameter of last command via git add (used after a diff)
 galst() {
-  last_command=$history[$[HISTCMD-1]]; 
-  last_commandt_command_array=("${(s/ /)last_command}") 
+  last_command=$history[$[HISTCMD-1]];
+  last_commandt_command_array=("${(s/ /)last_command}")
   echo $last_command_array[-1];
   git add $last_command_array[-1];
 }
 # take this repo and copy it to somewhere else minus the .git stuff.
 function gitexport(){
-	mkdir -p "$1"
-	git archive master | tar -x -C "$1"
+  mkdir -p "$1"
+  git archive master | tar -x -C "$1"
 }
 
 
@@ -791,5 +801,6 @@ source ~/dotfiles/zsh/personal.zsh
 if [[ -a ~/.secrets ]] then
   source ~/.secrets
 fi
+
 
 # }}}
