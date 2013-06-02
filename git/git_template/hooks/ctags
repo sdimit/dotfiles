@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+PATH="/usr/local/bin:$PATH"
+trap "rm -f .git/tags.$$" EXIT
+ctags --tag-relative -Rf.git/tags.$$ --exclude=core/static,.git  --languages=-javascript --recurse --fields=+iaS --extra=+q
+mv .git/tags.$$ .git/tags

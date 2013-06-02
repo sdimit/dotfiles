@@ -1,3 +1,8 @@
+--python-kinds=-i
+
+–exclude=node_modules
+–exclude=core/static
+
 --langdef=latex
 --langmap=latex:.tex
 --regex-latex=/^\\tableofcontents/TABLE OF CONTENTS/s,toc/

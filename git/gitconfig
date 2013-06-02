@@ -1,29 +1,25 @@
-[user] # {{{
+[user]
     name = Stéphane
     email = stephane@10to8.com
-  # user tokens are set as environment variables in ~/.secrets
+    # user tokens are set as environment variables in ~/.secrets
 
 [github]
   user = istib
-
-# }}}
 
 [init]
   templatedir = ~/.git_template
   # holds common hooks (such as ctags regeneration)
 
-[core] # {{{
+[core]
   autocrlf = false
   pager = less -FRSX
   # editor = vim
   browser = open
-
-    excludesfile = ~/dotfiles/git/gitignore
-    quotepath = false
+  excludesfile = ~/dotfiles/git/gitignore
+  quotepath = false
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
-# }}}
 
-[color]# {{{
+[color]
   ui = true
   pager = true
   diff = auto
@@ -42,19 +38,16 @@
   old = red
   new = green
   whitespace = red reverse
-# }}}
 
 [alias]
 
-  # ADD {{{
+  # ADD
 
   a = add                           # add
-  p = add --patch           # stage commits chunk by chunk
+  p = add --patch                   # stage commits chunk by chunk
   aa = add --all                    # specify folder add all in "folder"
 
-# }}}
-
-  # COMMIT {{{
+  # COMMIT
 
   c = commit -m                     # commit with message
   ca = commit -am                   # commit all with message
@@ -62,58 +55,48 @@
   amend = commit --amend            # ammend your last commit
   am = commit --amend               # ammend your last commit
   oops = !"git add -A -v && git commit --amend -C HEAD"
-    # Add modified files to previous commit
+                                    # Add modified files to previous commit
 
-# }}}
-
-  # BRANCH {{{
+  # BRANCH
 
   b = branch -v                     # branch (verbose)
   bd = branch -d                    # delete branch
   bD = branch -D
   bn = checkout -b                  # create and switch to a new branch
 
-# }}}
-
-  # CHECKOUT {{{
+  # CHECKOUT
 
   co = checkout                     # checkout
-    cob = checkout -b
-    com = checkout master
+  cob = checkout -b
+  com = checkout master
 
-# }}}
-
-  # CHERRY-PICK {{{
+  # CHERRY-PICK
 
   cp = cherry-pick -x               # grab a change from a branch
 
-  # }}}
-
-  # DIFF {{{
+  # DIFF
 
   d = diff                          # diff unstaged changes
   dc = diff --cached                # diff staged changes
   last = diff HEAD^                 # diff last committed change
-    dv = !git diff -w "$@" | vim -R -
+  dv = !git diff -w "$@" | vim -R -
   dcf = diff -- **/*.coffee         # diff coffeescript only
 
-# }}}
-
-  # STATUS {{{
+  # STATUS
 
   s = status
+  editm = "!$EDITOR $(git ls-files -m)" # Open all modified files in EDITOR
 
-  # Open all modified files in EDITOR
-  editm = "!$EDITOR $(git ls-files -m)"
-
-# }}}
-
-  # LOG {{{
+  # LOG
 
   l = log --decorate --graph --date=short --pretty='format:%C(blue)%ad%Creset %C(yellow)%h%C(red)%d%Creset %C()%s %C(black) [%an]%Creset'
+  # last 5
   lr = log -5 --decorate --graph --date=short --pretty='format:%C(blue)%ad%Creset %C(yellow)%h%C(red)%d%Creset %C()%s %C(black) [%an]%Creset'
+  # last 5 shas
+  lrs = log -5 --pretty='%h'
   gl = log     --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
 
+  search = log --grep=\"$@\" --online --pretty='format:%C(blue)%ad%Creset %C(yellow)%h%C(red)%d%Creset %C()%s %C(black) [%an]%Creset'
   changes = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\" --name-status
   changelog = log --pretty=format:\" * %s\"
 
@@ -126,22 +109,15 @@
   standup = log --committer=stephane@10to8.com --pretty=format:'%Cgreen%ar (%h)%n%Creset> %s %b%n' --since='yesterday' --no-merges
 
 
-
-# }}}
-
-  # PUSH AND PULL {{{
+  # PUSH AND PULL
 
   pl = pull                         # pull
   purr = pull --rebase
-
-  # push
   ps = push                         # push
   pom = push origin master
   poh = push origin HEAD
 
-# }}}
-
-  # MERGE {{{
+  # MERGE
 
   mom = merge origin/master
 
@@ -150,20 +126,16 @@
   mergetest = "!sh -c 'git merge-tree `git merge-base $1 HEAD` $1 HEAD \
       | awk '\\''/^@@/ { print \"Conflicts found\"; exit 1 }'\\''' -"
 
-  # }}}
+  # REBASE
 
-  # REBASE {{{
+  ready = rebase -i @{u}
+  # rebase only the local commits which we’re about to push
 
-    ready = rebase -i @{u}
-    # rebase only the local commits which we’re about to push
-
-    rba = rebase --abort
-    rbc = rebase --continue
-    rbi = rebase --interactive
-    rbs = rebase --skip
-    rom = rebase origin/master
-
-  # }}}
+  rba = rebase --abort
+  rbc = rebase --continue
+  rbi = rebase --interactive
+  rbs = rebase --skip
+  rom = rebase origin/master
 
   # remote
   r = remote -v                     # show remotes (verbose)
@@ -188,7 +160,7 @@
   # clean
   sparkling = clean -f
 
-  # SUBMODULES {{{
+  # SUBMODULES
 
   # Show status and diff of dirty submodules
   subdiff = !"git submodule foreach --recursive --quiet '[ \"$(git status -s)\" ] && echo \"--- $name ---\" && git status -s && git diff --unified=1 || :'"
@@ -208,9 +180,7 @@
     # Show current branch of each submodule
   subbranch = !"git submodule foreach --recursive 'git rev-parse --abbrev-ref HEAD'"
 
-  # }}}
-
-  # TOOLS {{{
+  # TOOLS
 
     # show list of contributors in descending order by number of commits
   rank = shortlog -sn --no-merges
@@ -229,7 +199,6 @@
 
   alias = !git config --get-regexp '^alias\\.' | sed -e 's/^alias\\.//' -e 's/ /    /'
 
-  # }}}
 
 [format]
   # pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
@@ -255,7 +224,7 @@
   mnemonicprefix = true
   tool = vimdiff
 
-# MERGING {{{
+# MERGING
 
 [merge]
   summary = true
@@ -271,9 +240,7 @@
   # http://gitfu.wordpress.com/2008/04/20/git-rerere-rereremember-what-you-did-last-time/
   enabled = true
 
-#}}}
-
-# GITHUB {{{
+# GITHUB
 
 [url "git@github.com:"]
     insteadOf = "gh:"
@@ -288,6 +255,4 @@
 [url "git://gist.github.com/"]
     insteadOf = "gist:"
 
-#}}}
-
-# vim: ft=config
+# vim: ft=gitconfig

@@ -22,8 +22,8 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'gregsexton/gitv'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'AndrewRadev/linediff.vim'
-" Bundle 'lengarvey/ctrlp-recent-or-modified.vim'
 Bundle 'mattn/gist-vim'
+Bundle 'tpope/vim-git'
 
 " snippets and completion
 Bundle 'SirVer/ultisnips'
@@ -40,24 +40,21 @@ Bundle 'tpope/vim-repeat'
 Bundle 'Indent-Guides'
 Bundle 'godlygeek/tabular'
 Bundle 'AndrewRadev/switch.vim'
-Bundle 'AndrewRadev/inline_edit.vim'
 Bundle 'danro/rename.vim'
 Bundle 'kshenoy/vim-signature'
 Bundle 'vim-scripts/highlight.vim'
-Bundle 'terryma/vim-expand-region'
 Bundle 'delimitMate.vim'
 
 " python
-Bundle 'klen/python-mode'
+" Bundle 'klen/python-mode'
 " Bundle 'nvie/vim-pyunit'
 " vimpdb
 
 " coffeescript
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'zeekay/vim-js2coffee'
-Bundle 'claco/jasmine.vim'
-" Bundle 'mintplant/vim-literate-coffeescript'
-Bundle 'vitaly/vim-syntastic-coffee'
+" LiveScript
+Bundle 'gkz/vim-ls'
 
 " web development
 Bundle 'tristen/vim-sparkup'
@@ -71,13 +68,14 @@ Bundle 'nginx.vim'
 Bundle 'jaxbot/brolink.vim'
 Bundle 'nono/vim-handlebars'
 Bundle 'wavded/vim-stylus'
+Bundle 'digitaltoad/vim-jade'
 
 " latex
 " Bundle 'jcf/vim-latex'
 
 " helpers to handle REPLs and running unit tests in tmux
 Bundle 'ervandew/screen'
-" Bundle 'benmills/vimux'
+Bundle 'benmills/vimux'
 " Bundle 'nvie/vim_bridge'
 Bundle 'tpope/vim-dispatch'
 Bundle 'tpope/vim-tbone'
@@ -94,6 +92,7 @@ Bundle 'vim-scripts/utl.vim'
 Bundle 'tpope/vim-speeddating'
 " Bundle 'vim-scripts/marvim'
 
+Bundle 'myusuf3/numbers.vim'
 Bundle 'sjl/gundo.vim'
 " Bundle 'chrisbra/NrrwRgn'
 Bundle 'vim-scripts/ZoomWin'
@@ -104,16 +103,19 @@ Bundle 'henrik/git-grep-vim'
 Bundle 'bronson/vim-visual-star-search'
 Bundle 'henrik/vim-indexed-search'
 Bundle 'nelstrom/vim-qargs'
+Bundle 'tpope/vim-abolish'
+Bundle 'rking/ag.vim'
 
 " Appearance
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'Lokaltog/vim-powerline'
 
+" Extras
 Bundle 'jtratner/vim-flavored-markdown'
 " Bundle 'jceb/vim-orgmode'
 " Bundle 'vim-scripts/vimwiki'
-
-" Bundle 'lukerandall/haskellmode-vim'
+Bundle 'lukerandall/haskellmode-vim'
+Bundle 'ledger/vim-ledger'
 
 " }}}
 
@@ -170,6 +172,7 @@ command! -nargs=1 Silent
 set encoding=utf8
 
 set nonumber
+let g:enable_numbers = 0
 
 set nostartofline       " cursor can stay on blank characters
 set scrolloff=10         "Start scrolling when we're 10 lines away from margins
@@ -193,6 +196,7 @@ autocmd BufReadPost *
       \ endif
 
 map <silent> <leader>n :set number!<CR>
+map <silent> <leader>N :NumbersToggle<CR>
 
 let g:yankring_history_dir = '$HOME'
 let g:yankring_history_file = '.yankring-history'
@@ -208,7 +212,7 @@ let g:gundo_width = 60
 " YANKING AND PASTING
 
 " paste with preceding space
-nmap <leader>p a<space><c-r>"<esc>
+" nmap <leader>p a<space><c-r>"<esc>
 
 " paste in alternate file
 vnoremap ap y<c-^>P<c-^>
@@ -217,9 +221,8 @@ vnoremap ap y<c-^>P<c-^>
 nnoremap <expr> gV "`[".getregtype(v:register)[0]."`]"
 
 " system clipboard
-" Preserve indentation while pasting text from the OS X clipboard
-nnoremap <leader><leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
 map <leader>y "*y
+nnoremap <leader><leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
 
 nnoremap Y y$
 
@@ -231,20 +234,20 @@ vnoremap V y'>p
 vmap P p :call setreg('"', getreg('0')) <CR>
 
 " visually select the last pasted text
-nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
+" nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 
 nmap YY vHLy
 
-" InlineEdit
-nnoremap <leader>ie :InlineEdit<cr>
-
+"
 " RSI bindings
 imap <c-d> #
-imap <c-h> =>
-imap £ #
-nmap £ #
-vmap £ #
-omap £ #
+imap <c-h> ->
+imap <c-j> =>
+" imap £ #
+" nmap £ #
+" vmap £ #
+" omap £ #
+map £ #
 
 
 " Fix for navigating long lines
@@ -260,7 +263,7 @@ cnoremap jj <c-c>
 " avoid shift key for invoking command line
 " nnoremap ; :
 " but preserve g; shortcut (remember: opposite is g,)
-" nnoremap g: g;
+nnoremap g: g;
 
 " Easier within-line navigation
 nnoremap H ^
@@ -271,20 +274,8 @@ vnoremap L g_
 " so we can use $ to duplicate % (just because i keep confusing them)
 noremap $ %
 
-" " painless moving in insert mode
-" inoremap <c-l> <right>
-" inoremap <c-h> <left>
-
 " or using traditional terminal mapping of swapping two letters
 inoremap <c-t> <esc>hxpa
-" nnoremap <c-t> hhxpl
-
-" append to current word
-inoremap <c-e> <esc>Ea
-
-" scrolling up/down with capital letters too (avoids joining lines instead) in visual mode
-vnoremap J j
-vnoremap K k
 
 " Visual shifting (does not exit Visual mode)
 vnoremap < <gv
@@ -293,16 +284,9 @@ vnoremap > >gv
 " delete last character of line
 nnoremap d. $x0
 
-" delete first character of line
-nnoremap d, 0x$
-
-" clear line and stay in normal mode
-nnoremap dD cc<esc>
-
 " SWITCH plugin
 
 nmap - :Switch<cr>
-" vmap <leader>s :Switch<cr>
 
 source ~/dotfiles/vim/switch.vim
 
@@ -331,21 +315,17 @@ set timeout timeoutlen=1000 ttimeoutlen=100
 
 " FILES {{{
 
-" go to preceding/next file in directory (unimpaired plugin)
-" [o and ]o
-
 set noswapfile                 " turn off swap files
 set nobackup
 set nowb
 
 set autoread                   " Reload files changed outside vim
 
-" Aggresive file saving (but use :update rather than :write)
-au InsertLeave * silent! :up
-" Save when buffers lose focus too (for changes made in normal mode)
+" Save when buffers lose focus
 au BufLeave * silent! :up
 
-nnoremap <leader>M :set modifiable<cr>
+" nnoremap <leader>M :set modifiable<cr>
+nnoremap <leader>M :make<cr>
 
 " shift key fixes
 command! -bang -nargs=* -complete=file E e<bang> <args>
@@ -361,7 +341,7 @@ command! -bang Qa qa<bang>
 " Kill buffer
 nnoremap <leader>q :bd!<cr>
 " Kill buffer and delete file
-nnoremap <leader>rm :!rm %<cr>:bd!<cr>
+nnoremap <leader>RM :!rm %<cr>:bd!<cr>
 " Quit vim
 nnoremap <leader>Q :qa!<cr>
 
@@ -398,6 +378,7 @@ nnoremap :l <c-^>
 
 set suffixesadd+=.py
 set suffixesadd+=.js
+set suffixesadd+=.coffee
 
 " Use Q to intelligently close a window
 
@@ -416,14 +397,13 @@ endfunction
 nnoremap <silent> Q :call CloseWindowOrKillBuffer()<CR>
 
 set autochdir
-" if exists('+autochdir')
-"   " so :e is relative to current file
-"   set autochdir
-" else
-"   autocmd BufEnter * silent! lcd %:p:h:gs/ /\\ /
-" endif
 
-" nmap ,M :make<cr>
+if exists('+autochdir')
+  " so :e is relative to current file
+  set autochdir
+else
+  autocmd BufEnter * silent! lcd %:p:h:gs/ /\\ /
+endif
 
 " Open URL
 command -bar -nargs=1 OpenURL :!open <args>
@@ -493,11 +473,11 @@ nmap <Leader>fk :set foldmethod=marker<cr>zM
 nmap <Leader>fe :set foldmethod=expr<cr>zM
 nmap <Leader>fs :set foldmethod=syntax<cr>zM
 
-nmap <leader>0 :set foldmethod=indent<cr>:set foldlevel=0<CR>
-nmap <leader>1 :set foldmethod=indent<cr>:set foldlevel=1<CR>
-nmap <leader>2 :set foldmethod=indent<cr>:set foldlevel=2<CR>
-nmap <leader>3 :set foldmethod=indent<cr>:set foldlevel=3<CR>
-nmap <leader>4 :set foldmethod=indent<cr>:set foldlevel=4<CR>
+nmap <leader>f0 :set foldmethod=indent<cr>:set foldlevel=0<CR>
+nmap <leader>f1 :set foldmethod=indent<cr>:set foldlevel=1<CR>
+nmap <leader>f2 :set foldmethod=indent<cr>:set foldlevel=2<CR>
+nmap <leader>f3 :set foldmethod=indent<cr>:set foldlevel=3<CR>
+nmap <leader>f4 :set foldmethod=indent<cr>:set foldlevel=4<CR>
 
 " fold HTML tag
 nnoremap zt :set foldmethod=manual<cr>Vatzf
@@ -542,11 +522,9 @@ nnoremap <leader>W :set wrap!<cr>
 
 
 " format paragraph: gq
-nmap <leader>fp vip:!par 100<cr>
-nmap <leader>FP vip:!par
+nmap <leader>FP vip:!par 100<cr>
 " format document
-nmap <leader>ft ggVG:!par 100<cr>''
-nmap <leader>FT ggVG:!par
+nmap <leader>FT ggVG:!par 100<cr>''
 
 
 " Alignment
@@ -611,7 +589,6 @@ vmap <Leader>a-       :Tabularize /-<cr>
 vmap <Leader>a{       :Tabularize /{<cr>
 vmap <Leader>a#       :Tabularize /#<cr>
 vmap <Leader>a£       :Tabularize /#<cr>
-
 
 " }}}
 
@@ -842,6 +819,15 @@ nmap <leader>jj :vertical expand("%:p:r")<CR>
 nmap <leader>jc :Js2Coffee<cr>
 vmap <leader>jc :Js2Coffee<cr>
 
+" coffeescript REPL
+" -----------------
+"
+" using `vim-tbone` bundle and `nesh` node package
+" run 'nesh -c' in adjacent tmux pane
+" record `.Twrite <pane-number><cr>` into register
+" (this only sends current line)
+" and hit @@ to run repeatedly
+
 " hide JS files
 " let NERDTreeIgnore+=['\.js']
 
@@ -863,7 +849,7 @@ let g:tagbar_type_coffee = {
 " CSS {{{
 
 " Compile LessCSS on save
-autocmd BufWritePost,FileWritePost *.less :silent !lessc <afile> <afile>:p:r.css
+" autocmd BufWritePost,FileWritePost *.less :silent !lessc <afile> <afile>:p:r.css
 
 " :ColorToggle - turn on #abc123 color highlighting
 
@@ -1046,13 +1032,13 @@ nnoremap <leader>l  :Gitv!<cr>
 vnoremap <leader>l  :Gitv! --all<cr>
 " search logs
 nnoremap <leader>gg  :Glog --grep=
-nnoremap <leader>gc  :Glog -S
+nnoremap <leader>gs  :Glog -S
 " open git objects (such as current file on other branch)
 nnoremap <leader>gE  :Gedit<space>
 nnoremap <leader>ge  :Gvsplit<space>
 nnoremap <leader>gs  :Gsplit<space>
 nnoremap <leader>gr  :Gread<cr>
-nnoremap <leader>gw  :Gwrite<cr>
+nnoremap <silent> <leader>gw  :Gwrite<cr>:up<cr>
 nnoremap <leader>gW  :Gwrite<cr>:tabclose<cr>
 nnoremap <leader>ga  :Git add --all<cr>:Gcommit<cr>
 " nnoremap <leader>GA  :Git add .<cr>
@@ -1062,7 +1048,10 @@ vnoremap <leader>gh  :Gbrowse<cr>
 nnoremap <leader>gH  :Gbrowse!<cr>
 vnoremap <leader>gH  :Gbrowse!<cr>
 nnoremap <leader>gco :Gcheckout<cr>
-nnoremap <leader>gci :Gcommit<cr>
+
+" write commit message in new tab and show preview
+nnoremap <leader>gc :Gcommit<cr><c-w>T:DiffGitCached<cr>:wincmd L<cr>:wincmd p<cr>
+
 nnoremap <leader>gm  :Gmove<cr>
 nnoremap <leader>gR  :Git checkout -- %<cr><cr>,u
 nnoremap <leader>gp  :Git push<CR>
@@ -1112,38 +1101,23 @@ endif
 nnoremap d2 :diffget //2<cr>
 nnoremap d3 :diffget //3<cr>
 
-" SHORTCUTS WITHIN :Gstatus
-"
-"   <C-N> next file
-"   <C-P> previous file
-"   <CR>  |:Gedit|
-
-"   -     |:Git| add
-"   -     |:Git| reset (staged files)
-
-"   C     |:Gcommit|
-"   cA    |:Gcommit| --amend --reuse-message=HEAD
-"   ca    |:Gcommit| --amend
-
-"   D     |:Gdiff|
-"   ds    |:Gsdiff|
-"   dp    |:Git!| diff (p for patch; use :Gw to apply)
-"   dp    |:Git| add --intent-to-add (untracked files)
-"   dv    |:Gvdiff|
-"   O     |:Gtabedit|
-"   o     |:Gsplit|
-"   p     |:Git| add --patch
-"   p     |:Git| reset --patch (staged files)
-"   q     close status
-"   R     reload status
-"   S     |:Gvsplit|
-
 " stop gitv messing with my window navigation
 let g:Gitv_DoNotMapCtrlKey = 1
 
 let g:Gitv_WipeAllOnClose = 0
 
-" autocmd FileType gitcommit DiffGitCached | wincmd p
+" autocmd FileType gitcommit DiffGitCached | wincmd L | wincmd p
+
+augroup interactive-git-rebase
+  au!
+  au FileType gitrebase nnoremap <buffer> <silent> <c-p><c-p> :s/^#\?\w\+/pick/<cr>:noh<cr>
+  au FileType gitrebase nnoremap <buffer> <silent> <c-r><c-r> :s/^#\?\w\+/reword/<cr>:noh<cr>
+  au FileType gitrebase nnoremap <buffer> <silent> <c-e><c-e> :s/^#\?\w\+/edit/<cr>:noh<cr>
+  au FileType gitrebase nnoremap <buffer> <silent> <c-s><c-s> :s/^#\?\w\+/squash/<cr>:noh<cr>
+  au FileType gitrebase nnoremap <buffer> <silent> <c-f><c-f> :s/^#\?\w\+/fixup/<cr>:noh<cr>
+  au FileType gitrebase nnoremap <buffer> <silent> <c-x><c-x> :s/^#\?\w\+/exec/<cr>:noh<cr>
+  au FileType gitrebase nnoremap <buffer> <silent> <c-k><c-k> :s/^#\?/#/<cr>:noh<cr>
+augroup END
 
 "}}}
 
@@ -1692,7 +1666,7 @@ set completeopt=longest,menuone,preview
 nmap <leader>D :windo diffthis<cr>
 
 " set fillchars=diff:⣿,vert:│
-set fillchars=diff:_,vert:│
+set fillchars=diff:_,vert:│,fold:_
 
 " Find merge conflict markers
 map <leader>fc /\v^[<=>]{7}( .*\|$)<cr>
@@ -1993,20 +1967,20 @@ vnoremap rr :s//<left>
 " replace current word
 nnoremap rc :%s/<c-r><c-w>/
 vnoremap rc :s/<c-r><c-w>/
-" ...with similar
-nnoremap RC :%s/<c-r><c-w>/<c-r><c-w>/
-vnoremap RC :s/<c-r><c-w>/<c-r><c-w>/
+" ...with similar and open command line view to edit the replacement
+nnoremap RC :%s/<c-r><c-w>/<c-r><c-w>/<c-f>
+vnoremap RC :s/<c-r><c-w>/<c-r><c-w>/<c-f>
 
 " replace yanked
 nnoremap ry :%s/<c-r>"/
 vnoremap ry :s/<c-r>"/
 " ...with similar
-nnoremap RY :%s/<c-r>"/<c-r>"
-vnoremap RY :s/<c-r>"/<c-r>"
+nnoremap RY :%s/<c-r>"/<c-r>"<c-f>
+vnoremap RY :s/<c-r>"/<c-r>"<c-f>
 
 " replace visual
 vnoremap rv "xy:%s/<c-r>x/
-vnoremap RV "xy:%s/<c-r>x/<c-r>x
+vnoremap RV "xy:%s/<c-r>x/<c-r>x<c-f>
 
 " replace last
 vnoremap rl :s/~/
@@ -2032,9 +2006,14 @@ let g:tlWindowPosition=1
 
 " auto-correct current word
 " imap <silent> ,s <esc>z=1<cr><cr>ea
-" nmap <silent> ,s z=1<cr><cr>
+nmap <silent> <leader>CS z=1<cr><cr>
 " ...and go to next spelling mistake
 " nmap <silent> <leader>S z=1<cr><cr>]s
+
+" common typos
+iabbr teh the
+iabbr nign ning
+iabbr lenght length
 
 " }}}
 
@@ -2096,9 +2075,6 @@ nmap <leader>tc :tabclose<cr>
 
 " Look for tags file in parent directories, upto "/"
 set tags=./tags;tags;/
-
-" Rebuild ctags
-nnoremap <leader>tt :!ctags --recurse --fields=+iaS --exclude=core/static --extra=+q .<CR><CR>
 
 " Restore case-sensitivity for jumping to tags (set ic disables it)
 nnoremap <silent> <C-]> :set noic<cr>g<C-]><silent>:set ic<cr>
@@ -2170,7 +2146,13 @@ nmap <leader>BCC /^class<cr><c-e><c-l>
 
 " }}}
 
-source ~/dotfiles/vim/personal.vim
+" HASKELL {{{
+
+au BufEnter *.hs compiler ghc
+let g:haddock_browser="/Application/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
+
+" }}}
+
 source ~/dotfiles/vim/colors.vim
 
 " vim:set foldmethod=marks; set foldenable

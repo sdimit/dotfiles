@@ -256,7 +256,8 @@ alias -g L='| wc -l'
 alias -g N="| /dev/null"
 alias -g S='| sort'
 alias -g C='| wc -l'
-alias -g H='| head'
+alias -g H='| head -n'
+alias -g T='| tail -n'
 alias -g ONE="| awk '{ print \$1}'"
 
 # Easier navigation: .., ..., ...., ....., ~ and -
@@ -695,7 +696,7 @@ alias gi='vim .gitignore'
 alias guns='git unstage'
 alias gunc='git uncommit'
 alias gm='git merge'
-alias gr='git rebase'
+alias gr='git ready'
 alias gra='git rebase --abort'
 alias grc='git rebase --continue'
 alias gri='git rebase --interactive'
@@ -802,5 +803,12 @@ if [[ -a ~/.secrets ]] then
   source ~/.secrets
 fi
 
+function pg_start {
+  /usr/local/bin/pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
+}
+
+function pg_stop {
+  /usr/local/bin/pg_ctl -D /usr/local/var/postgres stop -s -m fast
+}
 
 # }}}

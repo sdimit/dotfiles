@@ -1,3 +1,15 @@
+snippet req "req"
+${1} = require '${2}'
+endsnippet
+
+snippet ex "ex"
+module.exports = ${1}
+endsnippet
+
+snippet con "con"
+constructor: () ->
+endsnippet
+
 snippet but "button"
 <button class="btn std" data-bind="click: ${1}">${2}</button>
 endsnippet
@@ -111,14 +123,14 @@ endsnippet
 # Class
 snippet class "class"
 class ${1:name}
-	constructor: (${2:params...}) ->
-		${3://body...}
+  constructor: (${2:params...}) ->
+    ${3://body...}
 endsnippet
 
 # Function
 snippet fun "fun"
 ${1:function_name} = (${2:argumen}) ->
-	${3: //body...}
+  ${3: //body...}
 endsnippet
 
 # Anonymous Function
@@ -154,7 +166,7 @@ endsnippet
 # forof
 snippet forof "forof"
 ${1:ages} = for ${2:key}, ${3:value} of ${4:yearsOld}
-	key + " is " + value
+  key + " is " + value
 endsnippet
 
 # while
@@ -170,25 +182,25 @@ endsnippet
 # forindo
 snippet forindo "forindo"
 for ${1:filename} in ${2:list}
-	do (${3:filename}) ->
+  do (${3:filename}) ->
 endsnippet
 
 # try
 snippet try "try"
 try
-	${1:expresion}
+  ${1:expresion}
 catch error
-	${2:error}
+  ${2:error}
 endsnippet
 
 # tryfin
 snippet tryfin "tryfin"
 try
-	${1:expresion}
+  ${1:expresion}
 catch error
-	${2:error}
+  ${2:error}
 finally
-	${3:cleanAll()}
+  ${3:cleanAll()}
 endsnippet
 
 # ?=
@@ -204,14 +216,14 @@ endsnippet
 # switch
 snippet switch "switch"
 switch ${1:day}
-	when ${2:Mon} then ${3:go work}
-	else ${4:go relax}
+  when ${2:Mon} then ${3:go work}
+  else ${4:go relax}
 endsnippet
 
 # ##
 snippet ## "##"
 ###
-	${1:comment}
+  ${1:comment}
 ###
 endsnippet
 
@@ -222,74 +234,75 @@ endsnippet
 ## Jasmine Snippets
 
 snippet desc
-	# ${1:Specification}
-
-	describe '${2:Model or When ...}', ->
-		${3}
-		return
+describe '${1:Model or When ...}', ->
+  ${2}
 endsnippet
-		
+
 snippet it
-	it 'should ${1}', ->
-		${2}
+it '${1}', ->
+  ${2}
+endsnippet
+
+snippet bef
+beforeEach ->
+  ${1}
+endsnippet
+
+snippet af
+afterEach ->
+  ${1}
 endsnippet
 
 snippet exp
-	expect(${1:predicate})
+expect(${1:predicate})
 endsnippet
 
 snippet exp=
-	expect(${1:predicate}).toEqual ${2:value}
+expect(${1:predicate}).to.equal ${2:value}
 endsnippet
 
 snippet expmatch
-	expect(${1:predicate}).toMatch /${2:regex}/
+expect(${1:predicate}).toMatch /${2:regex}/
 endsnippet
 
 snippet expdef
-	expect(${1:predicate}).toBeDefined
+expect(${1:predicate}).toBeDefined
 endsnippet
 
 snippet expnull
-	expect(${1:predicate}).toBeNull
+expect(${1:predicate}).toBeNull
 endsnippet
 
 snippet exptrue
-	expect(${1:predicate}).toBeThruthy
+expect(${1:predicate}).to.be.true
 endsnippet
 
 snippet expfalse
-	expect(${1:predicate}).toBeFalsy()
+  expect(${1:predicate}).toBeFalsy()
 endsnippet
 
 snippet expcon
-	expect(${1:predicate}).toContain ${2:value}
-endsnippet
-
-snippet befe
-	# Configuration 
-	beforeEach ->
-		${1}
+  expect(${1:predicate}).toContain ${2:value}
 endsnippet
 
 snippet spyon
-	spyOn ${1:object}, ${2:method}
+  spyOn ${1:object}, ${2:method}
 endsnippet
 
 snippet expcall
-	expect(${1:predicate}).wasCalled
+  expect(${1:predicate}).wasCalled
 endsnippet
 
 snippet expncall
-	expect(${1:predicate}).wasNotCalled
+  expect(${1:predicate}).wasNotCalled
 endsnippet
 
 snippet expcallw
-	expect(${1:predicate}).wasCalledWith ${2:arguments}
+  expect(${1:predicate}).wasCalledWith ${2:arguments}
 endsnippet
 
 snippet expncallw
-	expect(${1:predicate}).wasNotCalledWith ${2:arguments}
+  expect(${1:predicate}).wasNotCalledWith ${2:arguments}
 endsnippet
 
 
