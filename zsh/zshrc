@@ -653,7 +653,6 @@ fi
 
 alias g="noglob git"
 
-
 # open changed files in git index
 ch () {
   vim `git status | grep modified | awk '{print $3}'`
@@ -666,99 +665,12 @@ vl() {
   vim . -c 'Gitv'
 }
 
-# use shortcuts from gitconfig (to avoid confusion), and make slightly shorter
-alias ga='git a'
-alias gaa='git aa'
-alias gam='git am'
-
-alias gc='git c'
-alias gcm='git c'
-alias gca='git ca'
-
-alias gco='git co'
-alias gcoh='git co -f'
-alias gcom='git com'
 alias zz='git co' # "z quick-jump" for git
-
-alias gb='git b'
-alias gbn='git bn'
-alias gbd='git bd'
-alias gbl='git branches'
-
-alias gs="git s"
-alias gss='git ss'
-alias gsa='git sa'
-alias gsd='git sd'
-alias gsl='git sl'
-alias gsh='git show'
-alias gi='vim .gitignore'
-
-alias guns='git unstage'
-alias gunc='git uncommit'
-alias gm='git merge'
-alias gr='git ready'
-alias gra='git rebase --abort'
-alias grc='git rebase --continue'
-alias gri='git rebase --interactive'
-
-# edit modified
-alias em='$EDITOR $(git ls-files -m)'
-
-
-# git log {{{
-
-alias gl='git l'
-alias gll='git gl'
-alias glr='git lr'
-
-# git log with per-commit cmd-clickable GitHub URLs (iTerm)
-function glc() {
-  local remote="$(git remote -v | awk '/^origin.*\(push\)$/ {print $2}')"
-  # [[ "$remote" ]] || return
-  local user_repo="$(echo "$remote" | perl -pe 's/.*://;s/\.git$//')"
-  git log $* --name-status --color | awk "$(cat <<AWK
-    /^.*commit [0-9a-f]{40}/ {sha=substr(\$2,1,7)}
-    /^[MA]\t/ {printf "%s\thttps://github.com/$user_repo/blob/%s/%s\n", \$1, sha, \$2; next}
-    /.*/ {print \$0}
-AWK
-  )" | less -F
-}
-# }}}
-
-alias gf='fact && git fetch'
-alias gpl='fact && git pull'
-alias gplr='fact && git pull --rebase'
-
-alias gplm='fact && git pull && git merge origin/master'
-
-alias gp='fact && git push'
-alias gpm='fact && git push origin master'
-alias gpom='fact && git push origin master'
-
-alias gd='git diff'
-alias gdiff='git diff'
-alias gdc='git diff --cached'
-alias gdcf='git dcf'
-
-
-alias grs='git reset'
-alias grsh='git reset --hard && git clean -f'
-
-alias gcln='git clean'
-alias gclndf='git clean -df'
-
-alias gsm='git submodule'
-alias gsmi='git submodule init'
-alias gsmu='git submodule update'
-
-alias gt='git tag'
-alias gal='git alias | grep'
-
-# clone github project from clipboard
-alias gcl='pbpaste | xargs git clone'
+alias gal='git alias | grep' # find aliases
+alias gcl='pbpaste | xargs git clone' # clone github project from clipboard
 
 # git function to add last parameter of last command via git add (used after a diff)
-galst() {
+glast() {
   last_command=$history[$[HISTCMD-1]];
   last_commandt_command_array=("${(s/ /)last_command}")
   echo $last_command_array[-1];

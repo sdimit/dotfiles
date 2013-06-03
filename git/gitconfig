@@ -144,7 +144,9 @@
 
   # reset
   unstage = reset HEAD              # remove files from index (tracking)
-  uncommit = reset --soft HEAD^     # go back before last commit, with files in uncommitted state
+  uncommit = reset --soft HEAD^     # go back before last commit, with files in uncommitted stateo
+  rsh = reset --hard && git clean -f
+
 
   mt = mergetool                    # fire up the merge tool
 
