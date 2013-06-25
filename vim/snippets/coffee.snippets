@@ -47,7 +47,12 @@ ko.observableArray(${1:[]})
 endsnippet
 
 snippet c ""
-ko.computed(${1})
+ko.computed => ${1}
+endsnippet
+
+snippet cc ""
+ko.deferred_computed =>
+  ${1}
 endsnippet
 
 snippet kdb "ddb"
@@ -135,7 +140,7 @@ endsnippet
 
 # Anonymous Function
 snippet f "f"
-(${1:argumen}) -> ${2: //body...}
+(${1}) => ${2}
 endsnippet
 
 # if

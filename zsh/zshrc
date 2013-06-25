@@ -273,7 +273,6 @@ alias oo="open ."
 # Enable aliases to be sudo’ed
 alias sudo='sudo '
 
-# clone github project from clipboard
 alias youtube='pbpaste | xargs youtube-dl -t --extract-audio --audio-format mp3'
 
 # IP addresses
@@ -336,6 +335,9 @@ fm () {
     [ -e /tmp/vifm-vimfile ] && vim +"silent !rm /tmp/vifm-vimfile" +redraw! `cat /tmp/vifm-vimfile`
     clear
 }
+
+# allow more simultaneously opened files (needed for brunch.io build watcher)
+ulimit -n 10000
 
 # Show human friendly numbers and colors
 alias f='fm'
@@ -540,6 +542,26 @@ alias tk="tmux kill-session -t"
 alias tka="~/bin/tmux-killall"
 alias tn="tka & tm"
 
+# Autocomplete from current tmux screen buffer
+_tmux_pane_words() {
+  local expl
+  local -a w
+  if [[ -z "$TMUX_PANE" ]]; then
+    _message "not running inside tmux!"
+    return 1
+  fi
+  w=( ${(u)=$(tmux capture-pane \; show-buffer \; delete-buffer)} )
+  _wanted values expl 'words from current tmux pane' compadd -a w
+}
+
+zle -C tmux-pane-words-prefix   complete-word _generic
+zle -C tmux-pane-words-anywhere complete-word _generic
+bindkey '^Xt' tmux-pane-words-prefix
+bindkey '^X^X' tmux-pane-words-anywhere
+zstyle ':completion:tmux-pane-words-(prefix|anywhere):*' completer _tmux_pane_words
+zstyle ':completion:tmux-pane-words-(prefix|anywhere):*' ignore-line current
+zstyle ':completion:tmux-pane-words-anywhere:*' matcher-list 'b:=* m:{A-Za-z}={a-zA-Z}'
+
 # }}}
 
 # CLOJURE {{{
@@ -665,8 +687,11 @@ vl() {
   vim . -c 'Gitv'
 }
 
-alias zz='git co' # "z quick-jump" for git
-alias gal='git alias | grep' # find aliases
+# use g [...]  and gitconfig shortcut rather than duplicating in zshconfig
+# ...except for a few one:
+alias gs='git status'                 # find aliases
+alias zz='git co'                     # "z quick-jump" for git
+alias gal='git alias | grep'          # find aliases
 alias gcl='pbpaste | xargs git clone' # clone github project from clipboard
 
 # git function to add last parameter of last command via git add (used after a diff)
@@ -723,4 +748,5 @@ function pg_stop {
   /usr/local/bin/pg_ctl -D /usr/local/var/postgres stop -s -m fast
 }
 
+alias jq='/usr/local/Cellar/jq/1.2/bin/jq'
 # }}}

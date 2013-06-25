@@ -30,19 +30,9 @@ hi! NonText ctermfg=8 ctermbg=8
 hi! link IndentGuidesOdd  NonText
 hi! link IndentGuidesEven LineNr
 
+" hi! link VertSplit LineNr
+" hi! link Visual LineNr
 
 " Enforce the colors set here in every buffer
 au VimEnter * so ~/dotfiles/vim/colors.vim
 " set background=light
-"
-" set statusline=
-" set statusline +=%#Identifier#\ %n\ %*                      " buffer number
-" set statusline +=%#Number#%y%*                              " file type
-" set statusline +=%#String#\ %<%t%*                          " full path
-" set statusline +=%#SpecialKey#%m%*                          " modified flag
-" " set statusline +=%#Identifier#\ %{PomodoroStatus()}%*       " pomodoro status
-" set statusline +=%#Identifier#%=%5l%*                       " current line
-" set statusline +=%#SpecialKey#/%L%*                         " total lines
-" " set statusline +=%#Identifier#%4v\ %*                       " virtual column number
-" " set statusline +=%#SpecialKey#0x%04B\ %*                    " character under cursor
-

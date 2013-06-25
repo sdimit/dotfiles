@@ -1,4 +1,4 @@
-" BUNDLES {{{
+" BUNDLES 
 
 set nocompatible
 filetype off
@@ -11,8 +11,8 @@ Bundle 'gmarik/vundle'
 " file management
 Bundle 'kien/ctrlp.vim'
 Bundle 'istib/vifm.vim'
-Bundle 'scrooloose/nerdtree'
-Bundle 'jistr/vim-nerdtree-tabs'
+Bundle 'vim-scripts/LargeFile'
+" Bundle 'kana/vim-altr'
 
 " tag support
 Bundle 'majutsushi/tagbar'
@@ -21,9 +21,11 @@ Bundle 'majutsushi/tagbar'
 Bundle 'tpope/vim-fugitive'
 Bundle 'gregsexton/gitv'
 Bundle 'airblade/vim-gitgutter'
-Bundle 'AndrewRadev/linediff.vim'
-Bundle 'mattn/gist-vim'
-Bundle 'tpope/vim-git'
+" Bundle 'AndrewRadev/linediff.vim'
+" Bundle 'mattn/gist-vim'
+" Bundle 'tpope/vim-git'
+Bundle 'jasoncodes/ctrlp-modified.vim'
+" Bundle 'mmozuras/vim-github-comment'
 
 " snippets and completion
 Bundle 'SirVer/ultisnips'
@@ -44,6 +46,8 @@ Bundle 'danro/rename.vim'
 Bundle 'kshenoy/vim-signature'
 Bundle 'vim-scripts/highlight.vim'
 Bundle 'delimitMate.vim'
+" Bundle 'vim-scripts/bufkill.vim'
+" Bundle 'dhruvasagar/vim-table-mode'
 
 " python
 " Bundle 'klen/python-mode'
@@ -54,21 +58,26 @@ Bundle 'delimitMate.vim'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'zeekay/vim-js2coffee'
 " LiveScript
-Bundle 'gkz/vim-ls'
+" Bundle 'gkz/vim-ls'
 
 " web development
 Bundle 'tristen/vim-sparkup'
-Bundle 'mattn/zencoding-vim'
-Bundle 'vim-scripts/closetag.vim'
+" Bundle 'mattn/zencoding-vim'
+" Bundle 'vim-scripts/closetag.vim'
 Bundle 'edsono/vim-matchit'
-Bundle 'vim-scripts/AutoTag'
+" Bundle 'vim-scripts/AutoTag'
 Bundle 'leshill/vim-json'
 Bundle 'groenewege/vim-less'
 Bundle 'nginx.vim'
-Bundle 'jaxbot/brolink.vim'
-Bundle 'nono/vim-handlebars'
+" Bundle 'jaxbot/brolink.vim'
+" Bundle 'nono/vim-handlebars'
 Bundle 'wavded/vim-stylus'
 Bundle 'digitaltoad/vim-jade'
+" Bundle 'skwp/vim-html-escape'
+
+" access dash help in OSX
+Bundle 'rizzatti/funcoo.vim'
+Bundle 'rizzatti/dash.vim'
 
 " latex
 " Bundle 'jcf/vim-latex'
@@ -89,7 +98,7 @@ Bundle 'gilligan/textobj-gitgutter'
 
 Bundle 'MarcWeber/vim-addon-mw-utils'
 Bundle 'vim-scripts/utl.vim'
-Bundle 'tpope/vim-speeddating'
+" Bundle 'tpope/vim-speeddating'
 " Bundle 'vim-scripts/marvim'
 
 Bundle 'myusuf3/numbers.vim'
@@ -100,26 +109,28 @@ Bundle 'vim-scripts/ZoomWin'
 
 " Search
 Bundle 'henrik/git-grep-vim'
+Bundle 'vim-scripts/grep.vim'
 Bundle 'bronson/vim-visual-star-search'
 Bundle 'henrik/vim-indexed-search'
 Bundle 'nelstrom/vim-qargs'
 Bundle 'tpope/vim-abolish'
 Bundle 'rking/ag.vim'
+Bundle 'goldfeld/vim-seek'
 
 " Appearance
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'Lokaltog/vim-powerline'
 
 " Extras
-Bundle 'jtratner/vim-flavored-markdown'
+" Bundle 'jtratner/vim-flavored-markdown'
 " Bundle 'jceb/vim-orgmode'
 " Bundle 'vim-scripts/vimwiki'
-Bundle 'lukerandall/haskellmode-vim'
-Bundle 'ledger/vim-ledger'
+" Bundle 'lukerandall/haskellmode-vim'
+" Bundle 'ledger/vim-ledger'
 
-" }}}
+" 
 
-" GENERAL {{{
+" GENERAL 
 
 filetype plugin on
 
@@ -164,9 +175,9 @@ command! -nargs=1 Silent
       \ | execute ':silent !'.<q-args>
       \ | execute ':redraw!'
 
-" }}}
+" 
 
-" EDITING {{{
+" EDITING 
 
 " use utf8
 set encoding=utf8
@@ -238,17 +249,10 @@ vmap P p :call setreg('"', getreg('0')) <CR>
 
 nmap YY vHLy
 
-"
 " RSI bindings
 imap <c-d> #
-imap <c-h> ->
-imap <c-j> =>
-" imap £ #
-" nmap £ #
-" vmap £ #
-" omap £ #
+imap <c-h> =>
 map £ #
-
 
 " Fix for navigating long lines
 " Wrapped lines goes down/up to next row, rather than next line in file.
@@ -294,8 +298,8 @@ source ~/dotfiles/vim/switch.vim
 nnoremap <silent> J mzJ`z:delmarks z<cr>
 
 " Split line (sister to [J]oin lines)
-" The normal use of S is covered by cc, so don't worry about shadowing it.
-nnoremap S i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w:silent! delmark w<cr>
+" use c-s, because [S] is used by vim-seek backward search..
+nnoremap <c-s> i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w:silent! delmark w<cr>
 
 vnoremap - =
 
@@ -311,9 +315,9 @@ map <leader>cc :set cursorcolumn!<cr>
 " set noesckeys
 set timeout timeoutlen=1000 ttimeoutlen=100
 
-" }}}
+" 
 
-" FILES {{{
+" FILES 
 
 set noswapfile                 " turn off swap files
 set nobackup
@@ -325,7 +329,7 @@ set autoread                   " Reload files changed outside vim
 au BufLeave * silent! :up
 
 " nnoremap <leader>M :set modifiable<cr>
-nnoremap <leader>M :make<cr>
+" nnoremap <leader>M :make<cr>
 
 " shift key fixes
 command! -bang -nargs=* -complete=file E e<bang> <args>
@@ -418,9 +422,21 @@ function! OpenURL()
 endfunction
 nnoremap gu :call OpenURL()<CR>
 
-" }}}
+" don't do all the usual background vim buffer stuff when loading large files 
+let g:LargeFile=5
 
-" FOLDING {{{
+" show alternate file
+" nmap <c-n><c-n> <Plug>(altr-forward)
+
+" sample definition for jade and stylus templates
+" call altr#define('%.jade', '../styles/%.styl')
+" call altr#define('%.styl', '../templates/%.jade')
+
+
+
+" 
+
+" FOLDING 
 
 "   zf{motion} / {Visual}zf      create a fold
 "
@@ -501,9 +517,9 @@ function! AppendModeline()
 endfunction
 nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
-" }}}
+" 
 
-" FORMAT {{{
+" FORMAT 
 
 set nowrap
 set linebreak                  " Wrap lines at convenient points
@@ -559,9 +575,9 @@ nmap <leader>co mz:call CleanCode()<cr>`z
 " add space inside current parenthesis
 map <leader>( vi(xi  <esc>P <esc>
 
-" }}}
+" 
 
-" INDENT {{{
+" INDENT 
 
 
 filetype indent on
@@ -590,9 +606,9 @@ vmap <Leader>a{       :Tabularize /{<cr>
 vmap <Leader>a#       :Tabularize /#<cr>
 vmap <Leader>a£       :Tabularize /#<cr>
 
-" }}}
+" 
 
-" LOOK {{{
+" LOOK 
 
 set laststatus=2               " show the statusline in all windows
 set noruler
@@ -606,9 +622,15 @@ set ttyfast                 " fast redraw screen
 
 set t_Co=256
 colorscheme solarized
-set background=dark
 let g:solarized_termtrans = 1
 let g:solarized_contrast = 'high'
+
+" Auto-detect solarized setting from the SOLARIZED env var
+if $SOLARIZED == 'light'
+  set background=light
+else
+  set background=dark
+endif
 
 nmap <leader>cs :colorscheme<space>
 
@@ -703,9 +725,9 @@ endfunction
 " augroup END
 
 
-" }}}
+" 
 
-" CONFIG {{{
+" CONFIG 
 
 nmap <leader>ve :tabedit ~/dotfiles/vim/vimrc.vim<cr>
 nmap <leader>V :NERDTree ~/dotfiles/vim/bundle/<cr>
@@ -726,24 +748,30 @@ vnoremap <leader>G "xy<esc>:!open "http://www.google.com/search?q=<c-r>x"<cr>
 vnoremap <leader>L "xy<esc>:!open "http://www.google.com/search?btnI&q=<c-r>x"<cr>
 " stack overflow
 vnoremap <leader>S "xy<esc>:!open "http://www.stackoverflow.com/search?q=<c-r>x"<cr>
-" Dash search (brilliant OSX help tool)
-vnoremap <leader>H "xy<esc>:!open dash://<c-r>x<cr>
-" language specific
-autocmd FileType coffee vnoremap <leader>H "xy<esc>:!open dash://cf:<c-r>x<cr>
-autocmd FileType python vnoremap <leader>H "xy<esc>:!open dash://dj:<c-r>x<cr>
-"}}}
 
-" UNDO {{{
+" Dash search (brilliant OSX help tool)
+vmap <leader>h <Plug>DashSearch
+nmap <leader>h <Plug>DashSearch
+
+" language specific
+autocmd FileType coffee :DashKeywords lodash jquery javascript d3
+autocmd FileType python :DashKeywords django python
+autocmd FileType haskell :DashKeywords haskell
+autocmd FileType stylus :DashKeywords css
+
+
+
+" UNDO 
 
 set undodir=~/.vim/backups     " Keep undo history across sessions, by storing in file.
 set undofile
 
 " GUndo
-nmap <silent> ,U :GundoToggle<CR>
+nmap <silent> <leader>U :GundoToggle<CR>
 
-"}}}
 
-" CLOJURE {{{
+
+" CLOJURE 
 
 let g:slime_target = "tmux"
 
@@ -800,15 +828,17 @@ let g:vimclojure#NailgunClient       = "~/.vim/bundle/vimclojure/bin/ng"
 "
 " sr StartRepl
 " sR StartLocalRepl
-" }}}
+" 
 
-" COFFEESCRIPT {{{
+" COFFEESCRIPT 
 
 autocmd BufRead *.coffee set filetype=coffee
 " autocmd BufWritePost,FileWritePost *.coffee :silent !coffee -c -m <afile>
 
 autocmd FileType javascript,coffee setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType javascript,coffee setlocal makeprg=node\ %:r
+
+autocmd FileType javascript,json setl nolist
 
 autocmd FileType coffee setl fdm=expr fde=getline(v:lnum)=~'\(->$\|=>\)$'&&indent(v:lnum)<indent(v:lnum+1)?'a1':'s1'
 
@@ -844,9 +874,9 @@ let g:tagbar_type_coffee = {
       \ ]
       \ }
 
-" }}}
+" 
 
-" CSS {{{
+" CSS 
 
 " Compile LessCSS on save
 " autocmd BufWritePost,FileWritePost *.less :silent !lessc <afile> <afile>:p:r.css
@@ -855,9 +885,9 @@ let g:tagbar_type_coffee = {
 
 " autocmd FileType css  setlocal foldmethod=indent
 
-" }}}
+" 
 
-" DBEXT {{{
+" DBEXT 
 
 " vnoremap <leader>es :let g:dbext_default_use_sep_result_buffer=1<CR>:DBExecVisualSQL<cr>
 " nnoremap <leader>es :let g:dbext_default_use_sep_result_buffer=1<CR>:DBExecSQLUnderCursor<cr>
@@ -884,9 +914,9 @@ let g:dbext_default_display_cmd_line =1
 let g:dbext_default_window_use_horiz = 0  " Use vertical split
 let g:dbext_default_window_width = 50
 
-" }}}
+" 
 
-" DJANGO {{{
+" DJANGO 
 
 " autocmd BufRead,BufNewFile *.html set filetype=html
 nmap _dt :set ft=htmldjango.html<cr>
@@ -910,112 +940,112 @@ nmap _ht :set ft=html<cr>
 "   autocmd FileType python nnoremap <leader>9 :e urls.py<cr>
 " augroup END
 
-let g:last_relative_dir = ''
+" let g:last_relative_dir = ''
 
-fun! RelatedFile(file)
-    " This is to check that the directory looks djangoish
-    if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
-        exec "edit %:h/" . a:file
-        let g:last_relative_dir = expand("%:h") . '/'
-        return ''
-    endif
-    if g:last_relative_dir != ''
-        exec "edit " . g:last_relative_dir . a:file
-        return ''
-    endif
-    echo "Cant determine where relative file is : " . a:file
-    return ''
-endfun
+" fun! RelatedFile(file)
+"     " This is to check that the directory looks djangoish
+"     if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
+"         exec "edit %:h/" . a:file
+"         let g:last_relative_dir = expand("%:h") . '/'
+"         return ''
+"     endif
+"     if g:last_relative_dir != ''
+"         exec "edit " . g:last_relative_dir . a:file
+"         return ''
+"     endif
+"     echo "Cant determine where relative file is : " . a:file
+"     return ''
+" endfun
 
-fun SetAppDir()
-    if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
-        let g:last_relative_dir = expand("%:h") . '/'
-        return ''
-    endif
-endfun
-autocmd BufEnter *.py call SetAppDir()
+" fun SetAppDir()
+"     if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
+"         let g:last_relative_dir = expand("%:h") . '/'
+"         return ''
+"     endif
+" endfun
+" autocmd BufEnter *.py call SetAppDir()
 
 
 
 " django testing from within vim. not 'tested'(!) yet
 " see http://gremu.net/blog/2010/integrate-your-python-test-runner-vim/
 
-let g:makeprg_django_app = 'python\ manage.py\ test\ -v\ 0'
-let g:makeprg_django_project = 'python\ manage.py\ test\ -v\ 0'
-set errorformat=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+" let g:makeprg_django_app = 'python\ manage.py\ test\ -v\ 0'
+" let g:makeprg_django_project = 'python\ manage.py\ test\ -v\ 0'
+" set errorformat=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 
-function! RunTestsForFile(args)
-  if @% =~ '\.py$'
-    let expandstr = '%:p:h' " dirname
-    while expand(expandstr) != '/'
-      let testpath = expand(expandstr)
-      if len(getfperm(testpath . '/tests')) > 0 || len(getfperm(testpath . '/tests.py')) > 0
-        call RunTests(expand(expandstr . ':t'), a:args)
-        return
-      endif
-      let expandstr .= ':h'
-    endwhile
-  endif
-  call RunTests('', a:args)
-endfunction
+" function! RunTestsForFile(args)
+"   if @% =~ '\.py$'
+"     let expandstr = '%:p:h' " dirname
+"     while expand(expandstr) != '/'
+"       let testpath = expand(expandstr)
+"       if len(getfperm(testpath . '/tests')) > 0 || len(getfperm(testpath . '/tests.py')) > 0
+"         call RunTests(expand(expandstr . ':t'), a:args)
+"         return
+"       endif
+"       let expandstr .= ':h'
+"     endwhile
+"   endif
+"   call RunTests('', a:args)
+" endfunction
 
-function! RunTests(target, args)
-  silent ! echo
-  silent ! echo -e "\033[1;36mRunning all unit tests\033[0m"
-  silent w
-  if len(a:target)
-    execute 'set makeprg=' . g:makeprg_django_app
-  else
-    execute 'set makeprg=' . g:makeprg_django_project
-  endif
-  exec "make! " . a:target . " " . a:args
-endfunction
+" function! RunTests(target, args)
+"   silent ! echo
+"   silent ! echo -e "\033[1;36mRunning all unit tests\033[0m"
+"   silent w
+"   if len(a:target)
+"     execute 'set makeprg=' . g:makeprg_django_app
+"   else
+"     execute 'set makeprg=' . g:makeprg_django_project
+"   endif
+"   exec "make! " . a:target . " " . a:args
+" endfunction
 
-function! JumpToError()
-  let has_valid_error = 0
-  for error in getqflist()
-    if error['valid']
-      let has_valid_error = 1
-      break
-    endif
-  endfor
-  if has_valid_error
-    for error in getqflist()
-      if error['valid']
-        break
-      endif
-    endfor
-    let error_message = substitute(error['text'], '^ *', '', 'g')
-    silent cc!
-    exec ":sbuffer " . error['bufnr']
-    call RedBar()
-    echo error_message
-  else
-    call GreenBar()
-    echo "All tests passed"
-  endif
-endfunction
+" function! JumpToError()
+"   let has_valid_error = 0
+"   for error in getqflist()
+"     if error['valid']
+"       let has_valid_error = 1
+"       break
+"     endif
+"   endfor
+"   if has_valid_error
+"     for error in getqflist()
+"       if error['valid']
+"         break
+"       endif
+"     endfor
+"     let error_message = substitute(error['text'], '^ *', '', 'g')
+"     silent cc!
+"     exec ":sbuffer " . error['bufnr']
+"     call RedBar()
+"     echo error_message
+"   else
+"     call GreenBar()
+"     echo "All tests passed"
+"   endif
+" endfunction
 
-function! RedBar()
-  hi RedBar ctermfg=white ctermbg=red guibg=red
-  echohl RedBar
-  echon repeat(" ",&columns - 1)
-  echohl
-endfunction
+" function! RedBar()
+"   hi RedBar ctermfg=white ctermbg=red guibg=red
+"   echohl RedBar
+"   echon repeat(" ",&columns - 1)
+"   echohl
+" endfunction
 
-function! GreenBar()
-  hi GreenBar ctermfg=white ctermbg=green guibg=green
-  echohl GreenBar
-  echon repeat(" ",&columns - 1)
-  echohl
-endfunction
+" function! GreenBar()
+"   hi GreenBar ctermfg=white ctermbg=green guibg=green
+"   echohl GreenBar
+"   echon repeat(" ",&columns - 1)
+"   echohl
+" endfunction
 
 " nnoremap <leader>a :call RunTests('', '')<cr>:redraw<cr>:call JumpToError()<cr>
 " nnoremap <leader>y :call RunTestsForFile('--failfast')<cr>:redraw<cr>:call JumpToError()<cr>
 
-" }}}
+" 
 
-" GIT {{{
+" GIT 
 
 nnoremap <leader>s  :Gstatus<cr>
 nnoremap <leader>S  :Gstatus<cr><c-w>T
@@ -1066,7 +1096,7 @@ nnoremap ]g  :GitGutterNextHunk<cr>
 nnoremap [g  :GitGutterPrevHunk<cr>
 
 " quickly access modified files in local git repo
-nnoremap <c-y> :CtrlPModified<cr>
+nnoremap <leader>M :CtrlPModified<cr>
 
 " Send visual selection to gist.github.com as a private, filetyped Gist
 " Requires the gist CLI
@@ -1119,9 +1149,10 @@ augroup interactive-git-rebase
   au FileType gitrebase nnoremap <buffer> <silent> <c-k><c-k> :s/^#\?/#/<cr>:noh<cr>
 augroup END
 
-"}}}
+let g:github_user = 'istib'
 
-" HTML {{{
+
+" HTML 
 
 " URL encode (unimpaired)
 " {Visual}[u
@@ -1139,9 +1170,9 @@ omap t it
 let g:sparkupNextMapping=""
 
 
-" }}}
+" 
 
-" JSON {{{
+" JSON 
 
 " Prettify JSON files
 autocmd BufRead,BufNewFile *.json set filetype=json
@@ -1160,9 +1191,9 @@ augroup json_autocmd
   autocmd FileType json set foldmethod=syntax
 augroup END
 
-" }}}
+" 
 
-" LATEX {{{
+" LATEX 
 
 au BufReadPost *.tex set syntax=tex
 " instead of plaintex
@@ -1206,9 +1237,9 @@ let g:tagbar_type_tex = {
       \ 'deffile' : expand('<sfile>:p:h:h') . '/ctags/latex.cnf'
       \ }
 
-" }}}
+" 
 
-" MARKDOWN {{{
+" MARKDOWN 
 
 " Sane(!) text-editing options
 
@@ -1258,9 +1289,9 @@ let g:tagbar_type_markdown = {
       \ ]
       \ }
 
-" }}}
+" 
 
-" R {{{
+" R 
 
 " VIM-R
 " =====
@@ -1358,9 +1389,9 @@ augroup filetypedetect
 augroup END
 
 
-" }}}
+" 
 
-" SURROUND {{{
+" SURROUND 
 
 " Ruby
 " Use v or # to get a variable interpolation (inside of a string)}
@@ -1389,9 +1420,9 @@ vnoremap <leader>' ""yls<c-r>={'"': "'", "'": '"'}[@"]<cr><esc>
 " imap <leader>" <esc>vES"i
 " imap <leader>' <esc>vES'i
 
-" }}}
+" 
 
-" BUFFERS {{{
+" BUFFERS 
 
 " buffers hidden, not closed, when abandoned
 set hidden
@@ -1405,7 +1436,7 @@ set splitbelow
 nnoremap gf :wincmd f<cr>
 
 " use ,gf to go to file in a vertical split
-nnoremap <silent> ,gf :vertical botright wincmd f<CR>
+nnoremap <silent> <leader>gf :vertical botright wincmd f<CR>
 
 " NARROW REGION
 
@@ -1420,8 +1451,8 @@ let g:nrrw_topbot_leftright = 'botright'
 
 " open selected in zoomed narrowregion buffer and center in buffer (used to
 " focus on current paragraph, eg.)
-vmap <silent> ,N :NR<cr><c-w>ogg14O<esc>50i<space><esc>i~~~~~~~~~~~~~~~~~<esc>0o<esc>G2o<esc>50i<space><esc>i~~~~~~~~~~~~~~~~~<esc>13o<esc>16G0<esc>
-nmap <silent> ,N vip:NR<cr><c-w>ogg14O<esc>50i<space><esc>i~~~~~~~~~~~~~~~~~<esc>0o<esc>G2o<esc>50i<space><esc>i~~~~~~~~~~~~~~~~~<esc>13o<esc>16G0
+vmap <silent> <leader>N :NR<cr><c-w>ogg14O<esc>50i<space><esc>i~~~~~~~~~~~~~~~~~<esc>0o<esc>G2o<esc>50i<space><esc>i~~~~~~~~~~~~~~~~~<esc>13o<esc>16G0<esc>
+nmap <silent> <leader>N vip:NR<cr><c-w>ogg14O<esc>50i<space><esc>i~~~~~~~~~~~~~~~~~<esc>0o<esc>G2o<esc>50i<space><esc>i~~~~~~~~~~~~~~~~~<esc>13o<esc>16G0
 " and exit gracefully
 nmap "; :1,15d<cr>:$-14,$d<cr><c-w>o:wq<cr>
 
@@ -1453,7 +1484,6 @@ nnoremap <c-g> :CtrlPTag<cr>
 
 " change list
 nnoremap <c-q> :CtrlPChangeAll<cr>
-" nnoremap <c-r> :CtrlPLine<cr>
 
 nmap <silent> :: :CtrlPCurWD<CR>
 
@@ -1479,6 +1509,9 @@ let g:ctrlp_user_command = {
 nmap <c-f> :CtrlPMRU<cr>
 nmap <leader>p :CtrlPMRU<cr>
 
+let g:ctrlp_cmd = 'CtrlPMixed'      " search anything (in files, buffers and MRU files at the same time.)
+let g:ctrlp_working_path_mode = 'ra'  " search for nearest ancestor like .git, .hg, and the directory of the current file
+
 " TIP: create new files using C-E from within CtrlP picker
 
 " Default to file searches
@@ -1496,14 +1529,19 @@ let g:ctrlp_open_multiple_files = 'v'
 " let g:ctrlp_working_path_mode = 2
 
 " open files in existing buffers if they are already opened
-let g:ctrlp_switch_buffer = 0
+let g:ctrlp_switch_buffer = 'et'
 
 let g:ctrlp_use_caching = 1
-let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_clear_cache_on_exit=0     " speed up by not removing clearing cache evertime
 let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
 let g:ctrlp_dotfiles = 1
 let g:ctrlp_max_depth = 20
 let g:ctrlp_mruf_max = 200
+"
+" coffee: https://gist.github.com/michaelglass/5210282
+let g:ctrlp_buftag_types = {
+\ 'coffee'     : '--language-force=coffee --coffee-types=cmfvf',
+\ }
 
 " NERDTREE
 
@@ -1531,9 +1569,9 @@ let g:nerdtree_tabs_open_on_gui_startup = 0
 " Focus in the main content window
 let g:nerdtree_tabs_focus_on_files = 1
 
-" }}}
+" 
 
-" COMMAND MODE {{{
+" COMMAND MODE 
 
 set history=1000               " Store lots of :cmdline history
 set cmdheight=2                " avoid 'Press ENTER to continue'
@@ -1559,9 +1597,9 @@ cmap   <script> <C-T> <SID>transposition<SID>transpose
 " use ESC to exit cmdline window
 autocmd CmdwinEnter * nnoremap <buffer> <esc> :q<cr>
 
-" }}}
+" 
 
-" COMMENTING {{{
+" COMMENTING 
 
 " comment paragraph
 " nmap <c-\> \\ip
@@ -1578,9 +1616,9 @@ nmap gyy mz:t-1<cr><c-\>`z:delmarks z<cr>
 imap gyy <esc>:t-1<cr>gCcgi
 " Using :t-1 instead of yyP to preserve registers
 
-" }}}
+" 
 
-" COMPLETION {{{
+" COMPLETION 
 
 let g:UltiSnipsSnippetDirectories=["snippets"]
 nnoremap <leader>ue :UltiSnipsEdit<cr>
@@ -1659,9 +1697,9 @@ set completefunc=syntaxcomplete#Complete
 " Better Completion
 set completeopt=longest,menuone,preview
 
-" }}}
+" 
 
-" DIFF {{{
+" DIFF 
 
 nmap <leader>D :windo diffthis<cr>
 
@@ -1737,7 +1775,7 @@ nmap <silent> <leader>dc :call DiffToggle(2)<cr>
 nmap <silent> <leader>dr :call DiffToggle(3)<cr>
 
 
-" Diff two registers {{{
+" Diff two registers 
 " Open a diff of two registers in a new tabpage. Close the tabpage when
 " finished. If no registers are specified it diffs the most recent yank with
 " the most recent deletion.
@@ -1760,11 +1798,11 @@ function! DiffRegsFunc(...)
 endfunction
 com -nargs=* DiffRegs call DiffRegsFunc(<f-args>)
 
-" }}}
+" 
 
-" }}}
+" 
 
-" MARKS {{{
+" MARKS 
 
 set viminfo='100,f1            " Save up to 100 marks, enable capital marks
 
@@ -1809,9 +1847,9 @@ endif
  
  
 
-" }}}
+" 
 
-" NAVIGATION {{{
+" NAVIGATION 
 
 " next text object
 " ================================================================================
@@ -1873,9 +1911,9 @@ augroup cline
   au InsertLeave * set cursorline
 augroup END
 
-" }}}
+" 
 
-" PYTHON {{{
+" PYTHON 
 
 augroup ft_python
   au!
@@ -1888,9 +1926,9 @@ augroup END
 autocmd BufRead *.py set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
 
 let pymode_options=0
-" }}}
+" 
 
-" SEARCH {{{
+" SEARCH 
 
 " Use sane regexes.
 nnoremap / /\v
@@ -1945,7 +1983,7 @@ endfunction
 " HIGHLIGHTING
 
 " toggle highlighting on/off
-nnoremap <silent> <leader>h :set hlsearch! hlsearch?<CR>
+nnoremap <silent> <leader>H :set hlsearch! hlsearch?<CR>
 
 " clear highlights
 noremap <silent> <leader>/ :nohls<CR>
@@ -1998,9 +2036,11 @@ nmap <silent> <leader>fo :copen<CR>
 " open quickfix at bottom of the window
 let g:tlWindowPosition=1
 
-" }}}
+let g:seek_enable_jumps = 1
 
-" SPELLING {{{
+" 
+
+" SPELLING 
 
 " nmap <silent> <leader><leader>s :setlocal spell!<cr>
 
@@ -2015,9 +2055,9 @@ iabbr teh the
 iabbr nign ning
 iabbr lenght length
 
-" }}}
+" 
 
-" SYNTAX {{{
+" SYNTAX 
 
 syntax on
 syntax enable                  " turn on syntax highlighting
@@ -2052,9 +2092,9 @@ autocmd BufNewFile,BufRead *.csv set noexpandtab nosmarttab
 " Don't try to highlight lines longer than 800 characters.
 set synmaxcol=800
 
-" }}}
+" 
 
-" TABS {{{
+" TABS 
 
 nmap <leader><tab> :tabnew<cr>
 
@@ -2069,12 +2109,12 @@ nmap <leader>tc :tabclose<cr>
 " :tabmove 1      Move current tab to become the 2nd tab
 
 
-" }}}
+" 
 
-" TAGS {{{
+" TAGS 
 
 " Look for tags file in parent directories, upto "/"
-set tags=./tags;tags;/
+set tags=./tags;tags;.git/;/
 
 " Restore case-sensitivity for jumping to tags (set ic disables it)
 nnoremap <silent> <C-]> :set noic<cr>g<C-]><silent>:set ic<cr>
@@ -2097,9 +2137,9 @@ let g:tagbar_compact = 1
 " capture cursor on popup
 let g:tagbar_autofocus = 1
 
-" }}}
+" 
 
-" TERMINAL {{{
+" TERMINAL 
 
 set shell=zsh
 
@@ -2123,19 +2163,19 @@ nmap <leader>rs :InterruptVimTmuxRunner<cr>
 nmap <silent> <leader>w :up<cr>:silent! RunLastVimTmuxCommand<cr>
 
 
-" }}}
+" 
 
-" NGINX {{{
+" NGINX 
 
 autocmd BufRead nginx.conf set filetype=nginx
 
-" }}}
+" 
 
 nmap <leader>BDB /data-bind=\".*\"<cr><c-e><c-s>
 nmap <leader>BCL /console\.log<cr><c-e><c-s>
 nmap <leader>BCC /^class<cr><c-e><c-l>
 
-" VIMWIKI {{{
+" VIMWIKI 
 
 " keep track of several wikis
 " let g:vimwikilist=""
@@ -2144,14 +2184,14 @@ nmap <leader>BCC /^class<cr><c-e><c-l>
 " ,w,w diary today (,w,t in tab)
 " ,wh convert current page to HTML (,whh: and open)
 
-" }}}
+" 
 
-" HASKELL {{{
+" HASKELL 
 
 au BufEnter *.hs compiler ghc
 let g:haddock_browser="/Application/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 
-" }}}
+" 
 
 source ~/dotfiles/vim/colors.vim
 

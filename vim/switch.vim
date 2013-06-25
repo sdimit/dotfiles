@@ -8,8 +8,9 @@ let g:switch_definitions =
       \   ['top', 'bottom'],
       \   ['max', 'min'],
       \   ['login', 'signup'],
-      \   ['event_template', 'location', 'staff', 'customer'],
-      \   ['EventTemplates', 'Locations', 'Staff', 'Customers'],
+      \   ['event', 'event_template', 'location', 'staff', 'customer'],
+      \   ['Event', 'EventTemplates', 'Locations', 'Staff', 'Customers'],
+      \   ['RHS', 'LHS'],
       \   ['=>', '->'],
       \   [' =', ':']
       \ ]
