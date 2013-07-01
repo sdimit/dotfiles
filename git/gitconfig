@@ -89,14 +89,15 @@
 
   # LOG
 
-  l = log --decorate --graph --date=short --pretty='format:%C(blue)%ad%Creset %C(yellow)%h%C(red)%d%Creset %C()%s %C(black) [%an]%Creset'
   # last 5
-  ll = log -5 --decorate --graph --date=short --pretty='format:%C(blue)%ad%Creset %C(yellow)%h%C(red)%d%Creset %C()%s %C(black) [%an]%Creset'
+  l = log -5 --decorate --graph --date=short --pretty='format:%C(blue)%ad%Creset %C(yellow)%h%C(red)%d%Creset %C()%s %C(black) [%an]%Creset'
+  # longer log
+  ll = log --decorate --graph --date=short --pretty='format:%C(blue)%ad%Creset %C(yellow)%h%C(red)%d%Creset %C()%s %C(black) [%an]%Creset'
   # last 5 shas
-  ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+  lsh = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
   gl = log     --color=always --all --graph --topo-order --pretty='format:%Cgreen%h%Creset %s %C(black bold)(by %an)%Creset%C(yellow bold)%d%Creset%n'
 
-  search = log --grep=\"$@\" --online --pretty='format:%C(blue)%ad%Creset %C(yellow)%h%C(red)%d%Creset %C()%s %C(black) [%an]%Creset'
+  search = log --grep=\"$@\" --pretty='format:%C(blue)%ad%Creset %C(yellow)%h%C(red)%d%Creset %C()%s %C(black) [%an]%Creset'
   changes = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\" --name-status
   changelog = log --pretty=format:\" * %s\"
 
@@ -128,8 +129,8 @@
 
   # REBASE
 
-  ready = rebase -i @{u}
-  # rebase only the local commits which we’re about to push
+  reb = !git rebase -i HEAD~"$@" # FIXME
+  ready = rebase -i @{u} # rebase only the local commits which we’re about to push
 
   rba = rebase --abort
   rbc = rebase --continue
@@ -138,7 +139,7 @@
   rom = rebase origin/master
 
   # remote
-  r = remote -v                     # show remotes (verbose)
+  rem = remote -v                     # show remotes (verbose)
 
   rao = remote add origin
 

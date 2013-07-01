@@ -1,138 +1,160 @@
-" BUNDLES 
+" BUNDLES
 
 set nocompatible
 filetype off
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+if has('vim_starting')
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
 
-Bundle 'gmarik/vundle'
+call neobundle#rc(expand('~/.vim/bundle/'))
+
+" Let NeoBundle manage NeoBundle
+NeoBundleFetch 'Shougo/neobundle.vim'
 
 " file management
-Bundle 'kien/ctrlp.vim'
-Bundle 'istib/vifm.vim'
-Bundle 'vim-scripts/LargeFile'
-" Bundle 'kana/vim-altr'
+" NeoBundle 'kien/ctrlp.vim'
+" NeoBundle 'istib/vifm.vim'
+NeoBundle 'vim-scripts/LargeFile'
+NeoBundle 'kana/vim-altr'
+
+NeoBundle 'Shougo/vimproc.vim'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/vimfiler.vim'
+NeoBundle 'Shougo/unite-outline'
+NeoBundle 'Shougo/unite-help'
+NeoBundle 'Shougo/unite-session'
+NeoBundle 'osyo-manga/unite-quickfix'
+NeoBundle 'thinca/vim-unite-history'
+NeoBundle 'hrsh7th/vim-versions'
 
 " tag support
-Bundle 'majutsushi/tagbar'
+NeoBundle 'majutsushi/tagbar'
+NeoBundle 'tsukkee/unite-tag'
 
 " git tools
-Bundle 'tpope/vim-fugitive'
-Bundle 'gregsexton/gitv'
-Bundle 'airblade/vim-gitgutter'
-" Bundle 'AndrewRadev/linediff.vim'
-" Bundle 'mattn/gist-vim'
-" Bundle 'tpope/vim-git'
-Bundle 'jasoncodes/ctrlp-modified.vim'
-" Bundle 'mmozuras/vim-github-comment'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'gregsexton/gitv'
+NeoBundle 'airblade/vim-gitgutter'
+NeoBundle 'vim-scripts/DirDiff.vim'
+NeoBundle 'kmnk/vim-unite-giti'
+" NeoBundle 'AndrewRadev/linediff.vim'
+" NeoBundle 'mattn/gist-vim'
+" NeoBundle 'tpope/vim-git'
+" NeoBundle 'jasoncodes/ctrlp-modified.vim'
+" NeoBundle 'mmozuras/vim-github-comment'
 
 " snippets and completion
-Bundle 'SirVer/ultisnips'
-Bundle 'Shougo/neocomplcache'
-" Bundle 'scrooloose/syntastic'
+NeoBundle 'SirVer/ultisnips'
+NeoBundle 'Shougo/neocomplcache'
+" NeoBundle 'Valloric/YouCompleteMe'
+
+" NeoBundle 'scrooloose/syntastic'
 
 " general helpers
-Bundle 'tpope/vim-commentary'
-Bundle 'tomtom/tcomment_vim'
-Bundle 'vim-scripts/YankRing.vim'
-Bundle 'tpope/vim-unimpaired'
-Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-repeat'
-Bundle 'Indent-Guides'
-Bundle 'godlygeek/tabular'
-Bundle 'AndrewRadev/switch.vim'
-Bundle 'danro/rename.vim'
-Bundle 'kshenoy/vim-signature'
-Bundle 'vim-scripts/highlight.vim'
-Bundle 'delimitMate.vim'
-" Bundle 'vim-scripts/bufkill.vim'
-" Bundle 'dhruvasagar/vim-table-mode'
+NeoBundle 'tpope/vim-commentary'
+NeoBundle 'tomtom/tcomment_vim'
+NeoBundle 'vim-scripts/YankRing.vim'
+NeoBundle 'tpope/vim-unimpaired'
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'tpope/vim-repeat'
+NeoBundle 'Indent-Guides'
+NeoBundle 'godlygeek/tabular'
+NeoBundle 'AndrewRadev/switch.vim'
+NeoBundle 'danro/rename.vim'
+NeoBundle 'kshenoy/vim-signature'
+NeoBundle 'vim-scripts/highlight.vim'
+NeoBundle 'delimitMate.vim'
+NeoBundle 'terryma/vim-smooth-scroll'
+" NeoBundle 'vim-scripts/bufkill.vim'
+" NeoBundle 'dhruvasagar/vim-table-mode'
 
 " python
-" Bundle 'klen/python-mode'
-" Bundle 'nvie/vim-pyunit'
+" NeoBundle 'klen/python-mode'
+" NeoBundle 'nvie/vim-pyunit'
 " vimpdb
 
 " coffeescript
-Bundle 'kchmck/vim-coffee-script'
-Bundle 'zeekay/vim-js2coffee'
+NeoBundle 'kchmck/vim-coffee-script'
+NeoBundle 'zeekay/vim-js2coffee'
 " LiveScript
-" Bundle 'gkz/vim-ls'
+" NeoBundle 'gkz/vim-ls'
 
 " web development
-Bundle 'tristen/vim-sparkup'
-" Bundle 'mattn/zencoding-vim'
-" Bundle 'vim-scripts/closetag.vim'
-Bundle 'edsono/vim-matchit'
-" Bundle 'vim-scripts/AutoTag'
-Bundle 'leshill/vim-json'
-Bundle 'groenewege/vim-less'
-Bundle 'nginx.vim'
-" Bundle 'jaxbot/brolink.vim'
-" Bundle 'nono/vim-handlebars'
-Bundle 'wavded/vim-stylus'
-Bundle 'digitaltoad/vim-jade'
-" Bundle 'skwp/vim-html-escape'
-
+NeoBundle 'tristen/vim-sparkup'
+" NeoBundle 'mattn/zencoding-vim'
+" NeoBundle 'vim-scripts/closetag.vim'
+NeoBundle 'edsono/vim-matchit'
+" NeoBundle 'vim-scripts/AutoTag'
+NeoBundle 'leshill/vim-json'
+NeoBundle 'groenewege/vim-less'
+NeoBundle 'nginx.vim'
+" NeoBundle 'jaxbot/brolink.vim'
+" NeoBundle 'nono/vim-handlebars'
+NeoBundle 'wavded/vim-stylus'
+NeoBundle 'digitaltoad/vim-jade'
+" NeoBundle 'skwp/vim-html-escape'
+" NeoBundle 'mattn/webapi-vim'
 " access dash help in OSX
-Bundle 'rizzatti/funcoo.vim'
-Bundle 'rizzatti/dash.vim'
+NeoBundle 'rizzatti/funcoo.vim'
+NeoBundle 'rizzatti/dash.vim'
+NeoBundle 'pasela/unite-webcolorname'
 
-" latex
-" Bundle 'jcf/vim-latex'
+" NeoBundle 'jcf/vim-latex'
 
 " helpers to handle REPLs and running unit tests in tmux
-Bundle 'ervandew/screen'
-Bundle 'benmills/vimux'
-" Bundle 'nvie/vim_bridge'
-Bundle 'tpope/vim-dispatch'
-Bundle 'tpope/vim-tbone'
+NeoBundle 'ervandew/screen'
+NeoBundle 'benmills/vimux'
+" NeoBundle 'nvie/vim_bridge'
+" NeoBundle 'tpope/vim-dispatch'
+" NeoBundle 'tpope/vim-tbone'
 
-Bundle 'kana/vim-textobj-entire'
-Bundle 'kana/vim-textobj-fold'
-Bundle 'kana/vim-textobj-indent'
-Bundle 'kana/vim-textobj-user'
-Bundle 'kana/vim-textobj-diff'
-Bundle 'gilligan/textobj-gitgutter'
+NeoBundle 'kana/vim-textobj-entire'
+NeoBundle 'kana/vim-textobj-fold'
+NeoBundle 'kana/vim-textobj-indent'
+NeoBundle 'kana/vim-textobj-user'
+NeoBundle 'kana/vim-textobj-diff'
+NeoBundle 'gilligan/textobj-gitgutter'
 
-Bundle 'MarcWeber/vim-addon-mw-utils'
-Bundle 'vim-scripts/utl.vim'
-" Bundle 'tpope/vim-speeddating'
-" Bundle 'vim-scripts/marvim'
+NeoBundle 'MarcWeber/vim-addon-mw-utils'
+NeoBundle 'vim-scripts/utl.vim'
+" NeoBundle 'tpope/vim-speeddating'
+" NeoBundle 'vim-scripts/marvim'
 
-Bundle 'myusuf3/numbers.vim'
-Bundle 'sjl/gundo.vim'
-" Bundle 'chrisbra/NrrwRgn'
-Bundle 'vim-scripts/ZoomWin'
-" Bundle 'vim-scripts/dbext.vim'
+" NeoBundle 'myusuf3/numbers.vim'
+" NeoBundle 'sjl/gundo.vim'
+NeoBundle 'vim-scripts/ZoomWin'
 
 " Search
-Bundle 'henrik/git-grep-vim'
-Bundle 'vim-scripts/grep.vim'
-Bundle 'bronson/vim-visual-star-search'
-Bundle 'henrik/vim-indexed-search'
-Bundle 'nelstrom/vim-qargs'
-Bundle 'tpope/vim-abolish'
-Bundle 'rking/ag.vim'
-Bundle 'goldfeld/vim-seek'
+NeoBundle 'henrik/git-grep-vim'
+NeoBundle 'vim-scripts/grep.vim'
+NeoBundle 'bronson/vim-visual-star-search'
+NeoBundle 'henrik/vim-indexed-search'
+NeoBundle 'nelstrom/vim-qargs'
+NeoBundle 'tpope/vim-abolish'
+NeoBundle 'rking/ag.vim'
+NeoBundle 'goldfeld/vim-seek'
 
 " Appearance
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'Lokaltog/vim-powerline'
+NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'Lokaltog/vim-powerline'
+NeoBundle 'zhaocai/linepower.vim'
+" NeoBundle 'bling/vim-airline'
 
 " Extras
-" Bundle 'jtratner/vim-flavored-markdown'
-" Bundle 'jceb/vim-orgmode'
-" Bundle 'vim-scripts/vimwiki'
-" Bundle 'lukerandall/haskellmode-vim'
-" Bundle 'ledger/vim-ledger'
+" NeoBundle 'jtratner/vim-flavored-markdown'
+" NeoBundle 'jceb/vim-orgmode'
+" NeoBundle 'vim-scripts/vimwiki'
+" NeoBundle 'lukerandall/haskellmode-vim'
+" NeoBundle 'ledger/vim-ledger'
 
-" 
+"
 
-" GENERAL 
+" GENERAL
 
 filetype plugin on
+
+NeoBundleCheck
 
 let mapleader="\<space>"
 let maplocalleader="\<space>"
@@ -175,9 +197,9 @@ command! -nargs=1 Silent
       \ | execute ':silent !'.<q-args>
       \ | execute ':redraw!'
 
-" 
+"
 
-" EDITING 
+" EDITING
 
 " use utf8
 set encoding=utf8
@@ -288,6 +310,10 @@ vnoremap > >gv
 " delete last character of line
 nnoremap d. $x0
 
+noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 2)<CR>
+noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR>
+
+
 " SWITCH plugin
 
 nmap - :Switch<cr>
@@ -315,9 +341,9 @@ map <leader>cc :set cursorcolumn!<cr>
 " set noesckeys
 set timeout timeoutlen=1000 ttimeoutlen=100
 
-" 
+"
 
-" FILES 
+" FILES
 
 set noswapfile                 " turn off swap files
 set nobackup
@@ -422,21 +448,21 @@ function! OpenURL()
 endfunction
 nnoremap gu :call OpenURL()<CR>
 
-" don't do all the usual background vim buffer stuff when loading large files 
+" don't do all the usual background vim buffer stuff when loading large files
 let g:LargeFile=5
 
 " show alternate file
-" nmap <c-n><c-n> <Plug>(altr-forward)
+nmap <c-n><c-n> <Plug>(altr-forward)
 
 " sample definition for jade and stylus templates
-" call altr#define('%.jade', '../styles/%.styl')
-" call altr#define('%.styl', '../templates/%.jade')
+call altr#define('%.jade', '../styles/%.styl')
+call altr#define('%.styl', '../templates/%.jade')
 
 
 
-" 
+"
 
-" FOLDING 
+" FOLDING
 
 "   zf{motion} / {Visual}zf      create a fold
 "
@@ -517,9 +543,9 @@ function! AppendModeline()
 endfunction
 nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
-" 
+"
 
-" FORMAT 
+" FORMAT
 
 set nowrap
 set linebreak                  " Wrap lines at convenient points
@@ -575,9 +601,9 @@ nmap <leader>co mz:call CleanCode()<cr>`z
 " add space inside current parenthesis
 map <leader>( vi(xi  <esc>P <esc>
 
-" 
+"
 
-" INDENT 
+" INDENT
 
 
 filetype indent on
@@ -596,19 +622,19 @@ nnoremap <leader><leader>4 :setlocal ts=4 sts=4 sw=4 et<cr>
 
 " ALIGN/TABULARISE
 
-vmap <Leader>a=       :Tabularize /=<cr>
-vmap <Leader>a"       :Tabularize /"<cr>
-vmap <Leader>a:       :Tabularize /:<cr>
-vmap <Leader>a::      :Tabularize /:\zs<cr>
-vmap <Leader>a,       :Tabularize /,<cr>
-vmap <Leader>a-       :Tabularize /-<cr>
-vmap <Leader>a{       :Tabularize /{<cr>
-vmap <Leader>a#       :Tabularize /#<cr>
-vmap <Leader>a£       :Tabularize /#<cr>
+vmap :w=       :Tabularize /=<cr>
+vmap :w"       :Tabularize /"<cr>
+vmap :w:       :Tabularize /:<cr>
+vmap :w::      :Tabularize /:\zs<cr>
+vmap :w,       :Tabularize /,<cr>
+vmap :w-       :Tabularize /-<cr>
+vmap :w{       :Tabularize /{<cr>
+vmap :w#       :Tabularize /#<cr>
+vmap :w£       :Tabularize /#<cr>
 
-" 
+"
 
-" LOOK 
+" LOOK
 
 set laststatus=2               " show the statusline in all windows
 set noruler
@@ -624,6 +650,8 @@ set t_Co=256
 colorscheme solarized
 let g:solarized_termtrans = 1
 let g:solarized_contrast = 'high'
+
+" colorscheme jellybeans
 
 " Auto-detect solarized setting from the SOLARIZED env var
 if $SOLARIZED == 'light'
@@ -677,6 +705,8 @@ let g:Powerline_symbols='fancy'
 let g:Powerline_theme='solarized256'
 let g:Powerline_colorscheme='solarized256'
 
+" let g:airline_powerline_fonts=0
+
 " Unfuck my screen
 nnoremap <leader>u :syntax sync fromstart<cr>:redraw!<cr>
 
@@ -725,9 +755,9 @@ endfunction
 " augroup END
 
 
-" 
+"
 
-" CONFIG 
+" CONFIG
 
 nmap <leader>ve :tabedit ~/dotfiles/vim/vimrc.vim<cr>
 nmap <leader>V :NERDTree ~/dotfiles/vim/bundle/<cr>
@@ -761,7 +791,7 @@ autocmd FileType stylus :DashKeywords css
 
 
 
-" UNDO 
+" UNDO
 
 set undodir=~/.vim/backups     " Keep undo history across sessions, by storing in file.
 set undofile
@@ -771,7 +801,7 @@ nmap <silent> <leader>U :GundoToggle<CR>
 
 
 
-" CLOJURE 
+" CLOJURE
 
 let g:slime_target = "tmux"
 
@@ -828,11 +858,12 @@ let g:vimclojure#NailgunClient       = "~/.vim/bundle/vimclojure/bin/ng"
 "
 " sr StartRepl
 " sR StartLocalRepl
-" 
+"
 
-" COFFEESCRIPT 
+" COFFEESCRIPT
 
 autocmd BufRead *.coffee set filetype=coffee
+autocmd BufRead *.coffee syn match error contained "\<console\>"
 " autocmd BufWritePost,FileWritePost *.coffee :silent !coffee -c -m <afile>
 
 autocmd FileType javascript,coffee setlocal omnifunc=javascriptcomplete#CompleteJS
@@ -874,9 +905,9 @@ let g:tagbar_type_coffee = {
       \ ]
       \ }
 
-" 
+"
 
-" CSS 
+" CSS
 
 " Compile LessCSS on save
 " autocmd BufWritePost,FileWritePost *.less :silent !lessc <afile> <afile>:p:r.css
@@ -885,9 +916,9 @@ let g:tagbar_type_coffee = {
 
 " autocmd FileType css  setlocal foldmethod=indent
 
-" 
+"
 
-" DBEXT 
+" DBEXT
 
 " vnoremap <leader>es :let g:dbext_default_use_sep_result_buffer=1<CR>:DBExecVisualSQL<cr>
 " nnoremap <leader>es :let g:dbext_default_use_sep_result_buffer=1<CR>:DBExecSQLUnderCursor<cr>
@@ -914,9 +945,9 @@ let g:dbext_default_display_cmd_line =1
 let g:dbext_default_window_use_horiz = 0  " Use vertical split
 let g:dbext_default_window_width = 50
 
-" 
+"
 
-" DJANGO 
+" DJANGO
 
 " autocmd BufRead,BufNewFile *.html set filetype=html
 nmap _dt :set ft=htmldjango.html<cr>
@@ -926,19 +957,6 @@ nmap _ht :set ft=html<cr>
 " surround helpers for templating:
 " s- :     <% %>
 " s= :     <%= %>
-
-" augroup django
-"   autocmd!
-"   autocmd FileType python nnoremap <leader>1 :call RelatedFile ("models.py")<cr>
-"   autocmd FileType python nnoremap <leader>2 :call RelatedFile ("views.py")<cr>
-"   autocmd FileType python nnoremap <leader>3 :call RelatedFile ("urls.py")<cr>
-"   autocmd FileType python nnoremap <leader>4 :call RelatedFile ("admin.py")<cr>
-"   autocmd FileType python nnoremap <leader>5 :call RelatedFile ("tests.py")<cr>
-"   autocmd FileType python nnoremap <leader>6 :call RelatedFile ( "templates/" )<cr>
-"   autocmd FileType python nnoremap <leader>7 :call RelatedFile ( "templatetags/" )<cr>
-"   autocmd FileType python nnoremap <leader>0 :e settings.py<cr>
-"   autocmd FileType python nnoremap <leader>9 :e urls.py<cr>
-" augroup END
 
 " let g:last_relative_dir = ''
 
@@ -1043,9 +1061,9 @@ nmap _ht :set ft=html<cr>
 " nnoremap <leader>a :call RunTests('', '')<cr>:redraw<cr>:call JumpToError()<cr>
 " nnoremap <leader>y :call RunTestsForFile('--failfast')<cr>:redraw<cr>:call JumpToError()<cr>
 
-" 
+"
 
-" GIT 
+" GIT
 
 nnoremap <leader>s  :Gstatus<cr>
 nnoremap <leader>S  :Gstatus<cr><c-w>T
@@ -1079,8 +1097,9 @@ nnoremap <leader>gH  :Gbrowse!<cr>
 vnoremap <leader>gH  :Gbrowse!<cr>
 nnoremap <leader>gco :Gcheckout<cr>
 
+nnoremap <leader>gc :Gcommit<cr>
 " write commit message in new tab and show preview
-nnoremap <leader>gc :Gcommit<cr><c-w>T:DiffGitCached<cr>:wincmd L<cr>:wincmd p<cr>
+nnoremap <leader>gC :Gcommit<cr><c-w>T:DiffGitCached<cr>:wincmd L<cr>:wincmd p<cr>
 
 nnoremap <leader>gm  :Gmove<cr>
 nnoremap <leader>gR  :Git checkout -- %<cr><cr>,u
@@ -1096,7 +1115,7 @@ nnoremap ]g  :GitGutterNextHunk<cr>
 nnoremap [g  :GitGutterPrevHunk<cr>
 
 " quickly access modified files in local git repo
-nnoremap <leader>M :CtrlPModified<cr>
+"nnoremap <leader>M :CtrlPModified<cr>
 
 " Send visual selection to gist.github.com as a private, filetyped Gist
 " Requires the gist CLI
@@ -1152,7 +1171,7 @@ augroup END
 let g:github_user = 'istib'
 
 
-" HTML 
+" HTML
 
 " URL encode (unimpaired)
 " {Visual}[u
@@ -1170,9 +1189,9 @@ omap t it
 let g:sparkupNextMapping=""
 
 
-" 
+"
 
-" JSON 
+" JSON
 
 " Prettify JSON files
 autocmd BufRead,BufNewFile *.json set filetype=json
@@ -1191,9 +1210,9 @@ augroup json_autocmd
   autocmd FileType json set foldmethod=syntax
 augroup END
 
-" 
+"
 
-" LATEX 
+" LATEX
 
 au BufReadPost *.tex set syntax=tex
 " instead of plaintex
@@ -1237,9 +1256,9 @@ let g:tagbar_type_tex = {
       \ 'deffile' : expand('<sfile>:p:h:h') . '/ctags/latex.cnf'
       \ }
 
-" 
+"
 
-" MARKDOWN 
+" MARKDOWN
 
 " Sane(!) text-editing options
 
@@ -1289,9 +1308,9 @@ let g:tagbar_type_markdown = {
       \ ]
       \ }
 
-" 
+"
 
-" R 
+" R
 
 " VIM-R
 " =====
@@ -1389,9 +1408,9 @@ augroup filetypedetect
 augroup END
 
 
-" 
+"
 
-" SURROUND 
+" SURROUND
 
 " Ruby
 " Use v or # to get a variable interpolation (inside of a string)}
@@ -1420,9 +1439,9 @@ vnoremap <leader>' ""yls<c-r>={'"': "'", "'": '"'}[@"]<cr><esc>
 " imap <leader>" <esc>vES"i
 " imap <leader>' <esc>vES'i
 
-" 
+"
 
-" BUFFERS 
+" BUFFERS
 
 " buffers hidden, not closed, when abandoned
 set hidden
@@ -1434,9 +1453,6 @@ set splitbelow
 " go file, but avoiding error message about leaving unsaved buffer
 " map gf :edit <cfile><CR>
 nnoremap gf :wincmd f<cr>
-
-" use ,gf to go to file in a vertical split
-nnoremap <silent> <leader>gf :vertical botright wincmd f<CR>
 
 " NARROW REGION
 
@@ -1480,12 +1496,12 @@ nnoremap <C-e> 3<C-e>
 nnoremap <C-y> 3<C-y>
 
 " tags
-nnoremap <c-g> :CtrlPTag<cr>
+"<esc>nnoremap <c-g> :CtrlPTag<cr>
 
 " change list
-nnoremap <c-q> :CtrlPChangeAll<cr>
+"<esc>nnoremap <c-q> :CtrlPChangeAll<cr>
 
-nmap <silent> :: :CtrlPCurWD<CR>
+"<esc>nmap <silent> :: :CtrlPCurWD<CR>
 
 "Move back and forth through previous and next buffers
 nnoremap <silent> xz :bp<CR>
@@ -1494,54 +1510,54 @@ nnoremap <silent> zx :bn<CR>
 " CTRL-P
 "========
 
-let g:ctrlp_custom_ignore = {
-      \ 'dir':  'private|core\/static',
-      \ 'file': '\.map$',
-      \ }
+"<esc>let g:ctrlp_custom_ignore = {
+      " \ 'dir':  'private|core\/static',
+      " \ 'file': '\.map$',
+      " \ }
 
-let g:ctrlp_user_command = {
-      \ 'types': {
-      \ 1: ['.git', 'cd %s && git ls-files'],
-      \ },
-      \ 'fallback': 'find %s -type f'
-      \ }
+"<esc>let g:ctrlp_user_command = {
+      " \ 'types': {
+      " \ 1: ['.git', 'cd %s && git ls-files'],
+      " \ },
+      " \ 'fallback': 'find %s -type f'
+      " \ }
 
-nmap <c-f> :CtrlPMRU<cr>
-nmap <leader>p :CtrlPMRU<cr>
+"<esc>nmap <c-f> :CtrlPMRU<cr>
+"<esc>nmap <leader>p :CtrlPMRU<cr>
 
-let g:ctrlp_cmd = 'CtrlPMixed'      " search anything (in files, buffers and MRU files at the same time.)
-let g:ctrlp_working_path_mode = 'ra'  " search for nearest ancestor like .git, .hg, and the directory of the current file
+"<esc>"<esc>let g:ctrlp_cmd = 'CtrlPMixed'      " search anything (in files, buffers and MRU files at the same time.)
+"<esc>let g:ctrlp_working_path_mode = 'ra'  " search for nearest ancestor like .git, .hg, and the directory of the current file
 
-" TIP: create new files using C-E from within CtrlP picker
+"<esc>" TIP: create new files using C-E from within CtrlP picker
 
 " Default to file searches
-let g:ctrlp_by_filename = 0
+"<esc>let g:ctrlp_by_filename = 0
 " switch to path search with ctrl-d inside plugin
 
 " We don't want to use Ctrl-p as the mapping because
 " it interferes with YankRing (paste, then hit ctrl-p)
-let g:ctrlp_map = ',0'
+"<esc>let g:ctrlp_map = ',0'
 
-let g:ctrlp_open_new_file = 'v'
-let g:ctrlp_open_multiple_files = 'v'
+"<esc>let g:ctrlp_open_new_file = 'v'
+"<esc>let g:ctrlp_open_multiple_files = 'v'
 
 " open switcher with project root directory (determined by location of .git folder)
-" let g:ctrlp_working_path_mode = 2
+"<esc>" let g:ctrlp_working_path_mode = 2
 
 " open files in existing buffers if they are already opened
-let g:ctrlp_switch_buffer = 'et'
+"<esc>let g:ctrlp_switch_buffer = 'et'
 
-let g:ctrlp_use_caching = 1
-let g:ctrlp_clear_cache_on_exit=0     " speed up by not removing clearing cache evertime
-let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
-let g:ctrlp_dotfiles = 1
-let g:ctrlp_max_depth = 20
-let g:ctrlp_mruf_max = 200
+"<esc>let g:ctrlp_use_caching = 1
+"<esc>let g:ctrlp_clear_cache_on_exit=0     " speed up by not removing clearing cache evertime
+"<esc>let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
+"<esc>let g:ctrlp_dotfiles = 1
+"<esc>let g:ctrlp_max_depth = 20
+"<esc>let g:ctrlp_mruf_max = 200
 "
 " coffee: https://gist.github.com/michaelglass/5210282
-let g:ctrlp_buftag_types = {
-\ 'coffee'     : '--language-force=coffee --coffee-types=cmfvf',
-\ }
+"<esc>let g:ctrlp_buftag_types = {
+" \ 'coffee'     : '--language-force=coffee --coffee-types=cmfvf',
+" \ }
 
 " NERDTREE
 
@@ -1555,23 +1571,14 @@ let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn'
 let NERDTreeMouseMode=2
 let NERDTreeShowHidden=1
 
-
-" nmap <tab><tab> :NERDTreeTabsToggle<cr>
-
-" current file in NERDTree
-noremap <leader>. :NERDTreeFind<cr>
-
-noremap <Leader>b :NERDTreeFromBookmark<space>
-noremap <c-b> :CtrlPBuffer<cr>
-
 " Auto open nerd tree on startup
 let g:nerdtree_tabs_open_on_gui_startup = 0
 " Focus in the main content window
 let g:nerdtree_tabs_focus_on_files = 1
 
-" 
+"
 
-" COMMAND MODE 
+" COMMAND MODE
 
 set history=1000               " Store lots of :cmdline history
 set cmdheight=2                " avoid 'Press ENTER to continue'
@@ -1597,9 +1604,9 @@ cmap   <script> <C-T> <SID>transposition<SID>transpose
 " use ESC to exit cmdline window
 autocmd CmdwinEnter * nnoremap <buffer> <esc> :q<cr>
 
-" 
+"
 
-" COMMENTING 
+" COMMENTING
 
 " comment paragraph
 " nmap <c-\> \\ip
@@ -1616,9 +1623,9 @@ nmap gyy mz:t-1<cr><c-\>`z:delmarks z<cr>
 imap gyy <esc>:t-1<cr>gCcgi
 " Using :t-1 instead of yyP to preserve registers
 
-" 
+"
 
-" COMPLETION 
+" COMPLETION
 
 let g:UltiSnipsSnippetDirectories=["snippets"]
 nnoremap <leader>ue :UltiSnipsEdit<cr>
@@ -1679,7 +1686,7 @@ let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+" autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
@@ -1697,9 +1704,9 @@ set completefunc=syntaxcomplete#Complete
 " Better Completion
 set completeopt=longest,menuone,preview
 
-" 
+"
 
-" DIFF 
+" DIFF
 
 nmap <leader>D :windo diffthis<cr>
 
@@ -1775,7 +1782,7 @@ nmap <silent> <leader>dc :call DiffToggle(2)<cr>
 nmap <silent> <leader>dr :call DiffToggle(3)<cr>
 
 
-" Diff two registers 
+" Diff two registers
 " Open a diff of two registers in a new tabpage. Close the tabpage when
 " finished. If no registers are specified it diffs the most recent yank with
 " the most recent deletion.
@@ -1798,11 +1805,11 @@ function! DiffRegsFunc(...)
 endfunction
 com -nargs=* DiffRegs call DiffRegsFunc(<f-args>)
 
-" 
+"
 
-" 
+"
 
-" MARKS 
+" MARKS
 
 set viminfo='100,f1            " Save up to 100 marks, enable capital marks
 
@@ -1842,14 +1849,14 @@ else
     let &t_SI = "\<Esc>]50;CursorShape=1\x7"
     let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
- 
- 
- 
- 
 
-" 
 
-" NAVIGATION 
+
+
+
+"
+
+" NAVIGATION
 
 " next text object
 " ================================================================================
@@ -1911,24 +1918,24 @@ augroup cline
   au InsertLeave * set cursorline
 augroup END
 
-" 
+"
 
-" PYTHON 
+" PYTHON
 
 augroup ft_python
   au!
   autocmd BufNewFile,BufRead *.py set filetype=python
   autocmd FileType python set expandtab
   " compile
-  autocmd Filetype python nmap <buffer> <leader>cc :w<Esc>:!python %<CR>
+  " autocmd Filetype python nmap <buffer> <leader>cc :w<Esc>:!python %<CR>
 augroup END
 
-autocmd BufRead *.py set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
+" autocmd BufRead *.py set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
 
 let pymode_options=0
-" 
+"
 
-" SEARCH 
+" SEARCH
 
 " Use sane regexes.
 nnoremap / /\v
@@ -1945,8 +1952,8 @@ set smartcase           " ...but if mixed case, go case-sensitive
 set gdefault            " Add the g flag to search/replace by default
 
 " Open a (CtrlP'ed) Quickfix window for the last search.
-nnoremap <silent> KS :execute 'vimgrep /'.@/.'/g %'<CR>:CtrlPQuickfix<CR>
-vnoremap <silent> KS *:execute 'vimgrep /'.@/.'/g %'<CR>:CtrlPQuickfix<CR>
+nnoremap <silent> KS :execute 'vimgrep /'.@/.'/g %'<CR>:Unite quickfix<CR>
+vnoremap <silent> KS *:execute 'vimgrep /'.@/.'/g %'<CR>:Unite quickfix<CR>
 
 " do visual-search and KS at once
 vmap 8 *KS
@@ -2029,7 +2036,7 @@ nnoremap & :&&<cr>
 xnoremap & :&&<cr>
 
 " toggle quickfix window
-nnoremap qq :CtrlPQuickfix<cr>
+nnoremap qq :Unite quickfix<cr>
 nmap <silent> <leader>fc :cclose<CR>
 nmap <silent> <leader>fo :copen<CR>
 
@@ -2038,9 +2045,9 @@ let g:tlWindowPosition=1
 
 let g:seek_enable_jumps = 1
 
-" 
+"
 
-" SPELLING 
+" SPELLING
 
 " nmap <silent> <leader><leader>s :setlocal spell!<cr>
 
@@ -2055,9 +2062,9 @@ iabbr teh the
 iabbr nign ning
 iabbr lenght length
 
-" 
+"
 
-" SYNTAX 
+" SYNTAX
 
 syntax on
 syntax enable                  " turn on syntax highlighting
@@ -2092,9 +2099,9 @@ autocmd BufNewFile,BufRead *.csv set noexpandtab nosmarttab
 " Don't try to highlight lines longer than 800 characters.
 set synmaxcol=800
 
-" 
+"
 
-" TABS 
+" TABS
 
 nmap <leader><tab> :tabnew<cr>
 
@@ -2109,9 +2116,9 @@ nmap <leader>tc :tabclose<cr>
 " :tabmove 1      Move current tab to become the 2nd tab
 
 
-" 
+"
 
-" TAGS 
+" TAGS
 
 " Look for tags file in parent directories, upto "/"
 set tags=./tags;tags;.git/;/
@@ -2124,8 +2131,15 @@ nmap ]t :bd<cr>:tnext<cr>
 " Jump to previous tag match
 nmap [t :bd<cr>:tprevious<cr>
 
-"open the taglist
-nnoremap <silent> T :TagbarToggle<CR><C-l>
+
+" jump to current tag
+nnoremap <silent> T :UniteWithCursorWord -immediately tag<cr>
+
+" open file (from cs require)
+nnoremap <silent> <leader>gf "zyi':Unite file_rec/async file_mru -no-start-insert -immediately -input=<c-r>z<cr>
+
+" open the taglist
+nnoremap <silent> <leader>T :TagbarToggle<CR><C-l>
 
 let g:tagbar_width=44
 let g:tagbar_autoclose = 1
@@ -2137,9 +2151,9 @@ let g:tagbar_compact = 1
 " capture cursor on popup
 let g:tagbar_autofocus = 1
 
-" 
+"
 
-" TERMINAL 
+" TERMINAL
 
 set shell=zsh
 
@@ -2163,19 +2177,19 @@ nmap <leader>rs :InterruptVimTmuxRunner<cr>
 nmap <silent> <leader>w :up<cr>:silent! RunLastVimTmuxCommand<cr>
 
 
-" 
+"
 
-" NGINX 
+" NGINX
 
 autocmd BufRead nginx.conf set filetype=nginx
 
-" 
+"
 
 nmap <leader>BDB /data-bind=\".*\"<cr><c-e><c-s>
 nmap <leader>BCL /console\.log<cr><c-e><c-s>
 nmap <leader>BCC /^class<cr><c-e><c-l>
 
-" VIMWIKI 
+" VIMWIKI
 
 " keep track of several wikis
 " let g:vimwikilist=""
@@ -2184,15 +2198,168 @@ nmap <leader>BCC /^class<cr><c-e><c-l>
 " ,w,w diary today (,w,t in tab)
 " ,wh convert current page to HTML (,whh: and open)
 
-" 
+"
 
-" HASKELL 
+" HASKELL
 
 au BufEnter *.hs compiler ghc
 let g:haddock_browser="/Application/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 
-" 
+"
+
+" UNITE
+
+
+" Start in insert mode
+let g:unite_enable_start_insert = 1
+
+" Enable short source name in window
+let g:unite_enable_short_source_names = 1
+
+" Enable history yank source
+let g:unite_source_history_yank_enable = 1
+
+" Open in bottom right
+let g:unite_split_rule = "botright"
+
+" Shorten the default update date of 500ms
+let g:unite_update_time = 200
+
+let g:unite_source_file_mru_limit = 1000
+let g:unite_cursor_line_highlight = 'TabLineSel'
+
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+
+
+nnoremap <leader>p :Unite -no-split -buffer-name=all buffer file_mru file_rec/async:!<cr>
+nnoremap <leader>r :Unite -buffer-name=mru file_mru<cr>
+nnoremap <c-f> :Unite -buffer-name=mru file_mru<cr>
+nnoremap <leader>o :Unite -no-split -buffer-name=outline outline<cr>
+nnoremap <leader>t :Unite -no-split -buffer-name=tags tag<cr>
+nnoremap <leader>f :Unite -no-split -buffer-name=files file<cr>
+nnoremap <leader>b :Unite -no-split -buffer-name=buffer buffer<cr>
+nnoremap <leader>R :Unite -no-split -buffer-name=register register<cr>
+nnoremap <leader>P :Unite -no-split -buffer-name=sessions session<CR>
+" nnoremap <leader>u :Unite -no-split -buffer-name=sources source<CR>
+nnoremap <leader>y :Unite -no-split -buffer-name=yank    history/yank<cr>
+nnoremap <leader>h :Unite -no-split -buffer-name=help help<CR>
+" nnoremap <leader>l :UniteWithCursorWord -no-split -buffer-name=search_file line<CR>
+nnoremap <leader>c :Unite -no-split -buffer-name=commands history/command command<CR>
+" nnoremap <leader>b :Unite -no-split -buffer-name=bookmarks bookmark<CR>
+nnoremap <leader>d :Unite -buffer-name=change-cwd -default-action=lcd directory_mru<CR>
+nnoremap <silent> <leader>/  :Unite -no-split -buffer-name=search line<CR>
+nnoremap <silent> <leader><leader>/  :Unite -no-split grep:.<CR>
+nnoremap <silent> q/  :Unite -no-split history/search<CR>
+nnoremap <leader>U  :Unite<space>
+nnoremap <leader>M :Unite giti/status<cr>
+nnoremap <leader>B :Unite giti/branch_all<cr>
+nnoremap <leader>L :Unite giti/log -default-action=yank_hash<cr>
+
+" Custom Unite settings
+autocmd FileType unite call s:unite_settings()
+function! s:unite_settings()
+
+  echo 'setting unite keys'
+  nmap <buffer> <ESC> <Plug>(unite_exit)
+  imap <buffer> <ESC> <Plug>(unite_exit)
+  " imap <buffer> <c-j> <Plug>(unite_select_next_line)
+  imap <buffer> <c-j> <Plug>(unite_insert_leave)
+  nmap <buffer> <c-j> <Plug>(unite_loop_cursor_down)
+  nmap <buffer> <c-k> <Plug>(unite_loop_cursor_up)
+  nmap <buffer> <c-v> <Plug>(unite_loop_cursor_up)
+  imap <buffer> <c-a> <Plug>(unite_choose_action)
+  imap <buffer> <c-d> <Plug>(unite_select_next_page)
+  imap <buffer> <c-u> <Plug>(unite_select_previous_page)
+  imap <buffer> <Tab> <Plug>(unite_exit_insert)
+  imap <buffer> jj <Plug>(unite_insert_leave)
+  imap <buffer> <C-w> <Plug>(unite_delete_backward_word)
+  nmap <buffer> h   <Plug>(unite_delete_backward_path)
+  imap <buffer> <C-z>   <Plug>(unite_toggle_mark_current_candidate)
+  imap <buffer> '     <Plug>(unite_quick_match_default_action)
+  nmap <buffer> '     <Plug>(unite_quick_match_default_action)
+  nmap <buffer> <C-r> <Plug>(unite_redraw)
+  imap <buffer> <C-r> <Plug>(unite_redraw)
+  inoremap <buffer><expr> <C-s> unite#do_action('split')
+  nnoremap <buffer><expr> <C-s> unite#do_action('split')
+  inoremap <buffer><expr> <C-v> unite#do_action('vsplit')
+  nnoremap <buffer><expr> <C-v> unite#do_action('vsplit')
+
+  let unite = unite#get_current_unite()
+  if unite.buffer_name =~# '^search'
+    nnoremap <silent><buffer><expr> r     unite#do_action('replace')
+  else
+    nnoremap <silent><buffer><expr> r     unite#do_action('rename')
+  endif
+
+  nnoremap <silent><buffer><expr> cd     unite#do_action('lcd')
+endfunction
+
+" Custom Unite settings
+autocmd FileType unite call s:unite_settings()
+
+
+nnoremap <leader>e :VimFilerCurrentDir<cr>
+
+" Custom mappings for the unite buffer
+autocmd FileType unite call s:unite_settings()
+function! s:unite_settings()
+  " Play nice with supertab
+  let b:SuperTabDisabled=1
+  " Enable navigation with control-j and control-k in insert mode
+  imap <buffer> <C-j>   <Plug>(unite_select_next_line)
+  imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
+endfunction
+
+let g:unite_source_grep_max_candidates = 200
+
+if executable('ag')
+  " Use ag in unite grep source.
+  let g:unite_source_grep_command = 'ag'
+  let g:unite_source_grep_default_opts = '--nocolor --nogroup --hidden'
+  let g:unite_source_grep_recursive_opt = ''
+elseif executable('ack-grep')
+  " Use ack in unite grep source.
+  let g:unite_source_grep_command = 'ack-grep'
+  let g:unite_source_grep_default_opts = '--no-heading --no-color -a'
+  let g:unite_source_grep_recursive_opt = ''
+endif
+
+" let g:unite_source_session_enable_auto_save = 1
+" Load session automatically.
+" autocmd VimEnter * UniteSessionLoad
+"
+" Use the fuzzy matcher for everything
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+
+" Use the rank sorter for everything
+call unite#filters#sorter_default#use(['sorter_rank'])
+
+" Set up some custom ignores
+call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
+      \ 'ignore_pattern', join([
+      \ '\.git/',
+      \ ], '\|'))
+
+
+let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_tree_leaf_icon = ' '
+let g:vimfiler_tree_opened_icon = '▾'
+let g:vimfiler_tree_closed_icon = '▸'
+let g:vimfiler_marked_file_icon = '✓'
+let g:my_vimfiler_explorer_name = 'explorer'
+let g:my_vimfiler_winwidth = 30
+let g:vimfiler_safe_mode_by_default = 0
+let g:vimfiler_directory_display_top = 1
+
+autocmd FileType vimfiler call s:vimfiler_settings()
+function! s:vimfiler_settings()
+  nmap     <buffer><expr><CR>  vimfiler#smart_cursor_map("\<PLUG>(vimfiler_expand_tree)", "e")
+  nmap     za <Plug>(vimfiler_toggle_visible_dot_files)
+endfunction
+
+nnoremap <leader>gS :Unite file_rec/async -input=<C-R>=expand("%:t:r")<cr>_spec<cr>
 
 source ~/dotfiles/vim/colors.vim
+
 
 " vim:set foldmethod=marks; set foldenable
