@@ -1,5 +1,4 @@
-" BUNDLES
-
+" bundles
 set nocompatible
 filetype off
 
@@ -13,23 +12,30 @@ call neobundle#rc(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " file management
-" NeoBundle 'kien/ctrlp.vim'
-" NeoBundle 'istib/vifm.vim'
+NeoBundle 'kien/ctrlp.vim'
+NeoBundle 'istib/vifm.vim'
 NeoBundle 'vim-scripts/LargeFile'
-NeoBundle 'kana/vim-altr'
+" NeoBundle 'kana/vim-altr'
 
 NeoBundle 'Shougo/vimproc.vim'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler.vim'
 NeoBundle 'Shougo/unite-outline'
+NeoBundle 'osyo-manga/unite-fold'
 NeoBundle 'Shougo/unite-help'
 NeoBundle 'Shougo/unite-session'
+NeoBundle 'tacroe/unite-mark'
+NeoBundle 'osyo-manga/unite-filetype'
 NeoBundle 'osyo-manga/unite-quickfix'
 NeoBundle 'thinca/vim-unite-history'
-NeoBundle 'hrsh7th/vim-versions'
+" NeoBundle 'hrsh7th/vim-versions'
+" NeoBundle 'Shougo/unite-ssh'
+" NeoBundle 'osyo-manga/unite-env'
+NeoBundle 'Shougo/vimshell.vim'
+
 
 " tag support
-NeoBundle 'majutsushi/tagbar'
+" NeoBundle 'majutsushi/tagbar'
 NeoBundle 'tsukkee/unite-tag'
 
 " git tools
@@ -38,11 +44,9 @@ NeoBundle 'gregsexton/gitv'
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'vim-scripts/DirDiff.vim'
 NeoBundle 'kmnk/vim-unite-giti'
-" NeoBundle 'AndrewRadev/linediff.vim'
+NeoBundle 'moznion/unite-git-conflict.vim'
 " NeoBundle 'mattn/gist-vim'
-" NeoBundle 'tpope/vim-git'
-" NeoBundle 'jasoncodes/ctrlp-modified.vim'
-" NeoBundle 'mmozuras/vim-github-comment'
+" gist
 
 " snippets and completion
 NeoBundle 'SirVer/ultisnips'
@@ -65,7 +69,8 @@ NeoBundle 'danro/rename.vim'
 NeoBundle 'kshenoy/vim-signature'
 NeoBundle 'vim-scripts/highlight.vim'
 NeoBundle 'delimitMate.vim'
-NeoBundle 'terryma/vim-smooth-scroll'
+" NeoBundle 'terryma/vim-smooth-scroll'
+" NeoBundle 'terryma/vim-multiple-cursors'
 " NeoBundle 'vim-scripts/bufkill.vim'
 " NeoBundle 'dhruvasagar/vim-table-mode'
 
@@ -78,75 +83,68 @@ NeoBundle 'terryma/vim-smooth-scroll'
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'zeekay/vim-js2coffee'
 " LiveScript
-" NeoBundle 'gkz/vim-ls'
+NeoBundle 'gkz/vim-ls'
 
 " web development
 NeoBundle 'tristen/vim-sparkup'
+NeoBundle 'edsono/vim-matchit'
 " NeoBundle 'mattn/zencoding-vim'
 " NeoBundle 'vim-scripts/closetag.vim'
-NeoBundle 'edsono/vim-matchit'
-" NeoBundle 'vim-scripts/AutoTag'
+" NeoBundle 'vim-scripts/autotag'
 NeoBundle 'leshill/vim-json'
-NeoBundle 'groenewege/vim-less'
-NeoBundle 'nginx.vim'
-" NeoBundle 'jaxbot/brolink.vim'
-" NeoBundle 'nono/vim-handlebars'
 NeoBundle 'wavded/vim-stylus'
+NeoBundle 'groenewege/vim-less'
+" NeoBundle 'skammer/vim-css-color'
 NeoBundle 'digitaltoad/vim-jade'
+" NeoBundle 'jaxbot/brolink.vim'
 " NeoBundle 'skwp/vim-html-escape'
-" NeoBundle 'mattn/webapi-vim'
-" access dash help in OSX
-NeoBundle 'rizzatti/funcoo.vim'
-NeoBundle 'rizzatti/dash.vim'
-NeoBundle 'pasela/unite-webcolorname'
 
-" NeoBundle 'jcf/vim-latex'
+" access dash help in osx
+" NeoBundle 'rizzatti/funcoo.vim'
+" NeoBundle 'rizzatti/dash.vim'
 
-" helpers to handle REPLs and running unit tests in tmux
-NeoBundle 'ervandew/screen'
-NeoBundle 'benmills/vimux'
-" NeoBundle 'nvie/vim_bridge'
+" helpers to handle repls and running unit tests in tmux
+" NeoBundle 'ervandew/screen'
+" NeoBundle 'benmills/vimux'
 " NeoBundle 'tpope/vim-dispatch'
+" NeoBundle 'nvie/vim_bridge'
 " NeoBundle 'tpope/vim-tbone'
 
 NeoBundle 'kana/vim-textobj-entire'
 NeoBundle 'kana/vim-textobj-fold'
 NeoBundle 'kana/vim-textobj-indent'
 NeoBundle 'kana/vim-textobj-user'
-NeoBundle 'kana/vim-textobj-diff'
+" NeoBundle 'kana/vim-textobj-diff'
 NeoBundle 'gilligan/textobj-gitgutter'
 
 NeoBundle 'MarcWeber/vim-addon-mw-utils'
 NeoBundle 'vim-scripts/utl.vim'
-" NeoBundle 'tpope/vim-speeddating'
 " NeoBundle 'vim-scripts/marvim'
-
-" NeoBundle 'myusuf3/numbers.vim'
-" NeoBundle 'sjl/gundo.vim'
-NeoBundle 'vim-scripts/ZoomWin'
 
 " Search
 NeoBundle 'henrik/git-grep-vim'
-NeoBundle 'vim-scripts/grep.vim'
 NeoBundle 'bronson/vim-visual-star-search'
 NeoBundle 'henrik/vim-indexed-search'
 NeoBundle 'nelstrom/vim-qargs'
 NeoBundle 'tpope/vim-abolish'
 NeoBundle 'rking/ag.vim'
-NeoBundle 'goldfeld/vim-seek'
 
 " Appearance
 NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'Lokaltog/vim-powerline'
-NeoBundle 'zhaocai/linepower.vim'
-" NeoBundle 'bling/vim-airline'
+NeoBundle 'bling/vim-airline'
 
-" Extras
+NeoBundle 'tpope/vim-fireplace'
+NeoBundle 'guns/vim-clojure-static'
+NeoBundle 'kien/rainbow_parentheses.vim'
+
+" extras
 " NeoBundle 'jtratner/vim-flavored-markdown'
 " NeoBundle 'jceb/vim-orgmode'
 " NeoBundle 'vim-scripts/vimwiki'
 " NeoBundle 'lukerandall/haskellmode-vim'
 " NeoBundle 'ledger/vim-ledger'
+" NeoBundle 'jcf/vim-latex'
+
 
 "
 
@@ -231,6 +229,11 @@ autocmd BufReadPost *
 map <silent> <leader>n :set number!<CR>
 map <silent> <leader>N :NumbersToggle<CR>
 
+" nmap <silent> <c-p> <plug>yankstack_substitute_older_paste
+" nmap <silent> <c-n> <plug>yankstack_substitute_newer_paste
+" let g:yankstack_map_keys = 0
+" let g:yankstack_did_setup = 1
+" call yankstack#setup() " call this explicitly so conflicting mappings can be defined in this file
 let g:yankring_history_dir = '$HOME'
 let g:yankring_history_file = '.yankring-history'
 let g:yankring_max_history = 300
@@ -310,8 +313,8 @@ vnoremap > >gv
 " delete last character of line
 nnoremap d. $x0
 
-noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 2)<CR>
-noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR>
+" noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 2)<CR>
+" noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR>
 
 
 " SWITCH plugin
@@ -353,6 +356,7 @@ set autoread                   " Reload files changed outside vim
 
 " Save when buffers lose focus
 au BufLeave * silent! :up
+au InsertLeave * silent! :up
 
 " nnoremap <leader>M :set modifiable<cr>
 " nnoremap <leader>M :make<cr>
@@ -426,14 +430,7 @@ endfunction
 
 nnoremap <silent> Q :call CloseWindowOrKillBuffer()<CR>
 
-set autochdir
-
-if exists('+autochdir')
-  " so :e is relative to current file
-  set autochdir
-else
-  autocmd BufEnter * silent! lcd %:p:h:gs/ /\\ /
-endif
+autocmd BufEnter * silent! lcd %:p:h:gs/ /\\ /
 
 " Open URL
 command -bar -nargs=1 OpenURL :!open <args>
@@ -455,8 +452,8 @@ let g:LargeFile=5
 nmap <c-n><c-n> <Plug>(altr-forward)
 
 " sample definition for jade and stylus templates
-call altr#define('%.jade', '../styles/%.styl')
-call altr#define('%.styl', '../templates/%.jade')
+" call altr#define('%.jade', '../styles/%.styl')
+" call altr#define('%.styl', '../templates/%.jade')
 
 
 
@@ -651,6 +648,28 @@ colorscheme solarized
 let g:solarized_termtrans = 1
 let g:solarized_contrast = 'high'
 
+let g:airline_enable_fugitive=1
+let g:airline_enable_syntastic=1
+" themes: dark, light, simple, badwolf, solarized, solarized2
+let g:airline_theme='dark'
+let g:airline_left_sep = 'badwolf'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_linecolumn_prefix = '␊ '
+let g:airline_linecolumn_prefix = '␤ '
+let g:airline_linecolumn_prefix = '¶ '
+let g:airline_fugitive_prefix = '⎇ '
+let g:airline_paste_symbol = 'ρ'
+let g:airline_paste_symbol = 'þ'
+let g:airline_paste_symbol = '∥'
+let g:airline_section_a = ''
+let g:airline_section_x = ''
+let g:airline_section_y = ''
+" let g:airline_section_y = '%{getcwd()}'
+let g:airline_section_z = ''
+let g:airline_powerline_fonts=1
+
 " colorscheme jellybeans
 
 " Auto-detect solarized setting from the SOLARIZED env var
@@ -701,11 +720,11 @@ set mouse=a
 map <leader>HI :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
 
 " POWERLINE
-let g:Powerline_symbols='fancy'
-let g:Powerline_theme='solarized256'
-let g:Powerline_colorscheme='solarized256'
+" let g:Powerline_symbols='fancy'
+" let g:Powerline_theme='solarized256'
+" let g:Powerline_colorscheme='solarized256'
 
-" let g:airline_powerline_fonts=0
+let g:airline_powerline_fonts=1
 
 " Unfuck my screen
 nnoremap <leader>u :syntax sync fromstart<cr>:redraw!<cr>
@@ -760,7 +779,6 @@ endfunction
 " CONFIG
 
 nmap <leader>ve :tabedit ~/dotfiles/vim/vimrc.vim<cr>
-nmap <leader>V :NERDTree ~/dotfiles/vim/bundle/<cr>
 " automatically reread Vim's configuration after writing it
 " autocmd! BufWritePost ~/dotfiles/vim/vimrc.vim source ~/dotfiles/vim/vimrc.vim
 
@@ -795,10 +813,6 @@ autocmd FileType stylus :DashKeywords css
 
 set undodir=~/.vim/backups     " Keep undo history across sessions, by storing in file.
 set undofile
-
-" GUndo
-nmap <silent> <leader>U :GundoToggle<CR>
-
 
 
 " CLOJURE
@@ -1178,18 +1192,9 @@ let g:github_user = 'istib'
 " XML encode (unimpaired)
 " {Visual}[x
 
-" ,he - Html Escape
-" ,hu - Html Unescape
-
-" :ColorToggle - turn on #abc123 color highlighting (useful for css)
-
-" shortcut to operate on tag inside
-omap t it
 " prevent c-n mapping conflict
 let g:sparkupNextMapping=""
 
-
-"
 
 " JSON
 
@@ -1496,12 +1501,12 @@ nnoremap <C-e> 3<C-e>
 nnoremap <C-y> 3<C-y>
 
 " tags
-"<esc>nnoremap <c-g> :CtrlPTag<cr>
+"nnoremap <c-g> :CtrlPTag<cr>
 
 " change list
-"<esc>nnoremap <c-q> :CtrlPChangeAll<cr>
+"nnoremap <c-q> :CtrlPChangeAll<cr>
 
-"<esc>nmap <silent> :: :CtrlPCurWD<CR>
+"nmap <silent> :: :CtrlPCurWD<CR>
 
 "Move back and forth through previous and next buffers
 nnoremap <silent> xz :bp<CR>
@@ -1510,52 +1515,51 @@ nnoremap <silent> zx :bn<CR>
 " CTRL-P
 "========
 
-"<esc>let g:ctrlp_custom_ignore = {
-      " \ 'dir':  'private|core\/static',
-      " \ 'file': '\.map$',
-      " \ }
+let g:ctrlp_custom_ignore = {
+      \ 'dir':  'private|core\/static',
+      \ 'file': '\.map$',
+      \ }
 
-"<esc>let g:ctrlp_user_command = {
-      " \ 'types': {
-      " \ 1: ['.git', 'cd %s && git ls-files'],
-      " \ },
-      " \ 'fallback': 'find %s -type f'
-      " \ }
+let g:ctrlp_user_command = {
+      \ 'types': {
+      \ 1: ['.git', 'cd %s && git ls-files'],
+      \ },
+      \ 'fallback': 'find %s -type f'
+      \ }
 
-"<esc>nmap <c-f> :CtrlPMRU<cr>
-"<esc>nmap <leader>p :CtrlPMRU<cr>
+nmap <leader>f :CtrlPMRU<cr>
 
-"<esc>"<esc>let g:ctrlp_cmd = 'CtrlPMixed'      " search anything (in files, buffers and MRU files at the same time.)
-"<esc>let g:ctrlp_working_path_mode = 'ra'  " search for nearest ancestor like .git, .hg, and the directory of the current file
+""let g:ctrlp_cmd = 'CtrlPMixed'      " search anything (in files, buffers and MRU files at the same time.)
+"let g:ctrlp_working_path_mode = 'ra'  " search for nearest ancestor like .git, .hg, and the directory of the current file
 
-"<esc>" TIP: create new files using C-E from within CtrlP picker
+"" TIP: create new files using C-E from within CtrlP picker
 
 " Default to file searches
-"<esc>let g:ctrlp_by_filename = 0
+"let g:ctrlp_by_filename = 0
 " switch to path search with ctrl-d inside plugin
 
 " We don't want to use Ctrl-p as the mapping because
 " it interferes with YankRing (paste, then hit ctrl-p)
-"<esc>let g:ctrlp_map = ',0'
+"let g:ctrlp_map = ',0'
 
-"<esc>let g:ctrlp_open_new_file = 'v'
-"<esc>let g:ctrlp_open_multiple_files = 'v'
+"let g:ctrlp_open_new_file = 'v'
+"let g:ctrlp_open_multiple_files = 'v'
 
 " open switcher with project root directory (determined by location of .git folder)
-"<esc>" let g:ctrlp_working_path_mode = 2
+"" let g:ctrlp_working_path_mode = 2
 
 " open files in existing buffers if they are already opened
-"<esc>let g:ctrlp_switch_buffer = 'et'
+"let g:ctrlp_switch_buffer = 'et'
 
-"<esc>let g:ctrlp_use_caching = 1
-"<esc>let g:ctrlp_clear_cache_on_exit=0     " speed up by not removing clearing cache evertime
-"<esc>let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
-"<esc>let g:ctrlp_dotfiles = 1
-"<esc>let g:ctrlp_max_depth = 20
-"<esc>let g:ctrlp_mruf_max = 200
+"let g:ctrlp_use_caching = 1
+"let g:ctrlp_clear_cache_on_exit=0     " speed up by not removing clearing cache evertime
+"let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
+"let g:ctrlp_dotfiles = 1
+"let g:ctrlp_max_depth = 20
+"let g:ctrlp_mruf_max = 200
 "
 " coffee: https://gist.github.com/michaelglass/5210282
-"<esc>let g:ctrlp_buftag_types = {
+"let g:ctrlp_buftag_types = {
 " \ 'coffee'     : '--language-force=coffee --coffee-types=cmfvf',
 " \ }
 
@@ -1583,8 +1587,9 @@ let g:nerdtree_tabs_focus_on_files = 1
 set history=1000               " Store lots of :cmdline history
 set cmdheight=2                " avoid 'Press ENTER to continue'
 
-" shortcut to reverse search history (like c-r in terminal)
-nmap q: :<c-f>?
+nmap q: :Unite history/command<cr>
+nmap q/ :Unite history/search<cr>
+nmap q" :Unite history/yank<cr>
 
 " filter command line history with c-p and c-n
 cnoremap <C-p> <Up>
@@ -1628,7 +1633,7 @@ imap gyy <esc>:t-1<cr>gCcgi
 " COMPLETION
 
 let g:UltiSnipsSnippetDirectories=["snippets"]
-nnoremap <leader>ue :UltiSnipsEdit<cr>
+nnoremap <leader>UE :UltiSnipsEdit<cr>
 
 " tab completion for e.g. :e is awesome with these
 set wildmode=list:longest,full
@@ -1708,13 +1713,16 @@ set completeopt=longest,menuone,preview
 
 " DIFF
 
+nmap dp :diffput<cr>
+nmap do :diffget<cr>
+
 nmap <leader>D :windo diffthis<cr>
 
 " set fillchars=diff:⣿,vert:│
 set fillchars=diff:_,vert:│,fold:_
 
 " Find merge conflict markers
-map <leader>fc /\v^[<=>]{7}( .*\|$)<cr>
+" map <leader>fc /\v^[<=>]{7}( .*\|$)<cr>
 
 " IN VIMDIFF BUFFER
 
@@ -1952,24 +1960,34 @@ set smartcase           " ...but if mixed case, go case-sensitive
 set gdefault            " Add the g flag to search/replace by default
 
 " Open a (CtrlP'ed) Quickfix window for the last search.
-nnoremap <silent> KS :execute 'vimgrep /'.@/.'/g %'<CR>:Unite quickfix<CR>
-vnoremap <silent> KS *:execute 'vimgrep /'.@/.'/g %'<CR>:Unite quickfix<CR>
+" nnoremap <silent> KS :execute 'vimgrep /'.@/.'/g %'<CR>:Unite quickfix<CR>
+" vnoremap <silent> KS *:execute 'vimgrep /'.@/.'/g %'<CR>:Unite quickfix<CR>
 
 " do visual-search and KS at once
 vmap 8 *KS
 vmap n *
 
-" Use Ack instead of Grep when available
-if executable("ack")
-  set grepprg=ack\ -H\ --nogroup\ --nocolor
-endif
+" " Use Ack instead of Grep when available
+" if executable("ack")
+"   set grepprg=ack\ -H\ --nogroup\ --nocolor
+" endif
 
 nnoremap KC :GitGrep <c-r><c-w><CR>
 vnoremap KC "sy:GitGrep "<c-r>s"<CR>
 
+" nnoremap KA :GitGrep ""<left>
+" vnoremap KA "sy:GitGrep "<c-r>s"<CR>
+" nnoremap KL :GitGrep "<c-r>/"<cr>
+
+
+" vnoremap KC "sy:GitGrep "<c-r>s"<CR>
+" vnoremap KC "sy:Unite -input=<C-R>y grep:.<cr>
+
 nnoremap KA :GitGrep ""<left>
+nnoremap <silent> KA  :Unite -no-split grep:.<CR>
 vnoremap KA "sy:GitGrep "<c-r>s"<CR>
 nnoremap KL :GitGrep "<c-r>/"<cr>
+
 
 " Escape and paste a register
 " <c-x>{char} - paste register into search field, escaping sensitive chars
@@ -1991,10 +2009,6 @@ endfunction
 
 " toggle highlighting on/off
 nnoremap <silent> <leader>H :set hlsearch! hlsearch?<CR>
-
-" clear highlights
-noremap <silent> <leader>/ :nohls<CR>
-
 
 " highlight whole line of search result
 " nnoremap ,/l :let @/ = '.*\%(' . @/ . '\m\).*'<cr>
@@ -2036,9 +2050,7 @@ nnoremap & :&&<cr>
 xnoremap & :&&<cr>
 
 " toggle quickfix window
-nnoremap qq :Unite quickfix<cr>
-nmap <silent> <leader>fc :cclose<CR>
-nmap <silent> <leader>fo :copen<CR>
+nnoremap qo :Unite quickfix<cr>
 
 " open quickfix at bottom of the window
 let g:tlWindowPosition=1
@@ -2069,12 +2081,7 @@ iabbr lenght length
 syntax on
 syntax enable                  " turn on syntax highlighting
 
-nmap <leader>ft :set filetype=
-nmap <leader>fth :set filetype=html<cr>
-nmap <leader>ftd :set filetype=htmldjango<cr>
-nmap <leader>ftc :set filetype=coffee<cr>
-nmap <leader>ftj :set filetype=javascript<cr>
-nmap <leader>ftm :set filetype=markdown<cr>
+nmap <leader>ft :Unite filetype<cr>
 
 let g:syntastic_check_on_open=0
 
@@ -2091,7 +2098,7 @@ let g:syntastic_auto_loc_list=0
 let g:syntastic_quiet_warnings=0
 
 " for html template files, you may want to disable syntastic's automatic checks using the passive mode:
-" nmap <leader>ns :SyntasticToggleMode<cr>
+nmap <leader>ns :SyntasticToggleMode<cr>
 
 " Use tabs if it's a CSV file
 autocmd BufNewFile,BufRead *.csv set noexpandtab nosmarttab
@@ -2155,7 +2162,7 @@ let g:tagbar_autofocus = 1
 
 " TERMINAL
 
-set shell=zsh
+" set shell=zsh
 
 " TMUX
 " Prompt for a command to run
@@ -2224,20 +2231,24 @@ let g:unite_split_rule = "botright"
 
 " Shorten the default update date of 500ms
 let g:unite_update_time = 200
-
+let g:unite_source_rec_max_cache_files = 20000
 let g:unite_source_file_mru_limit = 1000
 let g:unite_cursor_line_highlight = 'TabLineSel'
+let g:unite_source_file_mru_filename_format = ''
+let g:unite_source_directory_mru_filename_format = ''
+let g:unite_source_directory_mru_time_format = ''
+let g:unite_source_file_mru_time_format = ''
 
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
-
-
-nnoremap <leader>p :Unite -no-split -buffer-name=all buffer file_mru file_rec/async:!<cr>
-nnoremap <leader>r :Unite -buffer-name=mru file_mru<cr>
-nnoremap <c-f> :Unite -buffer-name=mru file_mru<cr>
+nnoremap qq :UniteResume<cr>
+nnoremap <leader>p :Unite -no-split -buffer-name=all file_rec/async:!<cr>
 nnoremap <leader>o :Unite -no-split -buffer-name=outline outline<cr>
+nnoremap <leader>i :set foldmethod=indent<cr>:Unite -no-split -buffer-name=fold fold<cr>
 nnoremap <leader>t :Unite -no-split -buffer-name=tags tag<cr>
-nnoremap <leader>f :Unite -no-split -buffer-name=files file<cr>
-nnoremap <leader>b :Unite -no-split -buffer-name=buffer buffer<cr>
+
+nnoremap <leader>f :Unite -buffer-name=mru file_mru<cr>
+nnoremap <leader>F :UniteWithBufferDir -no-split -buffer-name=files file<cr>
+nnoremap <leader>b :Unite -no-split -quick-match -buffer-name=buffer buffer<cr>
+
 nnoremap <leader>R :Unite -no-split -buffer-name=register register<cr>
 nnoremap <leader>P :Unite -no-split -buffer-name=sessions session<CR>
 " nnoremap <leader>u :Unite -no-split -buffer-name=sources source<CR>
@@ -2245,44 +2256,60 @@ nnoremap <leader>y :Unite -no-split -buffer-name=yank    history/yank<cr>
 nnoremap <leader>h :Unite -no-split -buffer-name=help help<CR>
 " nnoremap <leader>l :UniteWithCursorWord -no-split -buffer-name=search_file line<CR>
 nnoremap <leader>c :Unite -no-split -buffer-name=commands history/command command<CR>
-" nnoremap <leader>b :Unite -no-split -buffer-name=bookmarks bookmark<CR>
+nnoremap <leader>b :Unite -no-split -buffer-name=bookmarks -quick-match bookmark<CR>
 nnoremap <leader>d :Unite -buffer-name=change-cwd -default-action=lcd directory_mru<CR>
+nnoremap <leader><leader> :Unite -no-start-insert fold<CR>
+
 nnoremap <silent> <leader>/  :Unite -no-split -buffer-name=search line<CR>
+
 nnoremap <silent> <leader><leader>/  :Unite -no-split grep:.<CR>
+nnoremap <silent> <leader>G  :Unite -no-split grep:.<CR>
+
 nnoremap <silent> q/  :Unite -no-split history/search<CR>
-nnoremap <leader>U  :Unite<space>
+nnoremap <leader>u  :Unite<space>
 nnoremap <leader>M :Unite giti/status<cr>
 nnoremap <leader>B :Unite giti/branch_all<cr>
 nnoremap <leader>L :Unite giti/log -default-action=yank_hash<cr>
 
+autocmd BufEnter *
+\   if empty(&buftype)
+\|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
+\|  endif
+
 " Custom Unite settings
-autocmd FileType unite call s:unite_settings()
+
 function! s:unite_settings()
 
-  echo 'setting unite keys'
   nmap <buffer> <ESC> <Plug>(unite_exit)
   imap <buffer> <ESC> <Plug>(unite_exit)
+  imap <buffer> qq <Plug>(unite_exit)
+  imap <buffer> <c-c> <Plug>(unite_exit)
+  imap <buffer> kk <Plug>(unite_exit)
   " imap <buffer> <c-j> <Plug>(unite_select_next_line)
   imap <buffer> <c-j> <Plug>(unite_insert_leave)
   nmap <buffer> <c-j> <Plug>(unite_loop_cursor_down)
   nmap <buffer> <c-k> <Plug>(unite_loop_cursor_up)
-  nmap <buffer> <c-v> <Plug>(unite_loop_cursor_up)
   imap <buffer> <c-a> <Plug>(unite_choose_action)
   imap <buffer> <c-d> <Plug>(unite_select_next_page)
-  imap <buffer> <c-u> <Plug>(unite_select_previous_page)
   imap <buffer> <Tab> <Plug>(unite_exit_insert)
   imap <buffer> jj <Plug>(unite_insert_leave)
   imap <buffer> <C-w> <Plug>(unite_delete_backward_word)
   nmap <buffer> h   <Plug>(unite_delete_backward_path)
+  imap <buffer> <c-u>   <Plug>(unite_delete_backward_path)
   imap <buffer> <C-z>   <Plug>(unite_toggle_mark_current_candidate)
   imap <buffer> '     <Plug>(unite_quick_match_default_action)
   nmap <buffer> '     <Plug>(unite_quick_match_default_action)
   nmap <buffer> <C-r> <Plug>(unite_redraw)
   imap <buffer> <C-r> <Plug>(unite_redraw)
+  nnoremap <buffer><expr> cd     unite#do_action('lcd')
   inoremap <buffer><expr> <C-s> unite#do_action('split')
   nnoremap <buffer><expr> <C-s> unite#do_action('split')
   inoremap <buffer><expr> <C-v> unite#do_action('vsplit')
   nnoremap <buffer><expr> <C-v> unite#do_action('vsplit')
+  inoremap <buffer><expr> <C-t> unite#do_action('tabopen')
+  nnoremap <buffer><expr> <C-t> unite#do_action('tabopen')
+  inoremap <buffer><expr> <C-g> unite#do_action('grep')
+  nnoremap <buffer><expr> <C-g> unite#do_action('grep')
 
   let unite = unite#get_current_unite()
   if unite.buffer_name =~# '^search'
@@ -2290,25 +2317,9 @@ function! s:unite_settings()
   else
     nnoremap <silent><buffer><expr> r     unite#do_action('rename')
   endif
-
-  nnoremap <silent><buffer><expr> cd     unite#do_action('lcd')
 endfunction
 
-" Custom Unite settings
 autocmd FileType unite call s:unite_settings()
-
-
-nnoremap <leader>e :VimFilerCurrentDir<cr>
-
-" Custom mappings for the unite buffer
-autocmd FileType unite call s:unite_settings()
-function! s:unite_settings()
-  " Play nice with supertab
-  let b:SuperTabDisabled=1
-  " Enable navigation with control-j and control-k in insert mode
-  imap <buffer> <C-j>   <Plug>(unite_select_next_line)
-  imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
-endfunction
 
 let g:unite_source_grep_max_candidates = 200
 
@@ -2338,6 +2349,7 @@ call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
       \ 'ignore_pattern', join([
       \ '\.git/',
+      \ '\.neocomplcache/',
       \ ], '\|'))
 
 
@@ -2350,16 +2362,39 @@ let g:my_vimfiler_explorer_name = 'explorer'
 let g:my_vimfiler_winwidth = 30
 let g:vimfiler_safe_mode_by_default = 0
 let g:vimfiler_directory_display_top = 1
+let g:vimfiler_quick_look_command = 'qlmanage -p '
+let g:vimfiler_force_overwrite_statusline = 0
+let g:vimfiler_time_format = "%H:%M %d/%m/%y"
+let g:vimfiler_enable_auto_cd = 1
+let g:vimfiler_default_columns = "size:time"
+
+
+nnoremap <leader>e :VimFilerBufferDir<cr>
+nnoremap <tab><tab> :VimFilerExplorer<cr>
 
 autocmd FileType vimfiler call s:vimfiler_settings()
 function! s:vimfiler_settings()
-  nmap     <buffer><expr><CR>  vimfiler#smart_cursor_map("\<PLUG>(vimfiler_expand_tree)", "e")
-  nmap     za <Plug>(vimfiler_toggle_visible_dot_files)
+  nmap <buffer><expr><CR>  vimfiler#smart_cursor_map("\<PLUG>(vimfiler_expand_tree)", "e")
+  nmap <buffer> za <Plug>(vimfiler_toggle_visible_dot_files)
+  nmap <buffer> qq <Plug>(vimfiler_quick_look)
+  nmap <buffer> <leader>f <Plug>(vimfiler_switch_to_history_directory)
+  nmap <buffer> F <Plug>(vimfiler_find)
+  nmap <buffer> S <Plug>(vimfiler_select_sort_type)
+  nmap <buffer> a <Plug>(vimfiler_choose_action)
+  nmap <buffer> <c-v> vimfiler#do_action('vsplit')
+  nmap <buffer> h <Plug>(vimfiler_smart_h)
+  nmap <buffer> l <Plug>(vimfiler_smart_l)
+  nmap <buffer> <c-l> <c-w>l
+  nmap <buffer> y <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_copy_file)
+  nmap <buffer> m <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_move_file)
+  nmap <buffer> d <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_delete_file)
+
 endfunction
 
 nnoremap <leader>gS :Unite file_rec/async -input=<C-R>=expand("%:t:r")<cr>_spec<cr>
 
 source ~/dotfiles/vim/colors.vim
+" source ~/dotfiles/vim/personal.vim
 
 
 " vim:set foldmethod=marks; set foldenable

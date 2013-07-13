@@ -681,15 +681,13 @@ ch () {
 }
 # open fugitive status window
 vs() {
-  vim . -c 'Gstatus | bufdo tab split'
-}
-vl() {
-  vim . -c 'Gitv'
+  vim -c 'Unite git-conflict'
 }
 
 # use g [...]  and gitconfig shortcut rather than duplicating in zshconfig
 # ...except for a few one:
-alias gs='git status'                 # find aliases
+alias gs='git status'
+alias gd='git diff'
 alias zz='git co'                     # "z quick-jump" for git
 alias gal='git alias | grep'          # find aliases
 alias gcl='pbpaste | xargs git clone' # clone github project from clipboard

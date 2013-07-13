@@ -1,5 +1,5 @@
 " language-specific
-hi! link clojureComment     Search
+" hi! link clojureComment     Search
 hi! link initexComment Structure
 hi! link markdownBold Function
 hi! link markdownItalic Function
