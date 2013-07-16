@@ -37,6 +37,7 @@ NeoBundle 'Shougo/vimshell.vim'
 " tag support
 " NeoBundle 'majutsushi/tagbar'
 NeoBundle 'tsukkee/unite-tag'
+NeoBundle 'abudden/TagHighlight'
 
 " git tools
 NeoBundle 'tpope/vim-fugitive'
@@ -100,8 +101,8 @@ NeoBundle 'digitaltoad/vim-jade'
 " NeoBundle 'skwp/vim-html-escape'
 
 " access dash help in osx
-" NeoBundle 'rizzatti/funcoo.vim'
-" NeoBundle 'rizzatti/dash.vim'
+NeoBundle 'rizzatti/funcoo.vim'
+NeoBundle 'rizzatti/dash.vim'
 
 " helpers to handle repls and running unit tests in tmux
 " NeoBundle 'ervandew/screen'
@@ -118,6 +119,7 @@ NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'gilligan/textobj-gitgutter'
 
 NeoBundle 'MarcWeber/vim-addon-mw-utils'
+NeoBundle 'duff/vim-scratch'
 NeoBundle 'vim-scripts/utl.vim'
 " NeoBundle 'vim-scripts/marvim'
 
@@ -204,6 +206,9 @@ set encoding=utf8
 
 set nonumber
 let g:enable_numbers = 0
+
+nmap = :+
+nmap - :-
 
 set nostartofline       " cursor can stay on blank characters
 set scrolloff=10         "Start scrolling when we're 10 lines away from margins
@@ -399,12 +404,12 @@ cnoremap %% <C-R>=expand('%:h').'/'<cr>
 
 
 " Opens an edit command with the path of the currently edited file filled in
-nnoremap <leader>E :e <C-R>=expand("%:p:h") . "/" <CR>
+" nnoremap <leader>E :e <C-R>=expand("%:p:h") . "/" <CR>
 
 " Use vifm as vim file manager
-nnoremap <leader>e :EditVifm<cr>
+nnoremap <leader>E :EditVifm<cr>
 nnoremap <leader>v :VsplitVifm<cr>
-nnoremap <leader>F :DiffVifm<cr>
+" nnoremap <leader>F :DiffVifm<cr>
 nnoremap <leader>T :TabVifm<cr>
 
 " shortcut to swap to alternate file
@@ -506,17 +511,17 @@ endfunction
 set foldtext=Foldingstyle()
 
 
-nmap <Leader>fm :set foldmethod=manual<cr>zM
-nmap <Leader>fi :set foldmethod=indent<cr>zM
-nmap <Leader>fk :set foldmethod=marker<cr>zM
-nmap <Leader>fe :set foldmethod=expr<cr>zM
-nmap <Leader>fs :set foldmethod=syntax<cr>zM
+nmap <Leader>Fm :set foldmethod=manual<cr>zM
+nmap <Leader>Fi :set foldmethod=indent<cr>zM
+nmap <Leader>Fk :set foldmethod=marker<cr>zM
+nmap <Leader>Fe :set foldmethod=expr<cr>zM
+nmap <Leader>Fs :set foldmethod=syntax<cr>zM
 
-nmap <leader>f0 :set foldmethod=indent<cr>:set foldlevel=0<CR>
-nmap <leader>f1 :set foldmethod=indent<cr>:set foldlevel=1<CR>
-nmap <leader>f2 :set foldmethod=indent<cr>:set foldlevel=2<CR>
-nmap <leader>f3 :set foldmethod=indent<cr>:set foldlevel=3<CR>
-nmap <leader>f4 :set foldmethod=indent<cr>:set foldlevel=4<CR>
+nmap <leader>F0 :set foldmethod=indent<cr>:set foldlevel=0<CR>
+nmap <leader>F1 :set foldmethod=indent<cr>:set foldlevel=1<CR>
+nmap <leader>F2 :set foldmethod=indent<cr>:set foldlevel=2<CR>
+nmap <leader>F3 :set foldmethod=indent<cr>:set foldlevel=3<CR>
+nmap <leader>F4 :set foldmethod=indent<cr>:set foldlevel=4<CR>
 
 " fold HTML tag
 nnoremap zt :set foldmethod=manual<cr>Vatzf
@@ -619,15 +624,15 @@ nnoremap <leader><leader>4 :setlocal ts=4 sts=4 sw=4 et<cr>
 
 " ALIGN/TABULARISE
 
-vmap :w=       :Tabularize /=<cr>
-vmap :w"       :Tabularize /"<cr>
-vmap :w:       :Tabularize /:<cr>
-vmap :w::      :Tabularize /:\zs<cr>
-vmap :w,       :Tabularize /,<cr>
-vmap :w-       :Tabularize /-<cr>
-vmap :w{       :Tabularize /{<cr>
-vmap :w#       :Tabularize /#<cr>
-vmap :w£       :Tabularize /#<cr>
+vmap <leader>a=       :Tabularize /=<cr>
+vmap <leader>a"       :Tabularize /"<cr>
+vmap <leader>a:       :Tabularize /:<cr>
+vmap <leader>a::      :Tabularize /:\zs<cr>
+vmap <leader>a,       :Tabularize /,<cr>
+vmap <leader>a-       :Tabularize /-<cr>
+vmap <leader>a{       :Tabularize /{<cr>
+vmap <leader>a#       :Tabularize /#<cr>
+vmap <leader>a£       :Tabularize /#<cr>
 
 "
 
@@ -1382,13 +1387,13 @@ let vimrplugin_r_args = "--quiet --no-restore"
 
 autocmd FileType R  setlocal foldmethod=indent
 
-imap <C-f> <Plug>RCompleteArgs
-map <silent> <Leader>rL :call RAction("levels")<CR>
-map <silent> <Leader>rT :call RAction("tail")<CR>
-map <silent> <Leader>rH :call RAction("head")<CR>
-map <silent> <Leader>rN :call RAction("names")<CR>
-map <silent> <Leader>rC :call RAction("class")<CR>
-map <silent> <Leader>rD :call RAction("length")<CR>
+" imap <C-f> <Plug>RCompleteArgs
+" map <silent> <Leader>rL :call RAction("levels")<CR>
+" map <silent> <Leader>rT :call RAction("tail")<CR>
+" map <silent> <Leader>rH :call RAction("head")<CR>
+" map <silent> <Leader>rN :call RAction("names")<CR>
+" map <silent> <Leader>rC :call RAction("class")<CR>
+" map <silent> <Leader>rD :call RAction("length")<CR>
 
 let vimrplugin_underscore = 0
 
@@ -1444,6 +1449,8 @@ vnoremap <leader>' ""yls<c-r>={'"': "'", "'": '"'}[@"]<cr><esc>
 " imap <leader>" <esc>vES"i
 " imap <leader>' <esc>vES'i
 
+nnoremap [s i<space><esc>
+nnoremap ]s a<space><esc>
 "
 
 " BUFFERS
@@ -1492,9 +1499,9 @@ nnoremap <silent> vv <C-w>v
 nnoremap <silent> ss <C-w>s
 nnoremap <silent> tt :tabedit %<cr>
 
-" resizing shortcuts
-nnoremap _ <C-w>-
-nnoremap + <C-w>+
+" " resizing shortcuts
+" nnoremap _ <C-w>-
+" nnoremap + <C-w>+
 
 " Faster scrolling
 nnoremap <C-e> 3<C-e>
@@ -2081,7 +2088,7 @@ iabbr lenght length
 syntax on
 syntax enable                  " turn on syntax highlighting
 
-nmap <leader>ft :Unite filetype<cr>
+nmap <leader>FT :Unite filetype<cr>
 
 let g:syntastic_check_on_open=0
 
@@ -2209,7 +2216,7 @@ nmap <leader>BCC /^class<cr><c-e><c-l>
 
 " HASKELL
 
-au BufEnter *.hs compiler ghc
+" au BufEnter *.hs compiler ghc
 let g:haddock_browser="/Application/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 
 "
@@ -2394,7 +2401,7 @@ endfunction
 nnoremap <leader>gS :Unite file_rec/async -input=<C-R>=expand("%:t:r")<cr>_spec<cr>
 
 source ~/dotfiles/vim/colors.vim
-" source ~/dotfiles/vim/personal.vim
+source ~/dotfiles/vim/personal.vim
 
 
 " vim:set foldmethod=marks; set foldenable
