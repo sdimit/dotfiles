@@ -125,6 +125,7 @@ NeoBundle 'vim-scripts/utl.vim'
 
 " Search
 NeoBundle 'henrik/git-grep-vim'
+NeoBundle 'sgur/unite-git_grep'
 NeoBundle 'bronson/vim-visual-star-search'
 NeoBundle 'henrik/vim-indexed-search'
 NeoBundle 'nelstrom/vim-qargs'
@@ -399,10 +400,6 @@ map <leader>cd :cd %:p:h<cr>
 nnoremap <silent> <leader>cf :let @* = expand("%:~")<CR>
 nnoremap <silent> <leader>cn :let @* = expand("%:t")<CR>
 
-" expand current directory into command line
-cnoremap %% <C-R>=expand('%:h').'/'<cr>
-
-
 " Opens an edit command with the path of the currently edited file filled in
 " nnoremap <leader>E :e <C-R>=expand("%:p:h") . "/" <CR>
 
@@ -435,7 +432,7 @@ endfunction
 
 nnoremap <silent> Q :call CloseWindowOrKillBuffer()<CR>
 
-autocmd BufEnter * silent! lcd %:p:h:gs/ /\\ /
+" autocmd BufEnter * silent! lcd %:p:h:gs/ /\\ /
 
 " Open URL
 command -bar -nargs=1 OpenURL :!open <args>
@@ -671,7 +668,7 @@ let g:airline_paste_symbol = '∥'
 let g:airline_section_a = ''
 let g:airline_section_x = ''
 let g:airline_section_y = ''
-" let g:airline_section_y = '%{getcwd()}'
+let g:airline_section_y = '%{getcwd()}'
 let g:airline_section_z = ''
 let g:airline_powerline_fonts=1
 
@@ -1979,8 +1976,10 @@ vmap n *
 "   set grepprg=ack\ -H\ --nogroup\ --nocolor
 " endif
 
-nnoremap KC :GitGrep <c-r><c-w><CR>
-vnoremap KC "sy:GitGrep "<c-r>s"<CR>
+" nnoremap KC :GitGrep <c-r><c-w><CR>
+" vnoremap KC "sy:GitGrep "<c-r>s"<CR>
+nnoremap KC :UniteWithCursorWord vcs_grep/git<cr>
+vnoremap KC "sy:Unite vcs_grep/git -input=<c-r>s<CR>
 
 " nnoremap KA :GitGrep ""<left>
 " vnoremap KA "sy:GitGrep "<c-r>s"<CR>
@@ -2247,7 +2246,7 @@ let g:unite_source_directory_mru_time_format = ''
 let g:unite_source_file_mru_time_format = ''
 
 nnoremap qq :UniteResume<cr>
-nnoremap <leader>p :Unite -no-split -buffer-name=all file_rec/async:!<cr>
+nnoremap <leader>p :UniteWithCurrentDir -no-split -buffer-name=all file_rec/async:!<cr>
 nnoremap <leader>o :Unite -no-split -buffer-name=outline outline<cr>
 nnoremap <leader>i :set foldmethod=indent<cr>:Unite -no-split -buffer-name=fold fold<cr>
 nnoremap <leader>t :Unite -no-split -buffer-name=tags tag<cr>
@@ -2269,7 +2268,8 @@ nnoremap <leader><leader> :Unite -no-start-insert fold<CR>
 
 nnoremap <silent> <leader>/  :Unite -no-split -buffer-name=search line<CR>
 
-nnoremap <silent> <leader><leader>/  :Unite -no-split grep:.<CR>
+" nnoremap <silent> <leader><leader>/  :Unite -no-split grep:.<CR>
+nnoremap <silent> <leader><leader>/ :Unite vcs_grep/git<cr>
 nnoremap <silent> <leader>G  :Unite -no-split grep:.<CR>
 
 nnoremap <silent> q/  :Unite -no-split history/search<CR>
