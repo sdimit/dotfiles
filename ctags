@@ -1,4 +1,11 @@
---python-kinds=-i
+--recurse=yes
+--tag-relative=yes
+--exclude=*.git*
+--exclude=*.md
+--exclude=node_modules
+--exclude=public
+--exclude=static
+--python-kinds=-iv
 
 --langdef=latex
 --langmap=latex:.tex
@@ -39,17 +46,18 @@
 --regex-coffee=/(^|=[ \t])*class ([A-Za-z]+\.)*([A-Za-z]+)( extends [A-Za-z_.]+)?$/\3/c,class/
 --regex-coffee=/^[ \t]*(module\.)?(exports\.)?@?([A-Za-z_.]+):.*[-=]>.*$/\3/m,method/
 --regex-coffee=/^[ \t]*(module\.)?(exports\.)?([A-Za-z_.]+)[ \t]+=.*[-=]>.*$/\3/f,function/
---regex-coffee=/^[ \t]*([A-Za-z_.]+)[ \t]+=[^->\n]*$/\1/v,variable/
---regex-coffee=/^[ \t]*@([A-Za-z_.]+)[ \t]+=[^->\n]*$/\1/f,field/
---regex-coffee=/^[ \t]*@([A-Za-z_.]+):[^->\n]*$/\1/f,static field/
---regex-coffee=/^[ \t]*([A-Za-z_.]+):[^->\n]*$/\1/f,field/
---regex-coffee=/constructor:[ \t]+\([ \t]*@([A-Za-z_.]+)/\1/f,field/
---regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){1}/\2/f,field/
---regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){2}/\2/f,field/
---regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){3}/\2/f,field/
---regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){4}/\2/f,field/
---regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){5}/\2/f,field/
---regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){6}/\2/f,field/
---regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){7}/\2/f,field/
---regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){8}/\2/f,field/
---regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){9}/\2/f,field/
+
+
+--langdef=clojure
+--langmap=clojure:.clj
+--regex-clojure=/\([ \t]*create-ns[ \t]+([-[:alnum:]*+!_:\/.?]+)/\1/n,namespace/
+--regex-clojure=/\([ \t]*def[ \t]+([-[:alnum:]*+!_:\/.?]+)/\1/d,definition/
+--regex-clojure=/\([ \t]*defn-?[ \t]+([-[:alnum:]*+!_:\/.?]+)/\1/f,function/
+--regex-clojure=/\([ \t]*defmacro[ \t]+([-[:alnum:]*+!_:\/.?]+)/\1/m,macro/
+--regex-clojure=/\([ \t]*definline[ \t]+([-[:alnum:]*+!_:\/.?]+)/\1/i,inline/
+--regex-clojure=/\([ \t]*defmulti[ \t]+([-[:alnum:]*+!_:\/.?]+)/\1/a,multimethod definition/
+--regex-clojure=/\([ \t]*defmethod[ \t]+([-[:alnum:]*+!_:\/.?]+)/\1/b,multimethod instance/
+--regex-clojure=/\([ \t]*defonce[ \t]+([-[:alnum:]*+!_:\/.?]+)/\1/c,definition (once)/
+--regex-clojure=/\([ \t]*defstruct[ \t]+([-[:alnum:]*+!_:\/.?]+)/\1/s,struct/
+--regex-clojure=/\([ \t]*intern[ \t]+([-[:alnum:]*+!_:\/.?]+)/\1/v,intern/
+--regex-clojure=/\([ \t]*ns[ \t]+([-[:alnum:]*+!_:\/.?]+)/\1/n,namespace/

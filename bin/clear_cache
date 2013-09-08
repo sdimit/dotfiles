@@ -1,0 +1,6 @@
+#!/bin/sh
+
+find ~/.cache/ctrlp | grep 'cache.txt' | xargs rm -f
+rm -f ~/.cache/vim/classpath/*.*
+rm -f ~/.yankring-history_v2.txt
+rm -f ~/.goobook_cache

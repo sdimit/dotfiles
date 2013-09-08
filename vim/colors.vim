@@ -23,7 +23,7 @@ hi! link VertSplit CursorLineNr
 hi! link txtBold Identifier
 hi! link zshVariableDef Identifier
 hi! link zshFunction Function
-hi! link MatchParen DiffText
+" hi! link MatchParen DiffText
 hi! link ShowMarksHLl DiffAdd
 hi! link ShowMarksHLu DiffChange
 hi! NonText ctermfg=8 ctermbg=8

@@ -334,7 +334,8 @@ nnoremap <silent> J mzJ`z:delmarks z<cr>
 
 " Split line (sister to [J]oin lines)
 " use c-s, because [S] is used by vim-seek backward search..
-nnoremap <c-s> i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w:silent! delmark w<cr>
+nnoremap <c-s> i<cr><esc>
+
 
 vnoremap - =
 
