@@ -40,8 +40,6 @@ PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -
 
 # PATHS {{{
 
-# make python binaries first
-export PATH=/usr/local/share/python
 # normal bin
 export PATH=$PATH:/bin:/usr/bin:/usr/local/bin:~/bin
 export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
@@ -95,6 +93,7 @@ export EDITOR="/Applications/MacVim.app/Contents/MacOS/Vim"
 alias vim=$EDITOR
 alias vi=$EDITOR
 alias v=$EDITOR
+alias e=$EDITOR
 
 # get the right emacs
 alias emacs="/usr/local/bin/emacs-24.1.50"
@@ -169,6 +168,7 @@ alias ka9="killall -9"
 
 # kill process matching argument
 function grepkill() { ps -axf | grep -v grep | grep "$@" | awk '{print $2}' | xargs kill }
+alias killgrep='grepkill'
 
 alias psa="ps aux"
 function psg() { ps -axf | grep -v grep | grep "$@" -i --color=auto; }
@@ -197,8 +197,10 @@ alias brewer="brew update && brew upgrade && brew cleanup && brew doctor"
 # Get OS X Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
 alias update='sudo softwareupdate -i -a; brew update; brew upgrade'
 
-alias npkg='/usr/local/lib/node_modules'
-alias bpkg='/usr/local/Cellar'
+alias npkg='/usr/local/lib/node_modules' # NPM
+alias bpkg='/usr/local/Cellar'           # Brew
+alias bformulas='/usr/local/Library/Formula' # Brew
+alias cpkg='~/.m2/repository'            # Clojure/Leiningen
 
 # }}}
 
@@ -564,13 +566,6 @@ zstyle ':completion:tmux-pane-words-anywhere:*' matcher-list 'b:=* m:{A-Za-z}={a
 
 # }}}
 
-# CLOJURE {{{
-
-alias clj="~/Projects/clojure/clojure.sh"
-export VIMCLOJURE_SERVER_JAR="$HOME/.vim/bundle/vimclojure/bin/server-2.3.3.jar"
-
-# }}}
-
 # RUBY {{{
 
 alias rvmd="rvm default 1.9.3"
@@ -614,7 +609,7 @@ alias whois="whois -h whois-servers.net"
 # View HTTP traffic
 alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
-alias pg="ping www.google.com"
+alias pgoogle="ping www.google.com"
 
 # lists known hosts
 function hosts() {
@@ -687,6 +682,7 @@ vs() {
 # use g [...]  and gitconfig shortcut rather than duplicating in zshconfig
 # ...except for a few one:
 alias gs='git status'
+alias gl='git l'
 alias gd='git diff'
 alias zz='git co'                     # "z quick-jump" for git
 alias gal='git alias | grep'          # find aliases
@@ -747,4 +743,11 @@ function pg_stop {
 }
 
 alias jq='/usr/local/Cellar/jq/1.2/bin/jq'
+
+alias pg='phonegap'
+alias emu='cake emulate:ios:dev'
+
+export DYLD_FORCE_FLAT_NAMESPACE=1
+# for vim/youcompleteme
+
 # }}}

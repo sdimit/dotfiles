@@ -24,18 +24,17 @@ NeoBundle 'Shougo/unite-outline'
 NeoBundle 'osyo-manga/unite-fold'
 NeoBundle 'Shougo/unite-help'
 NeoBundle 'Shougo/unite-session'
-NeoBundle 'tacroe/unite-mark'
+" NeoBundle 'tacroe/unite-mark'
+NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'osyo-manga/unite-filetype'
 NeoBundle 'osyo-manga/unite-quickfix'
 NeoBundle 'thinca/vim-unite-history'
-" NeoBundle 'hrsh7th/vim-versions'
-" NeoBundle 'Shougo/unite-ssh'
+" NeoBundle 'thinca/vim-quickrun'
 " NeoBundle 'osyo-manga/unite-env'
 NeoBundle 'Shougo/vimshell.vim'
 
-
 " tag support
-" NeoBundle 'majutsushi/tagbar'
+NeoBundle 'majutsushi/tagbar'
 NeoBundle 'tsukkee/unite-tag'
 NeoBundle 'abudden/TagHighlight'
 
@@ -43,48 +42,55 @@ NeoBundle 'abudden/TagHighlight'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'gregsexton/gitv'
 NeoBundle 'airblade/vim-gitgutter'
-NeoBundle 'vim-scripts/DirDiff.vim'
 NeoBundle 'kmnk/vim-unite-giti'
 NeoBundle 'moznion/unite-git-conflict.vim'
+" NeoBundle 'hrsh7th/vim-versions'
 " NeoBundle 'mattn/gist-vim'
 " gist
 
 " snippets and completion
 NeoBundle 'SirVer/ultisnips'
-NeoBundle 'Shougo/neocomplcache'
-" NeoBundle 'Valloric/YouCompleteMe'
+" NeoBundle 'Shougo/neocomplcache'
+NeoBundle 'Valloric/YouCompleteMe'
 
-" NeoBundle 'scrooloose/syntastic'
+NeoBundle 'scrooloose/syntastic'
 
 " general helpers
 NeoBundle 'tpope/vim-commentary'
 NeoBundle 'tomtom/tcomment_vim'
+NeoBundle 'vim-scripts/DirDiff.vim'
+NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundle 'vim-scripts/YankRing.vim'
 NeoBundle 'tpope/vim-unimpaired'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-repeat'
-NeoBundle 'Indent-Guides'
-NeoBundle 'godlygeek/tabular'
+" NeoBundle 'Indent-Guides'
+" NeoBundle 'godlygeek/tabular'
 NeoBundle 'AndrewRadev/switch.vim'
 NeoBundle 'danro/rename.vim'
 NeoBundle 'kshenoy/vim-signature'
 NeoBundle 'vim-scripts/highlight.vim'
 NeoBundle 'delimitMate.vim'
+" NeoBundle 'dhruvasagar/vim-table-mode'
 " NeoBundle 'terryma/vim-smooth-scroll'
 " NeoBundle 'terryma/vim-multiple-cursors'
 " NeoBundle 'vim-scripts/bufkill.vim'
-" NeoBundle 'dhruvasagar/vim-table-mode'
+" NeoBundle 'cwoac/nvim'
+" NeoBundle 'PeterRincker/vim-argumentative'
 
 " python
-" NeoBundle 'klen/python-mode'
+NeoBundle 'klen/python-mode'
+NeoBundle 'jmcantrell/vim-virtualenv'
 " NeoBundle 'nvie/vim-pyunit'
 " vimpdb
+" NeoBundle 'mattboehm/unstack'
+
 
 " coffeescript
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'zeekay/vim-js2coffee'
 " LiveScript
-NeoBundle 'gkz/vim-ls'
+" NeoBundle 'gkz/vim-ls'
 
 " web development
 NeoBundle 'tristen/vim-sparkup'
@@ -105,9 +111,9 @@ NeoBundle 'rizzatti/funcoo.vim'
 NeoBundle 'rizzatti/dash.vim'
 
 " helpers to handle repls and running unit tests in tmux
-" NeoBundle 'ervandew/screen'
-" NeoBundle 'benmills/vimux'
-" NeoBundle 'tpope/vim-dispatch'
+NeoBundle 'ervandew/screen'
+NeoBundle 'benmills/vimux'
+NeoBundle 'tpope/vim-dispatch'
 " NeoBundle 'nvie/vim_bridge'
 " NeoBundle 'tpope/vim-tbone'
 
@@ -124,7 +130,7 @@ NeoBundle 'vim-scripts/utl.vim'
 " NeoBundle 'vim-scripts/marvim'
 
 " Search
-NeoBundle 'henrik/git-grep-vim'
+" NeoBundle 'henrik/git-grep-vim'
 NeoBundle 'sgur/unite-git_grep'
 NeoBundle 'bronson/vim-visual-star-search'
 NeoBundle 'henrik/vim-indexed-search'
@@ -133,23 +139,35 @@ NeoBundle 'tpope/vim-abolish'
 NeoBundle 'rking/ag.vim'
 
 " Appearance
+NeoBundle 'flazz/vim-colorschemes'
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'bling/vim-airline'
+NeoBundle 'osyo-manga/unite-airline_themes'
+NeoBundle 'tomasr/molokai'
+NeoBundle 'sjl/badwolf'
+NeoBundle 'Yggdroot/indentLine' "{{{
+  let g:indentLine_char = '┊'
+  let g:indentLine_color_term=236
+  let g:indentLine_indentLevel=5
+"}}}
 
+" Clojure
 NeoBundle 'tpope/vim-fireplace'
+" NeoBundle 'tpope/vim-classpath'
 NeoBundle 'guns/vim-clojure-static'
+NeoBundle 'dgrnbrg/vim-redl'
 NeoBundle 'kien/rainbow_parentheses.vim'
+NeoBundle 'vim-scripts/paredit.vim'
+NeoBundle 'emanon001/fclojure.vim'
 
 " extras
-" NeoBundle 'jtratner/vim-flavored-markdown'
+NeoBundle 'jtratner/vim-flavored-markdown'
+" NeoBundle 'mikewest/vimroom'
 " NeoBundle 'jceb/vim-orgmode'
 " NeoBundle 'vim-scripts/vimwiki'
 " NeoBundle 'lukerandall/haskellmode-vim'
 " NeoBundle 'ledger/vim-ledger'
 " NeoBundle 'jcf/vim-latex'
-
-
-"
 
 " GENERAL
 
@@ -158,7 +176,8 @@ filetype plugin on
 NeoBundleCheck
 
 let mapleader="\<space>"
-let maplocalleader="\<space>"
+" let maplocalleader="\<space>"
+let maplocalleader=","
 
 
 set visualbell " no sounds
@@ -205,7 +224,7 @@ command! -nargs=1 Silent
 " use utf8
 set encoding=utf8
 
-set nonumber
+set number
 let g:enable_numbers = 0
 
 nmap = :+
@@ -232,7 +251,7 @@ autocmd BufReadPost *
       \   exe "normal g`\"" |
       \ endif
 
-map <silent> <leader>n :set number!<CR>
+map <silent> <leader>n :windo set number!<CR>
 map <silent> <leader>N :NumbersToggle<CR>
 
 " nmap <silent> <c-p> <plug>yankstack_substitute_older_paste
@@ -334,8 +353,7 @@ nnoremap <silent> J mzJ`z:delmarks z<cr>
 
 " Split line (sister to [J]oin lines)
 " use c-s, because [S] is used by vim-seek backward search..
-nnoremap <c-s> i<cr><esc>
-
+nnoremap <c-s> i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w:silent! delmark w<cr>
 
 vnoremap - =
 
@@ -344,6 +362,12 @@ nnoremap <leader>C :let &scrolloff=999-&scrolloff<cr>
 
 map <leader>cl :set cursorline!<cr>
 map <leader>cc :set cursorcolumn!<cr>
+
+
+" jump to next occurance of current character
+" nmap S v"qy/<c-r>q<cr>
+" nmap Z v"qy?<c-r>q<cr>
+
 
 
 " fix slight delay after pressing ESC then O
@@ -395,7 +419,8 @@ nmap <leader>x :Silent chmod +x %<cr>
 nmap <leader>rn :Rename <c-r>=expand("%:t")<cr>
 
 " Change directory to the path of the current file
-map <leader>cd :cd %:p:h<cr>
+nnoremap <leader>cd :cd %:p:h<cr>:pwd<CR>
+
 
 " copy current filename into system clipboard - mnemonic: (c)urrent(f)ilename
 nnoremap <silent> <leader>cf :let @* = expand("%:~")<CR>
@@ -408,7 +433,7 @@ nnoremap <silent> <leader>cn :let @* = expand("%:t")<CR>
 nnoremap <leader>E :EditVifm<cr>
 nnoremap <leader>v :VsplitVifm<cr>
 " nnoremap <leader>F :DiffVifm<cr>
-nnoremap <leader>T :TabVifm<cr>
+" nnoremap <leader>T :TabVifm<cr>
 
 " shortcut to swap to alternate file
 nnoremap :l <c-^>
@@ -452,10 +477,11 @@ nnoremap gu :call OpenURL()<CR>
 let g:LargeFile=5
 
 " show alternate file
-nmap <c-n><c-n> <Plug>(altr-forward)
+" nmap <c-n><c-n> <Plug>(altr-forward)
 
 " sample definition for jade and stylus templates
 " call altr#define('%.jade', '../styles/%.styl')
+" call altr#define('%.html', '%.jade')
 " call altr#define('%.styl', '../templates/%.jade')
 
 
@@ -524,6 +550,8 @@ nmap <leader>F4 :set foldmethod=indent<cr>:set foldlevel=4<CR>
 " fold HTML tag
 nnoremap zt :set foldmethod=manual<cr>Vatzf
 
+nnoremap <cr> za
+
 " select all fold
 nnoremap vaf vaz
 
@@ -553,7 +581,7 @@ set linebreak                  " Wrap lines at convenient points
 set formatoptions+=j            "fo:    remove comment leader when joining lines
 
 " toggle line wrapping
-nnoremap <leader>W :set wrap!<cr>
+" nnoremap <leader>W :set wrap!<cr>
 
 
 " use external command for formatting paragraphs
@@ -648,13 +676,13 @@ set ttyfast                 " fast redraw screen
 
 set t_Co=256
 colorscheme solarized
-let g:solarized_termtrans = 1
-let g:solarized_contrast = 'high'
+" let g:solarized_termtrans = 1
+" let g:solarized_contrast = 'high'
 
-let g:airline_enable_fugitive=1
+let g:airline_enable_branch=1
 let g:airline_enable_syntastic=1
 " themes: dark, light, simple, badwolf, solarized, solarized2
-let g:airline_theme='dark'
+let g:airline_theme='solarized'
 let g:airline_left_sep = 'badwolf'
 let g:airline_left_sep = '▶'
 let g:airline_right_sep = '«'
@@ -662,18 +690,16 @@ let g:airline_right_sep = '◀'
 let g:airline_linecolumn_prefix = '␊ '
 let g:airline_linecolumn_prefix = '␤ '
 let g:airline_linecolumn_prefix = '¶ '
-let g:airline_fugitive_prefix = '⎇ '
+let g:airline_branch_prefix = '⎇ '
 let g:airline_paste_symbol = 'ρ'
 let g:airline_paste_symbol = 'þ'
 let g:airline_paste_symbol = '∥'
 let g:airline_section_a = ''
 let g:airline_section_x = ''
 let g:airline_section_y = ''
-let g:airline_section_y = '%{getcwd()}'
+" let g:airline_section_y = '%{getcwd()}'
 let g:airline_section_z = ''
 let g:airline_powerline_fonts=1
-
-" colorscheme jellybeans
 
 " Auto-detect solarized setting from the SOLARIZED env var
 if $SOLARIZED == 'light'
@@ -682,7 +708,7 @@ else
   set background=dark
 endif
 
-nmap <leader>cs :colorscheme<space>
+nmap <leader>cs :Unite colorscheme<cr>
 
 " " show file path in title bar
 " set title
@@ -730,7 +756,7 @@ map <leader>HI :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
 let g:airline_powerline_fonts=1
 
 " Unfuck my screen
-nnoremap <leader>u :syntax sync fromstart<cr>:redraw!<cr>
+nnoremap <leader>U :syntax sync fromstart<cr>:redraw!<cr>
 
 " Resize splits when the window is resized
 au VimResized * :wincmd =
@@ -787,7 +813,7 @@ nmap <leader>ve :tabedit ~/dotfiles/vim/vimrc.vim<cr>
 
 nmap <leader>ze :tabedit ~/dotfiles/zsh/zshrc<cr>
 nmap <leader>Ge :tabedit ~/dotfiles/git/gitconfig<cr>
-nmap <leader>te :tabedit ~/dotfiles/tmux/tmux.conf<cr>
+" nmap <leader>te :tabedit ~/dotfiles/tmux/tmux.conf<cr>
 
 " ,vc - (Vim Command) copies the command under your cursor and executes it in vim
 vnoremap <leader>vc y:execute @@<cr>
@@ -801,8 +827,8 @@ vnoremap <leader>L "xy<esc>:!open "http://www.google.com/search?btnI&q=<c-r>x"<c
 vnoremap <leader>S "xy<esc>:!open "http://www.stackoverflow.com/search?q=<c-r>x"<cr>
 
 " Dash search (brilliant OSX help tool)
-vmap <leader>h <Plug>DashSearch
-nmap <leader>h <Plug>DashSearch
+vmap <leader>H <Plug>DashSearch
+nmap <leader>H <Plug>DashSearch
 
 " language specific
 autocmd FileType coffee :DashKeywords lodash jquery javascript d3
@@ -820,62 +846,45 @@ set undofile
 
 " CLOJURE
 
-let g:slime_target = "tmux"
+autocmd FileType clojure nnoremap <buffer> <c-g> vip:Eval<cr>
+autocmd FileType clojure vnoremap <buffer> <c-g> :Eval<cr>
 
-" open a tmux pane and launch SBCL (Lisp interpreter)
-" then hit <C-c> v to set configuration
-" - socket name can be left to default
-" - target pane needs to be set to :.X where pane number X is found by hitting the tmux command <C-a> Q
+au FileType clojure let b:delimitMate_quotes = '"'
 
+autocmd BufRead *.cljx set filetype=clojure
+autocmd BufRead *.jar set filetype=clojure
 
-let g:vimclojure#ParenRainbow        = 1
-let g:vimclojure#FuzzyIndent         = 1
-let g:vimclojure#HighlightBuiltins   = 1
-let g:vimclojure#HighlightContrib    = 1
-let g:vimclojure#DynamicHighlighting = 1
-let g:vimclojure#SplitPos            = "right"
+let g:paredit_shortmaps=0
+let g:paredit_leader=" "
+let g:paredit_smartjump=1
 
-let g:vimclojure#WantNailgun         = 0
-let g:vimclojure#NailgunClient       = "~/.vim/bundle/vimclojure/bin/ng"
-" TODO: fix this
+let g:clojure_align_multiline_strings = 1
 
+function! s:wrapClojureExpression()
+  execute 'normal! HvLs)a'
+endfunction
 
+autocmd FileType clojure nnoremap <buffer> <leader><leader>w call s:wrapClojureExpression()
 
-" aw AddToLispWords
-" tr ToggleParenRainbow
-"
-" lw DocLookupWord
-" li DocLookupInteractive
-" jw JavadocLookupWord
-" ji JavadocLookupInteractive
-" fd FindDoc
-"
-" mw MetaLookupWord
-" mi MetaLookupInteractive
-"
-" sw SourceLookupWord
-" si SourceLookupInteractive
-"
-" gw GotoSourceWord
-" gi GotoSourceInteractive
-"
-" rf RequireFile
-" rF RequireFileAll
-"
-" rt RunTests
-"
-" me MacroExpand
-" m1 MacroExpand1
-"
-" ef EvalFile
-" el EvalLine
-" eb EvalBlock
-" et EvalToplevel
-" ep EvalParagraph
-"
-" sr StartRepl
-" sR StartLocalRepl
-"
+" Rainbow parentheses
+let g:rbpt_max = 10
+let g:rbpt_colorpairs = [
+    \ ['gray',      'HotPink1'],
+    \ ['darkred',   'cyan1'],
+    \ ['darkcyan',  'brown1'],
+    \ ['darkgreen', 'yellow1'],
+    \ ['darkblue',  'MediumOrchid'],
+    \ ['gray',      'DeepSkyBlue1'],
+    \ ['darkred',   'DarkOrange1'],
+    \ ['darkcyan',  'LimeGreen'],
+    \ ['darkgreen', 'goldenrod1'],
+    \ ['darkblue',  'RoyalBlue1'],
+    \ ]
+
+autocmd Filetype clojure RainbowParenthesesActivate
+autocmd BufRead *.clj,*.cljs RainbowParenthesesLoadRound
+" autocmd Syntax * RainbowParenthesesLoadSquare
+" autocmd Syntax * RainbowParenthesesLoadBraces
 
 " COFFEESCRIPT
 
@@ -889,13 +898,6 @@ autocmd FileType javascript,coffee setlocal makeprg=node\ %:r
 autocmd FileType javascript,json setl nolist
 
 autocmd FileType coffee setl fdm=expr fde=getline(v:lnum)=~'\(->$\|=>\)$'&&indent(v:lnum)<indent(v:lnum+1)?'a1':'s1'
-
-" open corresponding js file
-nmap <leader>jj :vertical expand("%:p:r")<CR>
-
-" convert js into coffeescript on the fly (using eponymous npm bundle)
-nmap <leader>jc :Js2Coffee<cr>
-vmap <leader>jc :Js2Coffee<cr>
 
 " coffeescript REPL
 " -----------------
@@ -966,6 +968,8 @@ let g:dbext_default_window_width = 50
 
 " DJANGO
 
+autocmd BufEnter *.py nmap <leader>deb Oimport pudb; pu.db<esc>
+
 " autocmd BufRead,BufNewFile *.html set filetype=html
 nmap _dt :set ft=htmldjango.html<cr>
 nmap _ht :set ft=html<cr>
@@ -1005,78 +1009,78 @@ nmap _ht :set ft=html<cr>
 " django testing from within vim. not 'tested'(!) yet
 " see http://gremu.net/blog/2010/integrate-your-python-test-runner-vim/
 
-" let g:makeprg_django_app = 'python\ manage.py\ test\ -v\ 0'
-" let g:makeprg_django_project = 'python\ manage.py\ test\ -v\ 0'
-" set errorformat=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+let g:makeprg_django_app = 'python\ manage.py\ test\ -v\ 0'
+let g:makeprg_django_project = 'python\ manage.py\ test\ -v\ 0'
+set errorformat=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 
-" function! RunTestsForFile(args)
-"   if @% =~ '\.py$'
-"     let expandstr = '%:p:h' " dirname
-"     while expand(expandstr) != '/'
-"       let testpath = expand(expandstr)
-"       if len(getfperm(testpath . '/tests')) > 0 || len(getfperm(testpath . '/tests.py')) > 0
-"         call RunTests(expand(expandstr . ':t'), a:args)
-"         return
-"       endif
-"       let expandstr .= ':h'
-"     endwhile
-"   endif
-"   call RunTests('', a:args)
-" endfunction
+function! RunTestsForFile(args)
+  if @% =~ '\.py$'
+    let expandstr = '%:p:h' " dirname
+    while expand(expandstr) != '/'
+      let testpath = expand(expandstr)
+      if len(getfperm(testpath . '/tests')) > 0 || len(getfperm(testpath . '/tests.py')) > 0
+        call RunTests(expand(expandstr . ':t'), a:args)
+        return
+      endif
+      let expandstr .= ':h'
+    endwhile
+  endif
+  call RunTests('', a:args)
+endfunction
 
-" function! RunTests(target, args)
-"   silent ! echo
-"   silent ! echo -e "\033[1;36mRunning all unit tests\033[0m"
-"   silent w
-"   if len(a:target)
-"     execute 'set makeprg=' . g:makeprg_django_app
-"   else
-"     execute 'set makeprg=' . g:makeprg_django_project
-"   endif
-"   exec "make! " . a:target . " " . a:args
-" endfunction
+function! RunTests(target, args)
+  silent ! echo
+  silent ! echo -e "\033[1;36mRunning all unit tests\033[0m"
+  silent w
+  if len(a:target)
+    execute 'set makeprg=' . g:makeprg_django_app
+  else
+    execute 'set makeprg=' . g:makeprg_django_project
+  endif
+  exec "make! " . a:target . " " . a:args
+endfunction
 
-" function! JumpToError()
-"   let has_valid_error = 0
-"   for error in getqflist()
-"     if error['valid']
-"       let has_valid_error = 1
-"       break
-"     endif
-"   endfor
-"   if has_valid_error
-"     for error in getqflist()
-"       if error['valid']
-"         break
-"       endif
-"     endfor
-"     let error_message = substitute(error['text'], '^ *', '', 'g')
-"     silent cc!
-"     exec ":sbuffer " . error['bufnr']
-"     call RedBar()
-"     echo error_message
-"   else
-"     call GreenBar()
-"     echo "All tests passed"
-"   endif
-" endfunction
+function! JumpToError()
+  let has_valid_error = 0
+  for error in getqflist()
+    if error['valid']
+      let has_valid_error = 1
+      break
+    endif
+  endfor
+  if has_valid_error
+    for error in getqflist()
+      if error['valid']
+        break
+      endif
+    endfor
+    let error_message = substitute(error['text'], '^ *', '', 'g')
+    silent cc!
+    exec ":sbuffer " . error['bufnr']
+    call RedBar()
+    echo error_message
+  else
+    call GreenBar()
+    echo "All tests passed"
+  endif
+endfunction
 
-" function! RedBar()
-"   hi RedBar ctermfg=white ctermbg=red guibg=red
-"   echohl RedBar
-"   echon repeat(" ",&columns - 1)
-"   echohl
-" endfunction
+function! RedBar()
+  hi RedBar ctermfg=white ctermbg=red guibg=red
+  echohl RedBar
+  echon repeat(" ",&columns - 1)
+  echohl
+endfunction
 
-" function! GreenBar()
-"   hi GreenBar ctermfg=white ctermbg=green guibg=green
-"   echohl GreenBar
-"   echon repeat(" ",&columns - 1)
-"   echohl
-" endfunction
+function! GreenBar()
+  hi GreenBar ctermfg=white ctermbg=green guibg=green
+  echohl GreenBar
+  echon repeat(" ",&columns - 1)
+  echohl
+endfunction
 
-" nnoremap <leader>a :call RunTests('', '')<cr>:redraw<cr>:call JumpToError()<cr>
-" nnoremap <leader>y :call RunTestsForFile('--failfast')<cr>:redraw<cr>:call JumpToError()<cr>
+nnoremap <leader><leader>a :call RunTests('', '')<cr>:redraw<cr>:call JumpToError()<cr>
+nnoremap <leader><leader>y :call RunTestsForFile('--failfast')<cr>:redraw<cr>:call JumpToError()<cr>
 
 "
 
@@ -1116,7 +1120,7 @@ nnoremap <leader>gco :Gcheckout<cr>
 
 nnoremap <leader>gc :Gcommit<cr>
 " write commit message in new tab and show preview
-nnoremap <leader>gC :Gcommit<cr><c-w>T:DiffGitCached<cr>:wincmd L<cr>:wincmd p<cr>
+nnoremap <leader>gC :Gstatus<cr><c-w>T:DiffGitCached<cr>:wincmd L<cr>:wincmd p<cr>
 
 nnoremap <leader>gm  :Gmove<cr>
 nnoremap <leader>gR  :Git checkout -- %<cr><cr>,u
@@ -1206,8 +1210,8 @@ autocmd BufRead,BufNewFile *.json set filetype=json
 autocmd Syntax json source ~/.vim/bundle/json/syntax/json.vim
 
 " format JSON
-nmap <leader>jp :%!python -m json.tool<cr>:set ft=json<cr>
-vmap <leader>jp :!python -m json.tool<cr>:set ft=json<cr>
+nmap <leader>JP :%!python -m json.tool<cr>:set ft=json<cr>
+vmap <leader>JP :!python -m json.tool<cr>:set ft=json<cr>
 
 augroup json_autocmd
   autocmd!
@@ -1274,6 +1278,7 @@ augroup ft_markdown
   au!
 
   " autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
+  " au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
   au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
 
   autocmd BufNewFile,BufRead *.txt set filetype=markdown
@@ -1433,7 +1438,7 @@ let g:surround_61 = "<%= \r %>"   " =
 " avoid annoying error when trying to surround with lowercase s
 vmap s S
 
-" ,# Surround a word with #{ruby interpolation}
+" ,# Surround a word with #{interpolation}
 map <leader># ysiw#
 " ,# Surround a word with quotes
 map <leader>" ysiw"
@@ -1532,10 +1537,8 @@ let g:ctrlp_user_command = {
       \ 'fallback': 'find %s -type f'
       \ }
 
-nmap <leader>f :CtrlPMRU<cr>
-
-""let g:ctrlp_cmd = 'CtrlPMixed'      " search anything (in files, buffers and MRU files at the same time.)
-"let g:ctrlp_working_path_mode = 'ra'  " search for nearest ancestor like .git, .hg, and the directory of the current file
+"let g:ctrlp_cmd = 'CtrlPMixed'      " search anything (in files, buffers and MRU files at the same time.)
+let g:ctrlp_working_path_mode = 'ra'  " search for nearest ancestor like .git, .hg, and the directory of the current file
 
 "" TIP: create new files using C-E from within CtrlP picker
 
@@ -1545,23 +1548,23 @@ nmap <leader>f :CtrlPMRU<cr>
 
 " We don't want to use Ctrl-p as the mapping because
 " it interferes with YankRing (paste, then hit ctrl-p)
-"let g:ctrlp_map = ',0'
+let g:ctrlp_map = ',0'
 
-"let g:ctrlp_open_new_file = 'v'
-"let g:ctrlp_open_multiple_files = 'v'
+let g:ctrlp_open_new_file = 'v'
+let g:ctrlp_open_multiple_files = 'v'
 
 " open switcher with project root directory (determined by location of .git folder)
 "" let g:ctrlp_working_path_mode = 2
 
 " open files in existing buffers if they are already opened
-"let g:ctrlp_switch_buffer = 'et'
+let g:ctrlp_switch_buffer = 'et'
 
-"let g:ctrlp_use_caching = 1
-"let g:ctrlp_clear_cache_on_exit=0     " speed up by not removing clearing cache evertime
-"let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
-"let g:ctrlp_dotfiles = 1
-"let g:ctrlp_max_depth = 20
-"let g:ctrlp_mruf_max = 200
+let g:ctrlp_use_caching = 1
+let g:ctrlp_clear_cache_on_exit=0     " speed up by not removing clearing cache evertime
+let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
+let g:ctrlp_dotfiles = 1
+let g:ctrlp_max_depth = 20
+let g:ctrlp_mruf_max = 200
 "
 " coffee: https://gist.github.com/michaelglass/5210282
 "let g:ctrlp_buftag_types = {
@@ -1662,7 +1665,7 @@ set wildignore+=tmp/**
 "   autocmd!
 "   " make sure `complete` works as expected for CSS class names whithout
 "   " messing with motions (eg. '.foo-bar__baz') and we make sure all
-"   " delimiters (_,-,$,%,.) are treated as word separators for motions
+"   delimiters (_,-,$,%,.) are treated as word separators for motions
 "   autocmd FileType * setl iskeyword=@,48-57,192-255
 "   autocmd InsertEnter * setl iskeyword=@,48-57,192-255,$,%,-,_
 "   autocmd InsertLeave * setl iskeyword=@,48-57,192-255
@@ -1692,22 +1695,19 @@ if !exists('g:neocomplcache_keyword_patterns')
 endif
 let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
+let delimitMate_matchpairs = "(:),[:],{:},<:>"
+" By default, delimitMate clobbers Vim's timeout settings. This
+" causes a huge delay when trying to exit insert or visual mode
+" while in the terminal. Setting this option to 1 fixes that.
+let g:delimitMate_no_esc_mapping = 1
+
 " Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 
 " autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
-" Enable heavy omni completion.
-if !exists('g:neocomplcache_omni_patterns')
-  let g:neocomplcache_omni_patterns = {}
-endif
-let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-
-" Filename completion
-inoremap <c-]> <c-x><C-]>
 inoremap <c-l> <c-x><C-l>
 set completefunc=syntaxcomplete#Complete
 
@@ -1837,8 +1837,8 @@ function! AddSign()
   execute(":sign place ".line(".")." line=".line(".")." name=white file=".expand("%:p"))
 endfunction
 
-map <leader>sa :call AddSign()<CR>
-map <leader>sr :sign unplace<CR>
+" map <leader>sa :call AddSign()<CR>
+" map <leader>sr :sign unplace<CR>
 
 " <c-e><c-e> Highlight current line
 " <c-e><C-a> Advance color for next line highlight
@@ -1931,7 +1931,12 @@ augroup cline
   au InsertLeave * set cursorline
 augroup END
 
-"
+" remap arrow keys
+nnoremap <pageup> :bnext<CR>
+nnoremap <pagedown> :bprev<CR>
+nnoremap <right> :tabnext<CR>
+nnoremap <left> :tabprev<CR>
+
 
 " PYTHON
 
@@ -1939,6 +1944,7 @@ augroup ft_python
   au!
   autocmd BufNewFile,BufRead *.py set filetype=python
   autocmd FileType python set expandtab
+  autocmd FileType python setlocal ts=4 sts=4 sw=4
   " compile
   " autocmd Filetype python nmap <buffer> <leader>cc :w<Esc>:!python %<CR>
 augroup END
@@ -1946,13 +1952,19 @@ augroup END
 " autocmd BufRead *.py set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
 
 let pymode_options=0
+let g:pymode_lint=0
+let g:pymode_lint_onfly = 0
+let g:pymode_lint_write = 0
+let g:pymode_rope = 0
+let g:pymode_folding = 0
+
 "
 
 " SEARCH
 
 " Use sane regexes.
-nnoremap / /\v
-vnoremap / /\v
+" nnoremap / /\v
+" vnoremap / /\v
 
 " use enter to start search (expect in quickfix window)
 " nnoremap <expr> <cr> (&buftype is# "quickfix" ? ":.cc<cr>" : "/")
@@ -1990,10 +2002,12 @@ vnoremap KC "sy:Unite vcs_grep/git -input=<c-r>s<CR>
 " vnoremap KC "sy:GitGrep "<c-r>s"<CR>
 " vnoremap KC "sy:Unite -input=<C-R>y grep:.<cr>
 
-nnoremap KA :GitGrep ""<left>
+" nnoremap KA :GitGrep ""<left>
 nnoremap <silent> KA  :Unite -no-split grep:.<CR>
-vnoremap KA "sy:GitGrep "<c-r>s"<CR>
-nnoremap KL :GitGrep "<c-r>/"<cr>
+" vnoremap KA "sy:GitGrep "<c-r>s"<CR>
+" nnoremap KL :GitGrep "<c-r>/"<cr>
+
+let g:unite_source_grep_default_opts = '--exclude ''\.tags'''
 
 
 " Escape and paste a register
@@ -2080,6 +2094,7 @@ nmap <silent> <leader>CS z=1<cr><cr>
 iabbr teh the
 iabbr nign ning
 iabbr lenght length
+iabbr erorr error
 
 "
 
@@ -2091,6 +2106,9 @@ syntax enable                  " turn on syntax highlighting
 nmap <leader>FT :Unite filetype<cr>
 
 let g:syntastic_check_on_open=0
+let g:syntastic_check_on_wq=0
+let g:syntastic_mode_map = { 'mode': 'active',
+                            \ 'passive_filetypes': ['python'] }
 
 " mark syntax errors with :signs
 let g:syntastic_enable_signs=1
@@ -2119,7 +2137,7 @@ set synmaxcol=800
 
 nmap <leader><tab> :tabnew<cr>
 
-nmap <leader>tc :tabclose<cr>
+" nmap <leader>TC :tabclose<cr>
 
 " gt              Move to next tab
 " gT              Move to previous tab
@@ -2135,7 +2153,8 @@ nmap <leader>tc :tabclose<cr>
 " TAGS
 
 " Look for tags file in parent directories, upto "/"
-set tags=./tags;tags;.git/;/
+" set tags=./tags;tags;.git/;/
+set tags=./tags;tags
 
 " Restore case-sensitivity for jumping to tags (set ic disables it)
 nnoremap <silent> <C-]> :set noic<cr>g<C-]><silent>:set ic<cr>
@@ -2145,15 +2164,14 @@ nmap ]t :bd<cr>:tnext<cr>
 " Jump to previous tag match
 nmap [t :bd<cr>:tprevious<cr>
 
+let g:ycm_collect_identifiers_from_tags_files = 1
 
 " jump to current tag
-nnoremap <silent> T :UniteWithCursorWord -immediately tag<cr>
+" nnoremap <silent> T :UniteWithCursorWord -immediately tag<cr>
 
 " open file (from cs require)
 nnoremap <silent> <leader>gf "zyi':Unite file_rec/async file_mru -no-start-insert -immediately -input=<c-r>z<cr>
 
-" open the taglist
-nnoremap <silent> <leader>T :TagbarToggle<CR><C-l>
 
 let g:tagbar_width=44
 let g:tagbar_autoclose = 1
@@ -2173,16 +2191,16 @@ let g:tagbar_autofocus = 1
 
 " TMUX
 " Prompt for a command to run
-nmap <leader>tp :PromptVimTmuxCommand<cr>
+" nmap <leader>tp :PromptVimTmuxCommand<cr>
 
-" Run last command executed by RunVimTmuxCommand
-nmap <leader>tl :RunLastVimTmuxCommand<cr>
+" " Run last command executed by RunVimTmuxCommand
+" nmap <leader>tl :RunLastVimTmuxCommand<cr>
 
-" Inspect runner pane
-nmap <leader>ti :InspectVimTmuxRunner<cr>
+" " Inspect runner pane
+" nmap <leader>ti :InspectVimTmuxRunner<cr>
 
-" Close all other tmux panes in current window
-nmap <leader>tx :CloseVimTmuxPanes<cr>
+" " Close all other tmux panes in current window
+" nmap <leader>tx :CloseVimTmuxPanes<cr>
 
 " Interrupt any command running in the runner pane
 nmap <leader>rs :InterruptVimTmuxRunner<cr>
@@ -2247,17 +2265,23 @@ let g:unite_source_directory_mru_time_format = ''
 let g:unite_source_file_mru_time_format = ''
 
 nnoremap qq :UniteResume<cr>
-nnoremap <leader>p :UniteWithCurrentDir -no-split -buffer-name=all file_rec/async:!<cr>
+" nnoremap <leader>p :Unite -no-split -buffer-name=all file_rec/async:!<cr>
+nnoremap <leader>p :CtrlPMRUFiles<cr>
 nnoremap <leader>o :Unite -no-split -buffer-name=outline outline<cr>
+nnoremap <leader>j :Unite jump<cr>
 nnoremap <leader>i :set foldmethod=indent<cr>:Unite -no-split -buffer-name=fold fold<cr>
-nnoremap <leader>t :Unite -no-split -buffer-name=tags tag<cr>
+nnoremap <leader>T :Unite -buffer-name=tags tag<cr>
+nnoremap <leader>t :CtrlPTag<cr>
+nnoremap T :TagbarToggle<cr>
 
-nnoremap <leader>f :Unite -buffer-name=mru file_mru<cr>
+nnoremap <leader><space> :Unite -toggle -auto-resize -buffer-name=mixed file_rec buffer file_mru bookmark<cr>
+nnoremap <leader>f :UniteWithCurrentDir -buffer-name=mru file_mru<cr>
 nnoremap <leader>F :UniteWithBufferDir -no-split -buffer-name=files file<cr>
 nnoremap <leader>b :Unite -no-split -quick-match -buffer-name=buffer buffer<cr>
 
 nnoremap <leader>R :Unite -no-split -buffer-name=register register<cr>
 nnoremap <leader>P :Unite -no-split -buffer-name=sessions session<CR>
+nnoremap <leader><leader>P :UniteSessionSave<space>
 " nnoremap <leader>u :Unite -no-split -buffer-name=sources source<CR>
 nnoremap <leader>y :Unite -no-split -buffer-name=yank    history/yank<cr>
 nnoremap <leader>h :Unite -no-split -buffer-name=help help<CR>
@@ -2265,7 +2289,7 @@ nnoremap <leader>h :Unite -no-split -buffer-name=help help<CR>
 nnoremap <leader>c :Unite -no-split -buffer-name=commands history/command command<CR>
 nnoremap <leader>b :Unite -no-split -buffer-name=bookmarks -quick-match bookmark<CR>
 nnoremap <leader>d :Unite -buffer-name=change-cwd -default-action=lcd directory_mru<CR>
-nnoremap <leader><leader> :Unite -no-start-insert fold<CR>
+" nnoremap <leader><leader> :Unite -no-start-insert fold<CR>
 
 nnoremap <silent> <leader>/  :Unite -no-split -buffer-name=search line<CR>
 
@@ -2316,8 +2340,6 @@ function! s:unite_settings()
   nnoremap <buffer><expr> <C-v> unite#do_action('vsplit')
   inoremap <buffer><expr> <C-t> unite#do_action('tabopen')
   nnoremap <buffer><expr> <C-t> unite#do_action('tabopen')
-  inoremap <buffer><expr> <C-g> unite#do_action('grep')
-  nnoremap <buffer><expr> <C-g> unite#do_action('grep')
 
   let unite = unite#get_current_unite()
   if unite.buffer_name =~# '^search'
@@ -2377,8 +2399,9 @@ let g:vimfiler_enable_auto_cd = 1
 let g:vimfiler_default_columns = "size:time"
 
 
-nnoremap <leader>e :VimFilerBufferDir<cr>
-nnoremap <tab><tab> :VimFilerExplorer<cr>
+nnoremap <leader>e :VimFiler<cr>
+nnoremap <leader><leader>e :VimFilerBufferDir<cr>
+" nnoremap <tab><tab> :VimFilerExplorer<cr>
 
 autocmd FileType vimfiler call s:vimfiler_settings()
 function! s:vimfiler_settings()
@@ -2393,6 +2416,7 @@ function! s:vimfiler_settings()
   nmap <buffer> h <Plug>(vimfiler_smart_h)
   nmap <buffer> l <Plug>(vimfiler_smart_l)
   nmap <buffer> <c-l> <c-w>l
+  nmap <buffer> <c-g> <Plug>(vimfiler_grep)
   nmap <buffer> y <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_copy_file)
   nmap <buffer> m <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_move_file)
   nmap <buffer> d <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_delete_file)
@@ -2405,4 +2429,5 @@ source ~/dotfiles/vim/colors.vim
 source ~/dotfiles/vim/personal.vim
 
 
+let unstack_mapkey="<leader><leader>S"
 " vim:set foldmethod=marks; set foldenable
