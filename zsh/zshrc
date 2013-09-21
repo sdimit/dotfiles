@@ -88,16 +88,20 @@ bindkey ' ' magic-space                             # [Space] - do history expan
 
 # EDITOR {{{
 
-export EDITOR="/Applications/MacVim.app/Contents/MacOS/Vim"
+# export EDITOR="/Applications/MacVim.app/Contents/MacOS/Vim"
+export EDITOR='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -t'
+
+alias es='/Applications/Emacs.app/Contents/MacOS/Emacs --daemon & > /dev/null'
 
 alias vim=$EDITOR
 alias vi=$EDITOR
 alias v=$EDITOR
-alias e=$EDITOR
 alias vc="git editm"
 
+alias ec='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -t'
+
 # get the right emacs
-# alias emacs="/usr/local/bin/emacs-24.1.50"
+alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs"
 
 # }}}
 
@@ -217,12 +221,8 @@ autoload -U edit-command-line
 zle -N edit-command-line
 bindkey '\C-x\C-e' edit-command-line
 
-alias m="mutt"
 alias o="offlineimap -o"
-alias t="tig"
-alias ts="tig status"
 alias tl="vim ~/Reference/tech_log.md"
-alias spotify="osascript ~/bin/SpotifyControl.scpt"
 alias lb="open /Applications/LaunchBar.app"
 
 alias y="yeoman"
@@ -231,7 +231,6 @@ alias y="yeoman"
 alias R='R --no-save'
 
 alias ni="npm install -g"
-alias vmi="vim +BundleInstall"
 
 alias xx='exit'
 alias n="newsbeuter -o"
@@ -692,6 +691,10 @@ alias gff='git flow feature finish'
 alias zz='git co'                     # "z quick-jump" for git
 alias gal='git alias | grep'          # find aliases
 alias gcl='pbpaste | xargs git clone' # clone github project from clipboard
+
+sha() {
+  git rev-list --max-count=1 HEAD
+}
 
 # git function to add last parameter of last command via git add (used after a diff)
 glast() {

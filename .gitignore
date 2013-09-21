@@ -7,3 +7,12 @@ maestro/Untitled Macro File.kmmacros
 newsbeuter/config
 newsbeuter/solarized-dark.txt
 newsbeuter/urls.txt
+emacs/auto-save-list/*
+emacs/backups/*
+emacs/src/*
+emacs/starter-kit*.el
+*.elc
+emacs/*.el
+emacs/projectile*.*
+emacs/bookmarks
+emacs/url/cookies

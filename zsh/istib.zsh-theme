@@ -22,7 +22,7 @@ vi_mode_prompt_info () {
 }
 
 
-PROMPT='%{$fg[green]%}%c $(git_prompt_info)$(git_time_since_commit) $(vi_mode_prompt_info) '
+PROMPT='%{$fg[green]%}%c $(git_prompt_info)$(git_time_since_commit) - Sir? '
 
 # The right-hand prompt
 

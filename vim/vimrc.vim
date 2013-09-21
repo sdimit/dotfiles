@@ -38,6 +38,8 @@ NeoBundle 'majutsushi/tagbar'
 NeoBundle 'tsukkee/unite-tag'
 " NeoBundle 'xolox/vim-misc'
 " NeoBundle 'xolox/vim-easytags'
+" NeoBundle "JCLiang/vim-cscope-utils"
+" NeoBundle "vim-scripts/cscope.vim"
 
 " git tools
 NeoBundle 'tpope/vim-fugitive'
@@ -52,8 +54,8 @@ NeoBundle 'moznion/unite-git-conflict.vim'
 " snippets and completion
 NeoBundle 'SirVer/ultisnips'
 " NeoBundle 'Shougo/neocomplete.vim'
-NeoBundle 'Valloric/YouCompleteMe'
-" NeoBundle 'scrooloose/syntastic'
+" NeoBundle 'Valloric/YouCompleteMe'
+NeoBundle 'scrooloose/syntastic'
 
 " general helpers
 NeoBundle 'tpope/vim-commentary'
@@ -87,6 +89,7 @@ NeoBundleLazy 'klen/python-mode', {'autoload': {'filetypes': ['python']}}
 NeoBundleLazy 'kevinw/pyflakes-vim', {'autoload': {'filetypes': ['python']}}
 NeoBundleLazy 'JarrodCTaylor/vim-python-test-runner', {'autoload': {'filetypes': ['python']}}
 NeoBundleLazy 'reinh/vim-makegreen', {'autoload':{'filetypes':['python']}}
+NeoBundleLazy 'yodiaditya/vim-pydjango', {'autoload':{'filetypes':['python']}}
 " NeoBundle 'nvie/vim-pyunit'
 " vimpdb
 " NeoBundle 'mattboehm/unstack'
@@ -136,7 +139,7 @@ NeoBundle 'MarcWeber/vim-addon-mw-utils'
 NeoBundle 'duff/vim-scratch'
 NeoBundle 'vim-scripts/utl.vim'
 " NeoBundle 'vim-scripts/marvim'
-NeoBundle 'svermeulen/vim-easymotion'
+" NeoBundle 'svermeulen/vim-easymotion'
 
 " Search
 " NeoBundle 'henrik/git-grep-vim'
@@ -150,6 +153,7 @@ NeoBundle 'svermeulen/vim-extended-ft'
 " Appearance
 NeoBundle 'flazz/vim-colorschemes'
 NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'junegunn/seoul256.vim'
 NeoBundle 'bling/vim-airline'
 NeoBundle 'osyo-manga/unite-airline_themes'
 NeoBundle 'tomasr/molokai'
@@ -233,7 +237,7 @@ command! -nargs=1 Silent
 " use utf8
 set encoding=utf8
 
-set number
+set nonumber
 let g:enable_numbers = 0
 
 nmap = :+
@@ -1887,12 +1891,6 @@ else
     let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
-
-
-
-
-"
-
 " NAVIGATION
 
 " next text object
@@ -2329,10 +2327,10 @@ nnoremap <leader>M :Unite giti/status<cr>
 nnoremap <leader>B :Unite giti/branch_all<cr>
 nnoremap <leader>L :Unite giti/log -default-action=yank_hash<cr>
 
-autocmd BufEnter *
-\   if empty(&buftype)
-\|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
-\|  endif
+" autocmd BufEnter *
+" \   if empty(&buftype)
+" \|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
+" \|  endif
 
 " Custom Unite settings
 
