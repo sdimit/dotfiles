@@ -7,6 +7,14 @@ ${2}
 " }}}
 endsnippet
 
+snippet b "bundle"
+NeoBundle '${1}'
+endsnippet
+
+snippet lb "lazy bundle"
+NeoBundleLazy '${1}', {'autoload':{'filetypes':['${2}']}}
+endsnippet
+
 snippet hi "highlight"
 hi! ${1} ctermfg=${2} ctermbg=${3}
 endsnippet

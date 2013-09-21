@@ -1,7 +1,7 @@
-set author-width = 2
+set author-width = 5
 set show-author = yes
 set show-date = relative
-# set show-refs = yes
+set show-refs = yes
 set show-rev-graph = yes
 set line-graphics = utf-8
 set status-untracked-dirs = off

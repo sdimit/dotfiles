@@ -49,8 +49,8 @@
 
   # COMMIT
 
-  c = commit -m                     # commit with message
-  ca = commit -am                   # commit all with message
+  c = commit --allow-empty          # commit with message
+  ca = commit --allow-empty -A      # commit all with message
 
   amend = commit --amend            # ammend your last commit
   am = commit --amend               # ammend your last commit
@@ -72,15 +72,13 @@
 
   # CHERRY-PICK
 
-  cp = cherry-pick -x               # grab a change from a branch
+  cp = cherry-pick                  # grab a change from a branch
 
   # DIFF
 
   d = diff                          # diff unstaged changes
   dc = diff --cached                # diff staged changes
   last = diff HEAD^                 # diff last committed change
-  dv = !git diff -w "$@" | vim -R -
-  dcf = diff -- **/*.coffee         # diff coffeescript only
 
   # STATUS
 

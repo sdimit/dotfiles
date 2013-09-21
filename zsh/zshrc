@@ -94,9 +94,10 @@ alias vim=$EDITOR
 alias vi=$EDITOR
 alias v=$EDITOR
 alias e=$EDITOR
+alias vc="git editm"
 
 # get the right emacs
-alias emacs="/usr/local/bin/emacs-24.1.50"
+# alias emacs="/usr/local/bin/emacs-24.1.50"
 
 # }}}
 
@@ -684,6 +685,10 @@ vs() {
 alias gs='git status'
 alias gl='git l'
 alias gd='git diff'
+alias gr='git rsh'
+alias gf='git flow'
+alias gfs='git flow feature start'
+alias gff='git flow feature finish'
 alias zz='git co'                     # "z quick-jump" for git
 alias gal='git alias | grep'          # find aliases
 alias gcl='pbpaste | xargs git clone' # clone github project from clipboard
@@ -749,5 +754,8 @@ alias emu='cake emulate:ios:dev'
 
 export DYLD_FORCE_FLAT_NAMESPACE=1
 # for vim/youcompleteme
+
+export LD_LIBRARY_PATH=/usr/local/lib/python2.7/site-packages/xapian-bindings-1.0.16
+export DJANGO_SETTINGS_MODULE=project.settings
 
 # }}}

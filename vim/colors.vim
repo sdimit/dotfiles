@@ -29,6 +29,8 @@ hi! link ShowMarksHLu DiffChange
 hi! NonText ctermfg=8 ctermbg=8
 hi! link IndentGuidesOdd  NonText
 hi! link IndentGuidesEven LineNr
+hi link EasyMotionTarget ErrorMsg
+hi link EasyMotionShade  Comment
 
 " hi! link VertSplit LineNr
 " hi! link Visual LineNr

@@ -14,7 +14,7 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " file management
 NeoBundle 'kien/ctrlp.vim'
 NeoBundle 'istib/vifm.vim'
-NeoBundle 'vim-scripts/LargeFile'
+" NeoBundle 'vim-scripts/LargeFile'
 " NeoBundle 'kana/vim-altr'
 
 NeoBundle 'Shougo/vimproc.vim'
@@ -36,7 +36,8 @@ NeoBundle 'Shougo/vimshell.vim'
 " tag support
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'tsukkee/unite-tag'
-NeoBundle 'abudden/TagHighlight'
+" NeoBundle 'xolox/vim-misc'
+" NeoBundle 'xolox/vim-easytags'
 
 " git tools
 NeoBundle 'tpope/vim-fugitive'
@@ -50,10 +51,9 @@ NeoBundle 'moznion/unite-git-conflict.vim'
 
 " snippets and completion
 NeoBundle 'SirVer/ultisnips'
-" NeoBundle 'Shougo/neocomplcache'
+" NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Valloric/YouCompleteMe'
-
-NeoBundle 'scrooloose/syntastic'
+" NeoBundle 'scrooloose/syntastic'
 
 " general helpers
 NeoBundle 'tpope/vim-commentary'
@@ -65,12 +65,15 @@ NeoBundle 'tpope/vim-unimpaired'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-repeat'
 " NeoBundle 'Indent-Guides'
-" NeoBundle 'godlygeek/tabular'
+NeoBundle 'godlygeek/tabular'
 NeoBundle 'AndrewRadev/switch.vim'
 NeoBundle 'danro/rename.vim'
 NeoBundle 'kshenoy/vim-signature'
 NeoBundle 'vim-scripts/highlight.vim'
 NeoBundle 'delimitMate.vim'
+" NeoBundle 'bvim-scripts/CompleteHelper'
+" NeoBundle 'vim-scripts/PrevInsertComplete'
+" let g:PrevInsertComplete_MinLength = 2
 " NeoBundle 'dhruvasagar/vim-table-mode'
 " NeoBundle 'terryma/vim-smooth-scroll'
 " NeoBundle 'terryma/vim-multiple-cursors'
@@ -79,30 +82,35 @@ NeoBundle 'delimitMate.vim'
 " NeoBundle 'PeterRincker/vim-argumentative'
 
 " python
-NeoBundle 'klen/python-mode'
 NeoBundle 'jmcantrell/vim-virtualenv'
+NeoBundleLazy 'klen/python-mode', {'autoload': {'filetypes': ['python']}}
+NeoBundleLazy 'kevinw/pyflakes-vim', {'autoload': {'filetypes': ['python']}}
+NeoBundleLazy 'JarrodCTaylor/vim-python-test-runner', {'autoload': {'filetypes': ['python']}}
+NeoBundleLazy 'reinh/vim-makegreen', {'autoload':{'filetypes':['python']}}
 " NeoBundle 'nvie/vim-pyunit'
 " vimpdb
 " NeoBundle 'mattboehm/unstack'
 
 
+
 " coffeescript
-NeoBundle 'kchmck/vim-coffee-script'
-NeoBundle 'zeekay/vim-js2coffee'
+NeoBundleLazy 'kchmck/vim-coffee-script', {'autoload':{'filetypes':['coffee']}}
+NeoBundleLazy 'zeekay/vim-js2coffee', {'autoload':{'filetypes':['javascript', 'coffee']}}
 " LiveScript
 " NeoBundle 'gkz/vim-ls'
 
 " web development
-NeoBundle 'tristen/vim-sparkup'
-NeoBundle 'edsono/vim-matchit'
+NeoBundleLazy 'tristen/vim-sparkup', {'autoload':{'filetypes':['hmtl', 'htmldjango']}}
+NeoBundleLazy 'edsono/vim-matchit', {'autoload':{'filetypes':['hmtl', 'htmldjango']}}
+NeoBundleLazy 'Rykka/colorv.vim', {'autoload':{'filetypes':['css', 'less', 'stylus']}}
 " NeoBundle 'mattn/zencoding-vim'
 " NeoBundle 'vim-scripts/closetag.vim'
 " NeoBundle 'vim-scripts/autotag'
-NeoBundle 'leshill/vim-json'
-NeoBundle 'wavded/vim-stylus'
-NeoBundle 'groenewege/vim-less'
+NeoBundleLazy 'leshill/vim-json', {'autoload':{'filetypes':['json']}}
+NeoBundleLazy 'wavded/vim-stylus', {'autoload':{'filetypes':['stylus']}}
+NeoBundleLazy 'groenewege/vim-less', {'autoload':{'filetypes':['less']}}
 " NeoBundle 'skammer/vim-css-color'
-NeoBundle 'digitaltoad/vim-jade'
+NeoBundleLazy 'digitaltoad/vim-jade', {'autoload':{'filetypes':['jade']}}
 " NeoBundle 'jaxbot/brolink.vim'
 " NeoBundle 'skwp/vim-html-escape'
 
@@ -128,6 +136,7 @@ NeoBundle 'MarcWeber/vim-addon-mw-utils'
 NeoBundle 'duff/vim-scratch'
 NeoBundle 'vim-scripts/utl.vim'
 " NeoBundle 'vim-scripts/marvim'
+NeoBundle 'svermeulen/vim-easymotion'
 
 " Search
 " NeoBundle 'henrik/git-grep-vim'
@@ -136,7 +145,7 @@ NeoBundle 'bronson/vim-visual-star-search'
 NeoBundle 'henrik/vim-indexed-search'
 NeoBundle 'nelstrom/vim-qargs'
 NeoBundle 'tpope/vim-abolish'
-NeoBundle 'rking/ag.vim'
+NeoBundle 'svermeulen/vim-extended-ft'
 
 " Appearance
 NeoBundle 'flazz/vim-colorschemes'
@@ -301,8 +310,8 @@ nmap YY vHLy
 
 " RSI bindings
 imap <c-d> #
-imap <c-h> =>
-map £ #
+" imap <c-h> =>
+imap £ #
 
 " Fix for navigating long lines
 " Wrapped lines goes down/up to next row, rather than next line in file.
@@ -550,7 +559,7 @@ nmap <leader>F4 :set foldmethod=indent<cr>:set foldlevel=4<CR>
 " fold HTML tag
 nnoremap zt :set foldmethod=manual<cr>Vatzf
 
-nnoremap <cr> za
+" nnoremap <cr> za
 
 " select all fold
 nnoremap vaf vaz
@@ -679,14 +688,11 @@ colorscheme solarized
 " let g:solarized_termtrans = 1
 " let g:solarized_contrast = 'high'
 
-let g:airline_enable_branch=1
-let g:airline_enable_syntastic=1
 " themes: dark, light, simple, badwolf, solarized, solarized2
 let g:airline_theme='solarized'
-let g:airline_left_sep = 'badwolf'
-let g:airline_left_sep = '▶'
-let g:airline_right_sep = '«'
-let g:airline_right_sep = '◀'
+let g:airline_powerline_fonts=1
+let g:Powerline_symbols='fancy'
+
 let g:airline_linecolumn_prefix = '␊ '
 let g:airline_linecolumn_prefix = '␤ '
 let g:airline_linecolumn_prefix = '¶ '
@@ -694,12 +700,30 @@ let g:airline_branch_prefix = '⎇ '
 let g:airline_paste_symbol = 'ρ'
 let g:airline_paste_symbol = 'þ'
 let g:airline_paste_symbol = '∥'
-let g:airline_section_a = ''
-let g:airline_section_x = ''
-let g:airline_section_y = ''
-" let g:airline_section_y = '%{getcwd()}'
-let g:airline_section_z = ''
-let g:airline_powerline_fonts=1
+let g:airline_left_sep = '⮀'
+let g:airline_left_alt_sep = '⮁'
+let g:airline_right_sep = '⮂'
+let g:airline_right_alt_sep = '⮃'
+
+let g:airline_enable_branch=1
+let g:airline_enable_syntastic=0
+let g:airline#extensions#virtualenv#enabled=1
+let g:airline#extensions#tabline#enabled=0
+let g:airline#extensions#tagbar#flags = 's'
+
+" let g:airline_section_a = ''
+let g:airline_section_b = airline#section#create(['branch'])
+let g:airline_section_c = airline#section#create(['%<', 'file'])
+" let g:airline_section_gutter = ''
+" let g:airline_section_y = ''
+let g:airline_section_x = airline#section#create(['tagbar'])
+let g:airline_section_z = airline#section#create(['%P'])
+let g:airline_section_warning = airline#section#create_right(['syntastic'])
+
+" POWERLINE
+" let g:Powerline_theme='solarized256'
+" let g:Powerline_colorscheme='solarized256'
+
 
 " Auto-detect solarized setting from the SOLARIZED env var
 if $SOLARIZED == 'light'
@@ -747,13 +771,6 @@ set mouse=a
 
 " Get the current highlight group. Useful for then remapping the color
 map <leader>HI :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
-
-" POWERLINE
-" let g:Powerline_symbols='fancy'
-" let g:Powerline_theme='solarized256'
-" let g:Powerline_colorscheme='solarized256'
-
-let g:airline_powerline_fonts=1
 
 " Unfuck my screen
 nnoremap <leader>U :syntax sync fromstart<cr>:redraw!<cr>
@@ -969,6 +986,8 @@ let g:dbext_default_window_width = 50
 " DJANGO
 
 autocmd BufEnter *.py nmap <leader>deb Oimport pudb; pu.db<esc>
+autocmd BufEnter *.py :VirtualEnvActivate Native<cr>
+
 
 " autocmd BufRead,BufNewFile *.html set filetype=html
 nmap _dt :set ft=htmldjango.html<cr>
@@ -1642,6 +1661,11 @@ imap gyy <esc>:t-1<cr>gCcgi
 
 let g:UltiSnipsSnippetDirectories=["snippets"]
 nnoremap <leader>UE :UltiSnipsEdit<cr>
+let g:UltiSnipsExpandTrigger="<c-j>"
+
+
+let g:ycm_complete_in_comments_and_strings=1
+let g:ycm_filetype_blacklist={'unite': 1}
 
 " tab completion for e.g. :e is awesome with these
 set wildmode=list:longest,full
@@ -2107,7 +2131,7 @@ nmap <leader>FT :Unite filetype<cr>
 
 let g:syntastic_check_on_open=0
 let g:syntastic_check_on_wq=0
-let g:syntastic_mode_map = { 'mode': 'active',
+let g:syntastic_mode_map = { 'mode': 'passive',
                             \ 'passive_filetypes': ['python'] }
 
 " mark syntax errors with :signs
@@ -2121,6 +2145,9 @@ let g:syntastic_auto_loc_list=0
 
 " don't care about warnings
 let g:syntastic_quiet_warnings=0
+
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='⚠'
 
 " for html template files, you may want to disable syntastic's automatic checks using the passive mode:
 nmap <leader>ns :SyntasticToggleMode<cr>
@@ -2153,11 +2180,10 @@ nmap <leader><tab> :tabnew<cr>
 " TAGS
 
 " Look for tags file in parent directories, upto "/"
-" set tags=./tags;tags;.git/;/
-set tags=./tags;tags
+set tags=./tags;tags;.git/;/
 
 " Restore case-sensitivity for jumping to tags (set ic disables it)
-nnoremap <silent> <C-]> :set noic<cr>g<C-]><silent>:set ic<cr>
+" nnoremap <silent> <C-]> :set noic<cr>g<C-]><silent>:set ic<cr>
 
 " Jump to next tag match
 nmap ]t :bd<cr>:tnext<cr>
@@ -2416,6 +2442,7 @@ function! s:vimfiler_settings()
   nmap <buffer> h <Plug>(vimfiler_smart_h)
   nmap <buffer> l <Plug>(vimfiler_smart_l)
   nmap <buffer> <c-l> <c-w>l
+
   nmap <buffer> <c-g> <Plug>(vimfiler_grep)
   nmap <buffer> y <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_copy_file)
   nmap <buffer> m <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_move_file)
@@ -2425,9 +2452,11 @@ endfunction
 
 nnoremap <leader>gS :Unite file_rec/async -input=<C-R>=expand("%:t:r")<cr>_spec<cr>
 
+" CUSTOM {{{
+
 source ~/dotfiles/vim/colors.vim
 source ~/dotfiles/vim/personal.vim
 
+" }}}
 
-let unstack_mapkey="<leader><leader>S"
 " vim:set foldmethod=marks; set foldenable
