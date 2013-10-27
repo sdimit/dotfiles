@@ -17,35 +17,29 @@ install them. Other dependencies are provided by Emacs 24.
 #+end_src
 
 ** Color Themes
-Emacs 24 introduces a streamlined theming system that replaces an
-older, messier one. The Starter Kit uses Ethan Schoonover's
-/Solarized/ color theme. Load it with =M-x load-theme solarized-dark=
-or =M-x load-theme solarized-light=. You can also try loading the
-=zenburn-theme= or =tango-2= themes. If this doesn't work first time,
-load it manually with =M-x load-theme solarized-light=.
 
 #+source: colors
 #+begin_src emacs-lisp
   (add-to-list 'custom-theme-load-path "~/.emacs.d/elpa")
   (setq custom-safe-themes t)
-  (load-theme 'solarized-light t)
 #+end_src
 
-** Window system 
+** Window system
 
 #+srcname: starter-kit-window-view-stuff
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
   (when window-system
     (setq frame-title-format '(buffer-file-name "%f" ("%b")))
     (tooltip-mode -1)
     (tool-bar-mode -1)
     (blink-cursor-mode -1))
-  
+    (menu-bar-mode -1)
+
   (mouse-wheel-mode t)
   (set-terminal-coding-system 'utf-8)
   (set-keyboard-coding-system 'utf-8)
   (prefer-coding-system 'utf-8)
-  
+
   (setq visible-bell t
         echo-keystrokes 0.1
         font-lock-maximum-decoration t
@@ -59,7 +53,7 @@ load it manually with =M-x load-theme solarized-light=.
         uniquify-buffer-name-style 'forward
         whitespace-style '(trailing lines space-before-tab
                                     indentation space-after-tab)
-        whitespace-line-column 100  
+        whitespace-line-column 100
         ediff-window-setup-function 'ediff-setup-windows-plain
         ediff-split-window-function 'split-window-horizontally
         oddmuse-directory (concat dotfiles-dir "oddmuse")
@@ -74,48 +68,31 @@ embedding multiple major modes in a single buffer.
 Nxhtml is not installed in this version of the starter-kit by default,
 for information on installing nxhtml see [[http://www.emacswiki.org/emacs/NxhtmlMode][EmacsWiki-Nxhtml]].
 
-** Set browser
-Set this to whatever browser you use e.g...
-#+source: browser
-#+begin_src emacs-lisp
-;  (setq browse-url-browser-function 'browse-default-macosx-browser)
-#+end_src
-
 ** Transparently open compressed files
 #+begin_src emacs-lisp
 (auto-compression-mode t)
 #+end_src
 
-** Enable syntax highlighting 
+** Enable syntax highlighting
 #+begin_src emacs-lisp
 (global-font-lock-mode t)
 #+end_src
 
-** Show Menu Bar in Window but not in tty
-If launching Emacs as in windowing system, show the menu. If launching in a tty/terminal window, don't display the menu.
-#+source: starter-kit-no-menu-in-tty
-#+begin_src emacs-lisp
-  (if window-system
-      (menu-bar-mode t)
-      (menu-bar-mode -1)
-      )
-#+end_src
-
 ** Save a list of recent files visited.
-#+begin_emacs-lisp 
+#+begin_emacs-lisp
 (recentf-mode 1)
 #+end_emacs-lisp
 
 ** Highlight matching parentheses when the point is on them.
 #+srcname: starter-kit-match-parens
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (show-paren-mode 1)
 #+end_src
 
 ** ido mode
 ido-mode is like magic pixie dust!
 #+srcname: starter-kit-loves-ido-mode
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
   (when (> emacs-major-version 21)
     (ido-mode t)
     (setq ido-enable-prefix nil
@@ -126,17 +103,17 @@ ido-mode is like magic pixie dust!
 #+end_src
 
 ** Other, tabs, imenu and a coding hook
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
   (set-default 'indent-tabs-mode nil)
   (set-default 'indicate-empty-lines t)
   (set-default 'imenu-auto-rescan t)
-  
+
   (add-hook 'text-mode-hook 'turn-on-auto-fill)
   (add-hook 'text-mode-hook 'turn-on-flyspell)
-  
+
   (defvar starter-kit-coding-hook nil
     "Hook that gets run on activation of any programming mode.")
-  
+
   (defalias 'yes-or-no-p 'y-or-n-p)
   ;; Seed the random-number generator
   (random t)
@@ -184,15 +161,17 @@ ido-mode is like magic pixie dust!
 ** Cosmetics
 This is turned off, as the color theme handles it.
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (eval-after-load 'diff-mode
     '(progn
        (set-face-foreground 'diff-added "green4")
        (set-face-foreground 'diff-removed "red3")))
-  
+
   (eval-after-load 'magit
     '(progn
        (set-face-foreground 'magit-diff-add "green3")
        (set-face-foreground 'magit-diff-del "red3")))
 
 #+end_src
+
+#+RESULTS:

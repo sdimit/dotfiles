@@ -1,7 +1,7 @@
 #+TITLE: Starter Kit Text Editing
 #+OPTIONS: toc:nil num:nil ^:nil
 
-This is part of the [[file:starter-kit.org][Emacs Starter Kit]]. 
+This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
 
 This file provides settings for text-editing modes and formats, including
 Markdown and Pandoc, as well as spellchecking and line-wrapping.
@@ -27,43 +27,34 @@ Markdown and Pandoc, as well as spellchecking and line-wrapping.
     ;; (add-hook hook (lambda () (word-count-mode 1))))
 
     (require 'wc)
-#+end_src 
+#+end_src
 
 ** Line wrapping and position
     Sane line wrapping and scrolling for long documents and
     papers. Plus a function for removing any hard-returns in a
-    document. 
+    document.
 #+srcname: line-modes
 #+begin_src emacs-lisp
-  (global-visual-line-mode t)
+  ; (global-visual-line-mode t)
   ;;; prefer auto-fill to visual line wrap in ESS mode
-  (add-hook 'ess-mode-hook 'turn-on-auto-fill)
-  (add-hook 'inferior-ess-mode-hook 'turn-on-auto-fill) 
-  
+
   ;;; but turn off auto-fill in tex and markdown
   (add-hook 'markdown-mode-hook 'turn-off-auto-fill)
   (add-hook 'latex-mode-hook 'turn-off-auto-fill)
-  
-  ;;; unfill paragraph
-  (defun unfill-paragraph ()
-  (interactive)
-  (let ((fill-column (point-max)))
-  (fill-paragraph nil)))
-  (global-set-key (kbd "<f6>") 'unfill-paragraph)
-  
-  ;; smooth-scrolling 
+
+  ;; smooth-scrolling
   (require 'smooth-scrolling)
-  
+
   ;; more smooth efforts.
-  (setq-default 
+  (setq-default
   scroll-conservatively 0
   scroll-up-aggressively 0.01
   scroll-down-aggressively 0.01)
-  
+
   ;; centered-cursor package in src/
   ;; (and
   ;;  (require 'centered-cursor-mode)
-  ;;  (global-centered-cursor-mode +1)) 
+  ;;  (global-centered-cursor-mode +1))
 #+end_src
 
 ** Spelling
@@ -109,12 +100,12 @@ Markdown and Pandoc, as well as spellchecking and line-wrapping.
 
 ** AutoPair Mode
     TextMate-like autopairing of quotes and parentheses. Trying out
-    instead of Skeleton Mode. 
+    instead of Skeleton Mode.
 #+srcname: autopair
-#+begin_src emacs-lisp 
-  (require 'autopair)
-  (autopair-global-mode) ;; enable autopair in all buffers 
-  (setq autopair-autowrap t)
+#+begin_src emacs-lisp
+ ; (require 'autopair)
+ ; (autopair-global-mode) ;; enable autopair in all buffers
+ ; (setq autopair-autowrap t)
 #+end_src
 
 ** Skeleton mode
@@ -128,7 +119,7 @@ Markdown and Pandoc, as well as spellchecking and line-wrapping.
     (?\] . ?\[)
     (?} . ?{)
     (?" . ?")))
-    
+
     (defun my-skeleton-pair-end (arg)
     "Skip the char if it is an ending, otherwise insert it."
     (interactive "*p")
@@ -148,8 +139,8 @@ Markdown and Pandoc, as well as spellchecking and line-wrapping.
 #+end_src
 
 
-** Markdown 
-Markdown mode support. 
+** Markdown
+Markdown mode support.
 
 #+srcname: markdown-mode
 #+begin_src emacs-lisp

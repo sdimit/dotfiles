@@ -1,4 +1,4 @@
-* Magit 
+* Magit
   Borrowed from https://raw.github.com/cjohansen/.emacs.d/master/setup-magit.el
 #+begin_src emacs-lisp
 (autoload 'magit-status "magit")

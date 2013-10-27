@@ -31,7 +31,7 @@ NeoBundle 'osyo-manga/unite-quickfix'
 NeoBundle 'thinca/vim-unite-history'
 " NeoBundle 'thinca/vim-quickrun'
 " NeoBundle 'osyo-manga/unite-env'
-NeoBundle 'Shougo/vimshell.vim'
+" NeoBundle 'Shougo/vimshell.vim'
 
 " tag support
 NeoBundle 'majutsushi/tagbar'
@@ -44,9 +44,9 @@ NeoBundle 'tsukkee/unite-tag'
 " git tools
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'gregsexton/gitv'
-NeoBundle 'airblade/vim-gitgutter'
-NeoBundle 'kmnk/vim-unite-giti'
-NeoBundle 'moznion/unite-git-conflict.vim'
+" NeoBundle 'airblade/vim-gitgutter'
+" NeoBundle 'kmnk/vim-unite-giti'
+" NeoBundle 'moznion/unite-git-conflict.vim'
 " NeoBundle 'hrsh7th/vim-versions'
 " NeoBundle 'mattn/gist-vim'
 " gist
@@ -55,12 +55,12 @@ NeoBundle 'moznion/unite-git-conflict.vim'
 NeoBundle 'SirVer/ultisnips'
 " NeoBundle 'Shougo/neocomplete.vim'
 " NeoBundle 'Valloric/YouCompleteMe'
-NeoBundle 'scrooloose/syntastic'
+" NeoBundle 'scrooloose/syntastic'
 
 " general helpers
 NeoBundle 'tpope/vim-commentary'
 NeoBundle 'tomtom/tcomment_vim'
-NeoBundle 'vim-scripts/DirDiff.vim'
+" NeoBundle 'vim-scripts/DirDiff.vim'
 NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundle 'vim-scripts/YankRing.vim'
 NeoBundle 'tpope/vim-unimpaired'
@@ -72,7 +72,7 @@ NeoBundle 'AndrewRadev/switch.vim'
 NeoBundle 'danro/rename.vim'
 NeoBundle 'kshenoy/vim-signature'
 NeoBundle 'vim-scripts/highlight.vim'
-NeoBundle 'delimitMate.vim'
+" NeoBundle 'delimitMate.vim'
 " NeoBundle 'bvim-scripts/CompleteHelper'
 " NeoBundle 'vim-scripts/PrevInsertComplete'
 " let g:PrevInsertComplete_MinLength = 2
@@ -86,10 +86,10 @@ NeoBundle 'delimitMate.vim'
 " python
 NeoBundle 'jmcantrell/vim-virtualenv'
 NeoBundleLazy 'klen/python-mode', {'autoload': {'filetypes': ['python']}}
-NeoBundleLazy 'kevinw/pyflakes-vim', {'autoload': {'filetypes': ['python']}}
-NeoBundleLazy 'JarrodCTaylor/vim-python-test-runner', {'autoload': {'filetypes': ['python']}}
-NeoBundleLazy 'reinh/vim-makegreen', {'autoload':{'filetypes':['python']}}
-NeoBundleLazy 'yodiaditya/vim-pydjango', {'autoload':{'filetypes':['python']}}
+" NeoBundleLazy 'kevinw/pyflakes-vim', {'autoload': {'filetypes': ['python']}}
+" NeoBundleLazy 'JarrodCTaylor/vim-python-test-runner', {'autoload': {'filetypes': ['python']}}
+" NeoBundleLazy 'reinh/vim-makegreen', {'autoload':{'filetypes':['python']}}
+" NeoBundleLazy 'yodiaditya/vim-pydjango', {'autoload':{'filetypes':['python']}}
 " NeoBundle 'nvie/vim-pyunit'
 " vimpdb
 " NeoBundle 'mattboehm/unstack'
@@ -118,13 +118,13 @@ NeoBundleLazy 'digitaltoad/vim-jade', {'autoload':{'filetypes':['jade']}}
 " NeoBundle 'skwp/vim-html-escape'
 
 " access dash help in osx
-NeoBundle 'rizzatti/funcoo.vim'
-NeoBundle 'rizzatti/dash.vim'
+" NeoBundle 'rizzatti/funcoo.vim'
+" NeoBundle 'rizzatti/dash.vim'
 
 " helpers to handle repls and running unit tests in tmux
-NeoBundle 'ervandew/screen'
-NeoBundle 'benmills/vimux'
-NeoBundle 'tpope/vim-dispatch'
+" NeoBundle 'ervandew/screen'
+" NeoBundle 'benmills/vimux'
+" NeoBundle 'tpope/vim-dispatch'
 " NeoBundle 'nvie/vim_bridge'
 " NeoBundle 'tpope/vim-tbone'
 
@@ -142,7 +142,7 @@ NeoBundle 'vim-scripts/utl.vim'
 " NeoBundle 'svermeulen/vim-easymotion'
 
 " Search
-" NeoBundle 'henrik/git-grep-vim'
+NeoBundle 'henrik/git-grep-vim'
 NeoBundle 'sgur/unite-git_grep'
 NeoBundle 'bronson/vim-visual-star-search'
 NeoBundle 'henrik/vim-indexed-search'
@@ -165,13 +165,13 @@ NeoBundle 'Yggdroot/indentLine' "{{{
 "}}}
 
 " Clojure
-NeoBundle 'tpope/vim-fireplace'
+" NeoBundle 'tpope/vim-fireplace'
 " NeoBundle 'tpope/vim-classpath'
-NeoBundle 'guns/vim-clojure-static'
-NeoBundle 'dgrnbrg/vim-redl'
-NeoBundle 'kien/rainbow_parentheses.vim'
-NeoBundle 'vim-scripts/paredit.vim'
-NeoBundle 'emanon001/fclojure.vim'
+" NeoBundle 'guns/vim-clojure-static'
+" NeoBundle 'dgrnbrg/vim-redl'
+" NeoBundle 'kien/rainbow_parentheses.vim'
+" NeoBundle 'vim-scripts/paredit.vim'
+" NeoBundle 'emanon001/fclojure.vim'
 
 " extras
 NeoBundle 'jtratner/vim-flavored-markdown'
@@ -847,15 +847,15 @@ vnoremap <leader>L "xy<esc>:!open "http://www.google.com/search?btnI&q=<c-r>x"<c
 " stack overflow
 vnoremap <leader>S "xy<esc>:!open "http://www.stackoverflow.com/search?q=<c-r>x"<cr>
 
-" Dash search (brilliant OSX help tool)
-vmap <leader>H <Plug>DashSearch
-nmap <leader>H <Plug>DashSearch
+" " Dash search (brilliant OSX help tool)
+" vmap <leader>H <Plug>DashSearch
+" nmap <leader>H <Plug>DashSearch
 
-" language specific
-autocmd FileType coffee :DashKeywords lodash jquery javascript d3
-autocmd FileType python :DashKeywords django python
-autocmd FileType haskell :DashKeywords haskell
-autocmd FileType stylus :DashKeywords css
+" " language specific
+" autocmd FileType coffee :DashKeywords lodash jquery javascript d3
+" autocmd FileType python :DashKeywords django python
+" autocmd FileType haskell :DashKeywords haskell
+" autocmd FileType stylus :DashKeywords css
 
 
 
@@ -2447,8 +2447,6 @@ function! s:vimfiler_settings()
   nmap <buffer> d <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_delete_file)
 
 endfunction
-
-nnoremap <leader>gS :Unite file_rec/async -input=<C-R>=expand("%:t:r")<cr>_spec<cr>
 
 " CUSTOM {{{
 

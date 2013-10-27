@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: constructor
+# --
+  constructor: ($0) ->
+    $1
