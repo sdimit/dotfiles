@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: constructor
 # --
-  constructor: ($0) ->
-    $1
+constructor: ($0) ->
+  $1

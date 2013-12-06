@@ -21,8 +21,12 @@ vi_mode_prompt_info () {
   fi
 }
 
-
+# if [[ -n ${INSIDE_EMACS} ]]; then
+#     PROMPT='%c - Sir? '
+# else
 PROMPT='%{$fg[green]%}%c $(git_prompt_info)$(git_time_since_commit) - Sir? '
+# fi
+
 
 # The right-hand prompt
 

@@ -1,0 +1,4 @@
+# -*- mode: snippet -*-
+# name: o
+# --
+ko.observable($1)

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: log
+# key: log
+# binding: direct-keybinding
+# expand-env: ((some-var some-value))
+# type: command
+# --
+console.log($1)

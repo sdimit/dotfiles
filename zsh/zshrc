@@ -89,19 +89,17 @@ bindkey ' ' magic-space                             # [Space] - do history expan
 # EDITOR {{{
 
 export VIM="/Applications/MacVim.app/Contents/MacOS/Vim"
-export EDITOR='/usr/local/Cellar/emacs/HEAD/bin/emacsclient -t'
+export EDITOR='/usr/local/Cellar/emacs-mac/emacs-24.3-mac-4.5/bin/emacsclient -t'
 
-alias es='/usr/local/Cellar/emacs/HEAD/bin/emacs --daemon & > /dev/null'
+alias es='/usr/local/Cellar/emacs-mac/emacs-24.3-mac-4.5/bin/emacs --daemon & > /dev/null'
+alias ec='/usr/local/Cellar/emacs-mac/emacs-24.3-mac-4.5/bin/emacsclient -t'
+alias emacs="/usr/local/Cellar/emacs-mac/emacs-24.3-mac-4.5/bin/emacsclient"
 
 alias vim=$VIM
 alias vi=$VIM
 alias v=$VIM
 alias vc="git editm"
 
-alias ec='/usr/local/Cellar/emacs/HEAD/bin/emacsclient -t'
-
-# get the right emacs
-alias emacs="/usr/local/Cellar/emacs/HEAD/bin/emacs"
 
 # }}}
 

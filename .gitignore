@@ -13,6 +13,17 @@ emacs/src/*
 emacs/starter-kit*.el
 *.elc
 emacs/*.el
+emacs/.cask
 emacs/projectile*.*
 emacs/bookmarks
 emacs/url/cookies
+emacs/eshell/history
+emacs/saved-places
+/emacs/eshell/lastdir
+/emacs/places
+/tmux-powerline/
+/tmux/tmux-powerline/
+/zsh/zsh-syntax-highlighting/
+/emacs/tramp
+/emacs/ac-comphist.dat
+/emacs/var/pcache/gh/gh-gist-api/istib

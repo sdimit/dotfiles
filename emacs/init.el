@@ -1,4 +1,7 @@
-;;; init.el --- Where all the magic begins
+;(require 'cask "~/.emacs.d/Cask")
+;(cask-initialize)
+
+;; init.el --- Where all the magic begins
 
 (setq dotfiles-dir (file-name-directory (or load-file-name (buffer-file-name))))
 

@@ -1,9 +1,6 @@
 * Evil-mode
 #+BEGIN_SRC emacs-lisp
   
-  ;; no duplicates in command history
-  (setq comint-input-ignoredups t)
-
   (evil-mode 1)
   
   ;; don't use evil in the following mode
@@ -14,6 +11,7 @@
          shell-mode
          eshell-mode
          inferior-python-mode
+         inferior-ess-mode
          dired-mode
          term-mode
          deft-mode
@@ -24,13 +22,10 @@
   
   
   ; evil leader mode
-  (global-evil-leader-mode)
+  ;(global-evil-leader-mode)
   
   ; (evil-leader/set-leader "<space>")
   ; (setq evil-leader/in-all-states t)
-  
-  (require 'surround)
-  (global-surround-mode 1)
   
   (setq evil-want-C-u-scroll t
         evil-cross-lines t
@@ -48,7 +43,8 @@
   
   (defun nmap (kbinding fun) (define-key evil-normal-state-map kbinding fun))
   (defun vmap (kbinding fun) (define-key evil-visual-state-map kbinding fun))
-  ;(defun imap (kbinding fun) (define-key evil-insert-state-map kbinding fun))
+  (defun imap (kbinding fun) (define-key evil-insert-state-map kbinding fun))
+  (defun nvmap (kbinding fun) (progn (nmap kbinding fun) (vmap kbinding fun)))
 
   (nmap (kbd "C-u")         'evil-scroll-up)
   (nmap (kbd "<RET>")       'evil-scroll-down)
@@ -69,7 +65,7 @@
   
   ; (define-key evil-normal-state-map ":l" 'cycle-buffer)
   
-  (nmap " k" 'ace-jump-char-mode)
+  (nmap " k" 'helm-bookmarks)
   (nmap " p" 'helm-browse-project)
   (nmap " g" 'helm-buffers-list)
   (nmap " t" 'idomenu) ;tags
@@ -93,18 +89,21 @@
   (nmap " a" 'ag-here-from-point)
   (nmap " e" 'helm-find-files)
   (nmap " i" 'deft)
-  (nmap "  " 'ido-find-file)
-  (nmap " q" 'eshell)
+  ; (nmap "  " 'ido-find-file)
+  (nmap "  " 'ido-switch-buffer)
+  (nmap (kbd "SPC TAB") 'ibuffer-other-window)
+  (nmap " q" 'multi-term)
   (nmap "gu" 'browse-url)
   (vmap "gu" 'google-region)
   (nmap "Q" 'kill-current-buffer)
   (nmap "q" 'delete-window)
   (nmap "j" 'evil-next-visual-line)
   (nmap "k" 'evil-previous-visual-line)
-  (nmap "H" 'evil-first-non-blank)
-  (nmap "L" 'evil-last-non-blank)
-  (vmap "H" 'evil-first-non-blank)
-  (vmap "L" 'evil-last-non-blank)
+
+  (nvmap "H" 'evil-first-non-blank)
+  (nvmap "L" 'evil-last-non-blank)
+
+  (nmap (kbd "C-f") 'evil-find-char-backward)
   
   (nmap (kbd "[ SPC") (bind (evil-insert-newline-above) (forward-line)))
   (nmap (kbd "] SPC") (bind (evil-insert-newline-below) (forward-line -1)))
@@ -115,12 +114,33 @@
   (nmap (kbd "[ q") 'previous-error)
   (nmap (kbd "] q") 'next-error)
   
-  (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-  (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-  (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-  (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-  (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
-  
+#+END_SRC
+* IBuffer
+#+BEGIN_SRC emacs-lisp
+  (require 'ibuffer)
+
+  (define-key ibuffer-mode-map "K" 'ibuffer-do-delete)
+  (define-key ibuffer-mode-map "j" 'ibuffer-forward-line)
+  (define-key ibuffer-mode-map "k" 'ibuffer-backward-line)
+  (define-key ibuffer-mode-map "f" 'ibuffer-jump-to-buffer)
+
+
+;; default grouping of ibuffer
+(setq ibuffer-saved-filter-groups
+      (quote (("default"
+               ("org" (mode . org-mode))
+               ("dirs" (mode . dired-mode))
+               ("python" (mode . python-mode))
+               ("php" (mode . php-mode))
+               ("js" (mode . js2-mode))
+               ("templates" (mode . web-mode))
+               ("emacs" (or
+                         (name . "^.+\\.el$")
+                         (name . "^\\*.+\\*$")))))))
+
+;; don't ask to kill buffers
+(setq ibuffer-expert t)
+
 #+END_SRC
 
 * Smartparens
@@ -155,7 +175,8 @@
 (define-key sp-keymap (kbd "C-M-<left>") 'sp-backward-slurp-sexp)
 (define-key sp-keymap (kbd "C-<left>") 'sp-forward-barf-sexp)
 (define-key sp-keymap (kbd "C-<right>") 'sp-backward-barf-sexp)
-(define-key sp-keymap (kbd "C-M-<up>") 'sp-splice-sexp)
+;(define-key sp-keymap (kbd "C-M-<up>") 'sp-splice-sexp)
+(define-key sp-keymap (kbd "C-M-<up>") 'sp-splice-sexp-killing-around)
 (define-key sp-keymap (kbd "C-M-<down>") 'sp-splice-sexp-killing-forward)
 ;(define-key sp-keymap (kbd "C-M-<backspace>") 'sp-splice-sexp-killing-backward)
 ;(define-key sp-keymap (kbd "C-S-<backspace>") 'sp-splice-sexp-killing-around)
@@ -192,46 +213,6 @@
 
 #+END_SRC
 
-* Defuns
-
-#+begin_src emacs-lisp
-  (require 'thingatpt)
-  (require 'imenu)
- 
-  (defun local-column-number-mode ()
-     (make-local-variable 'column-number-mode)
-     (column-number-mode t))
- 
-   (defun local-comment-auto-fill ()
-     (set (make-local-variable 'comment-auto-fill-only-comments) t)
-     (auto-fill-mode t))
- 
-   (defun turn-on-idle-highlight-mode ()
-     (idle-highlight t))
- 
-   (defun turn-on-hl-line-mode ()
-         (require 'hl-line+)
-         (toggle-hl-line-when-idle 1)
-         (global-hl-line-mode nil))
- 
-   (defun turn-on-save-place-mode ()
-     (setq save-place t))
- 
-   (defun turn-on-whitespace ()
-     (whitespace-mode t))
- 
- (add-hook 'starter-kit-coding-hook 'local-column-number-mode)
- (add-hook 'starter-kit-coding-hook 'local-comment-auto-fill)
- (add-hook 'starter-kit-coding-hook 'turn-on-idle-highlight-mode)
- (add-hook 'starter-kit-coding-hook 'turn-on-hl-line-mode)
-;(add-hook 'starter-kit-coding-hook 'starter-kit-pretty-lambdas)
-;
-;(defun run-starter-kit-coding-hook ()
-;  "Enable things that are convenient across all coding buffers."
-;  (run-hooks 'starter-kit-coding-hook))
-
-#+end_src
-
 * ELPA
 
 #+begin_src emacs-lisp
@@ -265,9 +246,7 @@
                                 'r-autoyas                                                              
                                 )
     "Libraries that should be installed by default.")
-#+end_src
 
-#+begin_src emacs-lisp
     (setq package-archives '(("org"       . "http://orgmode.org/elpa/")
                              ("gnu"       . "http://elpa.gnu.org/packages/")
                              ("melpa"     . "http://melpa.milkbox.net/packages/")
@@ -282,9 +261,7 @@
                 (functionp package))
       (message "Installing %s" (symbol-name package))
       (package-install package))))
-#+end_src
 
-#+begin_src emacs-lisp
 (defun esk-online? ()
   "See if we're online.
 
@@ -298,20 +275,17 @@ just have to assume it's online."
                                                    (car iface)))))))
             (network-interface-list))
     t))
-#+end_src
 
-On your first run, this should pull in all the base packages.
-#+begin_src emacs-lisp
+;On your first run, this should pull in all the base packages.
+
 (when (esk-online?)
   (unless package-archive-contents (package-refresh-contents))
   (starter-kit-elpa-install))
-#+end_src
 
-Make sure the PATH variable is set properly. (Uses exec-path-from-shell package.)
-#+source: fix-path
-#+begin_src emacs-lisp
+;Make sure the PATH variable is set properly. (Uses exec-path-from-shell package.)
   (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
+
 #+end_src
 
 * Folding
@@ -328,10 +302,12 @@ Make sure the PATH variable is set properly. (Uses exec-path-from-shell package.
   (setq initial-scratch-message "")
   (setq inhibit-splash-screen t)
   (setq inhibit-startup-message t)
-
+  (setq redisplay-dont-pause t)
   (set-scroll-bar-mode nil)
-  (menu-bar-mode -1)
+;  (menu-bar-mode -1)
   (tool-bar-mode -1)
+  (tooltip-mode -1)
+  (setq tooltip-use-echo-area t)
 
   (maximize-frame)
 
@@ -354,8 +330,7 @@ Make sure the PATH variable is set properly. (Uses exec-path-from-shell package.
     (setq evil-emacs-state-cursor '("yellow" box))
     (setq evil-normal-state-cursor '("white" box))
     (setq evil-visual-state-cursor '("orange" box))
-    (setq evil-insert-state-cursor '("white" bar))
-)
+    (setq evil-insert-state-cursor '("white" bar)))
 
   (setq evil-normal-state-tag   (propertize "<N>" 'face '((:background "black"  :foreground "grey" )))
         evil-visual-state-tag   (propertize "<V>" 'face '((:background "orange" :foreground "black")))
@@ -367,13 +342,16 @@ Make sure the PATH variable is set properly. (Uses exec-path-from-shell package.
 ;;; evil-surround
   (dark-theme)
 
+  (glasses-mode)
+
   (setq evil-default-cursor t)
 
   (set-face-attribute 'default nil
      :family "PragmataPro"
-     :height 160
+     :height 180
      :weight 'normal
      :width 'normal)
+
   (setq line-spacing 2)
 
 ; minimize fringe
@@ -384,8 +362,21 @@ Make sure the PATH variable is set properly. (Uses exec-path-from-shell package.
   ;; No current line highlighting
   (global-hl-line-mode nil)
 
-  ; (load-theme 'zenburn)
-  (load-theme 'solarized-dark t)
+ (custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(region ((t (:background "alternateSelectedControlColor" :foreground "white" :background "#073642")))))
+
+  (defun fullscreen (&optional f)
+    (interactive)
+    (set-frame-parameter f 'fullscreen
+                         (if (frame-parameter f 'fullscreen) nil 'fullboth)))
+
+  (global-set-key (kbd "C-M-f") 'fullscreen)
+
+  (add-hook 'after-make-frame-functions 'fullscreen)
 
 #+END_SRC
 
@@ -470,8 +461,8 @@ as turning off the sans-serif heading style that AucTeX defaults to.
 Shift+direction arrow moves between frames.
 
 #+begin_src emacs-lisp
-  (windmove-default-keybindings)
-  (setq windmove-wrap-around t)
+   (windmove-default-keybindings)
+   (setq windmove-wrap-around t)
 #+end_src
 
 *** Resizing Windows on the fly
@@ -513,80 +504,128 @@ When windows get out of order, you can rotate them.
 
 * Editing
 #+BEGIN_SRC emacs-lisp
-  
-    (setq ns-function-modifier 'hyper)
+  (require 'thingatpt)
+  (require 'imenu)
+ 
+  (defun local-column-number-mode ()
+     (make-local-variable 'column-number-mode)
+     (column-number-mode t))
+ 
+   (defun local-comment-auto-fill ()
+     (set (make-local-variable 'comment-auto-fill-only-comments) t)
+     (auto-fill-mode t))
+ 
+   (defun turn-on-hl-line-mode ()
+         (require 'hl-line+)
+         (toggle-hl-line-when-idle 1)
+         (global-hl-line-mode nil))     
+ 
+   (defun turn-on-save-place-mode ()
+     (setq save-place t))
+ 
+   (defun turn-on-whitespace ()
+     (whitespace-mode t))
+ 
+(defun buffer-contains-string-p (string)
+  "Does the current buffer contain STRING? Case sensitive."
+  (let ((case-fold-search nil))
+    (save-excursion
+      (save-match-data
+        (goto-char (point-min))
+        (search-forward string nil t)))))
     
-    (prefer-coding-system 'utf-8)
-    (set-language-environment 'utf-8)
-    (set-default-coding-systems 'utf-8)
-    (set-terminal-coding-system 'utf-8)
-    (set-selection-coding-system 'utf-8)
+      (setq ns-function-modifier 'hyper)
+      
+      (prefer-coding-system 'utf-8)
+      (set-language-environment 'utf-8)
+      (set-default-coding-systems 'utf-8)
+      (set-terminal-coding-system 'utf-8)
+      (set-selection-coding-system 'utf-8)
+    
+      ;; default tab-width is two spaces
+      (setq-default tab-width 2
+                    js-indent-level 2
+                    c-basic-offset 2
+                    indent-tabs-mode nil)
+    
+      (require 'highlight-indentation)
+    
+      (add-hook 'coffee-mode-hook
+                (lambda () (highlight-indentation-current-column-mode)))
+    
+        (nmap "[e" 'shift-text-up)
+        (nmap "]e" 'shift-text-down)
+    
+        (setq c-basic-offset 2)
+    
+    
+        (global-set-key "\C-\\" 'comment-region)
+    
+      ; show the matching parentheses immediately
+      (setq show-paren-delay 0)
   
-    ;; default tab-width is two spaces
-    (setq-default tab-width 2
-                  js-indent-level 2
-                  c-basic-offset 2
-                  indent-tabs-mode nil)
+      (require 'evil-matchit)
+      (global-evil-matchit-mode)
   
-    (require 'highlight-indentation)
+      (defun custom-align () (interactive) 
+        (let ((start (region-beginning))
+              (end   (region-end))) 
+          (align-regexp start end "=")))
   
-    (add-hook 'coffee-mode-hook
-              (lambda () (highlight-indentation-current-column-mode)))
-  
-      (nmap "[e" 'shift-text-up)
-      (nmap "]e" 'shift-text-down)
-  
-      (setq c-basic-offset 2)
-  
-  
-      (global-set-key "\C-\\" 'comment-region)
-  
-    ; show the matching parentheses immediately
-    (setq show-paren-delay 0)
-  
-    ; (define-key evil-visual-state-map " a=" (lambda () (interactive) 
-    ;    (align-regexp (region-beginning) (region-end) "=")))
-  
-    (defun visual-shift-left ()
-      (interactive)
-      (let ((start (region-beginning))
-            (end (region-end)))
-        (message start)
-        (message end))
-        (progn (evil-shift-left start end)
-               (evil-visual-restore)))
-  
+      (vmap " a=" (bind (align-regexp (region-beginning) (region-end) "=")))
+    
+    (defun visual-shift-left (start end)
+      (interactive "r")
+      (save-excursion
+        (evil-shift-left start end))
+      (evil-visual-restore))
+    
     (defun visual-shift-right ()
       (interactive)
       (let ((start (region-beginning))
             (end (region-end)))
         (progn (evil-shift-right start end)
                (evil-visual-restore))))
+    
+    (defun commas-to-newlines ()
+      (interactive)
+      (shell-command-on-region
+        (region-beginning)
+        (region-end)
+        "tr , '\n'"
+        nil
+        t))
   
-  (defun commas-to-newlines ()
+  (defun narrow-paragraph (start end)
+    "Narrow region to 80 columns"
+    (interactive "r")
+    (let ((command "par 79"))
+      (shell-command-on-region start end 
+                               command
+                               nil t)))
+    
+  (defun shell-command-on-buffer ()
     (interactive)
-    (shell-command-on-region
-      (region-beginning)
-      (region-end)
-      "tr , '\n'"
-      nil
-      t))
+    (shell-command-on-region (point-min) (point-max)
+                             (read-shell-command "Shell command on buffer: ") t))
 
-(defun narrow-paragraph (start end)
-  "Narrow region to 80 columns"
-  (interactive "r")
-  (let ((command "par 79"))
-    (shell-command-on-region start end 
-                             command
-                             nil t)))
+  (define-key evil-visual-state-map "<" 'visual-shift-left)
   
-    (define-key evil-visual-state-map "<" 'visual-shift-left)
+  (define-key evil-visual-state-map ">" 'visual-shift-right)
+    
+  (define-key evil-normal-state-map " =" 'evil-numbers/inc-at-pt)
+  (define-key evil-normal-state-map " -" 'evil-numbers/dec-at-pt)
+
+  (define-key evil-normal-state-map (kbd "C-c DEL") 
+     (bind (delete-region (point-min) (point-max))))
+
+  (require 'surround)
+  (global-surround-mode 1)
   
-    (define-key evil-visual-state-map ">" 'visual-shift-right)
-  
+ 
+   (idle-highlight t)
+
 #+end_src
-
-#+RESULTS:
 
 ** CUA mode for rectangle editing
 Sometimes very useful (but we don't use the core cua keys.)
@@ -718,99 +757,153 @@ First mark the word, then add more cursors. To get out of multiple-cursors-mode,
   
 #+end_src
 
-* Command mode (minibuffer)
+* Command mode
 #+BEGIN_SRC emacs-lisp
 
-(defun my-minibuffer-insert-word-at-point ()
-  "Get word at point in original buffer and insert it to minibuffer."
-  (interactive)
-  (let (word beg)
-    (with-current-buffer (window-buffer (minibuffer-selected-window))
-      (save-excursion
-        (skip-syntax-backward "w_")
-        (setq beg (point))
-        (skip-syntax-forward "w_")
-        (setq word (buffer-substring-no-properties beg (point)))))
-    (when word
-      (insert word))))
+  ;; no duplicates in command history
+  (setq comint-input-ignoredups t)
 
-(add-hook 'minibuffer-setup-hook (lambda () (local-set-key (kbd "C-w") 'my-minibuffer-insert-word-at-point)))
+  (setq enable-recursive-minibuffers t)
+  
+  (defun my-minibuffer-insert-word-at-point ()
+    "Get word at point in original buffer and insert it to minibuffer."
+    (interactive)
+    (let (word beg)
+      (with-current-buffer (window-buffer (minibuffer-selected-window))
+        (save-excursion
+          (skip-syntax-backward "w_")
+          (setq beg (point))
+          (skip-syntax-forward "w_")
+          (setq word (buffer-substring-no-properties beg (point)))))
+      (when word
+        (insert word))))
+  
+  (add-hook 'minibuffer-setup-hook (lambda () (local-set-key (kbd "C-w") 'my-minibuffer-insert-word-at-point)))
+
+  (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+  (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+  (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+  (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+  (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+
+  ; (define-key ido-completion-map (kbd "M-.") 'smex-find-function)
+  ; (define-key ido-completion-map (kbd "C-c C-d") 'smex-find-function)
+  
+  (add-hook 'ack-mode-hook 'ansi-color-for-comint-mode-on)
+
 
 #+END_SRC
 
 * Search
 #+begin_src emacs-lisp
+    
+    (require 'ack-and-a-half)
+    ;; Create shorter aliases
+    (defalias 'ack 'ack-and-a-half)
+    (defalias 'ack-same 'ack-and-a-half-same)
+    (defalias 'ack-find-file 'ack-and-a-half-find-file)
+    (defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
+    ; (define-key global-map "\C-x a" 'ack)
+    
+    ; Interface with Ag, the silver search
+    
+    (require 'ag)
+    (setq ag-highlight-search t)
+    ; (setq ag-reuse-window 't)
+    (setq ag-reuse-buffers 't)
+    
+    ; Activate occur easily inside isearch
+    (define-key isearch-mode-map (kbd "C-o")
+      (lambda () (interactive)
+        (let ((case-fold-search isearch-case-fold-search))
+          (occur (if isearch-regexp isearch-string (regexp-quote isearch-string))))))
+    
+    ; Use regex searches by default.
+    (global-set-key (kbd "C-s") 'isearch-forward-regexp)
+    (global-set-key (kbd "\C-r") 'isearch-backward-regexp)
+    
+    (defun highlight-from-isearch ()
+      (interactive)
+      (let ((input (if isearch-regexp
+                       isearch-string
+                       (regexp-quote isearch-string))))
+        (highlight-regexp input)))
+    
+    (defun ag-from-point ()
+      "Search using ag in current directory,
+       with STRING defaulting to the symbol under point."
+      (interactive)
+      (let ((ido-report-no-match nil)
+            (ido-auto-merge-work-directories-length -1)
+            (directory (file-name-directory (or load-file-name buffer-file-name)))
+            (string (ag/dwim-at-point))
+            (ag-function (apply-partially 'ag/search 'string)))
+        (ido-file-internal 'ag-function)))
   
-  (require 'ack-and-a-half)
-  ;; Create shorter aliases
-  (defalias 'ack 'ack-and-a-half)
-  (defalias 'ack-same 'ack-and-a-half-same)
-  (defalias 'ack-find-file 'ack-and-a-half-find-file)
-  (defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
-  ; (define-key global-map "\C-x a" 'ack)
+    (defun ag-here-from-point ()
+      "Search using ag in current directory,
+       with STRING defaulting to the symbol under point."
+       (interactive)
+       (let ((directory (file-name-directory (or load-file-name buffer-file-name)))
+             (string (ag/dwim-at-point)))
+         (ag/search string directory)))
   
-  ; Interface with Ag, the silver search
+    (defun show-ag () (interactive) (switch-to-buffer-other-window "*ag*"))
+    (defun kill-ag () (interactive) (kill-buffer "*ag*"))
   
-  (require 'ag)
-  (setq ag-highlight-search t)
-  ; (setq ag-reuse-window 't)
-  (setq ag-reuse-buffers 't)
+    (define-key evil-motion-state-map (kbd "C-'") 'next-error)
+    (define-key evil-motion-state-map (kbd "C-:") 'previous-error)
+    (define-key evil-motion-state-map (kbd "C-;") 'show-ag)
+    (define-key evil-motion-state-map (kbd "C-\"") 'kill-ag)
   
-  ; Activate occur easily inside isearch
-  (define-key isearch-mode-map (kbd "C-o")
-    (lambda () (interactive)
-      (let ((case-fold-search isearch-case-fold-search))
-        (occur (if isearch-regexp isearch-string (regexp-quote isearch-string))))))
+    (require 'f)
   
-  ; Use regex searches by default.
-  (global-set-key (kbd "C-s") 'isearch-forward-regexp)
-  (global-set-key (kbd "\C-r") 'isearch-backward-regexp)
+    (defun find-file-relative-to-current (&optional relative-index cycle)
+      "switches buffer to a nearby file
+       arguments: 
+       - relative-index: signed integer (default 1) which specifies the step relative to current file
+       - cycle: boolean (default true), specifies whether to jump to other edge when reaching end of dir
+         FIXME
+        -- requires dash.el and f.el"
+      (let* ((current-dir (file-name-directory (or load-file-name buffer-file-name)))
+             (dir-contents (directory-files current-dir))
+             (dir-files (-filter 'f-file? dir-contents))
+             (current-file  (file-name-nondirectory (buffer-file-name)))
+             (index-current-file (-elem-index current-file dir-files))
+             (dir-files-length (length dir-files))
+             (target-index (incf index-current-file (or relative-index 1)))
+             (cycle (if (boundp 'cycle) cycle t))
+             (index (cond
+                      ((and cycle (>= target-index dir-files-length)) 0)
+                      ((and cycle (< target-index 0)) (decf dir-files-length))
+                      (t target-index)))
+             (nextfile (nth index dir-files)))
+        (find-file nextfile)))
+    
+    (defun next-file-in-dir ()
+      "like in vim-unimpaired."
+      (interactive) (find-file-relative-to-current 1))
+    
+    (defun previous-file-in-dir ()
+      "like in vim-unimpaired."
+      (interactive) (find-file-relative-to-current -1))
+    
+    (nmap (kbd "] f") 'next-file-in-dir)
+    (nmap (kbd "[ f") 'previous-file-in-dir)
   
-  (defun highlight-from-isearch ()
-    (interactive)
-    (let ((input (if isearch-regexp
-                     isearch-string
-                     (regexp-quote isearch-string))))
-      (highlight-regexp input)))
   
-  (defun ag-from-point ()
-    "Search using ag in current directory,
-     with STRING defaulting to the symbol under point."
-    (interactive)
-    (let ((ido-report-no-match nil)
-          (ido-auto-merge-work-directories-length -1)
-          (directory (file-name-directory (or load-file-name buffer-file-name)))
-          (string (ag/dwim-at-point))
-          (ag-function (apply-partially 'ag/search 'string)))
-      (ido-file-internal 'ag-function)))
+  ;; (defun evil-ex-search-and-replace ()
+  ;;   ""
+  ;;   (interactive)
+  ;;   (evil-ex)
+  ;;   (insert "s///cg"))
 
-  (defun ag-here-from-point ()
-    "Search using ag in current directory,
-     with STRING defaulting to the symbol under point."
-     (interactive)
-     (let ((directory (file-name-directory (or load-file-name buffer-file-name)))
-           (string (ag/dwim-at-point)))
-       (ag/search string directory)))
-
-  (defun show-ag () (interactive) (switch-to-buffer-other-window "*ag*"))
-  (defun kill-ag () (interactive) (kill-buffer "*ag*"))
-
-  (define-key evil-motion-state-map (kbd "C-'") 'next-error)
-  (define-key evil-motion-state-map (kbd "C-:") 'previous-error)
-  (define-key evil-motion-state-map (kbd "C-;") 'show-ag)
-  (define-key evil-motion-state-map (kbd "C-\"") 'kill-ag)
-
-(defun next-file-in-dir ()
-  "like in vim-unimpaired"
-  (interactive)
-  (let ((dirfiles (directory-files (file-name-directory (or load-file-name buffer-file-name))))
-        (curfile  (file-name-nondirectory (buffer-file-name)))
-
-    ;----- TODO
-)))
+  ;; (vmap "rr" 'evil-ex-search-and-replace)
 
 
-
+      
+  
+  
 #+end_src
 
 ** Convenience Function to search for regexps build with re-builder
@@ -844,8 +937,15 @@ First mark the word, then add more cursors. To get out of multiple-cursors-mode,
   (global-set-key (kbd "C-h a") 'apropos)
   ; same as C-h f
   (global-set-key (kbd "C-h C-f") 'describe-function)
+  (global-set-key (kbd "C-h C-s") 'find-function)
+  (global-set-key (kbd "C-h C-f") 'describe-function)
+  (global-set-key (kbd "C-h C-s") 'find-function)
+;  (global-set-key (kbd "C-h C-s") 'smex-find-function)
 
   (global-set-key (kbd "C-h h") nil)
+
+  (define-key emacs-lisp-mode-map (kbd "C-c C-d") 'describe-function)
+  (define-key emacs-lisp-mode-map (kbd "C-c C-s") 'find-function)
 
 #+end_src
 
@@ -876,6 +976,7 @@ First mark the word, then add more cursors. To get out of multiple-cursors-mode,
   (vmap ":" 'smex)
   (nmap " :" 'helm-M-x)
   (global-set-key (kbd "M-x") 'smex) ; for emacs-mode
+  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
   
   (nmap (kbd "C-c :") 'evil-ex)
   (vmap (kbd "C-c :") 'evil-ex)
@@ -920,7 +1021,16 @@ First mark the word, then add more cursors. To get out of multiple-cursors-mode,
     (define-key ac-completing-map (kbd "C-p") 'ac-previous))
 
   (global-auto-complete-mode +1)
+
+  (require 'yasnippet)
   (yas-global-mode 1)
+
+  ;; bind yas-expand to SPC, since TAB is used by ac-complete
+  (define-key yas-minor-mode-map (kbd "C-j") 'yas-expand)
+
+  ;; Yasnippets, always
+  (eval-after-load "yasnippet"
+    '(setq-default ac-sources (append '(ac-source-yasnippet) ac-sources)))
 
   ;; Hippie expand: look in buffer before filenames please
   (setq hippie-expand-try-functions-list '(try-expand-dabbrev
@@ -941,6 +1051,7 @@ First mark the word, then add more cursors. To get out of multiple-cursors-mode,
 
   (define-key evil-insert-state-map "\C-l" 'hippie-expand)
   (define-key evil-insert-state-map (kbd "C-x C-l") 'hippie-expand-lines)
+
 
 #+end_src
 * Tags
@@ -1009,8 +1120,8 @@ First mark the word, then add more cursors. To get out of multiple-cursors-mode,
 #+BEGIN_SRC emacs-lisp
 
 (add-hook 'jade-mode-hook (lambda ()
-  (highlight-regexp "data-bind" :hi-red)
-  (highlight-regexp "editing_state" :hi-red)))
+  (highlight-regexp "data-bind" 'hi-red)
+  (highlight-regexp "editing_state" 'hi-red)))
 
 #+END_SRC
 ** Expand-region
@@ -1079,8 +1190,7 @@ First mark the word, then add more cursors. To get out of multiple-cursors-mode,
 
 (setq-default global-visual-line-mode nil)
 
-(add-hook 'ack-mode-hook 'ansi-color-for-comint-mode-on)
-(add-hook 'ag-mode-hook (lambda () (setq-default truncate-lines t)))
+(add-hook 'inferior-python-mode-hook (lambda () (setq-default truncate-lines nil)))
 
 #+end_src
 
@@ -1178,15 +1288,8 @@ Make updating my emacs config super low threshold.
 
 (setq helm-input-idle-delay 0.1)
 (setq helm-idle-delay 0.1)
-
 (setq helm-buffer-details-flag nil)
 (setq helm-ff-transformer-show-only-basename t)
-
-(defun helm-opened ()
-  (interactive)
-  (helm-other-buffer '(helm-c-source-buffers
-                       helm-c-source-recentf)
-                     "*helm opened*"))
 
 #+END_SRC
 
@@ -1206,6 +1309,26 @@ Make updating my emacs config super low threshold.
 
   (setq nrepl-popup-stacktraces nil)
   (setq nrepl-popup-stacktraces-in-repl t)
+
+  ;(nrepl-turn-on-eldoc-mode)
+
+  (require 'clj-refactor)
+  (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
+
+;; specify the print length to be 100 to stop infinite sequences killing things.
+(defun live-nrepl-set-print-length ()
+  (nrepl-send-string-sync "(set! *print-length* 100)" "clojure.core"))
+
+(add-hook 'nrepl-connected-hook 'live-nrepl-set-print-length)
+
+;; Switch a Clojure nrepl to ClojureScript
+
+(defun nrepl-start-noderepl ()
+  (interactive)
+  (save-excursion
+    (nrepl-switch-to-repl-buffer nil)
+    (insert "(require 'cljs.repl.node) (cljs.repl.node/run-node-nrepl)")
+    (nrepl-send-input)))
 
 #+END_SRC
 
@@ -1274,32 +1397,139 @@ Make updating my emacs config super low threshold.
   (require 'elpy)
   (elpy-enable)
 
-;  (add-hook 'python-mode-hook (lambda ()
-;    (define-key python-mode-map "\C-]" 'pycscope-find-global-definition-no-prompting)
-;    (define-key python-mode-map "\C-t" 'pycscope-pop-mark)
-;    (define-key python-mode-map (kbd "C-.") 'pycscope-find-global-definition)
-;    (define-key python-mode-map "(" 'elpy-nav-backward-statement)
-;    (define-key python-mode-map ")" 'elpy-nav-forward-statement)
-;    (define-key python-mode-map "[" 'elpy-nav-backward-definition)
-;    (define-key python-mode-map "]" 'elpy-nav-forward-definition)
-;    (define-key python-mode-map "{" 'elpy-nav-backward-class-definition)
-;    (define-key python-mode-map "}" 'elpy-nav-forward-class-definition)
-;    (define-key python-mode-map " c" 'elpy-occur-definitions)
-;    (define-key python-mode-map (kbd "C-c d") 'jedi:show-doc)
-;    (define-key python-mode-map (kbd "C-c C-n") 'jedi:dot-complete)))
+   (add-hook 'python-mode-hook (lambda ()
+     (define-key python-mode-map (kbd "C-]") 'pycscope-find-global-definition-no-prompting)
+     (define-key python-mode-map (kbd "C-t") 'pycscope-pop-mark)
+     (define-key python-mode-map (kbd "C-.") 'pycscope-find-global-definition)
+     (define-key python-mode-map "(" 'elpy-nav-backward-statement)
+     (define-key python-mode-map ")" 'elpy-nav-forward-statement)
+     (define-key python-mode-map "[" 'elpy-nav-backward-definition)
+     (define-key python-mode-map "]" 'elpy-nav-forward-definition)
+     (define-key python-mode-map "{" 'elpy-nav-backward-class-definition)
+     (define-key python-mode-map "}" 'elpy-nav-forward-class-definition)
+     ;(define-key python-mode-map " c" 'elpy-occur-definitions)
+     (define-key python-mode-map (kbd "C-c d") 'jedi:show-doc)
+     (define-key python-mode-map (kbd "C-c C-n") 'jedi:dot-complete)))
+
+     (define-key python-mode-map (kbd "C-]") 'pycscope-find-global-definition-no-prompting)
+
+  (defun find-tag-generic ()
+    (interactive)
+    (if (eq major-mode 'python-mode)
+      (pycscope-find-global-definition-no-prompting)
+      (evil-jump-to-tag)))
+
+  (nmap (kbd "C-]") 'find-tag-generic)
 
   ; (setq flymake-python-pyflakes-executable "flake8")
   ; (require 'flymake-python-pyflakes)
   ; (add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
 
-#+END_SRC
 
-#+RESULTS:
+; highlight Django templating stuff
+(defvar django-tag-face (make-face 'django-tag-face))
+(set-face-foreground 'django-tag-face "Orange")
+;
+(defvar django-variable-face (make-face 'django-variable-face))
+(set-face-foreground 'django-variable-face "Green")
+
+(defvar django-comment-face (make-face 'django-comment-face))
+(set-face-foreground 'django-comment-face "Gray")
+
+(font-lock-add-keywords
+ 'html-mode
+ '(
+   ("\\({%[^%]*%}\\)" 1 django-tag-face prepend)
+   ("\\({{[^}]*}}\\)" 1 django-variable-face prepend)
+   ("\\({#[^}]*#}\\)" 1 django-comment-face prepend)
+   ("\\({% comment %}\\(.\\|
+\\)*{% endcomment %}\\)" 1 django-comment-face prepend)
+   ))
+
+
+; skeletons for Django template tags
+(define-skeleton template-tag-skeleton
+  "Insert a {% foo %} template tag"
+  "Template tag name: "
+  "{% " str " %}")
+(define-skeleton template-variable-skeleton
+  "Insert a {{ foo }} template variable"
+  "Template variable: "
+  "{{ " str " }}")
+(define-skeleton template-comment-skeleton
+  "Insert a {# foo #} template variable"
+  "Comment: "
+  "{# " str " #}")
+(define-skeleton template-block-skeleton
+  "Insert {% block foo %}{% endblock %}"
+  "Block name: "
+  "{% block " str " %}\n" - "\n{% endblock %}")
+(define-skeleton template-if-else-skeleton
+  "Insert {% if foo %}{% else %}{% endif %}"
+  "If condition: "
+  "{% if " str " %}\n" - "\n{% else %}\n\n{% endif %}")
+(define-skeleton template-if-skeleton
+  "Insert {% if foo %}{% endif %}"
+  "If condition: "
+  "{% if " str " %}" - "{% endif %}")
+(define-skeleton underscore-skeleton
+  "Insert <%= foo %>"
+  "Contents: "
+  "<%= " str " %>")
+
+(defvar template-skeletons
+  '(template-tag-skeleton
+    template-variable-skeleton
+    template-comment-skeleton
+    template-block-skeleton
+    template-if-skeleton
+    template-if-else-skeleton
+    underscore-skeleton))
+
+(defun insert-django-skeleton ()
+  (interactive)
+  (let* ((skeleton-names (mapcar 'symbol-name template-skeletons))
+        (skeleton-chosen (ido-completing-read "HTML skeleton: " skeleton-names)))
+    (funcall (intern skeleton-chosen))))
+
+
+; (define-key html-mode-map "\C-ct" 'insert-django-skeleton)
+
+; (defun visit-parent-django-template ()
+;   "In a buffer containg {% extends \"foo.html\" %}, visit foo.html."
+;   (interactive)
+;   (let (start-pos end-pos template-name)
+;     (save-excursion
+;       (widen)
+;       (goto-char (point-min))
+;       ;; Find the extends tag
+;       (while (not (looking-at "{% ?extends"))
+;         (forward-char 1))
+;       ;; Find the opening " of the file name.
+;       (while (not (looking-at "\""))
+;         (forward-char 1))
+;       (forward-char)
+;       (setq start-pos (point))
+
+;       ;; Find the closing "
+;       (while (not (looking-at "\""))
+;         (forward-char 1))
+;       (setq end-pos (point))
+
+;       (setq template-name (buffer-substring-no-properties start-pos end-pos)))
+
+;     ;; Open this file, assuming it's in the same directory.
+;     ;; TODO: Search the current VCS checkout for it.
+;     (find-file template-name)))
+
+#+END_SRC
 
 * Git
 #+BEGIN_SRC emacs-lisp
     
   (setq ediff-highlight-all-diffs nil)
+
+  (setq magit-save-some-buffers 'dontask)
     
    (eval-after-load 'diff-mode
      '(progn
@@ -1334,35 +1564,34 @@ Make updating my emacs config super low threshold.
   
     (nmap "[g" 'git-gutter+-next-hunk)
     (nmap "]g" 'git-gutter+-previous-hunk)
+    (nmap " g" 'git-messenger:popup-message)
 
+    (setq git-messenger:show-detail t)
     
-       (require 'helm-open-github)
+    (require 'helm-open-github)
     
-       ; copies url of current selected region into clipboard (for easy sharing in IM)
-       ; depends on helm-open-github)
+    ; copies url of current selected region into clipboard (for easy sharing in IM)
+    ; depends on helm-open-github)
     
-       (defun yank-github-url-for-region ()
-         (interactive)
-         (if (not mark-active)
-           (print "no region selected")
-           (let* (
-                (file (buffer-file-name))
-                (start (region-beginning))
-                (end (region-end))
-                (root (helm-open-github--root-directory))
-                (repo-path (file-relative-name file root))
-                (start-line (line-number-at-pos start))
-                (end-line (line-number-at-pos end)))
+    (defun yank-github-url-for-region ()
+      (interactive)
+      (if (not mark-active)
+        (print "no region selected")
+        (let* ((file (buffer-file-name))
+              (start (region-beginning))
+              (end (region-end))
+              (root (helm-open-github--root-directory))
+              (repo-path (file-relative-name file root))
+              (start-line (line-number-at-pos start))
+              (end-line (line-number-at-pos end)))
+          (kill-new (-get-github-url-for-file-region repo-path start-line end-line)))))
     
-             (kill-new (-get-github-url-for-file-region repo-path start-line end-line)))
-           ))
-    
-       (defun -get-github-url-for-file-region (file &optional start end)
-         (let ((host (helm-open-github--host))
-               (remote-url (helm-open-github--remote-url))
-               (branch (helm-open-github--branch))
-               (marker (helm-open-github--highlight-marker start end)))
-           (helm-open-github--file-url host remote-url branch file marker)))
+    (defun -get-github-url-for-file-region (file &optional start end)
+      (let ((host (helm-open-github--host))
+            (remote-url (helm-open-github--remote-url))
+            (branch (helm-open-github--branch))
+            (marker (helm-open-github--highlight-marker start end)))
+        (helm-open-github--file-url host remote-url branch file marker)))
     
    ;     (define-key magit-branch-manager-mode-map (kbd "/") 'evil-search-forward)
    ;     (define-key magit-branch-manager-mode-map (kbd "C-n") 'evil-search-next)
@@ -1403,7 +1632,35 @@ Make updating my emacs config super low threshold.
                  '(lambda ()
                     (flyspell-mode t)))
     
+    (defun git-write-file ()
+      (interactive)
+      (magit-stage-item (buffer-file-name (current-buffer))))
     
+    (defun conflicts-list ()
+      "Show all the conflicts in the current buffer using occur-mode."
+      (interactive)
+      (occur "<<<<<<< ")
+      ; put mark on the first result in the occur window
+      (other-window 1)
+      (forward-line))
+
+(global-set-key (kbd "<f10>") 'conflicts-list)
+
+(defalias 'conflicts-keep-current 'smerge-keep-current)
+
+;; TODO: it would be nice if these jumped to the first conflict
+(defalias 'conflicts-keep-first 'smerge-keep-mine)
+(defalias 'conflicts-keep-second 'smerge-keep-other)
+
+(require 'smerge-mode)
+; (define-key smerge-mode-map (kbd "<C-return>") 'conflicts-keep-current)
+; (define-key smerge-mode-map (kbd "<f8>") 'smerge-prev)
+; (define-key smerge-mode-map (kbd "<f9>") 'smerge-next)
+
+(setq magit-completing-read-function 'magit-ido-completing-read)
+(setq magit-default-tracking-name-function 'magit-default-tracking-name-branch-only)
+
+
 #+END_SRC
   
 * Projectile
@@ -1716,9 +1973,10 @@ When in an org-mode buffer, bind TeX-insert-quote to =C-c "=. Turned off by defa
      (define-key dired-mode-map "l" 'diredp-find-file-reuse-dir-buffer)
      (define-key dired-mode-map "/" 'dired-isearch-filenames)
      (define-key dired-mode-map "j" 'diredp-next-line)
-;     (define-key dired-mode-map "~" '(lambda () (interactive) (dired "~"))
+     (define-key dired-mode-map "~" (bind (dired "~")))
      (define-key dired-mode-map "k" 'diredp-previous-line)
      (define-key dired-mode-map "K" 'dired-do-delete)
+     (define-key dired-mode-map "R" 'dired-efap)
      (define-key dired-mode-map "r" 'wdired-change-to-wdired-mode)
      (define-key dired-mode-map ":" 'smex)
      (define-key dired-mode-map "Q" 'quit-window)))
@@ -1729,6 +1987,7 @@ When in an org-mode buffer, bind TeX-insert-quote to =C-c "=. Turned off by defa
   (require 'wdired)
   (require 'dired+)
   (require 'dired-details)
+  (require 'dired-efap)
 
   (toggle-diredp-find-file-reuse-dir 1)
 
@@ -1766,17 +2025,73 @@ When in an org-mode buffer, bind TeX-insert-quote to =C-c "=. Turned off by defa
         )))
         (dired-do-kill-lines nil (concat "Filter" dired-file-name-filter " omitted %d line%s")))))
 
+(defun diredext-exec-git-command-in-shell (command &optional arg file-list)
+  "Run a shell command `git COMMAND`' on the marked files.
+if no files marked, always operate on current line in dired-mode
+"
+  (interactive
+   (let ((files (dired-get-marked-files t current-prefix-arg)))
+     (list
+      ;; Want to give feedback whether this file or marked files are used:
+      (dired-read-shell-command "git command on %s: " current-prefix-arg files)
+      current-prefix-arg
+      files)))
+  (unless (string-match "[*?][ \t]*\\'" command)
+    (setq command (concat command " *")))
+  (setq command (concat "git " command))
+  (dired-do-shell-command command arg file-list)
+  (message command))
+
+(setq dired-details-initially-hide t)
+
+(eval-after-load 'dired
+  '(progn
+     (setq-default dired-details-hidden-string "")
+     (define-key dired-mode-map "(" 'dired-details-toggle)
+     (define-key dired-mode-map ")" 'dired-details-toggle)
+     (define-key dired-mode-map "/" 'diredext-exec-git-command-in-shell)
+
+     (require 'dired+)
+     (setq dired-recursive-deletes 'top)
+     ))
+
 #+END_SRC
 
 * Other
 #+BEGIN_SRC emacs-lisp
-  
+
     (setq c-basic-offset 2)
   
+    ;; let command be meta too
+    (setq mac-command-modifier 'meta)
+
     (put 'dired-find-alternate-file 'disabled nil)
   
     (global-set-key "\C-\\" 'comment-region)
-  
+
+    (setq confirm-nonexistent-file-or-buffer nil)
+    (setq ido-create-new-buffer 'always)
+
+    ;; sort ido filelist by mtime instead of alphabetically
+    (defun ido-sort-mtime ()
+      (setq ido-temp-list
+            (sort ido-temp-list
+                  (lambda (a b)
+                    (time-less-p
+                     (sixth (file-attributes (concat ido-current-directory b)))
+                     (sixth (file-attributes (concat ido-current-directory a)))))))
+      (ido-to-end  ;; move . files to end (again)
+       (delq nil (mapcar
+                  (lambda (x) (and (char-equal (string-to-char x) ?.) x))
+                  ido-temp-list))))
+    (add-hook 'ido-make-file-list-hook 'ido-sort-mtime)
+    (add-hook 'ido-make-dir-list-hook 'ido-sort-mtime)
+
+    ; don't ask about killing processes attached to buffers
+    (setq kill-buffer-query-functions
+      (remq 'process-kill-buffer-query-function
+             kill-buffer-query-functions))
+
     (load "dired-x")
   
     (require 'highlight-sexp)
@@ -1839,6 +2154,8 @@ When in an org-mode buffer, bind TeX-insert-quote to =C-c "=. Turned off by defa
 
   (load "dired-x")
 
+  (require 'helm-ls-git)
+
   (defun save-all ()
     (interactive)
     (save-some-buffers t))
@@ -1880,6 +2197,44 @@ When in an org-mode buffer, bind TeX-insert-quote to =C-c "=. Turned off by defa
 
   (nmap " RM" 'my-delete-current-buffer-file)
 
+  (defun copy-yank-str (msg)
+    (kill-new msg)
+    (with-temp-buffer
+      (insert msg)
+      (shell-command-on-region (point-min) (point-max)
+                               (cond
+                                ((eq system-type 'cygwin) "putclip")
+                                ((eq system-type 'darwin) "pbcopy")
+                                ))))
+  
+  (defun copy-filename-of-current-buffer ()
+    "copy file name (NOT full path) into the yank ring and OS clipboard"
+    (interactive)
+    (let ((filename))
+      (when buffer-file-name
+        (setq filename (file-name-nondirectory buffer-file-name))
+        (kill-new filename)
+        (copy-yank-str filename)
+        (message "filename %s => clipboard & yank ring" filename)
+        )))
+  
+  (defun copy-full-path-of-current-buffer ()
+    "copy full path into the yank ring and OS clipboard"
+    (interactive)
+    (when buffer-file-name
+      (kill-new (file-truename buffer-file-name))
+      (copy-yank-str (file-truename buffer-file-name))
+      (message "full path of current buffer => clipboard & yank ring")
+      ))
+  
+  (global-set-key (kbd "C-x y f") 'copy-full-path-of-current-buffer)
+  
+  (defun sudo-edit (&optional arg)
+    (interactive "P")
+    (if (or arg (not buffer-file-name))
+        (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
+      (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+
 #+END_SRC
 ** Save Place in Opened Files
 
@@ -1917,90 +2272,138 @@ previously visited the same file. The following code comes from [[http://emacs-f
    #+END_SRC
 * 10to8
 #+BEGIN_SRC emacs-lisp
-
-
-  ; (defcustom virtualenv-workon-starts-python nil
-  ;   "If non-nil the `virtualenv-workon' will also start python."
-  ;   :group 'virtualenv
-  ;   :type 'boolean)
+    
+    
+      ; (defcustom virtualenv-workon-starts-python nil
+      ;   "If non-nil the `virtualenv-workon' will also start python."
+      ;   :group 'virtualenv
+      ;   :type 'boolean)
+      
+      (require 'virtualenvwrapper)
+      (venv-initialize-interactive-shells)
+      (venv-initialize-eshell)
+      (setq venv-location "~/.virtualenvs/")
+      
+      (defun start-10to8 ()
+        (interactive)
+        (venv-workon "Native")
+        (setq python-django-project-root "~/10to8/Native/native/src/")
+        (python-django-open-project "~/10to8/Native/native/src/core" "core.settings"))
+      
+      (defun open-10to8-db ()
+        (interactive)
+        (cd "/usr/local/var/postgres/pg_log/")
+        (ido-find-file-read-only)
+        (auto-revert-tail-mode))
+    
+    (defun run-django-command (django-cmd &optional cmd-args)
+      (let ((project-buffer-name "*Django: core (core.settings)*"))
+        (start-10to8)
+        (switch-to-buffer project-buffer-name)
+        (if cmd-args
+          (funcall django-cmd cmd-args)
+          (funcall django-cmd))))
+    
+    (defun 10to8-runserver ()
+      (interactive)
+      (let ((server-settings     "localhost:8000")
+            (server-buffer-name  "*[Django: core (core.settings)] ./manage.py runserver localhost:8000*"))
+        (if (get-buffer server-buffer-name)
+          (switch-to-buffer server-buffer-name)
+          (progn (run-django-command 'python-django-qmgmt-runserver server-settings)
+                 (switch-to-buffer server-buffer-name)))))
   
-  (require 'virtualenvwrapper)
-  (venv-initialize-interactive-shells)
-  (venv-initialize-eshell)
-  (setq venv-location "~/.virtualenvs/")
+    (defun 10to8-shell ()
+      (interactive)
+      (let ((shell-buffer-name  "*[Django: core (core.settings)] ./manage.py shell*"))
+        (if (get-buffer shell-buffer-name)
+          (switch-to-buffer shell-buffer-name)
+          (progn 
+            (run-django-command 'python-django-qmgmt-shell)
+            (switch-to-buffer shell-buffer-name)))))
   
-  (defun start-10to8 ()
-    (interactive)
-    (venv-workon "Native")
-    (setq python-django-project-root "~/10to8/Native/native/src/")
-    (python-django-open-project "~/10to8/Native/native/src/core" "core.settings"))
+    (defun send-to-10to8-shell (string)
+      (interactive)
+      (let* ((shell-buffer-name  "*[Django: core (core.settings)] ./manage.py shell*")
+             (shell-process (get-buffer-process shell-buffer-name)))
+        (comint-send-string shell-process string)
+        (when (or (not (string-match "\n$" string))
+                  (string-match "\n[ \t].*\n?$" string))
+          (comint-send-string shell-process "\n"))))
   
-  (defun open-10to8-db ()
-    (interactive)
-    (cd "/usr/local/var/postgres/pg_log/")
-    (ido-find-file-read-only)
-    (auto-revert-tail-mode))
+  ; (require 's)
+  
+  ; (defun send-region-to-10to8-shell (start end)
+  ;   (interactive "r")
+  ;   (let* ((string (buffer-substring start end)))
+  ;     (with-temp-buffer
+  ;       (insert string)
+  ;       (send-to-10to8-shell (buffer-substring-no-properties (buffer-string))))))
+  
+  
+     (defun search-deep-thought (string)
+      (interactive (list
+         (read-from-minibuffer "Search: " (ag/dwim-at-point))))
+      (ag/search string "~/10to8/Native/native/src/core" t))
+    
+     (defun search-jeltz (string)
+      (interactive (list
+         (read-from-minibuffer "Search: " (ag/dwim-at-point))))
+      (ag/search string "~/10to8/Native/native/src/apps/jeltz/app" t))
+    
+     (defun search-colin (string)
+      (interactive (list
+         (read-from-minibuffer "Search: " (ag/dwim-at-point))))
+      (ag/search string "~/10to8/Native/native/src/apps/colin/app" t))
+    
+     (require 'nose)
+     (add-to-list 'nose-project-root-files ".project")
+    
+    (defun nose-in-shell ()
+      "runs test in eshell"
+      (interactive)
+      (let ((pmt-command "cd ~/10to8/Native/native/src && python manage.py test")
+           (pmt-options "--noinput"))
+        (switch-to-buffer "*eshell*")
+        (append-to-buffer "*eshell*" (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable)))))
+    
+        ; (eshell-command (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable))))
+    
+    (defun yank-current-nose-test-path ()
+      "runs test in eshell"
+      (interactive)
+      (let ((pmt-command "python manage.py test")
+           (pmt-options "--noinput"))
+        (kill-new (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable)))))
+    
+    (global-set-key (kbd "C-c k k") 'search-deep-thought)
+    
+    (global-set-key (kbd "C-c j m") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/models/")))
+    (global-set-key (kbd "C-c j v") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/views/")))
+    (global-set-key (kbd "C-c j c") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/controllers/")))
+    (global-set-key (kbd "C-c j M") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/modules/")))
+    (global-set-key (kbd "C-c j t") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/templates/")))
+    (global-set-key (kbd "C-c j s") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/styles/")))
+    (global-set-key (kbd "C-c j a") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/")))
+    (global-set-key (kbd "C-c j j") 'search-jeltz)
+    (global-set-key (kbd "C-x j") (bind (cd "~/10to8/Native/native/src/apps/jeltz/app/")))
+    
+    (global-set-key (kbd "C-c c m") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/models/")))
+    (global-set-key (kbd "C-c c v") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/views/")))
+    (global-set-key (kbd "C-c c C") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/controllers/")))
+    (global-set-key (kbd "C-c c M") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/modules/")))
+    (global-set-key (kbd "C-c c t") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/templates/")))
+    (global-set-key (kbd "C-c c s") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/styles/")))
+    (global-set-key (kbd "C-c c a") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/")))
+    (global-set-key (kbd "C-c c c") 'search-colin)
+    (global-set-key (kbd "C-x c") (bind (cd "~/10to8/Native/native/src/apps/colin/app")))
 
- (defun search-deep-thought (string)
-  (interactive (list
-     (read-from-minibuffer "Search: " (ag/dwim-at-point))))
-  (ag/search string "~/10to8/Native/native/src/core" t))
-
- (defun search-jeltz (string)
-  (interactive (list
-     (read-from-minibuffer "Search: " (ag/dwim-at-point))))
-  (ag/search string "~/10to8/Native/native/src/apps/jeltz/app" t))
-
- (defun search-colin (string)
-  (interactive (list
-     (read-from-minibuffer "Search: " (ag/dwim-at-point))))
-  (ag/search string "~/10to8/Native/native/src/apps/colin/app" t))
-
- (require 'nose)
- (add-to-list 'nose-project-root-files ".project")
-
-(defun nose-in-shell ()
-  "runs test in eshell"
-  (interactive)
-  (let ((pmt-command "cd ~/10to8/Native/native/src && python manage.py test")
-       (pmt-options "--noinput"))
-    (switch-to-buffer "*eshell*")
-    (append-to-buffer "*eshell*" (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable)))))
-
-    ; (eshell-command (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable))))
-
-(defun yank-current-nose-test-path ()
-  "runs test in eshell"
-  (interactive)
-  (let ((pmt-command "python manage.py test")
-       (pmt-options "--noinput"))
-    (kill-new (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable)))))
-
-(global-set-key (kbd "C-c k k") 'search-deep-thought)
-
-(global-set-key (kbd "C-c j m") (lambda () (interactive) (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/models/")))
-(global-set-key (kbd "C-c j v") (lambda () (interactive) (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/views/")))
-(global-set-key (kbd "C-c j c") (lambda () (interactive) (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/controllers/")))
-(global-set-key (kbd "C-c j M") (lambda () (interactive) (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/modules/")))
-(global-set-key (kbd "C-c j t") (lambda () (interactive) (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/templates/")))
-(global-set-key (kbd "C-c j s") (lambda () (interactive) (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/styles/")))
-(global-set-key (kbd "C-c j a") (lambda () (interactive) (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/")))
-(global-set-key (kbd "C-c j j") 'search-jeltz)
-(global-set-key (kbd "C-c k a") (lambda () (interactive) (ido-find-file-in-dir "~/10to8/Native/native/src/core/")))
-
-(global-set-key (kbd "C-c c m") (lambda () (interactive) (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/models/")))
-(global-set-key (kbd "C-c c v") (lambda () (interactive) (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/views/")))
-(global-set-key (kbd "C-c c C") (lambda () (interactive) (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/controllers/")))
-(global-set-key (kbd "C-c c M") (lambda () (interactive) (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/modules/")))
-(global-set-key (kbd "C-c c t") (lambda () (interactive) (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/templates/")))
-(global-set-key (kbd "C-c c s") (lambda () (interactive) (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/styles/")))
-(global-set-key (kbd "C-c c a") (lambda () (interactive) (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/")))
-(global-set-key (kbd "C-c c c") 'search-colin)
-
-(global-set-key (kbd "C-c 1") (lambda () (interactive) (ido-find-file-in-dir "~/10to8/")))
-(global-set-key (kbd "C-c i") (lambda () (interactive) (ido-find-file-in-dir "~/Inbox/")))
-
-
+    (global-set-key (kbd "C-x x") (bind (cd "~/10to8/Native/native/src/core")))
+    (global-set-key (kbd "C-c k a") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/core/")))
+    (global-set-key (kbd "C-c 1") (bind (ido-find-file-in-dir "~/10to8/")))
+    (global-set-key (kbd "C-c i") (bind (ido-find-file-in-dir "~/Inbox/")))
+    
+    
 #+END_SRC
 * Coffeescript
 
@@ -2161,6 +2564,153 @@ previously visited the same file. The following code comes from [[http://emacs-f
 
 (defun highlight-angular-anchor ()
   (interactive)
-  (highlight-regexp "ng-\w*=" :hi-red))
+  (highlight-regexp "ng-\w*=" 'hi-red))
 
 #+END_SRC
+* Popwin
+
+#+BEGIN_SRC emacs-lisp
+
+(require 'popwin)
+(setq display-buffer-function 'popwin:display-buffer)
+
+(setq popwin:special-display-config
+      '(("*Help*"  :height 20)
+        ("*Completions*" :noselect t :height 12)
+        ("*Ido Completions*" :noselect t :height 12)
+        ("*Messages*" :noselect t :height 30)
+        ("*Apropos*" :noselect t :height 30)
+        ("*compilation*" :noselect t)
+        ("*Backtrace*" :height 30)
+        ("*Messages*" :height 30)
+        ("*ag*" :noselect t :height 14)
+        ("*Occur*" :height 14)
+        ("*Python Doc*" :height 10)
+        ("*Ido Completions*" :noselect t :height 30)
+        ("\\*ansi-term\\*.*" :regexp t :height 30)
+        ("*shell*" :height 30)
+        ("*gists*" :height 30)
+        ("*sldb.*":regexp t :height 30)
+        ("*nrepl-error*" :height 30 :stick t)
+        ("*nrepl-doc*" :height 30 :stick t)
+        ("*nrepl-src*" :height 30 :stick t)
+        ("*nrepl-result*" :height 30 :stick t)
+        ("*nrepl-macroexpansion*" :height 30 :stick t)
+        ("*Kill Ring*" :height 30)
+        ("*helm lsgit*" :height 10)
+        ("*helm mini*" :height 12)
+        ("*helm bookmarks*" :height 12)
+        ("*helm kill ring*" :height 8)
+        ("*Helm Find Files*" :height 12)
+        ("*Compile-Log*" :height 30 :stick t)
+        ("*[Django: core (core.settings)] ./manage.py shell*" :height 30 :stick t)
+        ("*git-gutter:diff*" :height 30 :stick t)))
+
+#+END_SRC
+
+* Pomodoro
+
+#+BEGIN_SRC emacs-lisp
+
+  (require 'pomodoro) 
+  ;(pomodoro-add-to-mode-line)
+
+#+END_SRC
+* Terminal
+
+
+#+BEGIN_SRC emacs-lisp
+
+;;make sure ansi colour character escapes are honoured
+(require 'ansi-color)
+(ansi-color-for-comint-mode-on)
+
+;; kill buffer when terminal process is killed
+(defadvice term-sentinel (around my-advice-term-sentinel (proc msg))
+  (if (memq (process-status proc) '(signal exit))
+      (let ((buffer (process-buffer proc)))
+        ad-do-it
+        (kill-buffer buffer))
+    ad-do-it))
+(ad-activate 'term-sentinel)
+
+; (setq multi-term-program "/bin/zsh")
+(setq multi-term-program "/bin/bash")
+
+;export PROMPT_COMMAND=""; 
+
+;; utf8
+(defun my-term-use-utf8 ()
+  (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
+(add-hook 'term-exec-hook 'my-term-use-utf8)
+
+; don't replace region/buffer with term error message
+(setq shell-command-default-error-buffer t)
+
+#+END_SRC
+
+ to try:
+- abbrev mode
+  
+* Registers
+
+#+BEGIN_SRC emacs-lisp
+
+;; @see http://www.emacswiki.org/emacs/BetterRegisters
+;; This is used in the function below to make marked points visible
+(defface register-marker-face '((t (:background "grey")))
+      "Used to mark register positions in a buffer."
+      :group 'faces)
+
+#+END_SRC
+
+* Skewer
+#+BEGIN_SRC emacs-lisp
+  
+  (defun skewer-coffee-eval (coffee-code)
+    "Requests the browser to evaluate a coffeescipt string."
+    ;; XXX should escape double quote characters
+    (skewer-eval (concat "CoffeeScript.eval(\""
+                         (s-replace "\n" "\\n" (s-trim coffee-code))
+                         "\");")
+                 #'skewer-post-minibuffer))
+  
+  (defun skewer-coffee-eval-region ()
+    "Sends the coffeescript code the region encloses, or -- if
+  there's no active region -- sends the current line."
+    (interactive)
+    (skewer-coffee-eval
+     (if (region-active-p)
+         (buffer-substring-no-properties (region-beginning) (region-end))
+         (thing-at-point 'line))))
+  
+  (defun skewer-coffee-eval-defun ()
+    "Evaluates the current 'sentence', which is usually a complete function."
+    (interactive)
+    (skewer-coffee-eval (thing-at-point 'sentence)))
+  
+  (defun skewer-coffee-eval-buffer ()
+    "Evaluates the current buffer as CoffeeScript."
+    (interactive)
+    (skewer-coffee-eval (buffer-substring-no-properties (point-min) (point-max))))
+  
+  (defvar skewer-coffee-mode-map
+    (let ((map (make-sparse-keymap)))
+      (prog1 map
+        (define-key map (kbd "C-x C-e") 'skewer-coffee-eval-region)
+        (define-key map (kbd "C-M-x")   'skewer-coffee-eval-defun)
+        (define-key map (kbd "C-c C-k") 'skewer-coffee-eval-buffer)))
+    "Keymap for skewer-coffee-mode.")
+  
+  ;;;###autoload
+  (define-minor-mode skewer-coffee-mode
+    "Minor mode for interactively loading coffeescript forms."
+    :lighter " skewer-coffee"
+    :keymap  skewer-coffee-mode-map
+    :group   skewer)
+  
+  
+#+END_SRC
+
+ to try:
+- abbrev mode
