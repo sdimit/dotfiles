@@ -50,48 +50,6 @@ Support for editing list dialects including [[* Emacs Lisp][Emacs Lisp]], [[* Sc
 			'(("(\\|)" . 'esk-paren-face)))
 #+end_src
 
-** Clojure
-
-#+begin_src emacs-lisp
-;(add-hook 'clojure-mode-hook 'run-starter-kit-coding-hook)
-;; (add-hook 'clojure-mode-hook 'idle-highlight)
-
-(font-lock-add-keywords 'clojure-mode
-                        '(("(\\|)" . 'esk-paren-face)))
-
-(defface esk-clojure-trace-face
-   '((((class color) (background dark))
-      (:foreground "grey50"))
-     (((class color) (background light))
-      (:foreground "grey55")))
-   "Face used to dim parentheses."
-   :group 'starter-kit-faces)
-
-(setq esk-clojure-trace-face 'esk-clojure-trace-face)
-
-
-#+end_src
-
-Prettier function names in clojure -- Thanks to Paul Hobbs for the
-idea to extend this feature beyond simply the =fn= function.
-#+begin_src emacs-lisp
-  ;; symbols for some overlong function names
-  (eval-after-load 'clojure-mode
-    '(font-lock-add-keywords
-      'clojure-mode
-      (mapcar
-       (lambda (pair)
-         `(,(car pair)
-           (0 (progn (compose-region
-                      (match-beginning 0) (match-end 0)
-                      ,(cadr pair))
-                     nil))))
-       '(("\\<fn\\>" ?ƒ)
-         ("\\<comp\\>" ?∘)
-         ("\\<partial\\>" ?þ)
-         ("\\<complement\\>" ?¬)))))
-#+end_src
-
 ** Scheme
 
 #+begin_src emacs-lisp
