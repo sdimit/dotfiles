@@ -1,6 +1,4 @@
-
 transit to separate .el files and Cask
-
 
 * Evil-mode
 #+BEGIN_SRC emacs-lisp
@@ -21,6 +19,8 @@ transit to separate .el files and Cask
            deft-mode
            nrepl-mode
            nrepl-repl-mode
+           project-explorer-mode
+           prodigy-mode
            git-rebase-mode
            magit-branch-manager-mode))
 
@@ -76,15 +76,6 @@ transit to separate .el files and Cask
     (nmap " u" 'unhighlight-regexp)
     (nmap " j" 'dired-jump)
     (nmap " n" 'linum-mode)
-    (nmap " s" 'magit-status)
-    (nmap " S" 'magit-status-only)
-    (nmap " l" 'magit-log-current-file)
-    (nmap " L" 'magit-log)
-    (nmap " ml" (bind (magit-show-commit-backward) (switch-to-buffer-other-window "*magit-commit*")))
-    (nmap " mf" (bind (magit-git-command "pull --rebase")))
-
-    (nmap " v" 'magit-checkout)
-    (nmap " V" 'magit-branch-manager)
     (nmap " o" 'helm-browse-code)
     (nmap " O" 'helm-org-headlines)
     (nmap " /" 'helm-occur)
@@ -135,12 +126,21 @@ transit to separate .el files and Cask
                ("org" (mode . org-mode))
                ("dirs" (mode . dired-mode))
                ("python" (mode . python-mode))
-               ("php" (mode . php-mode))
-               ("js" (mode . js2-mode))
+               ("git" (or
+                        (mode . magit-status-mode)
+                        (mode . magit-diff-mode)))
+               ("js" (or
+                        (mode . js2-mode)
+                        (mode . coffee-mode)))
+               ("clojure" (mode . clojure-mode))
                ("templates" (mode . web-mode))
                ("emacs" (or
                          (name . "^.+\\.el$")
                          (name . "^\\*.+\\*$")))))))
+
+ (add-hook 'ibuffer-mode-hook
+            (lambda ()
+              (ibuffer-switch-to-saved-filter-groups "default")))
 
 ;; don't ask to kill buffers
 (setq ibuffer-expert t)
@@ -358,9 +358,14 @@ just have to assume it's online."
                   (when (not (member major-mode '(term-mode
                                                   magit-commit-mode
                                                   magit-status-mode
+                                                  magit-log-mode
+                                                  magit-diff-mode
+                                                  w3m-mode
                                                   cider-repl-mode
                                                   ibuffer-mode)))
                     (setq show-trailing-whitespace t))))
+
+    (nmap (kbd "C-c C-w") 'whitespace-cleanup)
 
     (dark-theme)
 
@@ -572,11 +577,6 @@ Shift+direction arrow moves between frames.
                                command
                                nil t)))
 
-  (defun shell-command-on-buffer ()
-    (interactive)
-    (shell-command-on-region (point-min) (point-max)
-                             (read-shell-command "Shell command on buffer: ") t))
-
   (define-key evil-visual-state-map "<" 'visual-shift-left)
 
   (define-key evil-visual-state-map ">" 'visual-shift-right)
@@ -764,6 +764,22 @@ First mark the word, then add more cursors. To get out of multiple-cursors-mode,
 * Command mode
 #+BEGIN_SRC emacs-lisp
 
+  (defun shell-command-and-replace-region (start end)
+    (interactive "r")
+    (shell-command-on-region start
+                             end
+                             (read-shell-command "Shell command on buffer: ")
+                             t))
+
+  (defun shell-command-and-replace-buffer ()
+    (interactive)
+    (shell-command-and-replace-visual (point-min) (point-max)))
+
+  (nmap (kbd "!") 'shell-command)
+  (vmap (kbd "!") 'shell-command-on-region)
+  (nmap (kbd "C-c !") 'shell-command-and-replace-buffer)
+  (vmap (kbd "C-c !") 'shell-command-and-replace-region)
+
   (require 'zlc)
   (setq zlc-select-completion-immediately t)
 
@@ -798,6 +814,18 @@ First mark the word, then add more cursors. To get out of multiple-cursors-mode,
 
   (add-hook 'ack-mode-hook 'ansi-color-for-comint-mode-on)
 
+
+  (define-key process-menu-mode-map (kbd "K") 'delete-process-at-point)
+
+  (defun delete-process-at-point ()
+    (interactive)
+    (let ((process (get-text-property (point) 'tabulated-list-id)))
+      (cond ((and process
+                  (processp process))
+             (delete-process process)
+             (revert-buffer))
+            (t
+             (error "no process at point!")))))
 
 #+END_SRC
 
@@ -1307,11 +1335,14 @@ Make updating my emacs config super low threshold.
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c e") 'eval-and-replace)
+  (global-set-key (kbd "C-M-x") 'eval-defun)
 
   (global-rainbow-delimiters-mode)
 
   (add-hook 'clojure-mode-hook 'highlight-sexp-mode)
   (add-hook 'emacs-lisp-mode-hook 'highlight-sexp-mode)
+
+  ;(add-hook 'ielm-mode-hook 'ielm-auto-complete)
 
   (defun my-eval-region ()
     (interactive)
@@ -1328,17 +1359,23 @@ Make updating my emacs config super low threshold.
 
   (vmap (kbd "C-c C-r") 'my-eval-region)
 
+  ;; symbols for some overlong function names
+  (eval-after-load 'lisp-mode
+    '(font-lock-add-keywords
+      'lisp-mode
+      (mapcar
+       (lambda (pair)
+         `(,(car pair)
+           (0 (progn (compose-region
+                      (match-beginning 0) (match-end 0)
+                      ,(cadr pair))
+                     nil))))
+       '(("\\<defun\\>" ?ƒ)
+         ("\\<or\\>" ?<)
+         ("\\<not\\>" ?^)
+         ))))
+
 #+end_src
-
-* Helm
-#+BEGIN_SRC emacs-lisp
-
-(setq helm-input-idle-delay 0.1)
-(setq helm-idle-delay 0.1)
-(setq helm-buffer-details-flag nil)
-(setq helm-ff-transformer-show-only-basename t)
-
-#+END_SRC
 
 * Clojure
 #+begin_SRC emacs-lisp
@@ -1360,23 +1397,47 @@ Make updating my emacs config super low threshold.
 
 (setq esk-clojure-trace-face 'esk-clojure-trace-face)
 
-
-  ;; symbols for some overlong function names
+;;; font-lock
+(dolist (x '((true        т)
+             (false       ғ)
+             (:keys       ӄ)
+             (nil         Ø)
+             (partial     ∂)
+             (with-redefs я)
+             (fn          ƒ)
+             (comp        º)
+             (not         ¬)
+             (apply       ζ)
+             (interaction ι)
+             (a-fn1       α)
+             (a-fn2       β)
+             (a-fn3       γ)
+             (no-op       ε)))
   (eval-after-load 'clojure-mode
     '(font-lock-add-keywords
-      'clojure-mode
-      (mapcar
-       (lambda (pair)
-         `(,(car pair)
-           (0 (progn (compose-region
-                      (match-beginning 0) (match-end 0)
-                      ,(cadr pair))
-                     nil))))
-       '(("\\<fn\\>" ?ƒ)
-         ("\\<defn\\>" ?φ)
-         ("\\<comp\\>" ?∘)
-         ("\\<partial\\>" ?þ)
-         ("\\<complement\\>" ?¬)))))
+      'clojure-mode `((,(concat "[\[({[:space:]]"
+                                "\\(" (symbol-name (first x)) "\\)"
+                                "[\])}[:space:]]")
+                       (0 (progn (compose-region (match-beginning 1)
+                                                 (match-end 1) ,(symbol-name (second x)))
+                                 nil))))))
+  (eval-after-load 'clojure-mode
+    '(font-lock-add-keywords
+      'clojure-mode `((,(concat "^"
+                                "\\(" (symbol-name (first x)) "\\)"
+                                "[\])}[:space:]]")
+                       (0 (progn (compose-region (match-beginning 1)
+                                                 (match-end 1) ,(symbol-name (second x)))
+                                 nil))))))
+  (eval-after-load 'clojure-mode
+    '(font-lock-add-keywords
+      'clojure-mode `((,(concat "[\[({[:space:]]"
+                                "\\(" (symbol-name (first x)) "\\)"
+                                "$")
+                       (0 (progn (compose-region (match-beginning 1)
+                                                 (match-end 1) ,(symbol-name (second x)))
+                                 nil)))))))
+
 
   (setq nrepl-popup-stacktraces nil)
   (setq nrepl-popup-stacktraces-in-repl t)
@@ -1413,7 +1474,7 @@ Display the results in a hyperlinked *compilation* buffer."
   (interactive)
   (compile "lein kibit"))
 
-(require 'cider)
+;(require 'cider)
 
 (setq nrepl-hide-special-buffers t)
 
@@ -1621,57 +1682,90 @@ Display the results in a hyperlinked *compilation* buffer."
 
 #+END_SRC
 
+* Helm
+#+BEGIN_SRC emacs-lisp
+
+(setq helm-input-idle-delay 0.1)
+(setq helm-idle-delay 0.1)
+(setq helm-buffer-details-flag nil)
+(setq helm-ff-transformer-show-only-basename t)
+
+#+END_SRC
+
 * Git
 #+BEGIN_SRC emacs-lisp
 
+     (setq ediff-highlight-all-diffs nil)
 
-    (setq ediff-highlight-all-diffs nil)
-
-    (setq magit-save-some-buffers 'dontask)
+     (setq magit-save-some-buffers 'dontask)
 
      (eval-after-load 'diff-mode
        '(progn
           (set-face-foreground 'diff-added "green4")
           (set-face-foreground 'diff-removed "red3")))
 
-     (eval-after-load 'magit
-       '(progn
-          (set-face-foreground 'magit-diff-add "green3")
-          (set-face-foreground 'magit-diff-del "red3")))
+     (eval-after-load 'magit '(progn
+        (set-face-foreground 'magit-diff-add "green3")
+        (set-face-foreground 'magit-diff-del "red3")))
 
-         (defun magit-status-only ()
+       (defun magit-status-only ()
 
-            (interactive)
-            (magit-status default-directory)
-            (delete-other-windows))
+          (interactive)
+          (magit-status default-directory)
+          (delete-other-windows))
 
-         (defun magit-log-current-file ()
-            (interactive)
-            (magit-file-log (buffer-file-name (current-buffer))))
+       (defun magit-log-current-file ()
+          (interactive)
+          (magit-file-log (buffer-file-name (current-buffer))))
 
-         (global-set-key (kbd "C-x m") 'magit-status-only)
-         (global-set-key (kbd "C-x M") 'magit-status)
+       (global-set-key (kbd "C-x m") 'magit-status-only)
+       (global-set-key (kbd "C-x M") 'magit-status)
 
-         (global-git-gutter+-mode t)
+       (global-git-gutter+-mode t)
 
       (setq git-gutter+-modified-sign ".")
 
-         (global-set-key (kbd "C-c +") 'git-gutter+-stage-hunks)
-         (global-set-key (kbd "C-c C-=") 'git-gutter+-stage-hunks)
-         (global-set-key (kbd "C-c -") 'git-gutter+-revert-hunk)
+      (global-set-key (kbd "C-c +") 'git-gutter+-stage-hunks)
+      (global-set-key (kbd "C-c C-=") 'git-gutter+-stage-hunks)
+      (global-set-key (kbd "C-c -") 'git-gutter+-revert-hunk)
 
       (nmap "[g" 'git-gutter+-next-hunk)
       (nmap "]g" 'git-gutter+-previous-hunk)
       (nmap " g" 'git-messenger:popup-message)
 
+      (nmap " mbb" 'magit-blame-mode)
+      (nmap " mbl" 'magit-blame-locate-commit)
+      (nmap " mdd" 'ediff-current-file-on-git)
+      (nmap " mdm" 'ediff-current-file-on-git)
+      (nmap " mD" (bind (call-interactively 'magit-diff)
+                        (switch-to-buffer "*magit-diff*")
+                        (delete-other-windows)))
+      (nmap " mv" 'magit-checkout)
+      (nmap " mV" 'magit-branch-manager)
+      (nmap " ms" 'magit-status)
+      (nmap " ml" 'magit-log-current-file)
+      (nmap " mA" 'magit-log)
+      (nmap " mc" 'magit-commit)
+      (nmap " mO" 'magit-oops)
+      (nmap " mL" (bind (magit-show-commit-backward) (switch-to-buffer-other-window "*magit-commit*")))
+      (nmap " mr" 'magit-rebase-step)
+      (nmap " mR" 'magit-interactive-rebase)
+      (nmap " mf" (bind (magit-git-command "fetch --all")))
+      (nmap " mF" (bind (magit-git-command "pull --rebase")))
+
       (setq git-messenger:show-detail t)
+
+      (defun magit-review ()
+         (interactive)
+         (magit-diff "master")
+         (switch-to-buffer "*magit-diff*")
+         (delete-other-windows))
 
       (require 'helm-open-github)
 
-      ; copies url of current selected region into clipboard (for easy sharing in IM)
-      ; depends on helm-open-github)
-
       (defun yank-github-url-for-region ()
+        "copies url of current selected region into clipboard (for easy sharing in IM)
+        depends on helm-open-github)"
         (interactive)
         (if (not mark-active)
           (print "no region selected")
@@ -1690,10 +1784,6 @@ Display the results in a hyperlinked *compilation* buffer."
               (branch (helm-open-github--branch))
               (marker (helm-open-github--highlight-marker start end)))
           (helm-open-github--file-url host remote-url branch file marker)))
-
-     ;     (define-key magit-branch-manager-mode-map (kbd "/") 'evil-search-forward)
-     ;     (define-key magit-branch-manager-mode-map (kbd "C-n") 'evil-search-next)
-     ;     (evil-define-key 'normal magit-log-edit-mode-map "q" 'magit-log-edit-commit)
 
      ;; magit
      (evil-add-hjkl-bindings magit-branch-manager-mode-map 'emacs
@@ -1731,147 +1821,131 @@ Display the results in a hyperlinked *compilation* buffer."
        "J" 'open-jira-ticket-from-point
        "h" 'magit-toggle-diff-refine-hunk)
 
-         (defun ediff-current-file-on-git ()
-           ""
-           (interactive)
-           (ediff-revision (buffer-file-name (current-buffer))))
+     (defun ediff-current-file-on-git ()
+       (interactive)
+       (ediff-revision (buffer-file-name (current-buffer))))
 
-       (define-key evil-normal-state-map " d" 'ediff-current-file-on-git)
-       (define-key evil-normal-state-map " b" 'magit-blame-mode)
-       (define-key evil-normal-state-map " B" 'magit-blame-locate-commit)
-
-         (add-hook 'magit-log-edit-mode-hook
-                   '(lambda ()
-                      (flyspell-mode t)))
+     (add-hook 'magit-log-edit-mode-hook
+               (lambda () (flyspell-mode t)))
 
       (defun git-write-file ()
         (interactive)
         (magit-stage-item (buffer-file-name (current-buffer))))
 
-      (defun conflicts-list ()
-        "Show all the conflicts in the current buffer using occur-mode."
-        (interactive)
-        (occur "<<<<<<< ")
-        ; put mark on the first result in the occur window
-        (other-window 1)
-        (forward-line))
+    (defalias 'conflicts-keep-current 'smerge-keep-current)
+    (defalias 'conflicts-keep-first 'smerge-keep-mine)
+    (defalias 'conflicts-keep-second 'smerge-keep-other)
 
-  (global-set-key (kbd "<f10>") 'conflicts-list)
+    (require 'smerge-mode)
+    ; (define-key smerge-mode-map (kbd "<C-return>") 'conflicts-keep-current)
+    ; (define-key smerge-mode-map (kbd "<f8>") 'smerge-prev)
+    ; (define-key smerge-mode-map (kbd "<f9>") 'smerge-next)
 
-  (defalias 'conflicts-keep-current 'smerge-keep-current)
+    (setq magit-completing-read-function 'magit-ido-completing-read)
+    (setq magit-default-tracking-name-function 'magit-default-tracking-name-branch-only)
 
-  ;; TODO: it would be nice if these jumped to the first conflict
-  (defalias 'conflicts-keep-first 'smerge-keep-mine)
-  (defalias 'conflicts-keep-second 'smerge-keep-other)
+    (defun git-purr ()
+      (interactive)
+      (magit-shell-command "git pull --rebase"))
 
-  (require 'smerge-mode)
-  ; (define-key smerge-mode-map (kbd "<C-return>") 'conflicts-keep-current)
-  ; (define-key smerge-mode-map (kbd "<f8>") 'smerge-prev)
-  ; (define-key smerge-mode-map (kbd "<f9>") 'smerge-next)
+    (defun 10to8-git-flow-command (flow-command ticket-number)
+      (let* ((branch-suffix (concat "TTE-" ticket-number))
+            (flow-prefix "flow")
+            (complete-command (concat flow-prefix
+                                      " "
+                                      flow-command
+                                      " "
+                                      branch-suffix)))
+        (magit-git-command complete-command)))
 
-  (setq magit-completing-read-function 'magit-ido-completing-read)
-  (setq magit-default-tracking-name-function 'magit-default-tracking-name-branch-only)
 
-  (defun git-purr ()
+    ; options: fetch from origin, and keep branch
+    ; cf https://github.com/nvie/gitflow/wiki/Command-Line-Arguments
+
+    (defun 10to8-flow-start-feature (ticket-number)
+      (interactive "MTicket number: ")
+      (10to8-git-flow-command "feature start"
+                              ticket-number))
+
+    (defun 10to8-flow-finish-feature (ticket-number)
+      (interactive "MTicket number: ")
+      (10to8-git-flow-command "feature finish -k"
+                              ticket-number))
+
+    (defun 10to8-flow-start-hotfix (ticket-number)
+      (interactive "MTicket number: ")
+      (10to8-git-flow-command "hotfix start"
+                              ticket-number))
+
+    (defun 10to8-flow-finish-hotfix (ticket-number)
+      (interactive "MTicket number: ")
+      (10to8-git-flow-command "hotfix finish -k"
+                              ticket-number))
+
+    (defun 10to8-flow-publish-feature (ticket-number)
+      (interactive "MTicket number: ")
+      (10to8-git-flow-command "feature publish"
+                              ticket-number))
+
+    (defun shell-command-as-string (cmd)
+      (with-temp-buffer
+        (shell-command-on-region (point-min) (point-max)
+                                 cmd t)
+        (buffer-string)))
+
+    (defun extract-jira-ticket-ref (branch-ref)
+      "takes the part after feature/ or hotfix/,
+       if applicable"
+      (if (s-contains? "/" branch-ref)
+        (let* ((second-part (cadr (split-string branch-ref "/")))
+              (trimmed-ref (replace-regexp-in-string "\n$" "" second-part)))
+          trimmed-ref)
+          nil))
+
+    (defun get-current-ticket-name ()
+      (let* ((branch-ref (shell-command-as-string "git rev-parse --abbrev-ref HEAD"))
+             (ticket-name (extract-jira-ticket-ref branch-ref)))
+        ticket-name))
+
+    (defun open-jira-ticket (ticket-ref)
+      (if (not (eq nil ticket-ref))
+            (browse-url (concat "https://tento8.atlassian.net/browse/" ticket-ref))))
+
+    (defun open-jira-ticket-from-current-branch ()
+      (interactive)
+      (let* ((ticket-name (get-current-ticket-name)))
+        (open-jira-ticket ticket-name)))
+
+    (defun open-jira-ticket-from-point ()
+      (interactive)
+      (let* ((at-point (substring-no-properties (thing-at-point 'symbol)))
+             (ticket-name (extract-jira-ticket-ref at-point)))
+        (message at-point)
+        (open-jira-ticket ticket-name)))
+
+  (defun magit-oops ()
     (interactive)
-    (magit-shell-command "git pull --rebase"))
+    (save-window-excursion
+      (magit-with-refresh
+        (shell-command "git --no-pager commit --amend --reuse-message=HEAD"))))
 
-  (defun 10to8-git-flow-command (flow-command ticket-number)
-    (let* ((branch-suffix (concat "TTE-" ticket-number))
-          (flow-prefix "flow")
-          (complete-command (concat flow-prefix
-                                    " "
-                                    flow-command
-                                    " "
-                                    branch-suffix)))
-      (magit-git-command complete-command)))
+  (eval-after-load "magit"
+    (lambda ()
+      (define-key magit-status-mode-map (kbd "C-c C-a") 'magit-just-amend)
+      (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)))
 
-  (defun 10to8-flow-start-feature (ticket-number)
-    (interactive "MTicket number: ")
-    (10to8-git-flow-command "feature start"
-                            ticket-number))
+  ;; full screen magit-status
 
-  (defun 10to8-flow-finish-feature (ticket-number)
-    (interactive "MTicket number: ")
-    (10to8-git-flow-command "feature finish"
-                            ticket-number))
+  (defadvice magit-status (around magit-fullscreen activate)
+    (window-configuration-to-register :magit-fullscreen)
+    ad-do-it
+    (delete-other-windows))
 
-  (defun 10to8-flow-start-hotfix (ticket-number)
-    (interactive "MTicket number: ")
-    (10to8-git-flow-command "hotfix start"
-                            ticket-number))
-
-  (defun 10to8-flow-finish-hotfix (ticket-number)
-    (interactive "MTicket number: ")
-    (10to8-git-flow-command "hotfix finish"
-                            ticket-number))
-
-  (defun 10to8-flow-publish-feature (ticket-number)
-    (interactive "MTicket number: ")
-    (10to8-git-flow-command "feature publish"
-                            ticket-number))
-
-  (defun shell-command-as-string (cmd)
-    (with-temp-buffer
-      (shell-command-on-region (point-min) (point-max)
-                               cmd t)
-      (buffer-string)))
-
-  (defun extract-jira-ticket-ref (branch-ref)
-    "takes the part after feature/ or hotfix/,
-     if applicable"
-    (if (s-contains? "/" branch-ref)
-      (let* ((second-part (cadr (split-string branch-ref "/")))
-            (trimmed-ref (replace-regexp-in-string "\n$" "" second-part)))
-        trimmed-ref)
-        nil))
-
-  (defun get-current-ticket-name ()
-    (let* ((branch-ref (shell-command-as-string "git rev-parse --abbrev-ref HEAD"))
-           (ticket-name (extract-jira-ticket-ref branch-ref)))
-      ticket-name))
-
-  (defun open-jira-ticket (ticket-ref)
-    (if (not (eq nil ticket-ref))
-          (browse-url (concat "https://tento8.atlassian.net/browse/" ticket-ref))))
-
-  (defun open-jira-ticket-from-current-branch ()
+  (defun magit-quit-session ()
+    "Restores the previous window configuration and kills the magit buffer"
     (interactive)
-    (let* ((ticket-name (get-current-ticket-name)))
-      (open-jira-ticket ticket-name)))
-
-  (defun open-jira-ticket-from-point ()
-    (interactive)
-    (let* ((at-point (substring-no-properties (thing-at-point 'symbol)))
-           (ticket-name (extract-jira-ticket-ref at-point)))
-      (message at-point)
-      (open-jira-ticket ticket-name)))
-
-;; C-c C-a to amend without any prompt
-
-(defun magit-just-amend ()
-  (interactive)
-  (save-window-excursion
-    (magit-with-refresh
-      (shell-command "git --no-pager commit --amend --reuse-message=HEAD"))))
-
-(eval-after-load "magit"
-  (lambda ()
-    (define-key magit-status-mode-map (kbd "C-c C-a") 'magit-just-amend)
-    (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)))
-
-;; full screen magit-status
-
-(defadvice magit-status (around magit-fullscreen activate)
-  (window-configuration-to-register :magit-fullscreen)
-  ad-do-it
-  (delete-other-windows))
-
-(defun magit-quit-session ()
-  "Restores the previous window configuration and kills the magit buffer"
-  (interactive)
-  (kill-buffer)
-  (jump-to-register :magit-fullscreen))
+    (kill-buffer)
+    (jump-to-register :magit-fullscreen))
 
 #+END_SRC
 
@@ -2195,6 +2269,8 @@ When in an org-mode buffer, bind TeX-insert-quote to =C-c "=. Turned off by defa
      (define-key dired-mode-map ":" 'smex)
      (define-key dired-mode-map "Q" 'quit-window)))
 
+  (require 'find-dired)
+  (setq find-ls-option '("-print0 | xargs -0 ls -ld" . "-ld"))
 
   (nmap " I" (lambda () (interactive) (dired "~/Inbox/")))
 
@@ -2324,7 +2400,7 @@ if no files marked, always operate on current line in dired-mode
 ;                                     (bury-buffer))))
 
     ;; Add keybindings for commenting regions of text
-    (global-set-key (kbd "C-\\") 'comment-or-uncomment-region)
+    (global-set-key (kbd "C-\\") 'comment-dwim)
 
     ;; custom variables kludge. Why can't I get these to work via setq?
     (custom-set-variables
@@ -2622,6 +2698,31 @@ previously visited the same file. The following code comes from [[http://emacs-f
     (global-set-key (kbd "C-c 1") (bind (ido-find-file-in-dir "~/10to8/")))
     (global-set-key (kbd "C-c i") (bind (ido-find-file-in-dir "~/Inbox/")))
 
+(require 'prodigy)
+
+(prodigy-define-service
+  :name "10to8-sockjs"
+  :command "source ~/.virtualenvs/Native/bin/activate && python manage.py run_sockjs_server"
+  :cwd "~/10to8/Native/native/src/"
+  :tags '(10to8))
+
+(prodigy-define-service
+  :name "10to8-messaging"
+  :command "source ~/.virtualenvs/Native/bin/activate && python manage.py run_messaging"
+  :cwd "~/10to8/Native/native/src/"
+  :tags '(10to8))
+
+(prodigy-define-service
+  :name "10to8-rabbitmq"
+  :command "source ~/.virtualenvs/Native/bin/activate && rabbitmq-server"
+  :cwd "~/10to8/Native/native/src/"
+  :tags '(10to8))
+
+(prodigy-define-service
+  :name "10to8-celery"
+  :command "source ~/.virtualenvs/Native/bin/activate && python manage.py celery worker -E -l info"
+  :cwd "~/10to8/Native/native/src/"
+  :tags '(10to8))
 
 #+END_SRC
 * Coffeescript
@@ -2775,7 +2876,7 @@ previously visited the same file. The following code comes from [[http://emacs-f
      (lambda () (setq dash-at-point-docset "python")))
 
   (add-hook 'coffee-mode-hook
-     (lambda () (setq dash-at-point-docset "lodash")))
+     (lambda () (setq dash-at-point-docset "l1.2.0odash")))
 
 #+end_src
 * Angular
@@ -2850,13 +2951,13 @@ previously visited the same file. The following code comes from [[http://emacs-f
   (define-key comint-mode-map [down] 'comint-next-input))
 
 ;; kill buffer when terminal process is killed
-(defadvice term-sentinel (around my-advice-term-sentinel (proc msg))
-  (if (memq (process-status proc) '(signal exit))
-      (let ((buffer (process-buffer proc)))
-        ad-do-it
-        (kill-buffer buffer))
-    ad-do-it))
-(ad-activate 'term-sentinel)
+; (defadvice term-sentinel (around my-advice-term-sentinel (proc msg))
+;   (if (memq (process-status proc) '(signal exit))
+;       (let ((buffer (process-buffer proc)))
+;         ad-do-it
+;         (kill-buffer buffer))
+;     ad-do-it))
+; (ad-activate 'term-sentinel)
 
 (setq multi-term-program "/bin/zsh")
 
@@ -2903,6 +3004,8 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 
    (nmap (kbd "[ t") 'multi-term-next)
    (nmap (kbd "] t") 'multi-term-prev)
+
+(add-hook 'term-mode-hook 'auto-complete-mode)
 
 #+END_SRC
 
@@ -2972,14 +3075,20 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
   ;   (interactive "nPort: ")
   ;   (elnode-make-webserver (projectile-project-root) port))
 
-;; Use lambda for anonymous functions
-(add-hook 'js3-mode-hook
-          (lambda ()
-            (font-lock-add-keywords
-             nil `(("\\(function\\)"
-                          (0 (progn (compose-region (match-beginning 1)
-                                                    (match-end 1) "ƒ")
-                                    nil)))))))
+  ;; symbols for some overlong function names
+  (eval-after-load 'js3-mode
+    '(font-lock-add-keywords
+      'js3-mode
+      (mapcar
+       (lambda (pair)
+         `(,(car pair)
+           (0 (progn (compose-region
+                      (match-beginning 0) (match-end 0)
+                      ,(cadr pair))
+                     nil))))
+       '(("\\<function\\>" ?ƒ )
+         ("\\<return\\>" ?< )
+         ("\\<this.\\>" ?@)))))
 
 #+END_SRC
 
