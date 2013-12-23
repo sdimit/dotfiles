@@ -8,11 +8,6 @@
 ; don't launch GUI
 (x-focus-frame nil)
 
-; (add-to-list 'load-path (expand-file-name
-;                        "lisp" (expand-file-name
-;                                "org" (expand-file-name
-;                                       "src" dotfiles-dir))))
-
 ;; Common Lisp compatability
 (require 'cl-lib)
 
@@ -30,6 +25,3 @@
 (require 'org)
 
 (org-babel-load-file (expand-file-name "starter-kit.org" dotfiles-dir))
-
-(put 'narrow-to-page 'disabled nil)
-(put 'narrow-to-region 'disabled nil)
