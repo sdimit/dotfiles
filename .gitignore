@@ -28,3 +28,4 @@ emacs/saved-places
 /emacs/ac-comphist.dat
 /emacs/var/pcache/gh/gh-gist-api/istib
 /zsh/build/
+bin/clojurescript
