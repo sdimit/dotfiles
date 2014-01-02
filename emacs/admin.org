@@ -1,6 +1,6 @@
 * ELPA
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle "init-elpa.el"
   (defvar starter-kit-packages (list
                                 'auto-complete
                                 'autopair
@@ -74,7 +74,7 @@ just have to assume it's online."
 #+end_src
 
 * Evil-mode
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-evil.el"
 
   (evil-mode 1)
 
@@ -203,7 +203,8 @@ just have to assume it's online."
 
 #+END_SRC
 * IBuffer
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-ibuffer.el"
+
   (require 'ibuffer)
 
   (define-key ibuffer-mode-map "K" 'ibuffer-do-delete)
@@ -253,7 +254,7 @@ just have to assume it's online."
 #+END_SRC
 
 * Smartparens
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-smartparens.el"
 
   (require 'smartparens-config)
   (smartparens-global-mode t)
@@ -323,7 +324,7 @@ just have to assume it's online."
 #+END_SRC
 
 * Editing
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-editing.el"
   (require 'thingatpt)
   (require 'imenu)
 
@@ -591,7 +592,7 @@ just have to assume it's online."
 
 * Appearance
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle "init-look.el"
 
     ;; Less flickery display
     (setq redisplay-dont-pause t)
@@ -736,7 +737,7 @@ just have to assume it's online."
 #+end_src
 
 * Command mode
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-command.el"
 
   (define-key ido-file-completion-map (kbd "C-w") 'ido-delete-backward-updir)
 
@@ -835,7 +836,7 @@ just have to assume it's online."
 #+END_SRC
 
 * Navigation
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle "init-navigation.el"
 
   (winner-mode 1)
   (global-set-key (kbd "C-c <up>") 'winner-undo)
@@ -927,7 +928,7 @@ just have to assume it's online."
 #+end_src
 
 * Search
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle "init-search.el"
 
       (require 'ack-and-a-half)
       ;; Create shorter aliases
@@ -1052,7 +1053,7 @@ just have to assume it's online."
 
 #+end_src
 * Help
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle "init-help.el"
 
   (require 'discover)
   (global-discover-mode 1)
@@ -1114,7 +1115,7 @@ just have to assume it's online."
 #+end_src
 * Completion
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle "init-completion.el"
 
 (global-set-key (kbd "C-c C-q") 'start-kbd-macro)
 (global-set-key (kbd "C-c q") 'end-kbd-macro)
@@ -1179,7 +1180,7 @@ just have to assume it's online."
 #+end_src
 
 * LaTeX
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-latex.el"
 
     ; ;; custom variables kludge. Why can't I get these to work via setq?
     ; (custom-set-variables
@@ -1377,10 +1378,7 @@ just have to assume it's online."
 #+end_src
 
 * Web-mode
-   An actual major mode that works html and templates? Let's get
-   that!
-
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-web.el"
 
 (require 'web-mode)
 
@@ -1411,8 +1409,10 @@ just have to assume it's online."
 
 #+END_SRC
 * Lisp
+#+begin_src emacs-lisp :tangle "init-lisp.el"
 
-#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c e") 'eval-and-replace)
+  (global-set-key (kbd "C-M-x") 'eval-defun)
 
 (defun scratch ()
   (switch-to-buffer "*scratch*"))
@@ -1483,7 +1483,7 @@ just have to assume it's online."
 #+end_src
 
 * Clojure
-#+begin_SRC emacs-lisp
+#+begin_SRC emacs-lisp :tangle "init-clojure.el"
 
     (add-hook 'clojure-mode-hook 'highlight-sexp-mode)
 
@@ -1635,7 +1635,7 @@ Display the results in a hyperlinked *compilation* buffer."
 #+END_SRC
 
 * Python/Django
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-python.el"
 
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize))
@@ -1830,7 +1830,7 @@ Display the results in a hyperlinked *compilation* buffer."
 #+END_SRC
 
 * Helm
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-helm.el"
 
 (setq helm-input-idle-delay 0.1)
 (setq helm-idle-delay 0.1)
@@ -1840,7 +1840,7 @@ Display the results in a hyperlinked *compilation* buffer."
 #+END_SRC
 
 * Git
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-git.el"
 
      (setq ediff-highlight-all-diffs nil)
 
@@ -2119,7 +2119,7 @@ Display the results in a hyperlinked *compilation* buffer."
 #+END_SRC
 
 * Projectile
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-projectile.el"
 
   (require 'project-explorer "~/.emacs.d/elpa/project-explorer-0.10.1/project-explorer.el")
   (setq pe/omit-regex "^\\.\\|^#\\|~$|\\.pyc$")
@@ -2160,16 +2160,14 @@ Display the results in a hyperlinked *compilation* buffer."
 #+end_src
 
 * Pandoc
-A pandoc menu for markdown and tex files.
-#+src-name: pandoc_mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle "init-pandoc.el"
 ;  (load "pandoc-mode")
 ;  (add-hook 'markdown-mode-hook 'turn-on-pandoc)
 ;  (add-hook 'TeX-mode-hook 'turn-on-pandoc)
 ;  (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
 #+end_src
 * Org-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle "init-org.el"
 
 (define-minor-mode evil-org-mode
   "Buffer local minor mode for evil-org"
@@ -2263,9 +2261,7 @@ A pandoc menu for markdown and tex files.
 #+end_src
 
 * Files
-
-#+BEGIN_SRC emacs-lisp
-
+#+BEGIN_SRC emacs-lisp :tangle "init-files.el"
 
   ;; let command be meta too
   (setq mac-command-modifier 'meta)
@@ -2455,7 +2451,7 @@ A pandoc menu for markdown and tex files.
 #+END_SRC
 
 * Dired
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-dired.el"
 
 ; Auto refresh dired, but be quiet about it
 (setq global-auto-revert-non-file-buffers t)
@@ -2578,8 +2574,7 @@ if no files marked, always operate on current line in dired-mode
 #+END_SRC
 
 * Processes
-
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-processes.el"
 
   (require 'server)
   (unless (server-running-p) (server-start))
@@ -2624,9 +2619,7 @@ if no files marked, always operate on current line in dired-mode
 
 #+END_SRC
 * Terminal
-
-
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-terminal.el"
 
 ;;make sure ansi colour character escapes are honoured
 (require 'ansi-color)
@@ -2703,7 +2696,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 - abbrev mode
 
 * 10to8
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-10to8.el"
 
 
         ; (defcustom virtualenv-workon-starts-python nil
@@ -2883,8 +2876,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 
 #+END_SRC
 * Coffeescript
-
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-coffee.el"
 
   (defun coffee-custom ()
    "coffee-mode-hook"
@@ -2928,8 +2920,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 #+END_SRC
 
 * JSON
-
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-json.el"
 
 (defun format-json ()
   (interactive)
@@ -2938,8 +2929,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 
 #+END_SRC
 * Angular
-
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-angular.el"
 
 (defun highlight-angular-anchor ()
   (interactive)
@@ -2947,8 +2937,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 
 #+END_SRC
 * Popwin
-
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-popwin.el"
 
 (require 'popwin)
 (setq display-buffer-function 'popwin:display-buffer)
@@ -2991,8 +2980,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 #+END_SRC
 
 * Pomodoro
-
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-pomodoro.el"
 
   (require 'pomodoro)
   ;(pomodoro-add-to-mode-line)
@@ -3001,7 +2989,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 
 * Registers
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-registers.el"
 
 ;; @see http://www.emacswiki.org/emacs/BetterRegisters
 ;; This is used in the function below to make marked points visible
@@ -3012,7 +3000,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 #+END_SRC
 
 * Javascript
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "init-javascript.el"
 
   (defun skewer-coffee-eval (coffee-code)
     "Requests the browser to evaluate a coffeescipt string."
@@ -3080,11 +3068,8 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 
 #+END_SRC
 
- to try:
-- abbrev mode
-
 * Experimental
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle "experimental.el"
 
 ;; reduce the frequency of garbage collection by making it happen on
 ;; each 50MB of allocated data (the default is on every 0.76MB)
