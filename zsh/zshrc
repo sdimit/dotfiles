@@ -33,8 +33,17 @@ source $ZSH/oh-my-zsh.sh
 # for c-s and c-q
 stty -ixon -ixoff
 
-PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
-
+case "$TERM" in
+"dumb")
+    PS1="> "
+    ;;
+xterm*|rxvt*|eterm*|screen*)
+    PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
+    ;;
+*)
+    PS1="> "
+    ;;
+esac
 
 # }}}
 

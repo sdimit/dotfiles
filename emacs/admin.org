@@ -23,7 +23,6 @@
                                 'ruby-mode
                                 's
                                 'smex
-                                'textmate
                                 'typopunct
                                 'yaml-mode
                                 'yasnippet
@@ -93,6 +92,7 @@ just have to assume it's online."
          nrepl-mode
          nrepl-repl-mode
          cider-repl-mode
+         skewer-repl-mode
          makey-key-mode
          project-explorer-mode
          process-menu-mode
@@ -380,10 +380,6 @@ just have to assume it's online."
 
    (nmap (kbd "[ m") 'flymake-goto-prev-error)
    (nmap (kbd "] m") 'flymake-goto-next-error)
-
-; (textmate-mode)
-; (imap (kbd "<C-return>") 'textmate-next-line)
-; (nmap (kbd "<C-return>") 'textmate-next-line)
 
 ; Don't break lines
 (setq-default truncate-lines t)
@@ -676,8 +672,8 @@ just have to assume it's online."
 
     (set-face-attribute 'default nil
        :family "PragmataPro"
-       :height 175
-       :weight 'normal
+       :height 180
+       :weight 'semi-light
        :width 'normal)
 
     (setq line-spacing 2)
@@ -744,6 +740,7 @@ just have to assume it's online."
  (ido-vertical-mode t)
 
 (setq ido-enable-tramp-completion nil)
+(eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
 
 ;; Bind `~` to go to homedir when in ido-find-file; http://whattheemacsd.com/setup-ido.el-02.html
 (add-hook 'ido-setup-hook
@@ -1909,7 +1906,7 @@ Display the results in a hyperlinked *compilation* buffer."
       (nmap " mf" (bind (magit-git-command "fetch --all")))
       (nmap " mF" (bind (magit-git-command "pull --rebase")))
       (nmap " PF" (bind (project-explorer-open)
-                        (switch-to-buffer-other-window "*project-explorer*")))
+                        (switch-to-buffer-other-window "*project-explorer*") ))
 
       (setq git-messenger:show-detail t)
 
@@ -2121,7 +2118,7 @@ Display the results in a hyperlinked *compilation* buffer."
 * Projectile
 #+BEGIN_SRC emacs-lisp :tangle "init-projectile.el"
 
-  (require 'project-explorer "~/.emacs.d/elpa/project-explorer-0.10.1/project-explorer.el")
+  (require 'project-explorer)
   (setq pe/omit-regex "^\\.\\|^#\\|~$|\\.pyc$")
   (setq pe/width 30)
 
@@ -2613,7 +2610,8 @@ if no files marked, always operate on current line in dired-mode
   (nmap " PL" (bind (list-processes)
                         (switch-to-buffer-other-window "*Process List*")))
 
-  (nmap " PP" 'prodigy)
+  (nmap " Pp" 'prodigy)
+  (nmap " PP" 'list-processes)
 
   (define-key process-menu-mode-map (kbd "K") 'delete-process-at-point)
 
@@ -2946,7 +2944,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
       '(("*Help*"  :height 20)
         ("*Completions*" :noselect t :height 12)
         ("*Ido Completions*" :noselect t :height 12)
-        ("*Messages*" :noselect t :height 30)
+        ("*Messages*" :height 20)
         ("*Apropos*" :noselect t :height 30)
         ("*compilation*" :noselect t)
         ("*Backtrace*" :height 30)
@@ -3134,5 +3132,87 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
         (func (find-function-other-window func))
          (t (message "Neither function nor variable found!"))))
      (setq ac-disable-faces nil))
+
+;; TODO: add to all prog mode
+(add-hook 'coffee-mode-hook
+               (lambda ()
+                (font-lock-add-keywords nil
+                 '(("\\<\\(FIXME\\|TODO\\|BUG\\):" 1 font-lock-warning-face t)))))
+
+(defun filter-buffer-by-mode (mode)
+  (-filter (lambda (buffer) (string= mode (buffer-mode buffer)))
+           (buffer-list)))
+
+(defadvice git-commit-commit (after delete-window activate)
+  (delete-window))
+
+(defun eval-and-replace (value)
+  "Evaluate the sexp at point and replace it with its value."
+  (interactive (list (eval-last-sexp nil)))
+  (kill-sexp -1)
+  (insert (format "%S" value)))
+
+(defun flash-region (start end &optional timeout)
+  "Temporarily highlight region from START to END."
+  (let ((overlay (make-overlay start end)))
+    (overlay-put overlay 'face 'secondary-selection)
+    (run-with-timer (or timeout 0.2) nil 'delete-overlay overlay)))
+
+(defun slurp (file)
+  "Return FILE contents as a string."
+  (with-temp-buffer
+    (insert-file-contents file)
+    (buffer-string)))
+
+;; Quick switch to scratch buffers
+
+(defmacro scratch-key (key buffer-name mode)
+  `(global-set-key ,key (lambda ()
+                          (interactive)
+                          (switch-to-buffer ,buffer-name)
+                          (unless (eq major-mode ',mode)
+                            (,mode)))))
+
+(scratch-key (kbd "C-S-s") "*scratch*"    emacs-lisp-mode)
+(scratch-key (kbd "C-S-d") "*javascript*" js2-mode)
+(scratch-key (kbd "C-S-a") "*lisp*"       lisp-mode)
+(scratch-key (kbd "C-S-c") "*clojure*"    clojure-mode)
+(scratch-key (kbd "C-S-x") "*css*"        css-mode)
+(scratch-key (kbd "C-S-h") "*html*"       html-mode)
+
+
+
+;; (defun push-first-button ()
+;;   "Find and push the first button in this buffer, intended for `help-mode'."
+;;   (interactive)
+;;   (block :find-button
+;;     (goto-char (point-min))
+;;     (while (< (point) (point-max))
+;;       (if (get-text-property (point) 'button)
+;;           (return-from :find-button (push-button))
+;;         (forward-char)))))
+;
+;; (define-key help-mode-map "f" 'push-first-button)
+
+  (setq deft-extension "org")
+  (setq deft-text-mode 'org-mode)
+
+(defun get-last-message ()
+  "ideally some kill-ring navigation. or helm??"
+  (get-buffer "*Messages*")
+  ;; grab last line and put into kill-ring
+  )
+
+(defun send-region-to-end-of-file ()
+  "writing tools package or init file of someone had that...")
+
+; ideal keybinding
+; C-k C-k kill buffer
+
+(defun nuke-useless-buffers ()
+  "git, dired, emacs temp buffers"
+)
+
+(require 'sr-speedbar)
 
 #+END_SRC
