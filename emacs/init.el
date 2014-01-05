@@ -23,6 +23,7 @@
 ;; Load up Org Mode and Babel
 ;; load up the main file
 ;; org-mode windmove compatibility
+
 (setq org-replace-disputed-keys t)
 (require 'org)
 

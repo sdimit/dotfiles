@@ -1,6 +1,6 @@
 * ELPA
 
-#+begin_src emacs-lisp :tangle "init-elpa.el"
+#+begin_src emacs-lisp
   (defvar starter-kit-packages (list
                                 'auto-complete
                                 'autopair
@@ -73,7 +73,7 @@ just have to assume it's online."
 #+end_src
 
 * Evil-mode
-#+BEGIN_SRC emacs-lisp :tangle "init-evil.el"
+#+BEGIN_SRC emacs-lisp
 
   (evil-mode 1)
 
@@ -87,6 +87,7 @@ just have to assume it's online."
          inferior-python-mode
          inferior-ess-mode
          dired-mode
+         direx-mode
          term-mode
          deft-mode
          nrepl-mode
@@ -203,7 +204,7 @@ just have to assume it's online."
 
 #+END_SRC
 * IBuffer
-#+BEGIN_SRC emacs-lisp :tangle "init-ibuffer.el"
+#+BEGIN_SRC emacs-lisp
 
   (require 'ibuffer)
 
@@ -254,7 +255,7 @@ just have to assume it's online."
 #+END_SRC
 
 * Smartparens
-#+BEGIN_SRC emacs-lisp :tangle "init-smartparens.el"
+#+BEGIN_SRC emacs-lisp
 
   (require 'smartparens-config)
   (smartparens-global-mode t)
@@ -324,7 +325,7 @@ just have to assume it's online."
 #+END_SRC
 
 * Editing
-#+BEGIN_SRC emacs-lisp :tangle "init-editing.el"
+#+BEGIN_SRC emacs-lisp
   (require 'thingatpt)
   (require 'imenu)
 
@@ -555,7 +556,7 @@ just have to assume it's online."
   (require 'multiple-cursors)
   ;; When you have an active region that spans multiple lines, the following will add a cursor to each line:
 
-  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+  ;(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
 
   (global-set-key (kbd "C-S-c C-e") 'mc/edit-ends-of-lines)
   (global-set-key (kbd "C-S-c C-a") 'mc/edit-beginnings-of-lines)
@@ -588,7 +589,7 @@ just have to assume it's online."
 
 * Appearance
 
-#+begin_src emacs-lisp :tangle "init-look.el"
+#+begin_src emacs-lisp
 
     ;; Less flickery display
     (setq redisplay-dont-pause t)
@@ -733,11 +734,19 @@ just have to assume it's online."
 #+end_src
 
 * Command mode
-#+BEGIN_SRC emacs-lisp :tangle "init-command.el"
+#+BEGIN_SRC emacs-lisp
 
   (define-key ido-file-completion-map (kbd "C-w") 'ido-delete-backward-updir)
 
  (ido-vertical-mode t)
+
+(require 'flx-ido)
+(ido-mode 1)
+(ido-everywhere 1)
+(flx-ido-mode 1)
+;; disable ido faces to see flx highlights.
+(setq ido-use-faces nil)
+
 
 (setq ido-enable-tramp-completion nil)
 (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
@@ -833,7 +842,7 @@ just have to assume it's online."
 #+END_SRC
 
 * Navigation
-#+begin_src emacs-lisp :tangle "init-navigation.el"
+#+begin_src emacs-lisp
 
   (winner-mode 1)
   (global-set-key (kbd "C-c <up>") 'winner-undo)
@@ -925,7 +934,7 @@ just have to assume it's online."
 #+end_src
 
 * Search
-#+begin_src emacs-lisp :tangle "init-search.el"
+#+begin_src emacs-lisp
 
       (require 'ack-and-a-half)
       ;; Create shorter aliases
@@ -1050,7 +1059,15 @@ just have to assume it's online."
 
 #+end_src
 * Help
-#+begin_src emacs-lisp :tangle "init-help.el"
+#+begin_src emacs-lisp
+
+  (defun describe-major-mode ()
+    "Show inline doc for current major-mode."
+    ;; code by Kevin Rodgers. 2009-02-25
+    (interactive)
+    (describe-function major-mode))
+
+  (global-set-key (kbd "C-h m") 'describe-major-mode)
 
   (require 'discover)
   (global-discover-mode 1)
@@ -1112,7 +1129,7 @@ just have to assume it's online."
 #+end_src
 * Completion
 
-#+begin_src emacs-lisp :tangle "init-completion.el"
+#+begin_src emacs-lisp
 
 (global-set-key (kbd "C-c C-q") 'start-kbd-macro)
 (global-set-key (kbd "C-c q") 'end-kbd-macro)
@@ -1122,6 +1139,23 @@ just have to assume it's online."
 
   (require 'fuzzy)
   (require 'auto-complete)
+  (require 'auto-complete-config)
+  (global-auto-complete-mode t)
+  (add-to-list 'ac-dictionary-directories (expand-file-name "auto-complete" dotfiles-dir))
+  (add-to-list 'ac-dictionary-directories "~/.emacs.d/local-autocomplete")
+  (setq ac-modes (append ac-modes '(org-mode)))
+  (ac-config-default)
+  (define-key ac-complete-mode-map [tab] 'ac-expand)
+  (setq ac-auto-start 4)
+  (ac-flyspell-workaround)
+  (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+  (setq ac-auto-show-menu 0.4)
+  ;;
+  (set-face-background 'ac-candidate-face "#366060")
+  (set-face-foreground 'ac-selection-face "#1f1f1f")
+  (set-face-background 'ac-selection-face "#8cd0d3")
+  (set-face-foreground 'ac-selection-face "#1f1f1f")
+
 
   (setq ac-auto-show-menu t
         ac-quick-help-delay 0.2
@@ -1135,9 +1169,7 @@ just have to assume it's online."
     (define-key ac-completing-map (kbd "C-n") 'ac-next)
     (define-key ac-completing-map (kbd "C-p") 'ac-previous))
 
-  (global-auto-complete-mode +1)
-
-(setq-default ac-sources '(ac-source-words-in-buffer
+  (setq-default ac-sources '(ac-source-words-in-buffer
                            ac-source-words-in-same-mode-buffers
                            ac-source-dictionary
                            ac-source-filename))
@@ -1177,7 +1209,7 @@ just have to assume it's online."
 #+end_src
 
 * LaTeX
-#+BEGIN_SRC emacs-lisp :tangle "init-latex.el"
+#+BEGIN_SRC emacs-lisp
 
     ; ;; custom variables kludge. Why can't I get these to work via setq?
     ; (custom-set-variables
@@ -1375,7 +1407,7 @@ just have to assume it's online."
 #+end_src
 
 * Web-mode
-#+BEGIN_SRC emacs-lisp :tangle "init-web.el"
+#+BEGIN_SRC emacs-lisp
 
 (require 'web-mode)
 
@@ -1406,23 +1438,37 @@ just have to assume it's online."
 
 #+END_SRC
 * Lisp
-#+begin_src emacs-lisp :tangle "init-lisp.el"
-
-  (global-set-key (kbd "C-c e") 'eval-and-replace)
-  (global-set-key (kbd "C-M-x") 'eval-defun)
+#+begin_src emacs-lisp
 
 (defun scratch ()
   (switch-to-buffer "*scratch*"))
 
-(global-set-key (kbd "C-c e e") 'eval-and-replace)
-(global-set-key (kbd "C-c e r") 'eval-region)
-(global-set-key (kbd "C-c e f") 'eval-defun)
-(global-set-key (kbd "C-c e b") 'eval-buffer)
-(global-set-key (kbd "C-c e s") 'scratch)
+;; (global-set-key (kbd "C-c e e") 'eval-and-replace)
+;; (global-set-key (kbd "C-c e r") 'eval-region)
+;; (global-set-key (kbd "C-c e f") 'eval-defun)
+;; (global-set-key (kbd "C-c e b") 'eval-buffer)
+;; (global-set-key (kbd "C-c e s") 'scratch)
 
-; (global-set-key (kbd "C-h e k") 'find-function-on-key)
-; (global-set-key (kbd "C-h e e") 'view-echo-area-messages)
-; (global-set-key (kbd "C-h e l") 'find-library)
+;; (global-set-key (kbd "C-h e k") 'find-function-on-key)
+;; (global-set-key (kbd "C-h e e") 'view-echo-area-messages)
+;; (global-set-key (kbd "C-h e l") 'find-library)
+
+(define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
+;; (define-key lisp-mode-shared-map (kbd "C-c l") "lambda")
+(define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
+(define-key lisp-mode-shared-map (kbd "C-\\") 'lisp-complete-symbol)
+(define-key lisp-mode-shared-map (kbd "C-c v") 'eval-buffer)
+
+(defun esk-remove-elc-on-save ()
+  "If you're saving an elisp file, likely the .elc is no longer valid."
+  (make-local-variable 'after-save-hook)
+  (add-hook 'after-save-hook
+            (lambda ()
+              (if (file-exists-p (concat buffer-file-name "c"))
+                  (delete-file (concat buffer-file-name "c"))))))
+
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
 
 (global-rainbow-delimiters-mode)
 
@@ -1480,7 +1526,7 @@ just have to assume it's online."
 #+end_src
 
 * Clojure
-#+begin_SRC emacs-lisp :tangle "init-clojure.el"
+#+begin_SRC emacs-lisp
 
     (add-hook 'clojure-mode-hook 'highlight-sexp-mode)
 
@@ -1632,7 +1678,23 @@ Display the results in a hyperlinked *compilation* buffer."
 #+END_SRC
 
 * Python/Django
-#+BEGIN_SRC emacs-lisp :tangle "init-python.el"
+#+BEGIN_SRC emacs-lisp
+
+  (autoload 'python-mode "python-mode" "Python Mode." t)
+  (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+  (add-to-list 'interpreter-mode-alist '("python" . python-mode))
+
+  (setq
+   python-shell-interpreter "python"
+   python-shell-interpreter-args ""
+   python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+   python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+   python-shell-completion-setup-code
+     ""
+   python-shell-completion-module-string-code
+   "';'.join(module_completion('''%s'''))\n"
+   python-shell-completion-string-code
+     "")
 
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize))
@@ -1672,11 +1734,11 @@ Display the results in a hyperlinked *compilation* buffer."
   (setq pycscope-truncate-lines t)
 
   (add-hook 'python-mode-hook 'auto-complete-mode)
-  (add-hook 'python-mode-hook 'jedi:ac-setup)
+  (add-hook 'python-mode-hook 'jedi:setup)
 
-  (setq jedi:setup-keys nil)
+  ; (setq jedi:setup-keys nil)
   (setq jedi:complete-on-dot t)
-  (setq jedi:tooltip-method t)
+  (setq jedi:tooltip-method 'popup)
 
 (defun elpy-nav-forward-class-definition ()
   "Move forward to the next class definition."
@@ -1697,12 +1759,12 @@ Display the results in a hyperlinked *compilation* buffer."
     (goto-char (point-min))))
 
   (require 'elpy)
-  ;(elpy-enable)
+  (elpy-enable)
 
    (add-hook 'python-mode-hook (lambda ()
-     (define-key python-mode-map (kbd "C-]") 'pycscope-find-global-definition-no-prompting)
-     (define-key python-mode-map (kbd "C-t") 'pycscope-pop-mark)
-     (define-key python-mode-map (kbd "C-.") 'pycscope-find-global-definition)
+     ; (define-key python-mode-map (kbd "C-]") 'pycscope-find-global-definition-no-prompting)
+     ; (define-key python-mode-map (kbd "C-t") 'pycscope-pop-mark)
+     ; (define-key python-mode-map (kbd "C-.") 'pycscope-find-global-definition)
      (define-key python-mode-map "(" 'elpy-nav-backward-statement)
      (define-key python-mode-map ")" 'elpy-nav-forward-statement)
      (define-key python-mode-map "[" 'elpy-nav-backward-definition)
@@ -1713,12 +1775,10 @@ Display the results in a hyperlinked *compilation* buffer."
      (define-key python-mode-map (kbd "C-c d") 'jedi:show-doc)
      (define-key python-mode-map (kbd "C-c C-n") 'jedi:dot-complete)))
 
-     (define-key python-mode-map (kbd "C-]") 'pycscope-find-global-definition-no-prompting)
-
   (defun find-tag-generic ()
     (interactive)
     (if (eq major-mode 'python-mode)
-      (pycscope-find-global-definition-no-prompting)
+      (jedi:goto-definition)
       (evil-jump-to-tag)))
 
   (nmap (kbd "C-]") 'find-tag-generic)
@@ -1827,7 +1887,7 @@ Display the results in a hyperlinked *compilation* buffer."
 #+END_SRC
 
 * Helm
-#+BEGIN_SRC emacs-lisp :tangle "init-helm.el"
+#+BEGIN_SRC emacs-lisp
 
 (setq helm-input-idle-delay 0.1)
 (setq helm-idle-delay 0.1)
@@ -1837,11 +1897,11 @@ Display the results in a hyperlinked *compilation* buffer."
 #+END_SRC
 
 * Git
-#+BEGIN_SRC emacs-lisp :tangle "init-git.el"
+#+BEGIN_SRC emacs-lisp
 
-     (setq ediff-highlight-all-diffs nil)
+    (setq ediff-highlight-all-diffs nil)
 
-     (setq magit-save-some-buffers 'dontask)
+    (setq magit-save-some-buffers 'dontask)
     (setq magit-stage-all-confirm nil)
     (setq magit-unstage-all-confirm nil)
 
@@ -1867,6 +1927,15 @@ Display the results in a hyperlinked *compilation* buffer."
        (defun magit-log-current-file ()
           (interactive)
           (magit-file-log (buffer-file-name (current-buffer))))
+
+     (defun magit-kill-file-on-line ()
+       "Show file on current magit line and prompt for deletion."
+       (interactive)
+       (magit-visit-item)
+       (delete-current-buffer-file)
+       (magit-refresh))
+
+     ; (define-key magit-status-mode-map (kbd "C-x C-k") 'magit-kill-file-on-line)
 
     ;; close popup when commiting
 
@@ -2077,7 +2146,7 @@ Display the results in a hyperlinked *compilation* buffer."
       (if (not (eq nil ticket-ref))
             (browse-url (concat "https://tento8.atlassian.net/browse/" ticket-ref))))
 
-    (defun open-jira-ticket-from-current-branch ()
+   (defun open-jira-ticket-from-current-branch ()
       (interactive)
       (let* ((ticket-name (get-current-ticket-name)))
         (open-jira-ticket ticket-name)))
@@ -2116,7 +2185,7 @@ Display the results in a hyperlinked *compilation* buffer."
 #+END_SRC
 
 * Projectile
-#+BEGIN_SRC emacs-lisp :tangle "init-projectile.el"
+#+BEGIN_SRC emacs-lisp
 
   (require 'project-explorer)
   (setq pe/omit-regex "^\\.\\|^#\\|~$|\\.pyc$")
@@ -2157,14 +2226,67 @@ Display the results in a hyperlinked *compilation* buffer."
 #+end_src
 
 * Pandoc
-#+begin_src emacs-lisp :tangle "init-pandoc.el"
+#+begin_src emacs-lisp
 ;  (load "pandoc-mode")
 ;  (add-hook 'markdown-mode-hook 'turn-on-pandoc)
 ;  (add-hook 'TeX-mode-hook 'turn-on-pandoc)
 ;  (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
 #+end_src
 * Org-mode
-#+begin_src emacs-lisp :tangle "init-org.el"
+#+begin_src emacs-lisp
+
+; The following displays the contents of code blocks in Org-mode files
+; using the major-mode of the code.  It also changes the behavior of
+; =TAB= to as if it were used in the appropriate major mode.  This means
+; that reading and editing code form inside of your Org-mode files is
+; much more like reading and editing of code using its major mode.
+  (setq org-src-fontify-natively t)
+  (setq org-src-tab-acts-natively t)
+
+; Don't ask for confirmation on every =C-c C-c= code-block compile.
+
+  (setq org-confirm-babel-evaluate nil)
+
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (sh . t)
+     (R . t)
+     (ruby . t)
+     (python . t)
+     (js . t)
+     (haskell . t)
+     (clojure . t)
+     ))
+
+  (org-babel-lob-ingest
+   (expand-file-name
+    "library-of-babel.org"
+    (expand-file-name
+     "babel"
+     (expand-file-name
+      "contrib"
+      (expand-file-name
+       "org"
+       (expand-file-name "src" dotfiles-dir))))))
+
+(setq org-completion-use-ido t)
+(require 'org-special-blocks)
+(if window-system (require 'org-mouse))
+
+(defun yas-org-very-safe-expand ()
+  (let ((yas-fallback-behavior 'return-nil))
+    (and (fboundp 'yas-expand) (yas-expand))))
+
+(add-hook 'org-mode-hook
+          (lambda ()
+            (add-to-list 'org-tab-first-hook
+                         'yas-org-very-safe-expand)
+            ))
+
+  ; Nice Bulleted Lists
+  (require 'org-bullets)
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 (define-minor-mode evil-org-mode
   "Buffer local minor mode for evil-org"
@@ -2258,7 +2380,7 @@ Display the results in a hyperlinked *compilation* buffer."
 #+end_src
 
 * Files
-#+BEGIN_SRC emacs-lisp :tangle "init-files.el"
+#+BEGIN_SRC emacs-lisp
 
   ;; let command be meta too
   (setq mac-command-modifier 'meta)
@@ -2434,8 +2556,7 @@ Display the results in a hyperlinked *compilation* buffer."
 
 (defun edit-emacs-config ()
  (interactive)
- (find-file-other-window "~/.emacs.d/admin.org")
- (delete-other-windows))
+ (find-file-other-window "~/.emacs.d/admin.org"))
 
 (global-set-key (kbd "C-h C-c") 'edit-emacs-config)
 
@@ -2448,7 +2569,7 @@ Display the results in a hyperlinked *compilation* buffer."
 #+END_SRC
 
 * Dired
-#+BEGIN_SRC emacs-lisp :tangle "init-dired.el"
+#+BEGIN_SRC emacs-lisp
 
 ; Auto refresh dired, but be quiet about it
 (setq global-auto-revert-non-file-buffers t)
@@ -2571,7 +2692,7 @@ if no files marked, always operate on current line in dired-mode
 #+END_SRC
 
 * Processes
-#+BEGIN_SRC emacs-lisp :tangle "init-processes.el"
+#+BEGIN_SRC emacs-lisp
 
   (require 'server)
   (unless (server-running-p) (server-start))
@@ -2617,7 +2738,7 @@ if no files marked, always operate on current line in dired-mode
 
 #+END_SRC
 * Terminal
-#+BEGIN_SRC emacs-lisp :tangle "init-terminal.el"
+#+BEGIN_SRC emacs-lisp
 
 ;;make sure ansi colour character escapes are honoured
 (require 'ansi-color)
@@ -2694,7 +2815,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 - abbrev mode
 
 * 10to8
-#+BEGIN_SRC emacs-lisp :tangle "init-10to8.el"
+#+BEGIN_SRC emacs-lisp
 
 
         ; (defcustom virtualenv-workon-starts-python nil
@@ -2874,7 +2995,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 
 #+END_SRC
 * Coffeescript
-#+BEGIN_SRC emacs-lisp :tangle "init-coffee.el"
+#+BEGIN_SRC emacs-lisp
 
   (defun coffee-custom ()
    "coffee-mode-hook"
@@ -2918,7 +3039,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 #+END_SRC
 
 * JSON
-#+BEGIN_SRC emacs-lisp :tangle "init-json.el"
+#+BEGIN_SRC emacs-lisp
 
 (defun format-json ()
   (interactive)
@@ -2927,7 +3048,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 
 #+END_SRC
 * Angular
-#+BEGIN_SRC emacs-lisp :tangle "init-angular.el"
+#+BEGIN_SRC emacs-lisp
 
 (defun highlight-angular-anchor ()
   (interactive)
@@ -2935,7 +3056,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 
 #+END_SRC
 * Popwin
-#+BEGIN_SRC emacs-lisp :tangle "init-popwin.el"
+#+BEGIN_SRC emacs-lisp
 
 (require 'popwin)
 (setq display-buffer-function 'popwin:display-buffer)
@@ -2978,7 +3099,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 #+END_SRC
 
 * Pomodoro
-#+BEGIN_SRC emacs-lisp :tangle "init-pomodoro.el"
+#+BEGIN_SRC emacs-lisp
 
   (require 'pomodoro)
   ;(pomodoro-add-to-mode-line)
@@ -2987,7 +3108,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 
 * Registers
 
-#+BEGIN_SRC emacs-lisp :tangle "init-registers.el"
+#+BEGIN_SRC emacs-lisp
 
 ;; @see http://www.emacswiki.org/emacs/BetterRegisters
 ;; This is used in the function below to make marked points visible
@@ -2998,7 +3119,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 #+END_SRC
 
 * Javascript
-#+BEGIN_SRC emacs-lisp :tangle "init-javascript.el"
+#+BEGIN_SRC emacs-lisp
 
   (defun skewer-coffee-eval (coffee-code)
     "Requests the browser to evaluate a coffeescipt string."
@@ -3060,14 +3181,18 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
                       ,(cadr pair))
                      nil))))
        '(("\\<function\\>" ?ƒ)
-         ("\\<var\\>" ?Ʋ)
-         ("\\<return\\>" ?«)
+         ("\\<var\\>" ?ν)
+         ("\\<return\\>" ?↞)
          ("\\<this\\>" ?@)))))
+
+(setq-default js3-global-externs
+      '("module" "exports" "require" "__dirname" "process" "console" "define"
+        "JSON" "$" "_" "Backbone" "buster" "sinon" "moment" "Date"))
 
 #+END_SRC
 
 * Experimental
-#+BEGIN_SRC emacs-lisp :tangle "experimental.el"
+#+BEGIN_SRC emacs-lisp
 
 ;; reduce the frequency of garbage collection by making it happen on
 ;; each 50MB of allocated data (the default is on every 0.76MB)
@@ -3144,7 +3269,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
            (buffer-list)))
 
 (defadvice git-commit-commit (after delete-window activate)
-  (delete-window))
+  (mapcar delete-window (filter-buffer-by-mode 'magit-status-mode)))
 
 (defun eval-and-replace (value)
   "Evaluate the sexp at point and replace it with its value."
@@ -3176,7 +3301,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 (scratch-key (kbd "C-S-s") "*scratch*"    emacs-lisp-mode)
 (scratch-key (kbd "C-S-d") "*javascript*" js2-mode)
 (scratch-key (kbd "C-S-a") "*lisp*"       lisp-mode)
-(scratch-key (kbd "C-S-c") "*clojure*"    clojure-mode)
+;(scratch-key (kbd "C-S-c") "*clojure*"    clojure-mode)
 (scratch-key (kbd "C-S-x") "*css*"        css-mode)
 (scratch-key (kbd "C-S-h") "*html*"       html-mode)
 
