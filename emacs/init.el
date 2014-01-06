@@ -42,3 +42,4 @@
                  (message "Loading %s...done (%.3fs) [after-init]"
                           ,load-file-name elapsed)))
             t))
+(put 'narrow-to-region 'disabled nil)

@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: desc
+# key: desc
+# binding: direct-keybinding
+# expand-env: ((some-var some-value))
+# type: command
+# --
+describe '$1', ->
+  beforeEach ->
+    $2
+  it '$3', ->
+    $4k

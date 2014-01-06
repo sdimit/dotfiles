@@ -82,12 +82,11 @@ just have to assume it's online."
        '(inferior-emacs-lisp-mode
          comint-mode
          compilation-mode
-         shell-mode
          eshell-mode
          inferior-python-mode
          inferior-ess-mode
          dired-mode
-         direx-mode
+         direx:direx-mode
          term-mode
          deft-mode
          nrepl-mode
@@ -95,12 +94,12 @@ just have to assume it's online."
          cider-repl-mode
          skewer-repl-mode
          makey-key-mode
-         project-explorer-mode
          process-menu-mode
          prodigy-mode
          git-rebase-mode
          Custom-mode
          pycscope-list-entry-mode
+         magit-blame-mode
          magit-branch-manager-mode))
 
 
@@ -133,6 +132,7 @@ just have to assume it's online."
   (nmap (kbd "<RET>")       'evil-scroll-down)
   (nmap (kbd "<backspace>") 'evil-scroll-up)
   (nmap (kbd "`")           'universal-argument)
+;  (nmap (kbd "M-`")         'repeat-complex-command)
 
   ; (global-set-key "\\" 'evil-execute-in-normal-state)
 
@@ -252,6 +252,20 @@ just have to assume it's online."
 ;; don't ask to kill buffers
 (setq ibuffer-expert t)
 
+
+(require 'ibuffer-git)
+
+;;nicely format the ibuffer and include git-status
+(setq ibuffer-formats '((mark modified read-only git-status-mini " "
+      (name 18 18 :left :elide)
+      " "
+      (size 9 -1 :right)
+      " "
+      (git-status 8 8 :left :elide)
+      " "
+      (mode 16 16 :left :elide)
+      " " filename-and-process)))
+
 #+END_SRC
 
 * Smartparens
@@ -303,6 +317,9 @@ just have to assume it's online."
 
   (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
 
+  ;; don't pair apostrophes
+  (sp-pair "'" nil :unless '(sp-point-after-word-p))
+
   ;;; markdown-mode
   (sp-with-modes '(markdown-mode gfm-mode rst-mode)
     (sp-local-pair "*" "*" :bind "C-*")
@@ -328,6 +345,11 @@ just have to assume it's online."
 #+BEGIN_SRC emacs-lisp
   (require 'thingatpt)
   (require 'imenu)
+
+;; show wrap guide
+(require 'fill-column-indicator)
+
+(fci-mode)
 
 ;; Disable annoying visible bell on OSX
 (setq visible-bell nil)
@@ -389,6 +411,10 @@ just have to assume it's online."
 
 (add-hook 'inferior-python-mode-hook
    (lambda () (setq-default truncate-lines nil)))
+
+(add-hook 'javascript-mode-hook
+   (lambda () (auto-complete-mode t)))
+
 (add-hook 'cider-repl-mode-hook
    (lambda () (setq-default truncate-lines nil)))
 
@@ -491,13 +517,6 @@ just have to assume it's online."
 
   (idle-highlight t)
 
-  (setq pretty-default-groups '(:function))
-  (require 'pretty-mode)
-  (global-pretty-mode)
-
-  (require 'pretty-symbols)
-  (pretty-symbols-mode)
-
 (defun lorem ()
   "Insert a lorem ipsum."
   (interactive)
@@ -591,6 +610,11 @@ just have to assume it's online."
 
 #+begin_src emacs-lisp
 
+    (require 'pretty-mode)
+    (global-pretty-mode t)
+
+    (require 'pretty-symbols)
+
     ;; Less flickery display
     (setq redisplay-dont-pause t)
 
@@ -657,6 +681,7 @@ just have to assume it's online."
                                                   inferior-lisp-mode
                                                   inferior-python-mode
                                                   compilation-mode
+                                                  Custom-mode
                                                   ibuffer-mode)))
                     (setq show-trailing-whitespace t))))
 
@@ -745,7 +770,7 @@ just have to assume it's online."
 (ido-everywhere 1)
 (flx-ido-mode 1)
 ;; disable ido faces to see flx highlights.
-(setq ido-use-faces nil)
+; (setq ido-use-faces nil)
 
 
 (setq ido-enable-tramp-completion nil)
@@ -857,14 +882,43 @@ just have to assume it's online."
     (interative)
     (if (eq major-mode 'clojure-mode)
         (call-interactively 'cider-jump)
-        (call-interactively 'find-tag)))
+        (call-interactively 'find-tag-generic)))
 
   (nmap (kbd "M-.") 'jump-to-tag)
+
+  (defun find-tag-generic ()
+    (interactive)
+    (cond
+       ((eq major-mode 'python-mode)
+          (call-interactively 'jedi:goto-definition))
+       ((eq major-mode 'clojure-mode)
+          (call-interactively 'cider-jump))
+       (t
+          (call-interactively 'evil-jump-to-tag))))
+
+  (defun find-tag-on-mouse-click (event)
+    "py-charm envy..."
+    (interactive "e")
+    (let ((posn (elt event 1)))
+      (with-selected-window (posn-window posn)
+        (goto-char (posn-point posn))
+        (find-tag-generic))))
+
+  (nmap (kbd "C-]") 'find-tag-generic)
+  (nmap (kbd "<down-double-mouse-1>") 'find-tag-on-mouse-click)
+  (nmap (kbd "<M-double-mouse-1>") 'projectile-ag)
+  (vmap (kbd "<M-double-mouse-1>") 'projectile-ag)
+
 
   ; (define-key evil-normal-state-map [escape] 'winner-undo)
 
    (windmove-default-keybindings)
    (setq windmove-wrap-around t)
+
+  (global-set-key (kbd "M-h") 'evil-window-left)
+  (global-set-key (kbd "M-l") 'evil-window-right)
+  (global-set-key (kbd "M-j") 'evil-window-down)
+  (global-set-key (kbd "M-k") 'evil-window-up)
 
   ;; resizing 'windows' (i.e., inside the frame)
   (global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
@@ -1143,21 +1197,15 @@ just have to assume it's online."
   (global-auto-complete-mode t)
   (add-to-list 'ac-dictionary-directories (expand-file-name "auto-complete" dotfiles-dir))
   (add-to-list 'ac-dictionary-directories "~/.emacs.d/local-autocomplete")
+
   (setq ac-modes (append ac-modes '(org-mode)))
   (ac-config-default)
   (define-key ac-complete-mode-map [tab] 'ac-expand)
-  (setq ac-auto-start 4)
+
   (ac-flyspell-workaround)
   (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
-  (setq ac-auto-show-menu 0.4)
-  ;;
-  (set-face-background 'ac-candidate-face "#366060")
-  (set-face-foreground 'ac-selection-face "#1f1f1f")
-  (set-face-background 'ac-selection-face "#8cd0d3")
-  (set-face-foreground 'ac-selection-face "#1f1f1f")
 
-
-  (setq ac-auto-show-menu t
+  (setq ac-auto-show-menu 0.4
         ac-quick-help-delay 0.2
         ac-use-fuzzy t
         ac-auto-start t
@@ -1436,6 +1484,23 @@ just have to assume it's online."
 (setq mweb-filename-extensions '("html" "phtml" "erb"))
 (multi-web-global-mode 1)
 
+(pretty-add-keywords 'html-mode `(("data-bind" . "Δ")
+                                  ("attributes"  . "Ѧ")))
+
+(add-hook 'html-mode-hook 'pretty-symbols-mode)
+(add-hook 'html-mode-hook 'highlight-knockout)
+
+(defun highlight-knockout ()
+  (highlight-regexp "data-bind=\"\\(.*\\)\"" 'hi-red-b))
+
+(defun pretty-indent-html ()
+  (interactive)
+  (sgml-mode)
+  (mark-whole-buffer)
+  (call-interactively 'sgml-pretty-print)
+  (html-mode))
+
+
 #+END_SRC
 * Lisp
 #+begin_src emacs-lisp
@@ -1681,20 +1746,18 @@ Display the results in a hyperlinked *compilation* buffer."
 #+BEGIN_SRC emacs-lisp
 
   (autoload 'python-mode "python-mode" "Python Mode." t)
+  (add-hook 'python-mode-hook 'pretty-symbols-mode)
+
   (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
   (add-to-list 'interpreter-mode-alist '("python" . python-mode))
 
-  (setq
-   python-shell-interpreter "python"
-   python-shell-interpreter-args ""
-   python-shell-prompt-regexp "In \\[[0-9]+\\]: "
-   python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
-   python-shell-completion-setup-code
-     ""
-   python-shell-completion-module-string-code
-   "';'.join(module_completion('''%s'''))\n"
-   python-shell-completion-string-code
-     "")
+  (setq python-shell-interpreter "python"
+        python-shell-interpreter-args ""
+        python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+        python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+        python-shell-completion-setup-code ""
+        python-shell-completion-module-string-code "';'.join(module_completion('''%s'''))\n"
+        python-shell-completion-string-code "")
 
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize))
@@ -1716,6 +1779,7 @@ Display the results in a hyperlinked *compilation* buffer."
     (interactive)
     (newline-and-indent)
     (insert "import pudb; pudb.set_trace()")
+    (newline-and-indent)
     (highlight-lines-matching-regexp "^[ ]*import pudb; pudb.set_trace()"))
 
   (defun ipdb ()
@@ -1723,6 +1787,7 @@ Display the results in a hyperlinked *compilation* buffer."
     (interactive)
     (newline-and-indent)
     (insert "import ipdb; ipdb.set_trace()")
+    (newline-and-indent)
     (highlight-lines-matching-regexp "^[ ]*import ipdb; ipdb.set_trace()"))
 
   ; PYCSCOPE
@@ -1758,8 +1823,14 @@ Display the results in a hyperlinked *compilation* buffer."
       (goto-char (match-beginning 1))
     (goto-char (point-min))))
 
+  (defadvice jedi:goto-definition (after scroll-line-to-center last)
+    (evil-normal-state))
+
+;;   (call-interactively 'evil-scroll-line-to-center)
+;;   (evil-normal-state))
+
   (require 'elpy)
-  (elpy-enable)
+  ; (elpy-enable)
 
    (add-hook 'python-mode-hook (lambda ()
      ; (define-key python-mode-map (kbd "C-]") 'pycscope-find-global-definition-no-prompting)
@@ -1773,25 +1844,28 @@ Display the results in a hyperlinked *compilation* buffer."
      (define-key python-mode-map "}" 'elpy-nav-forward-class-definition)
      ;(define-key python-mode-map " c" 'elpy-occur-definitions)
      (define-key python-mode-map (kbd "C-c d") 'jedi:show-doc)
-     (define-key python-mode-map (kbd "C-c C-n") 'jedi:dot-complete)))
+     (define-key python-mode-map (kbd "C-c C-n") 'jedi:dot-complete)
+     (nmap " `"  'jedi-direx:pop-to-buffer)
+   ))
 
-  (defun find-tag-generic ()
-    (interactive)
-    (if (eq major-mode 'python-mode)
-      (jedi:goto-definition)
-      (evil-jump-to-tag)))
-
-  (nmap (kbd "C-]") 'find-tag-generic)
 
   ; (setq flymake-python-pyflakes-executable "flake8")
   ; (require 'flymake-python-pyflakes)
   ; (add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
 
+(pretty-add-keywords 'python-mode `(("True"  . "т")
+                                    ("False" . "ғ")
+                                    ("is not" . "≠")
+                                    ("def" . "ƒ")
+                                    ("return" . "↞")
+                                    ; ("class" . "ϰ")
+                                    ("self\\." . "@")
+                                    ("kwargs" . "ӄ")))
 
 ; highlight Django templating stuff
 (defvar django-tag-face (make-face 'django-tag-face))
 (set-face-foreground 'django-tag-face "Orange")
-;
+
 (defvar django-variable-face (make-face 'django-variable-face))
 (set-face-foreground 'django-variable-face "Green")
 
@@ -1900,6 +1974,7 @@ Display the results in a hyperlinked *compilation* buffer."
 #+BEGIN_SRC emacs-lisp
 
     (setq ediff-highlight-all-diffs nil)
+    ; (add-hook 'ediff-cleanup-hook (lambda () (ediff-janitor nil nil)))
 
     (setq magit-save-some-buffers 'dontask)
     (setq magit-stage-all-confirm nil)
@@ -1945,6 +2020,12 @@ Display the results in a hyperlinked *compilation* buffer."
       (global-git-gutter+-mode t)
 
       (setq git-gutter+-modified-sign ".")
+      (set-face-foreground 'git-gutter+-modified "orange4")
+      (set-face-foreground 'git-gutter+-added "green4")
+      (set-face-foreground 'git-gutter+-deleted "red4")
+      (set-face-background 'git-gutter+-modified nil)
+      (set-face-background 'git-gutter+-added nil)
+      (set-face-background 'git-gutter+-deleted nil)
 
       (nmap " mka" 'git-gutter+-stage-hunks) ; [m]agit hun[k] [a]dd
       (nmap " mkd" (bind (git-gutter+-popup-hunk)
@@ -1958,7 +2039,7 @@ Display the results in a hyperlinked *compilation* buffer."
       (nmap " mbb" 'magit-blame-mode)
       (nmap " mbl" 'magit-blame-locate-commit)
       (nmap " mdd" 'ediff-current-file-on-git)
-      (nmap " mdm" 'ediff-current-file-on-git)
+      (nmap " mdm" 'ediff-current-file-with-master)
       (nmap " mD" (bind (call-interactively 'magit-diff)
                         (switch-to-buffer "*magit-diff*")
                         (delete-other-windows)))
@@ -1974,8 +2055,6 @@ Display the results in a hyperlinked *compilation* buffer."
       (nmap " mR" 'magit-interactive-rebase)
       (nmap " mf" (bind (magit-git-command "fetch --all")))
       (nmap " mF" (bind (magit-git-command "pull --rebase")))
-      (nmap " PF" (bind (project-explorer-open)
-                        (switch-to-buffer-other-window "*project-explorer*") ))
 
       (setq git-messenger:show-detail t)
 
@@ -2048,6 +2127,10 @@ Display the results in a hyperlinked *compilation* buffer."
      (defun ediff-current-file-on-git ()
        (interactive)
        (ediff-revision (buffer-file-name (current-buffer))))
+
+     (defun ediff-current-file-with-master ()
+       (interactive)
+       (ediff-vc-internal "master" "HEAD"))
 
      (add-hook 'magit-log-edit-mode-hook
                (lambda () (flyspell-mode t)))
@@ -2133,12 +2216,12 @@ Display the results in a hyperlinked *compilation* buffer."
        if applicable"
       (if (s-contains? "/" branch-ref)
         (let* ((second-part (cadr (split-string branch-ref "/")))
-              (trimmed-ref (replace-regexp-in-string "\n$" "" second-part)))
+              (trimmed-ref (replace-regexp-in-string "b?\n$" "" second-part)))
           trimmed-ref)
           nil))
 
     (defun get-current-ticket-name ()
-      (let* ((branch-ref (shell-command-as-string "git rev-parse --abbrev-ref HEAD"))
+      (let* ((branch-ref (shell-command-as-string "git rev-parse --abbrev-ref HEAD") )
              (ticket-name (extract-jira-ticket-ref branch-ref)))
         ticket-name))
 
@@ -2171,10 +2254,10 @@ Display the results in a hyperlinked *compilation* buffer."
 
   ;; full screen magit-status
 
-  (defadvice magit-status (around magit-fullscreen activate)
-    (window-configuration-to-register :magit-fullscreen)
-    ad-do-it
-    (delete-other-windows))
+  ;; (defadvice magit-status (around magit-fullscreen activate)
+  ;;   (window-configuration-to-register :magit-fullscreen)
+  ;;   ad-do-it
+  ;;   (delete-other-windows))
 
   (defun magit-quit-session ()
     "Restores the previous window configuration and kills the magit buffer"
@@ -2187,39 +2270,22 @@ Display the results in a hyperlinked *compilation* buffer."
 * Projectile
 #+BEGIN_SRC emacs-lisp
 
-  (require 'project-explorer)
-  (setq pe/omit-regex "^\\.\\|^#\\|~$|\\.pyc$")
-  (setq pe/width 30)
+  (push '(direx:direx-mode :position left :width 30 :dedicated t)
+          popwin:special-display-config)
+  (global-set-key (kbd "C-x C-j") 'direx:jump-to-directory-other-window)
+  (nmap " 1" 'direx:jump-to-directory-other-window)
 
   (require 'projectile)
-  (require 'grizzl)
 
-  (projectile-global-mode)
-
-  (define-key projectile-mode-map [?\s-j] 'projectile-switch-project)
-  (define-key projectile-mode-map [?\s-d] 'projectile-find-dir)
-  (define-key projectile-mode-map [?\s-a] 'projectile-ack)
-  (define-key projectile-mode-map [?\s-p] 'projectile-find-file)
-  (define-key projectile-mode-map [?\s-b] 'projectile-switch-to-buffer)
-  ; (global-set-key (kbd "s-p") 'projectile-find-file)
-  ; (global-set-key (kbd "s-b") 'projectile-switch-to-buffer)
-  (define-key projectile-mode-map [?\s-t] 'helm-etags-select)
+  ; (projectile-global-mode)
 
   (setq projectile-enable-caching t)
-  (setq projectile-completion-system 'grizzl)
   ; broken because of font-family, apparently
-
-  ;; Press Command-b for fuzzy switch buffer
-
-  (add-to-list 'ack-and-a-half-project-root-file-patterns ".projectile\\'")
 
   (defcustom projectile-switch-project-action 'helm-projectile
     ""
     :group 'projectile
     :type 'symbol)
-
-  ; (setq projectile-require-project-root nil)
-  (setq projectile-enable-caching t)
 
   (global-set-key (kbd "C-x f") 'helm-projectile)
 
@@ -2581,6 +2647,7 @@ Display the results in a hyperlinked *compilation* buffer."
      (define-key dired-mode-map "h" 'dired-up-directory)
      (define-key dired-mode-map "l" 'diredp-find-file-reuse-dir-buffer)
      (define-key dired-mode-map "/" 'dired-isearch-filenames)
+     (define-key dired-mode-map "e" 'wdired-change-to-wdired-mode)
      (define-key dired-mode-map "j" 'diredp-next-line)
      (define-key dired-mode-map "~" (bind (dired "~")))
      (define-key dired-mode-map "k" 'diredp-previous-line)
@@ -2694,47 +2761,47 @@ if no files marked, always operate on current line in dired-mode
 * Processes
 #+BEGIN_SRC emacs-lisp
 
-  (require 'server)
-  (unless (server-running-p) (server-start))
+(require 'server)
+(unless (server-running-p) (server-start))
 
-    ; don't ask about killing processes attached to buffers
-    (setq kill-buffer-query-functions
-      (remq 'process-kill-buffer-query-function
-             kill-buffer-query-functions))
+  ; don't ask about killing processes attached to buffers
+  (setq kill-buffer-query-functions
+    (remq 'process-kill-buffer-query-function
+           kill-buffer-query-functions))
 
-    (add-hook 'ack-mode-hook
-             (lambda ()
-             (set-process-query-on-exit-flag (get-buffer-process
-                                             (current-buffer))
-                                             nil)))
+  (add-hook 'ack-mode-hook
+           (lambda ()
+           (set-process-query-on-exit-flag (get-buffer-process
+                                           (current-buffer))
+                                           nil)))
 
-    (add-hook 'comint-exec-hook
-             (lambda ()
-             (set-process-query-on-exit-flag (get-buffer-process
-                                             (current-buffer))
-                                             nil)))
-
-
-  (require 'prodigy)
-
-  (defun delete-process-at-point ()
-    (interactive)
-    (let ((process (get-text-property (point) 'tabulated-list-id)))
-      (cond ((and process
-                  (processp process))
-             (delete-process process)
-             (revert-buffer))
-            (t
-             (error "no process at point!")))))
+  (add-hook 'comint-exec-hook
+           (lambda ()
+           (set-process-query-on-exit-flag (get-buffer-process
+                                           (current-buffer))
+                                           nil)))
 
 
-  (nmap " PL" (bind (list-processes)
-                        (switch-to-buffer-other-window "*Process List*")))
+(require 'prodigy)
 
-  (nmap " Pp" 'prodigy)
-  (nmap " PP" 'list-processes)
+(defun delete-process-at-point ()
+  (interactive)
+  (let ((process (get-text-property (point) 'tabulated-list-id)))
+    (cond ((and process
+                (processp process))
+           (delete-process process)
+           (revert-buffer))
+          (t
+           (error "no process at point!")))))
 
-  (define-key process-menu-mode-map (kbd "K") 'delete-process-at-point)
+
+(nmap " PL" (bind (list-processes)
+                      (switch-to-buffer-other-window "*Process List*")))
+
+(nmap " PP" 'prodigy)
+(nmap " Pp" 'list-processes)
+
+(define-key process-menu-mode-map (kbd "K") 'delete-process-at-point)
 
 #+END_SRC
 * Terminal
@@ -2745,10 +2812,6 @@ if no files marked, always operate on current line in dired-mode
 
 (ansi-color-for-comint-mode-on)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-
-(after 'comint
-  (define-key comint-mode-map [up] 'comint-previous-input)
-  (define-key comint-mode-map [down] 'comint-next-input))
 
 ;; kill buffer when terminal process is killed
 ; (defadvice term-sentinel (around my-advice-term-sentinel (proc msg))
@@ -2818,197 +2881,233 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 #+BEGIN_SRC emacs-lisp
 
 
-        ; (defcustom virtualenv-workon-starts-python nil
-        ;   "If non-nil the `virtualenv-workon' will also start python."
-        ;   :group 'virtualenv
-        ;   :type 'boolean)
+      ; (defcustom virtualenv-workon-starts-python nil
+      ;   "If non-nil the `virtualenv-workon' will also start python."
+      ;   :group 'virtualenv
+      ;   :type 'boolean)
 
-        (require 'virtualenvwrapper)
-        (venv-initialize-interactive-shells)
-        (venv-initialize-eshell)
-        (setq venv-location "~/.virtualenvs/")
+      (require 'virtualenvwrapper)
+      (venv-initialize-interactive-shells)
+      (venv-initialize-eshell)
+      (setq venv-location "~/.virtualenvs/")
 
-        (defun start-10to8 ()
-          (interactive)
-          (venv-workon "Native")
-          (setq python-django-project-root "~/10to8/Native/native/src/")
-          (python-django-open-project "~/10to8/Native/native/src/core" "core.settings"))
-
-        (defun open-10to8-db ()
-          (interactive)
-          (cd "/usr/local/var/postgres/pg_log/")
-          (ido-find-file-read-only)
-          (auto-revert-tail-mode))
-
-      (defun run-django-command (django-cmd &optional cmd-args)
-        (let ((project-buffer-name "*Django: core (core.settings)*"))
-          (start-10to8)
-          (switch-to-buffer-other-window project-buffer-name)
-          (if cmd-args
-            (funcall django-cmd cmd-args)
-            (funcall django-cmd))))
-
-      (defun 10to8-runserver ()
+      (defun start-10to8 ()
         (interactive)
-        (let ((server-settings     "localhost:8000")
-              (server-buffer-name  "*[Django: core (core.settings)] ./manage.py runserver localhost:8000*"))
-          (if (get-buffer server-buffer-name)
-            (switch-to-buffer-other-window server-buffer-name)
-            (progn (run-django-command 'python-django-qmgmt-runserver server-settings)
-                   (switch-to-buffer-other-window server-buffer-name)))))
+        (venv-workon "Native")
+        (setq python-django-project-root "~/10to8/Native/native/src/")
+        (python-django-open-project "~/10to8/Native/native/src/core" "core.settings"))
 
-      (defun 10to8-shell ()
+      (defun open-10to8-db ()
         (interactive)
-        (let ((shell-buffer-name  "*[Django: core (core.settings)] ./manage.py shell*"))
-          (if (get-buffer shell-buffer-name)
-            (switch-to-buffer-other-window shell-buffer-name)
-            (progn
-              (run-django-command 'python-django-qmgmt-shell)
-              (switch-to-buffer-other-window shell-buffer-name)))))
+        (cd "/usr/local/var/postgres/pg_log/")
+        (ido-find-file-read-only)
+        (auto-revert-tail-mode))
 
-      (defun send-to-10to8-shell (string)
-        (interactive)
-        (let* ((shell-buffer-name  "*[Django: core (core.settings)] ./manage.py shell*")
-               (shell-process (get-buffer-process shell-buffer-name)))
-          (comint-send-string shell-process string)
-          (when (or (not (string-match "\n$" string))
-                    (string-match "\n[ \t].*\n?$" string))
-            (comint-send-string shell-process "\n"))))
+    (defun run-django-command (django-cmd &optional cmd-args)
+      (let ((project-buffer-name "*Django: core (core.settings)*"))
+        (start-10to8)
+        (switch-to-buffer-other-window project-buffer-name)
+        (if cmd-args
+          (funcall django-cmd cmd-args)
+          (funcall django-cmd))))
 
-    ; (require 's)
+    (defun 10to8-runserver ()
+      (interactive)
+      (let ((server-settings     "localhost:8000 --nothreading")
+            (server-buffer-name  "*[Django: core (core.settings)] ./manage.py runserver localhost:8000*"))
+        (if (get-buffer server-buffer-name)
+          (switch-to-buffer-other-window server-buffer-name)
+          (progn (run-django-command 'python-django-qmgmt-runserver server-settings)
+                 (switch-to-buffer-other-window server-buffer-name)))))
 
-    ; (defun send-region-to-10to8-shell (start end)
-    ;   (interactive "r")
-    ;   (let* ((string (buffer-substring start end)))
-    ;     (with-temp-buffer
-    ;       (insert string)
-    ;       (send-to-10to8-shell (buffer-substring-no-properties (buffer-string))))))
+    (defun 10to8-shell ()
+      (interactive)
+      (let ((shell-buffer-name  "*[Django: core (core.settings)] ./manage.py shell*"))
+        (if (get-buffer shell-buffer-name)
+          (switch-to-buffer-other-window shell-buffer-name)
+          (progn
+            (run-django-command 'python-django-qmgmt-shell)
+            (switch-to-buffer-other-window shell-buffer-name)))))
+
+    (defun send-to-10to8-shell (string)
+      (interactive)
+      (let* ((shell-buffer-name  "*[Django: core (core.settings)] ./manage.py shell*")
+             (shell-process (get-buffer-process shell-buffer-name)))
+        (comint-send-string shell-process string)
+        (when (or (not (string-match "\n$" string))
+                  (string-match "\n[ \t].*\n?$" string))
+          (comint-send-string shell-process "\n"))))
+
+  ; (require 's)
+
+  ; (defun send-region-to-10to8-shell (start end)
+  ;   (interactive "r")
+  ;   (let* ((string (buffer-substring start end)))
+  ;     (with-temp-buffer
+  ;       (insert string)
+  ;       (send-to-10to8-shell (buffer-substring-no-properties (buffer-string))))))
 
 
-       (defun search-deep-thought (string)
-        (interactive (list
-           (read-from-minibuffer "Search: " (ag/dwim-at-point))))
-        (ag/search string "~/10to8/Native/native/src/core" t))
+     (defun search-deep-thought (string)
+      (interactive (list
+         (read-from-minibuffer "Search: " (ag/dwim-at-point))))
+      (ag/search string "~/10to8/Native/native/src/core" t))
 
-       (defun search-jeltz (string)
-        (interactive (list
-           (read-from-minibuffer "Search: " (ag/dwim-at-point))))
-        (ag/search string "~/10to8/Native/native/src/apps/jeltz/app" t))
+     (defun search-jeltz (string)
+      "follow symlinks"
+      (interactive (list
+         (read-from-minibuffer "Search: " (ag/dwim-at-point))))
+      (let ((ag-arguments (cons "--follow" ag-arguments)))
+         (ag/search string "~/10to8/Native/native/src/apps/jeltz/app" t)))
 
-       (defun search-colin (string)
-        (interactive (list
-           (read-from-minibuffer "Search: " (ag/dwim-at-point))))
-        (ag/search string "~/10to8/Native/native/src/apps/colin/app" t))
+     (defun search-colin (string)
+      "follow symlinks"
+      (interactive (list
+         (read-from-minibuffer "Search: " (ag/dwim-at-point))))
+      (let ((ag-arguments (cons "--follow" ag-arguments)))
+         (ag/search string "~/10to8/Native/native/src/apps/colin/app" t)))
 
-       (require 'nose)
-       (add-to-list 'nose-project-root-files ".project")
+     (require 'nose)
+     (add-to-list 'nose-project-root-files ".project")
 
-      (defun nose-in-shell ()
-        "runs test in eshell"
-        (interactive)
-        (let ((pmt-command "cd ~/10to8/Native/native/src && python manage.py test")
-             (pmt-options "--noinput"))
-          (switch-to-buffer-other-window "*eshell*")
-          (append-to-buffer "*eshell*" (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable)))))
+    (defun nose-in-shell ()
+      "runs test in eshell"
+      (interactive)
+      (let ((pmt-command "cd ~/10to8/Native/native/src && python manage.py test")
+           (pmt-options "--noinput"))
+        (switch-to-buffer-other-window "*eshell*")
+        (append-to-buffer "*eshell*" (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable)))))
 
-          ; (eshell-command (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable)))
+        ; (eshell-command (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable)))
 
-      (defun yank-current-nose-test-path ()
-        "runs test in eshell"
-        (interactive)
-        (let ((pmt-command "python manage.py test")
-             (pmt-options "--noinput"))
-          (kill-new (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable)))))
+    (defun yank-current-nose-test-path ()
+      "runs test in eshell"
+      (interactive)
+      (let ((pmt-command "cd ~/10to8/Native/native/src && source ~/.virtualenvs/Native/bin/activate && python manage.py test")
+           (pmt-options "--noinput"))
+        (kill-new (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable)))))
 
-      (global-set-key (kbd "C-c k k") 'search-deep-thought)
+    (defun run-nose-test ()
+      (interactive)
+      (let ((command (yank-current-nose-test-path)))
+       (async-shell-command command "*nose-test*")))
 
-      (global-set-key (kbd "C-c j m") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/models/")))
-      (global-set-key (kbd "C-c j v") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/views/")))
-      (global-set-key (kbd "C-c j c") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/controllers/")))
-      (global-set-key (kbd "C-c j M") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/modules/")))
-      (global-set-key (kbd "C-c j t") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/templates/")))
-      (global-set-key (kbd "C-c j s") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/styles/")))
-      (global-set-key (kbd "C-c j a") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/")))
-      (global-set-key (kbd "C-c j j") 'search-jeltz)
-      (global-set-key (kbd "C-x j") (bind (cd "~/10to8/Native/native/src/apps/jeltz/app/")))
+    (defun run-jeltz-test ()
+      (interactive)
+      (let ((command "cd ~/10to8/Native/native/src/apps/jeltz && cake test:once"))
+       (async-shell-command command "*cake-test*")))
 
-      (global-set-key (kbd "C-c c m") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/models/")))
-      (global-set-key (kbd "C-c c v") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/views/")))
-      (global-set-key (kbd "C-c c C") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/controllers/")))
-      (global-set-key (kbd "C-c c M") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/modules/")))
-      (global-set-key (kbd "C-c c t") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/templates/")))
-      (global-set-key (kbd "C-c c s") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/styles/")))
-      (global-set-key (kbd "C-c c a") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/")))
-      (global-set-key (kbd "C-c c c") 'search-colin)
-      (global-set-key (kbd "C-x c") (bind (cd "~/10to8/Native/native/src/apps/colin/app")))
+    (defun run-jeltz-build-test ()
+      (interactive)
+      (let ((command "cd ~/10to8/Native/native/src/apps/jeltz && cake build:test:once"))
+       (async-shell-command command "*cake-test*")))
 
-      (global-set-key (kbd "C-x x") (bind (cd "~/10to8/Native/native/src/core")))
-      (global-set-key (kbd "C-c k a") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/core/")))
-      (global-set-key (kbd "C-c 1") (bind (ido-find-file-in-dir "~/10to8/")))
-      (global-set-key (kbd "C-c i") (bind (ido-find-file-in-dir "~/Inbox/")))
+    (defun run-colin-test ()
+      (interactive)
+      (let ((command "cd ~/10to8/Native/native/src/apps/colin && npm test"))
+       (async-shell-command command "*cake-test*")))
 
-  (prodigy-define-service
-    :name "10to8-sockjs"
-    :command "/usr/local/bin/python manage.py run_sockjs_server"
-    :cwd "~/10to8/Native/native/src/"
-    :tags '(10to8)
-    :path '("~/.virtualenvs/Native/bin/" "/usr/local/bin/" "~/10to8/Native/native/src/")
-    :init (lambda () (venv-workon "Native")))
+    (global-set-key (kbd "C-c k k") 'search-deep-thought)
 
-  (prodigy-define-service
-    :name "10to8-messaging"
-    :command "source ~/.virtualenvs/Native/bin/activate && python manage.py run_messaging"
-    :cwd "~/10to8/Native/native/src/"
-    :path '("~/.virtualenvs/Native/bin/" "/usr/local/bin/" "~/10to8/Native/native/src/")
-    :tags '(10to8))
+    (global-set-key (kbd "C-c j m") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/models/")))
+    (global-set-key (kbd "C-c j v") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/views/")))
+    (global-set-key (kbd "C-c j c") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/controllers/")))
+    (global-set-key (kbd "C-c j M") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/modules/")))
+    (global-set-key (kbd "C-c j t") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/templates/")))
+    (global-set-key (kbd "C-c j s") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/styles/")))
+    (global-set-key (kbd "C-c j a") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/")))
+    (global-set-key (kbd "C-c j j") 'search-jeltz)
+    (global-set-key (kbd "C-x j") (bind (cd "~/10to8/Native/native/src/apps/jeltz/app/")))
 
-  (prodigy-define-service
-    :name "10to8-rabbitmq"
-    :command ". ~/.virtualenvs/Native/bin/activate && rabbitmq-server"
-    :cwd "~/10to8/Native/native/src/"
-    :tags '(10to8))
+    (global-set-key (kbd "C-c c m") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/models/")))
+    (global-set-key (kbd "C-c c v") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/views/")))
+    (global-set-key (kbd "C-c c C") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/controllers/")))
+    (global-set-key (kbd "C-c c M") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/modules/")))
+    (global-set-key (kbd "C-c c t") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/templates/")))
+    (global-set-key (kbd "C-c c s") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/styles/")))
+    (global-set-key (kbd "C-c c a") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/")))
+    (global-set-key (kbd "C-c c c") 'search-colin)
+    (global-set-key (kbd "C-x c") (bind (cd "~/10to8/Native/native/src/apps/colin/app")))
 
-  (prodigy-define-service
-    :name "10to8-celery"
-    :command ". ~/.virtualenvs/Native/bin/activate && python manage.py celery worker -E -l info"
-    :cwd "~/10to8/Native/native/src/"
-    :tags '(10to8))
+    (global-set-key (kbd "C-x x") (bind (cd "~/10to8/Native/native/src/core")))
+    (global-set-key (kbd "C-c k a") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/core/")))
+    (global-set-key (kbd "C-c 1") (bind (ido-find-file-in-dir "~/10to8/")))
+    (global-set-key (kbd "C-c i") (bind (ido-find-file-in-dir "~/Inbox/")))
 
-  (prodigy-define-service
-    :name "brunch jeltz"
-    :command "/usr/local/bin/brunch watch --server -p 3333"
-    :cwd "~/10to8/Native/native/src/apps/jeltz"
-    :tags '(10to8))
+ ; (prodigy-define-service
+ ;   :name "10to8-sockjs"
+ ;   :command "bash"
+ ;   :args '("-ci" " 'source ~/.virtualenvs/Native/bin/activate'")
+ ;   :cwd "~/10to8/Native/native/src/"
+ ;   :tags '(10to8)
+ ;   :path '("/usr/local/bin/" "~/10to8/Native/native/src/")
+ ;   :init (lambda () (venv-workon "Native")))
 
-  (prodigy-define-service
-    :name "brunch colin"
-    :command "/usr/local/bin/brunch watch --server -p 3334"
-    :cwd "~/10to8/Native/native/src/apps/colin"
-    :tags '(10to8))
+(prodigy-define-service
+  :name "jeltz - serve"
+  :command "serv"
+  :args '("3333")
+  :cwd "~/10to8/Native/native/src/apps/jeltz/public"
+  :path '("~/dotfiles/bin/")
+  :kill-process-buffer-on-stop t
+  :tags '(10to8))
 
-; (require 'butler)
+(prodigy-define-service
+  :name "jeltz - build"
+  :command "brunch"
+  :args '("build")
+  :cwd "~/10to8/Native/native/src/apps/jeltz/"
+  :path '("~/usr/local/bin/")
+  :kill-process-buffer-on-stop t
+  :tags '(10to8))
 
-; (add-to-list butler-server-list
-;              '(jenkins "10to8"
-;                        (server-address . "https://jenkins.10to8.com/")
-;                        (auth-file . "~/.authinfo")))
+(prodigy-define-service
+  :name "jeltz - watch"
+  :command "brunch"
+  :args '("watch" "--server" "-p" "3333")
+  :cwd "~/10to8/Native/native/src/apps/jeltz/"
+  :path '("~/usr/local/bin/")
+  :kill-process-buffer-on-stop t
+  :tags '(10to8))
+
+(prodigy-define-service
+  :name "jeltz - test runner"
+  :command "/usr/local/bin/cake"
+  :args '("test:once")
+  :cwd "~/10to8/Native/native/src/apps/jeltz"
+  :path '("/usr/local/bin/")
+  :tags '(10to8))
+
+;; (require 'butler)
+;;
+;; (add-to-list butler-servers
+;;              '(jenkins "10to8"
+;;                        (server-address . "https://jenkins.10to8.com/")
+;;                        (auth-file . "~/.authinfo")))
 
 #+END_SRC
 * Coffeescript
 #+BEGIN_SRC emacs-lisp
+
+  ; (setq coffee-command "/usr/local/bin/nesh")
+  ; (setq coffee-args-repl '("-c -e /usr/local/lib/node_modules/underscore/underscore.js'"))
 
   (defun coffee-custom ()
    "coffee-mode-hook"
    (set (make-local-variable 'tab-width) 2)
    (auto-complete-mode)
    ; (coffeelintnode-hook)
-   (require 'flymake-coffee)
-   (flymake-coffee-load)
-   (unless (eq buffer-file-name nil) (flymake-mode 1)) ;dont invoke flymake on temporary buffers for the interpreter
+   ; (require 'flymake-coffee)
+   ; (flymake-coffee-load)
+   ; (unless (eq buffer-file-name nil) (flymake-mode 1)) ;dont invoke flymake on temporary buffers for the interpreter
   )
 
-   (add-hook 'coffee-mode-hook
-     (lambda() (coffee-custom)))
+  (add-hook 'coffee-mode-hook (lambda() (coffee-custom)))
+
+  (add-hook 'coffee-mode-hook 'pretty-symbols-mode)
+
+
+(pretty-add-keywords 'coffee-mode `(("@attributes"  . "Ѧ")))
 
     (defun coffee-open-below ()
       (interactive)
@@ -3092,6 +3191,9 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
         ("*Helm Find Files*" :height 12)
         ("*Compile-Log*" :height 30 :stick t)
         ("*HTTP Response*" :height 20 :stick t)
+        ("*nose-test*" :height 10)
+        ("*cake-test*" :height 10)
+        ("^\\*direx-jedi.*\\*$" :regexp t :width 35 :position left)
         ("*[Django: core (core.settings)] ./manage.py shell*" :height 30 :stick t)
         ("*Django: core (core.settings)" :height 20 :stick t)
         ("*git-gutter+-diff*" :height 10 :stick t)))
@@ -3163,31 +3265,48 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
     :keymap  skewer-coffee-mode-map
     :group   skewer)
 
-  ;; Launch a static web server in the current project root
-  ; (require 'elnode)
-  ; (defun http-server-in-project (port)
-  ;   (interactive "nPort: ")
-  ;   (elnode-make-webserver (projectile-project-root) port))
+(pretty-add-keywords 'js3-mode `(("true"      . "т")
+                                 ("false"     . "ғ")
+                                 ("undefined" . "∅")
+                                 ("function"  . "ƒ")
+                                 ("return"    . "↞")
+                                 ("null"      . "∅")
+                                 ("this."     . "@")))
 
-  ;; symbols for some overlong function names
-  (eval-after-load 'js3-mode
-    '(font-lock-add-keywords
-      'js3-mode
-      (mapcar
-       (lambda (pair)
-         `(,(car pair)
-           (0 (progn (compose-region
-                      (match-beginning 0) (match-end 0)
-                      ,(cadr pair))
-                     nil))))
-       '(("\\<function\\>" ?ƒ)
-         ("\\<var\\>" ?ν)
-         ("\\<return\\>" ?↞)
-         ("\\<this\\>" ?@)))))
+(pretty-add-keywords 'coffee-mode `(("true"      . "т")
+                                    ("false"     . "ғ")
+                                    ("null"      . "∅")
+                                    ("undefined" . "∅")
+                                    ("return"    . "↞")))
+
 
 (setq-default js3-global-externs
       '("module" "exports" "require" "__dirname" "process" "console" "define"
-        "JSON" "$" "_" "Backbone" "buster" "sinon" "moment" "Date"))
+        "JSON" "$" "_" "Backbone" "buster" "sinon" "moment" "Date" "React"))
+
+(defun run-process-silently-if-successful (cmd buffer-name)
+  "Only show result if failed"
+  (let* ((proc-buffer (get-buffer-create buffer-name))
+         (result (call-process-shell-command cmd nil proc-buffer t))
+         (output (with-current-buffer proc-buffer (buffer-string))))
+    (cond ((zerop result)
+           (message "Process completed without errors"))
+          (t
+           (message nil)
+           (split-window-vertically)
+           (set-window-buffer (next-window) proc-buffer)))))
+
+
+;; (setq grunt-cmd "grunt --no-color --config ~/grunt.js")
+(setq grunt-cmd "grunt --no-color --config")
+
+(defun grunt ()
+  "Run grunt"
+  (interactive)
+  (run-process-silently-if-successful grunt-cmd "*grunt*"))
+
+;; (run-process-silently-if-successful "cd ~/10to8/Native/native/src/apps/jeltz && cake test:once" "jeltz")
+
 
 #+END_SRC
 
@@ -3199,6 +3318,7 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 (setq gc-cons-threshold 50000000)
 
 (defun syn ()
+  "shows nouns in text"
   (interactive)
   (shell-command-on-region (point-min)
                            (point-max)
@@ -3262,14 +3382,25 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 (add-hook 'coffee-mode-hook
                (lambda ()
                 (font-lock-add-keywords nil
-                 '(("\\<\\(FIXME\\|TODO\\|BUG\\):" 1 font-lock-warning-face t)))))
+                 '(("\\<\\(FIXME\\|TODO\\|BUG\\|XXX\\):" 1 font-lock-warning-face t)))))
+
+;; TODO: add to all prog mode
+(add-hook 'python-mode-hook
+               (lambda ()
+                (font-lock-add-keywords nil
+                 '(("\\<\\(FIXME\\|TODO\\|BUG\\|XXX\\):" 1 font-lock-warning-face t)))))
+
+(defun buffer-mode (buffer-or-string)
+  "Returns the major mode associated with a buffer."
+  (with-current-buffer buffer-or-string
+     major-mode))
 
 (defun filter-buffer-by-mode (mode)
   (-filter (lambda (buffer) (string= mode (buffer-mode buffer)))
            (buffer-list)))
 
-(defadvice git-commit-commit (after delete-window activate)
-  (mapcar delete-window (filter-buffer-by-mode 'magit-status-mode)))
+; (defadvice git-commit-commit (after delete-window activate)
+;   (mapcar 'delete-buffer (filter-buffer-by-mode "magit-status-mode") ) )
 
 (defun eval-and-replace (value)
   "Evaluate the sexp at point and replace it with its value."
@@ -3319,8 +3450,9 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 ;
 ;; (define-key help-mode-map "f" 'push-first-button)
 
-  (setq deft-extension "org")
-  (setq deft-text-mode 'org-mode)
+  (setq deft-extension "org"
+        deft-text-mode 'org-mode
+        deft-auto-save-interval 10.0)
 
 (defun get-last-message ()
   "ideally some kill-ring navigation. or helm??"
@@ -3339,5 +3471,193 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 )
 
 (require 'sr-speedbar)
+
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
+
+(defun esk-remove-elc-on-save ()
+  "If you're saving an elisp file, likely the .elc is no longer valid."
+  (make-local-variable 'after-save-hook)
+  (add-hook 'after-save-hook
+            (lambda ()
+              (if (file-exists-p (concat buffer-file-name "c"))
+                  (delete-file (concat buffer-file-name "c"))))))
+
+(defun append-to-emacs-config (start end)
+  (interactive "r")
+  (append-region-to-file start end "~/Inbox/new-stuff.el"))
+
+(defun append-region-to-file (start end filename)
+  "function takes current region, and writes it to specified file"
+  (write-region start end filename t)
+  (kill-region start end))
+
+(setq recentf-max-saved-items 100)
+(recentf-mode)
+
+(defun recentf-ido-find-file ()
+  "Find a recent file using ido."
+  (interactive)
+  (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
+    (when file
+      (find-file file))))
+
+(global-set-key (kbd "C-x f") 'recentf-ido-find-file)
+
+
+(defun yank-annotated ()
+  "Yanks the region, puts a filename and line numbers. Lots of fun"
+  (interactive)
+  (let* ((start-pos (save-excursion (goto-char (region-beginning))
+                                    (beginning-of-line)
+                                    (point)))
+         (end-pos (save-excursion (goto-char (region-end))
+                                  (end-of-line)
+                                  (point)))
+         (start-line (line-number-at-pos (region-beginning)))
+         (content (buffer-substring start-pos end-pos))
+         (filename buffer-file-name)
+         (r (with-temp-buffer
+               (insert content)
+               (newline)
+               (while (line-move -1 t)
+                 (beginning-of-line)
+                 (insert (format "%4d | " (+ (line-number-at-pos) start-line -1))))
+
+               (goto-char (point-min))
+               (insert filename)
+               (newline)
+               (newline)
+               (buffer-string))))
+    ;; (message "%s %s %d %d %d" filename content start-pos end-pos start-line)
+    (message "%s" r)
+    (kill-new r)
+    (deactivate-mark)))
+
+;; Mac-like key defaults
+(global-set-key (kbd "M-n") 'create-new-buffer)
+(global-set-key (kbd "M-{") 'previous-buffer)
+(global-set-key (kbd "M-}") 'next-buffer)
+
+(setq speedbar-hide-button-brackets-flag t
+      speedbar-show-unknown-files t
+      speedbar-smart-directory-expand-flag t
+      speedbar-directory-button-trim-method 'trim
+      speedbar-use-images nil
+      speedbar-indentation-width 2
+      speedbar-use-imenu-flag t
+      speedbar-file-unshown-regexp "flycheck-.*"
+      sr-speedbar-width 40
+      sr-speedbar-width-x 40
+      sr-speedbar-auto-refresh nil
+      sr-speedbar-skip-other-window-p t
+      sr-speedbar-right-side nil)
+
+(setq next-error-recenter 20)
+
+(defun delete-last-char-on-line ()
+  (interactive)
+  (end-of-line)
+  (backward-char)
+  (delete-char 1)
+  (beginning-of-line))
+
+; (nmap (kbd "M-d C-.") 'delete-last-char-on-line)
+
+;;;###autoload
+(progn
+  (defadvice find-tag (around find-tag-around)
+    "Before calling `find-tag', set correct TAGS-files."
+    (tags-reset-tags-tables)
+    (let ((tags-table-list (rwd-tag-file-list)) (tags-file-name))
+      ad-do-it))
+  (ad-activate 'find-tag))
+
+;;;###autoload
+(defun rwd-find-file-up (file-name &optional dir)
+ (let ((f (expand-file-name file-name (or dir default-directory)))
+       (parent (file-truename (expand-file-name ".." dir))))
+   (cond ((string= dir parent) nil)
+         ((file-exists-p f) f)
+         (t (rwd-find-file-up file-name parent)))))
+
+;;;###autoload
+(defun rwd-tag-file-list ()
+  (let ((dir (rwd-find-file-up "TAGS")))
+    (if dir (list dir) nil)))
+
+(defun split-window-vertically-and-switch ()
+  (interactive)
+  (split-window-vertically)
+  (other-window 1))
+
+(defun split-window-horizontally-and-switch ()
+  (interactive)
+  (split-window-horizontally)
+  (other-window 1))
+
+(defun ido-invoke-in-other-window ()
+  "signals ido mode to switch to (or create) another window after exiting"
+  (interactive)
+  (setq ido-exit-minibuffer-target-window 'other)
+  (ido-exit-minibuffer))
+
+(defun ido-invoke-in-horizontal-split ()
+  "signals ido mode to split horizontally and switch after exiting"
+  (interactive)
+  (setq ido-exit-minibuffer-target-window 'horizontal)
+  (ido-exit-minibuffer))
+
+(defun ido-invoke-in-vertical-split ()
+  "signals ido mode to split vertically and switch after exiting"
+  (interactive)
+  (setq ido-exit-minibuffer-target-window 'vertical)
+  (ido-exit-minibuffer))
+
+(defun ido-invoke-in-new-frame ()
+  "signals ido mode to create a new frame after exiting"
+  (interactive)
+  (setq ido-exit-minibuffer-target-window 'frame)
+  (ido-exit-minibuffer))
+
+(defadvice ido-read-internal (around ido-read-internal-with-minibuffer-other-window activate)
+  (let* (ido-exit-minibuffer-target-window
+         (this-buffer (current-buffer))
+         (result ad-do-it))
+    (cond
+     ((equal ido-exit-minibuffer-target-window 'other)
+      (if (= 1 (count-windows))
+          (split-window-horizontally-and-switch)
+        (other-window 1)))
+     ((equal ido-exit-minibuffer-target-window 'horizontal)
+      (split-window-horizontally-and-switch))
+
+     ((equal ido-exit-minibuffer-target-window 'vertical)
+      (split-window-vertically-and-switch))
+     ((equal ido-exit-minibuffer-target-window 'frame)
+      (make-frame)))
+    (switch-to-buffer this-buffer) ;; why? Some ido commands, such as textmate.el's textmate-goto-symbol don't switch the current buffer
+    result))
+
+(defadvice ido-init-completion-maps (after ido-init-completion-maps-with-other-window-keys activate)
+  (mapcar (lambda (map)
+            (define-key map (kbd "C-o") 'ido-invoke-in-other-window)
+            (define-key map (kbd "C-2") 'ido-invoke-in-vertical-split)
+            (define-key map (kbd "C-3") 'ido-invoke-in-horizontal-split)
+            (define-key map (kbd "C-4") 'ido-invoke-in-other-window)
+            (define-key map (kbd "C-5") 'ido-invoke-in-new-frame))
+          (list ido-buffer-completion-map
+                ido-common-completion-map
+                ido-file-completion-map
+                ido-file-dir-completion-map)))
+
+;; (defun delete-last-char-on-line ()
+;;   (interactive)
+;;   (end-of-line)
+;;   (backward-char)
+;;   (delete-char 1)
+;;   (beginning-of-line))
+;;
+;; (nmap (kbd "M-d C-.") 'delete-last-char-on-line)
 
 #+END_SRC
