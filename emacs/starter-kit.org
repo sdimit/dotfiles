@@ -1,18 +1,5 @@
 * Starter kit basics
 
-** Load path etc.
-
-#+srcname: starter-kit-load-paths
-#+begin_src emacs-lisp
-  (setq dotfiles-dir (file-name-directory
-                      (or load-file-name (buffer-file-name))))
-
-  (add-to-list 'load-path dotfiles-dir)
-  (setq autoload-file (concat dotfiles-dir "loaddefs.el"))
-  (setq package-user-dir (concat dotfiles-dir "elpa"))
-  (setq custom-file (concat dotfiles-dir "custom.el"))
-#+end_src
-
 ** Ubiquitous Packages
 
 These should be loaded on startup rather than autoloaded on demand
@@ -332,21 +319,3 @@ This is turned off, as the color theme handles it.
   (load custom-file 'noerror)
 #+end_src
 
-** E-lisp customization
-After we've loaded all the Starter Kit defaults, lets load the User's stuff.
-#+srcname: starter-kit-load-files
-#+begin_src emacs-lisp
-  (if (file-exists-p elisp-source-dir)
-      (let ((default-directory elisp-source-dir))
-        (normal-top-level-add-subdirs-to-load-path)))
-  (if (file-exists-p system-specific-config) (load system-specific-config))
-  (if (file-exists-p system-specific-literate-config)
-      (org-babel-load-file system-specific-literate-config))
-  (if (file-exists-p user-specific-config) (load user-specific-config))
-  (if (file-exists-p user-specific-literate-config)
-      (org-babel-load-file user-specific-literate-config))
-  (when (file-exists-p user-specific-dir)
-    (let ((default-directory user-specific-dir))
-      (mapc #'load (directory-files user-specific-dir nil ".*el$"))
-      (mapc #'org-babel-load-file (directory-files user-specific-dir nil ".*org$"))))
-#+end_src
