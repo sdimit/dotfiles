@@ -6,6 +6,11 @@
 ;;  (global-set-key (kbd "C-. l") 'evil-window-right)
 ;;  (global-set-key (kbd "C-. h") 'evil-window-left)
 
+(require 'direx)
+
+(nmap " 1" 'direx:jump-to-directory-other-window)
+
+(define-key direx:direx-mode-map (kbd "RET") 'direx:find-item-other-window)
 
 (defun jump-to-tag ()
   (interative)

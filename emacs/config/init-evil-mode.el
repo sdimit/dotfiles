@@ -105,6 +105,7 @@
 
 (nmap (kbd "SPC RET") 'ido-find-file)
 (nmap (kbd "SPC TAB") 'ibuffer-other-window)
+(nmap (kbd "SPC \\") 'helm-recentf)
 
 (nmap "j" 'evil-next-visual-line)
 (nmap "k" 'evil-previous-visual-line)

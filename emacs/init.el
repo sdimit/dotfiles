@@ -51,6 +51,7 @@
 (require 'init-search)
 (require 'init-help)
 (require 'init-completion)
+(require 'init-macros)
 (require 'init-latex)
 (require 'init-web-mode)
 (require 'init-lisp)

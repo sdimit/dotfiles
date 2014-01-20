@@ -16,6 +16,7 @@
 (global-set-key (kbd "C-h C-s") 'find-function)
 (global-set-key (kbd "C-h C-f") 'describe-function)
 (global-set-key (kbd "C-h C-s") 'find-function)
+(global-set-key (kbd "C-h W") 'find-function-on-key)
 ;;   (global-set-key (kbd "C-h C-s") 'smex-find-function)
 
 (global-set-key (kbd "C-h h") nil)
@@ -43,6 +44,15 @@
           (lambda () (setq dash-at-point-docset "coffee")))
 
 
+(defun howdoi (beg end)
+  "Replace the region from BEG to END with the howdoi search results for that text."
+  (interactive "r")
+  (let ((terms (buffer-substring beg end)))
+    (shell-command-on-region
+     beg
+     end
+     (format "%s %s" "howdoi" (shell-quote-argument terms))
+     t)))
 
 
 

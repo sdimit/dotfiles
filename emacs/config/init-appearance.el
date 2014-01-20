@@ -70,6 +70,7 @@
                                           inferior-lisp-mode
                                           inferior-python-mode
                                           compilation-mode
+                                          prodigy-view-mode
                                           Custom-mode
                                           ibuffer-mode)))
               (setq show-trailing-whitespace t))))

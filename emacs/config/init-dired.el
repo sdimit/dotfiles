@@ -40,7 +40,7 @@
 (require 'find-dired)
 (setq find-ls-option '("-print0 | xargs -0 ls -ld" . "-ld"))
 
-(nmap " I" (lambda () (interactive) (dired "~/Inbox/")))
+(nmap " I" (lambda () (interactive) (ido-find-file-in-dir "~/Inbox/")))
 
 (require 'wdired)
 (require 'dired+)

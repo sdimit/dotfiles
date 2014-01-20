@@ -169,15 +169,21 @@
               (if (file-exists-p (concat buffer-file-name "c"))
                   (delete-file (concat buffer-file-name "c"))))))
 
-(defun append-to-emacs-config (start end)
-  (interactive "r")
-  (append-region-to-file start end "~/Inbox/new-stuff.el"))
 
-(defun append-region-to-file (start end filename)
+(defun append-region-to-file (start end)
   "function takes current region, and writes it to specified file"
-  (write-region start end filename t)
-  (kill-region start end))
+  (interactive "r")
+  (let ((filename (ido-read-file-name "Append to: ")))
+    (write-region start end filename t)))
 
+(defun kill-and-append-region-to-file (start end)
+  "function takes current region, and writes it to specified file"
+  (interactive "r")
+  (let ((filename (ido-read-file-name "Kill and append to: ")))
+    (write-region start end filename t)
+    (kill-region start end)))
+
+(nmap (kbd "C-c 1") 'append-region-to-file)
 (setq recentf-max-saved-items 100)
 (recentf-mode)
 

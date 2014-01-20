@@ -1,4 +1,3 @@
-
 (setq ediff-highlight-all-diffs nil)
 ;;  (add-hook 'ediff-cleanup-hook (lambda () (ediff-janitor nil nil)))
 
@@ -57,7 +56,7 @@
 (nmap " mkd" (bind (git-gutter+-popup-hunk)
                    (switch-to-buffer-other-window "*git-gutter+-diff*")))
 ;;  [m]agit hun[k] show [d]iff
-(nmap " mkK" 'git-gutter+-revert-hunk) ; [m]agit hun[k] [k]ill
+(nmap " mkK" 'git-gutter+-revert-hunk) ; [m]agit hun[k] [K]ill
 (nmap " mkm" 'git-messenger:popup-message) ; [m]agit hun[k] show [m]essage
 (nmap "[g" 'git-gutter+-next-hunk)
 (nmap "]g" 'git-gutter+-previous-hunk)
@@ -72,6 +71,7 @@
 (nmap " mv" 'magit-checkout)
 (nmap " mV" 'magit-branch-manager)
 (nmap " ms" 'magit-status)
+(nmap " mS" 'magit-status-with-details)
 (nmap " ml" 'magit-log-current-file)
 (nmap " mA" 'magit-log)
 (nmap " mc" 'magit-commit)
@@ -271,7 +271,7 @@
   (interactive)
   (save-window-excursion
     (magit-with-refresh
-     (shell-command "git --no-pager commit --amend --reuse-message=HEAD"))))
+      (shell-command "git --no-pager commit --amend --reuse-message=HEAD"))))
 
 (eval-after-load "magit"
   (lambda ()
@@ -290,5 +290,10 @@
   (interactive)
   (kill-buffer)
   (jump-to-register :magit-fullscreen))
+
+(defun magit-status-with-details ()
+  (interactive)
+  (let ((current-prefix-arg '(4)))
+    (call-interactively 'magit-status)))
 
 (provide 'init-git)

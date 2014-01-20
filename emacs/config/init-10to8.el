@@ -1,4 +1,3 @@
-
 ;; (defcustom virtualenv-workon-starts-python nil
 ;;   "If non-nil the `virtualenv-workon' will also start python."
 ;;   :group 'virtualenv
@@ -104,6 +103,7 @@
   (let* ((pmt-command "cd ~/10to8/Native/native/src && source ~/.virtualenvs/Native/bin/activate && python manage.py test")
          (pmt-options "--noinput --nocapture --failfast --verbosity=0")
          (command (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable))))
+    (save-buffer)
     (async-shell-command command "*nose-test*")
     (evil-normal-state)))
 
@@ -113,6 +113,7 @@
   (let* ((pmt-command "cd ~/10to8/Native/native/src && source ~/.virtualenvs/Native/bin/activate && python manage.py test")
          (pmt-options "--noinput --nocapture --failfast --with-watch --verbosity=0")
          (command (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable))))
+    (save-buffer)
     (async-shell-command command "*nose-test*")
     (evil-normal-state)))
 
@@ -155,17 +156,83 @@
 
 (global-set-key (kbd "C-x x") (bind (cd "~/10to8/Native/native/src/core")))
 (global-set-key (kbd "C-c k a") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/core/")))
-(global-set-key (kbd "C-c 1") (bind (ido-find-file-in-dir "~/10to8/")))
-(global-set-key (kbd "C-c i") (bind (ido-find-file-in-dir "~/Inbox/")))
 
-;; (prodigy-define-service
-;;   :name "10to8-sockjs"
-;;   :command "bash"
-;;   :args '("-ci" " 'source ~/.virtualenvs/Native/bin/activate'")
-;;   :cwd "~/10to8/Native/native/src/"
-;;   :tags '(10to8)
-;;   :path '("/usr/local/bin/" "~/10to8/Native/native/src/")
-;;   :init (lambda () (venv-workon "Native")))
+(prodigy-define-service
+  :name "deepthought - runserver"
+  :command "python"
+  :args '("manage.py" "runserver")
+  :cwd "~/10to8/Native/native/src/"
+  :kill-signal 'sigkill
+  :kill-process-buffer-on-stop t
+  :init (lambda () (venv-workon "Native"))
+  :on-output (lambda (service output)
+                 (when (s-matches? "Quit the server with CONTROL-C" output)
+                   (prodigy-set-status service 'ready)))
+  :tags '(10to8 redux normal full))
+
+(prodigy-define-service
+  :name "deepthought - messaging"
+  :command "python"
+  :args '("manage.py" "run_messaging")
+  :cwd "~/10to8/Native/native/src/"
+  :kill-signal 'sigkill
+  :kill-process-buffer-on-stop t
+  :init (lambda () (venv-workon "Native"))
+  :tags '(10to8 full))
+
+(prodigy-define-service
+  :name "deepthought - celery"
+  :command "python"
+  :args '("manage.py" "celery" "worker" "-E" "-l" "info")
+  :cwd "~/10to8/Native/native/src/"
+  :kill-signal 'sigkill
+  :kill-process-buffer-on-stop t
+  :init (lambda () (venv-workon "Native"))
+  :tags '(10to8 normal))
+
+(prodigy-define-service
+  :name "deepthought - sockjs"
+  :command "python"
+  :args '("manage.py" "run_sockjs_server")
+  :cwd "~/10to8/Native/native/src/"
+  :kill-signal 'sigkill
+  :kill-process-buffer-on-stop t
+  :init (lambda () (venv-workon "Native"))
+  :tags '(10to8 normal))
+
+(prodigy-define-service
+  :name "deepthought - rabbit"
+  :command "rabbitmq-server"
+  :cwd "~/10to8/Native/native/src/"
+  :init (lambda () (venv-workon "Native"))
+  :on-output (lambda (service output)
+                 (when (s-matches? "completed" output)
+                   (prodigy-set-status service 'ready)))
+  :kill-process-buffer-on-stop t
+  :kill-signal 'sigkill
+  :tags '(10to8 normal))
+
+(prodigy-define-service
+  :name "deepthought - redis"
+  :command "redis-server"
+  :cwd "~/10to8/Native/native/src/"
+  :init (lambda () (venv-workon "Native"))
+  :kill-process-buffer-on-stop t
+  :kill-signal 'sigkill
+  :on-output (lambda (service output)
+                 (when (s-matches? "The server is now ready" output)
+                   (prodigy-set-status service 'ready)))
+  :tags '(10to8 normal))
+
+(prodigy-define-service
+  :name "make current user root"
+  :command "python"
+  :args '("manage.py" "root_user" "stephane@thebati.net")
+  :cwd "~/10to8/Native/native/src/"
+  :kill-signal 'sigkill
+  :kill-process-buffer-on-stop t
+  :init (lambda () (venv-workon "Native"))
+  :tags '(10to8))
 
 (prodigy-define-service
   :name "jeltz - serve"
@@ -173,8 +240,12 @@
   :args '("3333")
   :cwd "~/10to8/Native/native/src/apps/jeltz/public"
   :path '("~/dotfiles/bin/")
+  :kill-signal 'sigkill
   :kill-process-buffer-on-stop t
-  :tags '(10to8))
+  :on-output (lambda (service output)
+                 (when (s-matches? "Serving HTTP" output)
+                   (prodigy-set-status service 'ready)))
+  :tags '(10to8 redux normal))
 
 (prodigy-define-service
   :name "jeltz - build"
@@ -182,7 +253,11 @@
   :args '("build")
   :cwd "~/10to8/Native/native/src/apps/jeltz/"
   :path '("~/usr/local/bin/")
+  :kill-signal 'sigkill
   :kill-process-buffer-on-stop t
+  :on-output (lambda (service output)
+                 (when (s-matches? "compiled" output)
+                   (prodigy-set-status service 'ready)))
   :tags '(10to8))
 
 (prodigy-define-service
@@ -191,7 +266,11 @@
   :args '("watch" "--server" "-p" "3333")
   :cwd "~/10to8/Native/native/src/apps/jeltz/"
   :path '("~/usr/local/bin/")
+  :kill-signal 'sigkill
   :kill-process-buffer-on-stop t
+  :on-output (lambda (service output)
+                 (when (s-matches? "compiled" output)
+                   (prodigy-set-status service 'ready)))
   :tags '(10to8))
 
 (prodigy-define-service
@@ -200,6 +279,8 @@
   :args '("test:once")
   :cwd "~/10to8/Native/native/src/apps/jeltz"
   :path '("/usr/local/bin/")
+  :kill-signal 'sigkill
+  :kill-process-buffer-on-stop t
   :tags '(10to8))
 
 (prodigy-define-service
@@ -208,7 +289,11 @@
   :args '("3334")
   :cwd "~/10to8/Native/native/src/apps/colin/public"
   :path '("~/dotfiles/bin/")
+  :kill-signal 'sigkill
   :kill-process-buffer-on-stop t
+  :on-output (lambda (service output)
+                 (when (s-matches? "Serving HTTP" output)
+                   (prodigy-set-status service 'ready)))
   :tags '(10to8))
 
 (prodigy-define-service
@@ -217,7 +302,11 @@
   :args '("build")
   :cwd "~/10to8/Native/native/src/apps/colin/"
   :path '("~/usr/local/bin/")
+  :kill-signal 'sigkill
   :kill-process-buffer-on-stop t
+  :on-output (lambda (service output)
+                 (when (s-matches? "compiled" output)
+                   (prodigy-set-status service 'ready)))
   :tags '(10to8))
 
 (prodigy-define-service
@@ -226,7 +315,11 @@
   :args '("watch" "--server" "-p" "3334")
   :cwd "~/10to8/Native/native/src/apps/colin/"
   :path '("~/usr/local/bin/")
+  :kill-signal 'sigkill
   :kill-process-buffer-on-stop t
+  :on-output (lambda (service output)
+                 (when (s-matches? "compiled" output)
+                   (prodigy-set-status service 'ready)))
   :tags '(10to8))
 
 (prodigy-define-service
@@ -235,6 +328,24 @@
   :args '("test:once")
   :cwd "~/10to8/Native/native/src/apps/colin"
   :path '("/usr/local/bin/")
+  :kill-signal 'sigkill
+  :kill-process-buffer-on-stop t
+  :tags '(10to8))
+
+(prodigy-define-service
+  :name "jeltz - build etags"
+  :command "build-coffee-etags.sh"
+  :cwd "~/10to8/Native/native/src/apps/jeltz/app"
+  :kill-signal 'sigkill
+  :kill-process-buffer-on-stop t
+  :tags '(10to8))
+
+(prodigy-define-service
+  :name "colin - build etags"
+  :command "build-coffee-etags.sh"
+  :cwd "~/10to8/Native/native/src/apps/colin/app"
+  :kill-signal 'sigkill
+  :kill-process-buffer-on-stop t
   :tags '(10to8))
 
 ;; (require 'butler)

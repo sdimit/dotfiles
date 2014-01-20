@@ -4,16 +4,11 @@
 
 ;; show wrap guide
 (require 'fill-column-indicator)
-
 (fci-mode)
 
-;; Disable annoying visible bell on OSX
 (setq visible-bell nil)
-
-;; Actually, why not disable the annoying audible bell as well
 (setq ring-bell-function 'ignore)
 
-;; No slow stupid flyspell. Die!
 (eval-after-load "flyspell"
   '(defun flyspell-mode (&optional arg)))
 
@@ -137,12 +132,10 @@
     (evil-shift-left start end))
   (evil-visual-restore))
 
-(defun visual-shift-right ()
-  (interactive)
-  (let ((start (region-beginning))
-        (end (region-end)))
-    (progn (evil-shift-right start end)
-           (evil-visual-restore))))
+;; (defun visual-shift-right (start end)
+;;   (interactive "r")
+;;   (evil-shift-right start end)
+;;   (evil-visual-restore))
 
 (defun commas-to-newlines (start end)
   (interactive "r")
@@ -161,7 +154,7 @@
 
 (define-key evil-visual-state-map "<" 'visual-shift-left)
 
-(define-key evil-visual-state-map ">" 'visual-shift-right)
+;; (define-key evil-visual-state-map ">" 'visual-shift-right)
 
 (define-key evil-normal-state-map " =" 'evil-numbers/inc-at-pt)
 (define-key evil-normal-state-map " -" 'evil-numbers/dec-at-pt)

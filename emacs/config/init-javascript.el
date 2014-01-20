@@ -60,19 +60,6 @@
               '("module" "exports" "require" "__dirname" "process" "console" "define"
                 "JSON" "$" "_" "Backbone" "buster" "sinon" "moment" "Date" "React"))
 
-(defun run-process-silently-if-successful (cmd buffer-name)
-  "Only show result if failed"
-  (let* ((proc-buffer (get-buffer-create buffer-name))
-         (result (call-process-shell-command cmd nil proc-buffer t))
-         (output (with-current-buffer proc-buffer (buffer-string))))
-    (cond ((zerop result)
-           (message "Process completed without errors"))
-          (t
-           (message nil)
-           (split-window-vertically)
-           (set-window-buffer (next-window) proc-buffer)))))
-
-
 ;; (setq grunt-cmd "grunt --no-color --config ~/grunt.js")
 (setq grunt-cmd "grunt --no-color --config")
 
@@ -82,5 +69,13 @@
   (run-process-silently-if-successful grunt-cmd "*grunt*"))
 
 ;; (run-process-silently-if-successful "cd ~/10to8/Native/native/src/apps/jeltz && cake test:once" "jeltz")
+
+(require 'tern)
+(require 'tern-auto-complete)
+(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+(after 'tern
+  (after 'auto-complete
+    (require 'tern-auto-complete)
+    (tern-ac-setup)))
 
 (provide 'init-javascript)
