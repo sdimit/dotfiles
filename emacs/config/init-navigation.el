@@ -11,6 +11,8 @@
 (nmap " 1" 'direx:jump-to-directory-other-window)
 
 (define-key direx:direx-mode-map (kbd "RET") 'direx:find-item-other-window)
+(define-key direx:direx-mode-map (kbd "j") 'direx:next-item)
+(define-key direx:direx-mode-map (kbd "k") 'direx:previous-item)
 
 (defun jump-to-tag ()
   (interative)

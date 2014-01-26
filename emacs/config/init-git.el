@@ -19,7 +19,6 @@
                            (set-face-foreground 'magit-diff-del "red3")))
 
 (defun magit-status-only ()
-
   (interactive)
   (magit-status default-directory)
   (delete-other-windows))

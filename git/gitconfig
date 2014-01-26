@@ -1,75 +1,77 @@
 [user]
-		name = Stéphane
-		email = stephane@10to8.com
-		# user tokens are set as environment variables in ~/.secrets
+  name = Stephane
+  email = stephane@10to8.com
+  # user tokens are set as environment variables in ~/.secrets
 
 [github]
-	user = istib
-	oauth-token = 42b14ffa1cd60d77df70ab618a449fcb5523cfd9
+  user = istib
+  oauth-token = 42b14ffa1cd60d77df70ab618a449fcb5523cfd9
 
 [init]
-	templatedir = ~/.git_template
-	# holds common hooks (such as ctags regeneration)
+  templatedir = ~/.git_template
+  # holds common hooks (such as ctags regeneration)
 
 [core]
-	autocrlf = false
-	pager = less -FRSX
-	# editor = vim
-	browser = open
-	excludesfile = ~/dotfiles/git/gitignore
-	quotepath = false
-	whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+  autocrlf = false
+  pager = less -FRSX
+  # editor = vim
+  browser = open
+  excludesfile = ~/dotfiles/git/gitignore
+  quotepath = false
+  whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 
 [branch]
-	autosetuprebase = always
+  autosetuprebase = always
 
 [color]
-	ui = true
-	pager = true
-	diff = auto
-	status = auto
-	branch = auto
-	interactive = auto
+  ui = true
+  pager = true
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = auto
 
 [color "branch"]
-	current = yellow reverse
-	local = yellow
-	remote = green
+  current = yellow reverse
+  local = yellow
+  remote = green
 
 [color "diff"]
-	meta = yellow bold
-	frag = magenta bold
-	old = red
-	new = green
-	whitespace = red reverse
+  meta = yellow bold
+  frag = magenta bold
+  old = red
+  new = green
+  whitespace = red reverse
 
 [alias]
 
-	b = rev-parse --abbrev-ref HEAD
-	id = rev-parse --short HEAD
+  b = rev-parse --abbrev-ref HEAD
+  id = rev-parse --short HEAD
 
-	# ADD
+  # ADD
 
-	a = add                           # add
-	p = add --patch                   # stage commits chunk by chunk
-	aa = add --all                    # specify folder add all in "folder"
+  a = add                           # add
+  p = add --patch                   # stage commits chunk by chunk
+  aa = add --all                    # specify folder add all in "folder"
 
-	# COMMIT
+  # COMMIT
 
-	c = commit --allow-empty          # commit with message
-	ca = commit --allow-empty -A      # commit all with message
+  c = commit --allow-empty          # commit with message
+  ca = commit --allow-empty -A      # commit all with message
 
-	amend = commit --amend            # ammend your last commit
-	am = commit --amend               # ammend your last commit
-	oops = !"git add -A -v && git commit --amend -C HEAD"
-																		# Add modified files to previous commit
+  amend = commit --amend            # ammend your last commit
+  am = commit --amend               # ammend your last commit
+  oops = !"git add -A -v && git commit --amend -C HEAD"
+                                    # Add modified files to previous commit
 
-	# BRANCH
+  # BRANCH
 
-	branches = branch -v              # branch (verbose)
-	bd = branch -d                    # delete branch
-	bD = branch -D
-	bn = checkout -b                  # create and switch to a new branch
+  branches = branch -v              # branch (verbose)
+  bd = branch -d                    # delete branch
+  bD = branch -D
+  bn = checkout -b                  # create and switch to a new branch
+
+  delete-merged-branches = "!f() { git checkout --quiet master && git branch --merged | grep --invert-match '\\*' | xargs -n 1 git branch --delete; git checkout --quiet @{-1}; }; f"
 
 	# CHECKOUT
 

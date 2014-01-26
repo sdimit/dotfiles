@@ -55,6 +55,14 @@
              (string-match "\n[ \t].*\n?$" string))
       (comint-send-string shell-process "\n"))))
 
+(defun 10to8-magit-status ()
+  (interactive)
+  (let ((default-directory "~/10to8/Native/native/src"))
+    (magit-status default-directory)
+    (delete-other-windows)))
+
+(nmap " [" '10to8-magit-status)
+
 ;; (require 's)
 
 ;; (defun send-region-to-10to8-shell (start end)

@@ -73,4 +73,11 @@
 
 (nmap (kbd "C-c d") 'describe-thing-in-popup)
 
+(defun search-config-files (string)
+  (interactive (list
+                (read-from-minibuffer "Search: " (ag/dwim-at-point))))
+  (ag/search string "~/.emacs.d/config" t))
+
+(global-set-key (kbd "C-c e e") 'search-config-files)
+
 (provide 'init-help)
