@@ -66,7 +66,8 @@
 (define-key evil-insert-state-map "\C-l" 'hippie-expand)
 (define-key evil-insert-state-map (kbd "C-x C-l") 'hippie-expand-lines)
 
-;; (define-abbrev global-abbrev-table "atr" "attributes")
-;; (abbrev-mode 1)
+(define-abbrev global-abbrev-table "atr" "attributes")
+(define-abbrev global-abbrev-table "tempalte" "template")
+(abbrev-mode 1)
 
 (provide 'init-completion)

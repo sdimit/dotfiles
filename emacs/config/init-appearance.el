@@ -22,6 +22,12 @@
 (tooltip-mode -1)
 (setq tooltip-use-echo-area t)
 
+(setq light-symbol-face 'hi-yellow)
+(light-symbol-mode)
+
+;; (set-face-background  'hi-blue "Grey30")
+;; (set-face-foreground  'hi-blue "Grey99")
+
 (require 'highlight-sexp)
 
 (defun light-theme ()
@@ -71,6 +77,7 @@
                                           inferior-python-mode
                                           compilation-mode
                                           prodigy-view-mode
+                                          bs-mode ; for ace-jump-line
                                           Custom-mode
                                           ibuffer-mode)))
               (setq show-trailing-whitespace t))))
@@ -118,7 +125,8 @@
 (sml/setup)
 
 (add-to-list 'sml/hidden-modes " GitGutter")
-(add-to-list 'sml/hidden-modes " Lisp Interaction")
+(add-to-list 'sml/hidden-modes " Lisp\ Interaction")
+(add-to-list 'sml/hidden-modes " Emacs-Lisp")
 (add-to-list 'sml/hidden-modes " ElDoc")
 (add-to-list 'sml/hidden-modes " hl-sexp")
 (add-to-list 'sml/hidden-modes " Fill")
@@ -133,6 +141,8 @@
 (add-to-list 'sml/replacer-regexp-list '("^~/10to8/Native/native/src/core/"      ":DT:"))
 (add-to-list 'sml/replacer-regexp-list '("^~/10to8/Native/native/src/apps/jeltz/app/"      ":Jeltz:"))
 (add-to-list 'sml/replacer-regexp-list '("^~/10to8/Native/native/src/apps/colin/app"     ":Colin:"))
+
+(powerline-center-evil-theme)
 
 (setq scroll-conservatively 10000
       scroll-step 1)

@@ -14,15 +14,6 @@
   (ansi-color-apply-on-region (point-min)
                               (point-max)))
 
-(defun nuke-all-buffers ()
-  "Kill all buffers, leaving *scratch* only."
-  (interactive)
-  (mapc
-   (lambda (buffer)
-     (kill-buffer buffer))
-   (buffer-list))
-  (delete-other-windows))
-
 (defun url-decode-region (beg end)
   (interactive "r")
   (let ((content (url-unhex-string (buffer-substring beg end))))
@@ -52,9 +43,8 @@
           (kill-line)
         (sp-kill-sexp)))))
 
-(defun stk/find-function-or-variable-at-point ()
-  "Find directly the function/variable at point in the other window.
-     I don't care if is a function or a variable... just go there, Emacs!"
+(defun find-function-or-variable-at-point ()
+  "Find directly the function/variable at point in the other window."
   (interactive)
   (let ((var (variable-at-point))
         (func (function-called-at-point)))
@@ -122,20 +112,6 @@
 (scratch-key (kbd "C-S-x") "*css*"        css-mode)
 (scratch-key (kbd "C-S-h") "*html*"       html-mode)
 
-
-
-;; (defun push-first-button ()
-;;   "Find and push the first button in this buffer, intended for `help-mode'."
-;;   (interactive)
-;;   (block :find-button
-;;     (goto-char (point-min))
-;;     (while (< (point) (point-max))
-;;       (if (get-text-property (point) 'button)
-;;           (return-from :find-button (push-button))
-;;         (forward-char)))))
-;;
-;; (define-key help-mode-map "f" 'push-first-button)
-
 (setq deft-extension "org"
       deft-text-mode 'org-mode
       deft-auto-save-interval 10.0)
@@ -146,17 +122,12 @@
   ;; grab last line and put into kill-ring
   )
 
-(defun send-region-to-end-of-file ()
-  "writing tools package or init file of someone had that...")
-
 ;;  ideal keybinding
 ;;  C-k C-k kill buffer
 
 (defun nuke-useless-buffers ()
   "git, dired, emacs temp buffers"
   )
-
-(require 'sr-speedbar)
 
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
@@ -173,7 +144,7 @@
 (defun append-region-to-file (start end)
   "function takes current region, and writes it to specified file"
   (interactive "r")
-  (let ((filename (ido-read-file-name "Append to: ")))
+  (let ((filename (ido-read-file-name "Append to: " "~/.emacs.d/config/")))
     (write-region start end filename t)))
 
 (defun kill-and-append-region-to-file (start end)
@@ -228,22 +199,22 @@
 
 ;; Mac-like key defaults
 (global-set-key (kbd "M-n") 'create-new-buffer)
-(global-set-key (kbd "M-{") 'previous-buffer)
-(global-set-key (kbd "M-}") 'next-buffer)
+(global-set-key (kbd "M-[") 'previous-buffer)
+(global-set-key (kbd "M-]") 'next-buffer)
 
-(setq speedbar-hide-button-brackets-flag t
-      speedbar-show-unknown-files t
-      speedbar-smart-directory-expand-flag t
-      speedbar-directory-button-trim-method 'trim
-      speedbar-use-images nil
-      speedbar-indentation-width 2
-      speedbar-use-imenu-flag t
-      speedbar-file-unshown-regexp "flycheck-.*"
-      sr-speedbar-width 40
-      sr-speedbar-width-x 40
-      sr-speedbar-auto-refresh nil
-      sr-speedbar-skip-other-window-p t
-      sr-speedbar-right-side nil)
+;; (setq speedbar-hide-button-brackets-flag t
+;;       speedbar-show-unknown-files t
+;;       speedbar-smart-directory-expand-flag t
+;;       speedbar-directory-button-trim-method 'trim
+;;       speedbar-use-images nil
+;;       speedbar-indentation-width 2
+;;       speedbar-use-imenu-flag t
+;;       speedbar-file-unshown-regexp "flycheck-.*"
+;;       sr-speedbar-width 40
+;;       sr-speedbar-width-x 40
+;;       sr-speedbar-auto-refresh nil
+;;       sr-speedbar-skip-other-window-p t
+;;       sr-speedbar-right-side nil)
 
 (setq next-error-recenter 20)
 

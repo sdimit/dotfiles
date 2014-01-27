@@ -91,7 +91,6 @@
 (nmap "  " 'ido-switch-buffer)
 (nmap " ll" 'align-regexp)
 (nmap " LL" 'align-cljlet)
-(nmap " q" 'multi-term)
 (nmap "gu" 'browse-url)
 (vmap "gu" 'google-region)
 (nmap "Q" 'kill-current-buffer)

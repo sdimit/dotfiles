@@ -117,10 +117,12 @@
 (require 'saveplace)
 
 (defun create-new-buffer ()
-  "Create a new buffer named *new*[num]."
   (interactive)
-  (switch-to-buffer-other-window (generate-new-buffer-name "*new*"))
-  (lisp-interaction-mode))
+  (switch-to-buffer-other-window (generate-new-buffer-name "*new*")))
+
+(defun create-new-buffer-in-same-window ()
+  (interactive)
+  (switch-to-buffer (generate-new-buffer-name "*new*")))
 
 ;; Create a new instance of emacs
 (when window-system
@@ -131,9 +133,10 @@
                         (list invocation-directory) exec-suffixes)))
       (call-process path-to-emacs nil 0 nil))))
 
-(global-set-key (kbd "C-c n") 'create-new-buffer)
+(global-set-key (kbd "C-c n") 'create-new-buffer-in-same-window)
+(global-set-key (kbd "C-c C-n") 'create-new-buffer)
 (global-set-key (kbd "C-c C-n") (bind (create-new-buffer) (delete-other-windows)))
-(global-set-key (kbd "C-c N") 'new-emacs-instance)
+;(global-set-key (kbd "C-c N") 'new-emacs-instance)
 
 
 (require 'f)
@@ -171,12 +174,28 @@
 (nmap (kbd "] f") 'next-file-in-dir)
 (nmap (kbd "[ f") 'previous-file-in-dir)
 
-(global-set-key (kbd "C-h C-c") (bind (ido-find-file-in-dir "~/.emacs.d/config/")))
+(setq default-major-mode 'text-mode)
 
+(defun zshrc ()
+  (interactive)
+  (find-file "~/.zshrc"))
+
+(defun zshhistory ()
+  (interactive)
+  (find-file "~/.zsh_history"))
 
 ;; Stop creating backup~ and #auto-save# files
 
 (setq make-backup-files nil)
 (setq auto-save-default nil)
+
+(defun nuke-all-buffers ()
+  "Kill all buffers, leaving *scratch* only."
+  (interactive)
+  (mapc
+   (lambda (buffer)
+     (kill-buffer buffer))
+   (buffer-list))
+  (delete-other-windows))
 
 (provide 'init-files)

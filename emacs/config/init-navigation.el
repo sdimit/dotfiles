@@ -13,6 +13,8 @@
 (define-key direx:direx-mode-map (kbd "RET") 'direx:find-item-other-window)
 (define-key direx:direx-mode-map (kbd "j") 'direx:next-item)
 (define-key direx:direx-mode-map (kbd "k") 'direx:previous-item)
+(define-key direx:direx-mode-map [mouse-2] 'direx:mouse-1)
+(define-key direx:direx-mode-map [mouse-1] 'direx:mouse-2)
 
 (defun jump-to-tag ()
   (interative)
@@ -120,5 +122,9 @@
   (delete-other-windows))
 
 (nmap (kbd "C-/") 'only)
+
+;; (golden-ratio-mode)
+;; (nmap " ~" 'golden-ratio)
+
 
 (provide 'init-navigation)

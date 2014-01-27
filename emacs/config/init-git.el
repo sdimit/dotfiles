@@ -1,6 +1,8 @@
 (setq ediff-highlight-all-diffs nil)
 ;;  (add-hook 'ediff-cleanup-hook (lambda () (ediff-janitor nil nil)))
 
+(set-variable 'magit-emacsclient-executable "/usr/local/Cellar/emacs-mac/emacs-24.3-mac-4.5/bin/emacsclient")
+
 (setq magit-save-some-buffers 'dontask)
 (setq magit-stage-all-confirm nil)
 (setq magit-unstage-all-confirm nil)
@@ -33,6 +35,13 @@
   (magit-visit-item)
   (delete-current-buffer-file)
   (magit-refresh))
+
+(defun magit-delete-remote-branch ()
+  "Show file on current magit line and prompt for deletion."
+  (interactive)
+  (let* ((current-branch (shell-command-as-string "git rev-parse --abbrev-ref HEAD"))
+        (remote-branch (concat "push origin :" current-branch)))
+    (magit-shell-command remote-branch)))
 
 ;;  (define-key magit-status-mode-map (kbd "C-x C-k") 'magit-kill-file-on-line)
 
@@ -70,16 +79,18 @@
 (nmap " mv" 'magit-checkout)
 (nmap " mV" 'magit-branch-manager)
 (nmap " ms" 'magit-status)
+(nmap " `" 'magit-status)
 (nmap " mS" 'magit-status-with-details)
 (nmap " ml" 'magit-log-current-file)
 (nmap " mA" 'magit-log)
 (nmap " mc" 'magit-commit)
 (nmap " mO" 'magit-oops)
-(nmap " mL" (bind (magit-show-commit-backward) (switch-to-buffer-other-window "*magit-commit*")))
+(nmap " mL" (bind (magit-show-commit "HEAD")))
 (nmap " mr" 'magit-rebase-step)
 (nmap " mR" 'magit-interactive-rebase)
 (nmap " mf" (bind (magit-git-command "fetch --all")))
 (nmap " mF" (bind (magit-git-command "pull --rebase")))
+
 
 (setq git-messenger:show-detail t)
 
@@ -246,25 +257,29 @@
     nil))
 
 (defun get-current-ticket-name ()
-  (let* ((branch-ref (shell-command-as-string "git rev-parse --abbrev-ref HEAD") )
+  (let* ((branch-ref (shell-command-as-string "git rev-parse --abbrev-ref head") )
          (ticket-name (extract-jira-ticket-ref branch-ref)))
     ticket-name))
 
-(defun open-jira-ticket (ticket-ref)
+(defun -open-jira-ticket (ticket-ref)
   (if (not (eq nil ticket-ref))
       (browse-url (concat "https://tento8.atlassian.net/browse/" ticket-ref))))
+
+(defun open-jira-ticket (ticket-ref)
+  (interactive "MTicket number: ")
+  (-open-jira-ticket (concat "TTE-" ticket-ref)))
 
 (defun open-jira-ticket-from-current-branch ()
   (interactive)
   (let* ((ticket-name (get-current-ticket-name)))
-    (open-jira-ticket ticket-name)))
+    (-open-jira-ticket ticket-name)))
 
 (defun open-jira-ticket-from-point ()
   (interactive)
   (let* ((at-point (substring-no-properties (thing-at-point 'symbol)))
          (ticket-name (extract-jira-ticket-ref at-point)))
     (message at-point)
-    (open-jira-ticket ticket-name)))
+    (-open-jira-ticket ticket-name)))
 
 (defun magit-oops ()
   (interactive)

@@ -80,4 +80,6 @@
 
 (global-set-key (kbd "C-c e e") 'search-config-files)
 
+(global-set-key (kbd "C-h C-c") (bind (ido-find-file-in-dir "~/.emacs.d/config")))
+
 (provide 'init-help)

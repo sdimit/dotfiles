@@ -59,8 +59,21 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
   :type 'alist
   :group 'multi-term)
 
+(defun open-term ()
+  (interactive)
+;;  (split-window-horizontally-and-switch)
+  (multi-term))
+
+(defun open-term-below ()
+  (interactive)
+  (split-window-vertically-and-switch)
+  (multi-term))
+
 (nmap (kbd "[ t") 'multi-term-next)
 (nmap (kbd "] t") 'multi-term-prev)
+
+(nmap " q" 'open-term)
+(nmap " Q" 'open-term-below)
 
 (add-hook 'term-mode-hook 'auto-complete-mode)
 

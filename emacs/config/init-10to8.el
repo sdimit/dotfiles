@@ -30,7 +30,7 @@
 
 (defun 10to8-runserver ()
   (interactive)
-  (let ((server-settings     "localhost:8000 --nothreading")
+  (let ((server-settings     "localhost:8000");;" --nothreading")
         (server-buffer-name  "*[Django: core (core.settings)] ./manage.py runserver localhost:8000*"))
     (if (get-buffer server-buffer-name)
         (switch-to-buffer-other-window server-buffer-name)
@@ -82,7 +82,7 @@
   "follow symlinks"
   (interactive (list
                 (read-from-minibuffer "Search: " (ag/dwim-at-point))))
-  (let ((ag-arguments (cons "--follow" ag-arguments)))
+  (let* ((ag-arguments (cons "--follow" ag-arguments)))
     (ag/search string "~/10to8/Native/native/src/apps/jeltz/app" t)))
 
 (defun search-colin (string)
@@ -127,6 +127,11 @@
 
 (defun run-jeltz-test ()
   (interactive)
+  (let ((command "cd ~/10to8/Native/native/src/apps/jeltz && cake test"))
+    (async-shell-command command "*cake-test*")))
+
+(defun run-jeltz-test-once ()
+  (interactive)
   (let ((command "cd ~/10to8/Native/native/src/apps/jeltz && cake test:once"))
     (async-shell-command command "*cake-test*")))
 
@@ -137,7 +142,17 @@
 
 (defun run-colin-test ()
   (interactive)
-  (let ((command "cd ~/10to8/Native/native/src/apps/colin && npm test"))
+  (let ((command "cd ~/10to8/Native/native/src/apps/colin && cake test"))
+    (async-shell-command command "*cake-test*")))
+
+(defun run-colin-test-once ()
+  (interactive)
+  (let ((command "cd ~/10to8/Native/native/src/apps/colin && cake test:once"))
+    (async-shell-command command "*cake-test*")))
+
+(defun run-colin-build-test ()
+  (interactive)
+  (let ((command "cd ~/10to8/Native/native/src/apps/colin && cake build:test:once"))
     (async-shell-command command "*cake-test*")))
 
 (global-set-key (kbd "C-c k k") 'search-deep-thought)
@@ -148,6 +163,7 @@
 (global-set-key (kbd "C-c j M") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/modules/")))
 (global-set-key (kbd "C-c j t") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/templates/")))
 (global-set-key (kbd "C-c j s") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/styles/")))
+(global-set-key (kbd "C-c j T") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/test/")))
 (global-set-key (kbd "C-c j a") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/")))
 (global-set-key (kbd "C-c j j") 'search-jeltz)
 (global-set-key (kbd "C-x j") (bind (cd "~/10to8/Native/native/src/apps/jeltz/app/")))
@@ -158,6 +174,7 @@
 (global-set-key (kbd "C-c c M") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/modules/")))
 (global-set-key (kbd "C-c c t") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/templates/")))
 (global-set-key (kbd "C-c c s") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/styles/")))
+(global-set-key (kbd "C-c c T") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/test/")))
 (global-set-key (kbd "C-c c a") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/")))
 (global-set-key (kbd "C-c c c") 'search-colin)
 (global-set-key (kbd "C-x c") (bind (cd "~/10to8/Native/native/src/apps/colin/app")))
@@ -176,7 +193,7 @@
   :on-output (lambda (service output)
                  (when (s-matches? "Quit the server with CONTROL-C" output)
                    (prodigy-set-status service 'ready)))
-  :tags '(10to8 redux normal full))
+  :tags '(10to8 redux jeltz-dev normal full))
 
 (prodigy-define-service
   :name "deepthought - messaging"
@@ -196,7 +213,7 @@
   :kill-signal 'sigkill
   :kill-process-buffer-on-stop t
   :init (lambda () (venv-workon "Native"))
-  :tags '(10to8 normal))
+  :tags '(10to8 normal full))
 
 (prodigy-define-service
   :name "deepthought - sockjs"
@@ -206,7 +223,7 @@
   :kill-signal 'sigkill
   :kill-process-buffer-on-stop t
   :init (lambda () (venv-workon "Native"))
-  :tags '(10to8 normal))
+  :tags '(10to8 normal jeltz-dev full))
 
 (prodigy-define-service
   :name "deepthought - rabbit"
@@ -218,7 +235,7 @@
                    (prodigy-set-status service 'ready)))
   :kill-process-buffer-on-stop t
   :kill-signal 'sigkill
-  :tags '(10to8 normal))
+  :tags '(10to8 normal full jeltz-dev))
 
 (prodigy-define-service
   :name "deepthought - redis"
@@ -230,7 +247,7 @@
   :on-output (lambda (service output)
                  (when (s-matches? "The server is now ready" output)
                    (prodigy-set-status service 'ready)))
-  :tags '(10to8 normal))
+  :tags '(10to8 normal full jeltz-dev))
 
 (prodigy-define-service
   :name "make current user root"
@@ -253,7 +270,7 @@
   :on-output (lambda (service output)
                  (when (s-matches? "Serving HTTP" output)
                    (prodigy-set-status service 'ready)))
-  :tags '(10to8 redux normal))
+  :tags '(10to8 redux normal full))
 
 (prodigy-define-service
   :name "jeltz - build"
@@ -279,7 +296,7 @@
   :on-output (lambda (service output)
                  (when (s-matches? "compiled" output)
                    (prodigy-set-status service 'ready)))
-  :tags '(10to8))
+  :tags '(10to8 jeltz-dev))
 
 (prodigy-define-service
   :name "jeltz - test runner"
@@ -302,7 +319,7 @@
   :on-output (lambda (service output)
                  (when (s-matches? "Serving HTTP" output)
                    (prodigy-set-status service 'ready)))
-  :tags '(10to8))
+  :tags '(10to8 normal full jeltz-dev))
 
 (prodigy-define-service
   :name "colin - build"
@@ -315,7 +332,7 @@
   :on-output (lambda (service output)
                  (when (s-matches? "compiled" output)
                    (prodigy-set-status service 'ready)))
-  :tags '(10to8))
+  :tags '(10to8 full))
 
 (prodigy-define-service
   :name "colin - watch"
@@ -328,7 +345,7 @@
   :on-output (lambda (service output)
                  (when (s-matches? "compiled" output)
                    (prodigy-set-status service 'ready)))
-  :tags '(10to8))
+  :tags '(10to8 colin-dev))
 
 (prodigy-define-service
   :name "colin - test runner"
@@ -354,6 +371,38 @@
   :cwd "~/10to8/Native/native/src/apps/colin/app"
   :kill-signal 'sigkill
   :kill-process-buffer-on-stop t
+  :tags '(10to8))
+
+(prodigy-define-service
+  :name "website - build"
+  :command "brunch"
+  :args '("build")
+  :cwd "~/10to8/Native/native/src/apps/website/"
+  :path '("~/usr/local/bin/")
+  :kill-signal 'sigkill
+  :kill-process-buffer-on-stop t
+  :on-output (lambda (service output)
+                 (when (s-matches? "compiled" output)
+                   (prodigy-set-status service 'ready)))
+  :tags '(10to8))
+
+(prodigy-define-service
+  :name "new db"
+  :command "./newdb.sh"
+  :path '("~/10to8/scripts/")
+  :kill-signal 'sigkill
+  :kill-process-buffer-on-stop t
+  :init (lambda () (venv-workon "Native"))
+  :tags '(10to8))
+
+(prodigy-define-service
+  :name "new db - gen data"
+  :command "python"
+  :args '("manage.py" "gen_data" "-e" "1")
+  :cwd "~/10to8/Native/native/src/"
+  :kill-signal 'sigkill
+  :kill-process-buffer-on-stop t
+  :init (lambda () (venv-workon "Native"))
   :tags '(10to8))
 
 ;; (require 'butler)

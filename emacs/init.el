@@ -1,8 +1,7 @@
 (defconst emacs-start-time (current-time))
 
-(require 'cask "~/.emacs.d/Cask")
-
-;(cask-initialize)
+;; (require 'cask "~/.emacs.d/Cask")
+;; (cask-initialize)
 
 ;; init.el --- Where all the magic begins
 

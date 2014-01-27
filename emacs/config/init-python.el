@@ -1,6 +1,5 @@
 
 (autoload 'python-mode "python-mode" "Python Mode." t)
-(add-hook 'python-mode-hook 'pretty-symbols-mode)
 
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
 (add-to-list 'interpreter-mode-alist '("python" . python-mode))
@@ -22,9 +21,6 @@
 ;;  don't bug me about E501 (warning about lines > 80 chars)
 
 ;;  (add-to-list 'helm-boring-file-regexp-list '("\\.pyc"))
-
-(add-hook 'python-mode-hook
-          (lambda () (highlight-indentation-current-column-mode)))
 
 (defvar nose-use-verbose nil)
 
@@ -51,9 +47,6 @@
 (setq pycscope-use-face nil)
 (setq pycscope-display-pycscope-buffer nil)
 (setq pycscope-truncate-lines t)
-
-(add-hook 'python-mode-hook 'auto-complete-mode)
-(add-hook 'python-mode-hook 'jedi:setup)
 
 ;;  (setq jedi:setup-keys nil)
 (setq jedi:complete-on-dot t)
@@ -86,33 +79,35 @@
 (require 'elpy)
 ;;  (elpy-enable)
 
+(defun run-nose-test-new-buffer ()
+  (interactive)
+  (run-nose-test)
+  (switch-to-buffer-other-window "*nose-test*")
+  (delete-other-windows))
+
 (add-hook 'python-mode-hook (lambda ()
-                              ;;  (define-key python-mode-map (kbd "C-]") 'pycscope-find-global-definition-no-prompting)
-                              ;;  (define-key python-mode-map (kbd "C-t") 'pycscope-pop-mark)
-                              ;;  (define-key python-mode-map (kbd "C-.") 'pycscope-find-global-definition)
-                              (define-key python-mode-map "(" 'elpy-nav-backward-statement)
-                              (define-key python-mode-map ")" 'elpy-nav-forward-statement)
-                              (define-key python-mode-map "[" 'elpy-nav-backward-definition)
-                              (define-key python-mode-map "]" 'elpy-nav-forward-definition)
-                              (define-key python-mode-map "{" 'elpy-nav-backward-class-definition)
-                              (define-key python-mode-map "}" 'elpy-nav-forward-class-definition)
-                              ;; (define-key python-mode-map " c" 'elpy-occur-definitions)
-                              (define-key python-mode-map (kbd "C-c C-c") 'run-nose-test)
-                              (define-key python-mode-map (kbd "C-c C-v")
-                                (bind (run-nose-test)
-                                      (switch-to-buffer-other-window "*nose-test*")
-                                      (delete-other-windows)))
-
-                              (define-key python-mode-map (kbd "C-c d") 'jedi:show-doc)
-                              (define-key python-mode-map (kbd "C-c C-n") 'jedi:dot-complete)
-                              (nmap " `"  'jedi-direx:pop-to-buffer)
-                              ))
-
-(add-hook 'direx-mode-hook (lambda ()
-                             (define-key direx:direx-mode-map (kbd "RET") 'direx:find-item-other-window)
-                             (define-key direx:direx-mode-map (kbd "j") 'direx:next-item)
-                             (define-key direx:direx-mode-map (kbd "k") 'direx:previous-item)
-                             (define-key direx:direx-mode-map [mouse-1] 'direx:mouse-2)))
+            (highlight-indentation-current-column-mode)
+;;          (outline-minor-mode 1)
+;;          (light-symbol-mode)
+            (pretty-symbols-mode)
+            (auto-complete-mode)
+            (jedi:setup)
+            (which-function-mode t)
+            ;; (define-key python-mode-map (kbd "C-]") 'pycscope-find-global-definition-no-prompting)
+            ;; (define-key python-mode-map (kbd "C-t") 'pycscope-pop-mark)
+            ;; (define-key python-mode-map (kbd "C-.") 'pycscope-find-global-definition)
+            ;; (define-key python-mode-map "(" 'elpy-nav-backward-statement)
+            ;; (define-key python-mode-map ")" 'elpy-nav-forward-statement)
+            ;; (define-key python-mode-map "[" 'elpy-nav-backward-definition)
+            ;; (define-key python-mode-map "]" 'elpy-nav-forward-definition)
+            ;; (define-key python-mode-map "{" 'elpy-nav-backward-class-definition)
+            ;; (define-key python-mode-map "}" 'elpy-nav-forward-class-definition)
+            ;; (define-key python-mode-map " c" 'elpy-occur-definitions)
+            (define-key python-mode-map (kbd "C-c C-c") 'run-nose-test)
+            (define-key python-mode-map (kbd "C-c C-v") 'run-nose-test-new-buffer)
+            (define-key python-mode-map (kbd "C-c d") 'jedi:show-doc)
+            (define-key python-mode-map (kbd "C-c C-n") 'jedi:dot-complete)
+            (nmap " c"  'jedi-direx:pop-to-buffer)))
 
 ;;  (setq flymake-python-pyflakes-executable "flake8")
 ;;  (require 'flymake-python-pyflakes)

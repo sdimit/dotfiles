@@ -88,7 +88,8 @@ bindkey ' ' magic-space                             # [Space] - do history expan
 export VIM="/Applications/MacVim.app/Contents/MacOS/Vim"
 export EDITOR='/usr/local/Cellar/emacs-mac/emacs-24.3-mac-4.5/bin/emacsclient -t'
 
-alias es='/usr/local/Cellar/emacs-mac/emacs-24.3-mac-4.5/bin/emacs --daemon & > /dev/null'
+# alias es='/usr/local/Cellar/emacs-mac/emacs-24.3-mac-4.5/bin/emacs --daemon & > /dev/null'
+alias es='/usr/local/Cellar/emacs-mac/emacs-24.3-mac-4.5/Emacs.app --daemon'
 alias ec='/usr/local/Cellar/emacs-mac/emacs-24.3-mac-4.5/bin/emacsclient -t'
 alias emacs="/usr/local/Cellar/emacs-mac/emacs-24.3-mac-4.5/bin/emacsclient"
 

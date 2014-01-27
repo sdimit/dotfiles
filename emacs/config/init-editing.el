@@ -105,6 +105,7 @@
 (add-hook 'coffee-mode-hook
           (lambda () (highlight-indentation-current-column-mode)))
 
+(require 'shift-text)
 (nmap "[e" 'shift-text-up)
 (nmap "]e" 'shift-text-down)
 

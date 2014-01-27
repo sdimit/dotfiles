@@ -6,6 +6,7 @@
 (define-key ibuffer-mode-map "f" 'ibuffer-jump-to-buffer)
 
 (nmap ",," 'evil-buffer)
+(nmap ",." 'ace-jump-buffer)
 
 ;; default grouping of ibuffer
 (setq ibuffer-saved-filter-groups
