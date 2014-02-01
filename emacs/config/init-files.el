@@ -133,9 +133,9 @@
                         (list invocation-directory) exec-suffixes)))
       (call-process path-to-emacs nil 0 nil))))
 
-(global-set-key (kbd "C-c n") 'create-new-buffer-in-same-window)
-(global-set-key (kbd "C-c C-n") 'create-new-buffer)
-(global-set-key (kbd "C-c C-n") (bind (create-new-buffer) (delete-other-windows)))
+(global-set-key (kbd "C-c C-n") 'create-new-buffer-in-same-window)
+(global-set-key (kbd "C-c n") 'create-new-buffer)
+;;(global-set-key (kbd "C-c C-n") (bind (create-new-buffer) (delete-other-windows)))
 ;(global-set-key (kbd "C-c N") 'new-emacs-instance)
 
 

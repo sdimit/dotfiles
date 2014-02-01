@@ -41,7 +41,7 @@
   (interactive)
   (let* ((current-branch (shell-command-as-string "git rev-parse --abbrev-ref HEAD"))
         (remote-branch (concat "push origin :" current-branch)))
-    (magit-shell-command remote-branch)))
+    (magit-run-git (list remote-branch))))
 
 ;;  (define-key magit-status-mode-map (kbd "C-x C-k") 'magit-kill-file-on-line)
 
@@ -200,7 +200,7 @@
 
 (defun git-purr ()
   (interactive)
-  (magit-shell-command "git pull --rebase"))
+  (magit-run-git "git pull --rebase"))
 
 (defun 10to8-git-flow-command (flow-command ticket-number)
   (let* ((branch-suffix (concat "TTE-" ticket-number))

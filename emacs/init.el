@@ -75,6 +75,7 @@
 (require 'init-registers)
 (require 'init-javascript)
 (require 'init-experimental)
+(require 'init-irc)
 
 
 (when window-system

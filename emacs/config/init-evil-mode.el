@@ -24,8 +24,11 @@
         Custom-mode
         pycscope-list-entry-mode
         magit-blame-mode
+        jabber-chat-mode
         magit-branch-manager-mode))
 
+;; normal mode for test runner
+(evil-set-initial-state 'shell-mode 'normal)
 
 ;;  evil leader mode
 ;; (global-evil-leader-mode)

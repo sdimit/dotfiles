@@ -78,6 +78,8 @@
                                           compilation-mode
                                           prodigy-view-mode
                                           bs-mode ; for ace-jump-line
+                                          gnus-article-mode
+                                          gnus-summary-mode
                                           Custom-mode
                                           ibuffer-mode)))
               (setq show-trailing-whitespace t))))
@@ -155,5 +157,16 @@
   (global-set-key [double-wheel-up] (lambda () (interactive) (scroll-down-command 2)))
   (global-set-key [triple-wheel-down] (lambda () (interactive) (scroll-up-command 4)))
   (global-set-key [triple-wheel-up] (lambda () (interactive) (scroll-down-command 4))))
+
+(setq minimap-window-location 'right)
+
+(defun disable-all-pretty-highlighting ()
+  (pretty-mode -1)
+  (pretty-symbols-mode -1))
+
+(defun face-default-face ()
+  (interactive)
+  (let ((faded-color (face-attribute 'font-lock-comment-face :foreground)))
+    (set-face-foreground 'default faded-color)))
 
 (provide 'init-appearance)

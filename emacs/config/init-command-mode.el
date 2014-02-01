@@ -36,7 +36,7 @@
   (interactive "r")
   (shell-command-on-region start
                            end
-                           (read-shell-command "Shell command on buffer: ")
+                           (read-shell-command "Shell command on region: ")
                            t))
 
 (defun shell-command-and-replace-buffer ()

@@ -3,17 +3,6 @@
 ;; each 50MB of allocated data (the default is on every 0.76MB)
 (setq gc-cons-threshold 50000000)
 
-(defun syn ()
-  "shows nouns in text"
-  (interactive)
-  (shell-command-on-region (point-min)
-                           (point-max)
-                           "syn -n"
-                           nil
-                           t)
-  (ansi-color-apply-on-region (point-min)
-                              (point-max)))
-
 (defun url-decode-region (beg end)
   (interactive "r")
   (let ((content (url-unhex-string (buffer-substring beg end))))
@@ -141,11 +130,27 @@
                   (delete-file (concat buffer-file-name "c"))))))
 
 
-(defun append-region-to-file (start end)
-  "function takes current region, and writes it to specified file"
+(defun append-region-to-config-file (start end)
+  "takes current region, and writes it to one emacs config file.
+   makes sure to keep the (provide 'feature) line at the bottom of file"
   (interactive "r")
   (let ((filename (ido-read-file-name "Append to: " "~/.emacs.d/config/")))
-    (write-region start end filename t)))
+    (write-region start end filename t)
+    (with-current-buffer (find-file-noselect filename)
+      (goto-char (point-min))
+      (search-forward "(provide '")
+      (goto-char (line-beginning-position))
+      (kill-line 1)
+      (goto-char (point-max))
+      (newline)
+      (yank))))
+
+
+(defun select-current-line ()
+  "Select the current line"
+  (interactive)
+                                        ; move to end of line
+  )
 
 (defun kill-and-append-region-to-file (start end)
   "function takes current region, and writes it to specified file"

@@ -2,6 +2,17 @@
 (require 'thingatpt)
 (require 'imenu)
 
+(require 'sentence-highlight)
+
+(defface sentence-highlight-face
+  '((t (:inherit font-lock-variable-name-face)))
+  ""
+  :group 'sentence-highlight-faces)
+
+(require 'artbollocks-mode "~/.emacs.d/src/artbollocks-mode.el")
+
+(require 'wordsmith "~/.emacs.d/config/wordsmith-mode/wordsmith-mode.el")
+
 ;; show wrap guide
 (require 'fill-column-indicator)
 (fci-mode)
@@ -259,5 +270,63 @@
 
 (add-to-list 'load-path (concat dotfiles-dir "contrib/expand-region"))
 (require 'expand-region)
+
+(defun newline-after-sentence ()
+  (interactive)
+  (save-excursion
+    (forward-sentence)
+    (insert "\n \n")
+    ))
+
+(defvar-local hidden-mode-line-mode nil)
+(defvar-local hide-mode-line nil)
+
+(define-minor-mode hidden-mode-line-mode
+  "Minor mode to hide the mode-line in the current buffer."
+  :init-value nil
+  :global nil
+  :variable hidden-mode-line-mode
+  :group 'editing-basics
+  (if hidden-mode-line-mode
+      (setq hide-mode-line mode-line-format
+            mode-line-format nil)
+    (setq mode-line-format hide-mode-line
+          hide-mode-line nil))
+  (force-mode-line-update)
+  ;; Apparently force-mode-line-update is not always enough to
+  ;; redisplay the mode-line
+  (redraw-display)
+  (when (and (called-interactively-p 'interactive)
+             hidden-mode-line-mode)
+    (run-with-idle-timer
+     0 nil 'message
+     (concat "Hidden Mode Line Mode enabled.  "
+             "Use M-x hidden-mode-line-mode to make the mode-line appear."))))
+
+(defvar wide-fringe-mode nil)
+(define-minor-mode wide-fringe-mode
+  "Minor mode to hide the mode-line in the current buffer."
+  :init-value nil
+  :global t
+  :variable wide-fringe-mode
+  :group 'editing-basics
+  (if (not wide-fringe-mode)
+      (set-fringe-style nil)
+    (set-fringe-mode
+     (/ (- (frame-pixel-width)
+           (* 100 (frame-char-width)))
+        2))))
+
+(defun turn-on-writing-mode ()
+  (interactive)
+  (hidden-mode-line-mode 1)
+  (wide-fringe-mode 1)
+  (git-gutter-mode -1))
+
+(defun paste-text ()
+  (interactive)
+  (yank)
+  (mark-whole-buffer)
+  (call-interactively 'narrow-paragraph))
 
 (provide 'init-editing)

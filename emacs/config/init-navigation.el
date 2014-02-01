@@ -34,6 +34,11 @@
    (t
     (call-interactively 'evil-jump-to-tag))))
 
+(defun find-tag-generic-other-window ()
+  (interactive)
+  (evil-window-vsplit)
+  (call-interactively 'find-tag-generic))
+
 (defun find-tag-on-mouse-click (event)
   "py-charm envy..."
   (interactive "e")
@@ -43,6 +48,7 @@
       (find-tag-generic))))
 
 (nmap (kbd "C-]") 'find-tag-generic)
+(nmap (kbd "C-c C-]") 'find-tag-generic-other-window)
 (nmap (kbd "<down-double-mouse-1>") 'find-tag-on-mouse-click)
 (nmap (kbd "<M-double-mouse-1>") 'projectile-ag)
 (vmap (kbd "<M-double-mouse-1>") 'projectile-ag)
@@ -50,13 +56,12 @@
 
 ;;  (define-key evil-normal-state-map [escape] 'winner-undo)
 
-(windmove-default-keybindings)
+(windmove-default-keybindings 'meta)
+(global-set-key (kbd "M-h") 'windmove-left)
+(global-set-key (kbd "M-l") 'windmove-right)
+(global-set-key (kbd "M-j") 'windmove-down)
+(global-set-key (kbd "M-k") 'windmove-up)
 (setq windmove-wrap-around t)
-
-(global-set-key (kbd "M-h") 'evil-window-left)
-(global-set-key (kbd "M-l") 'evil-window-right)
-(global-set-key (kbd "M-j") 'evil-window-down)
-(global-set-key (kbd "M-k") 'evil-window-up)
 
 ;; resizing 'windows' (i.e., inside the frame)
 (global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)

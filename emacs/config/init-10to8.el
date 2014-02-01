@@ -237,17 +237,17 @@
   :kill-signal 'sigkill
   :tags '(10to8 normal full jeltz-dev))
 
-(prodigy-define-service
-  :name "deepthought - redis"
-  :command "redis-server"
-  :cwd "~/10to8/Native/native/src/"
-  :init (lambda () (venv-workon "Native"))
-  :kill-process-buffer-on-stop t
-  :kill-signal 'sigkill
-  :on-output (lambda (service output)
-                 (when (s-matches? "The server is now ready" output)
-                   (prodigy-set-status service 'ready)))
-  :tags '(10to8 normal full jeltz-dev))
+;; (prodigy-define-service
+;;   :name "deepthought - redis"
+;;   :command "redis-server"
+;;   :cwd "~/10to8/Native/native/src/"
+;;   :init (lambda () (venv-workon "Native"))
+;;   :kill-process-buffer-on-stop t
+;;   :kill-signal 'sigkill
+;;   :on-output (lambda (service output)
+;;                  (when (s-matches? "The server is now ready" output)
+;;                    (prodigy-set-status service 'ready)))
+;;   :tags '(10to8 normal full jeltz-dev))
 
 (prodigy-define-service
   :name "make current user root"
@@ -298,15 +298,15 @@
                    (prodigy-set-status service 'ready)))
   :tags '(10to8 jeltz-dev))
 
-(prodigy-define-service
-  :name "jeltz - test runner"
-  :command "/usr/local/bin/cake"
-  :args '("test:once")
-  :cwd "~/10to8/Native/native/src/apps/jeltz"
-  :path '("/usr/local/bin/")
-  :kill-signal 'sigkill
-  :kill-process-buffer-on-stop t
-  :tags '(10to8))
+;; (prodigy-define-service
+;;   :name "jeltz - test runner"
+;;   :command "/usr/local/bin/cake"
+;;   :args '("test:once")
+;;   :cwd "~/10to8/Native/native/src/apps/jeltz"
+;;   :path '("/usr/local/bin/")
+;;   :kill-signal 'sigkill
+;;   :kill-process-buffer-on-stop t
+;;   :tags '(10to8))
 
 (prodigy-define-service
   :name "colin - serve"
@@ -347,15 +347,15 @@
                    (prodigy-set-status service 'ready)))
   :tags '(10to8 colin-dev))
 
-(prodigy-define-service
-  :name "colin - test runner"
-  :command "/usr/local/bin/cake"
-  :args '("test:once")
-  :cwd "~/10to8/Native/native/src/apps/colin"
-  :path '("/usr/local/bin/")
-  :kill-signal 'sigkill
-  :kill-process-buffer-on-stop t
-  :tags '(10to8))
+;; (prodigy-define-service
+;;   :name "colin - test runner"
+;;   :command "/usr/local/bin/cake"
+;;   :args '("test:once")
+;;   :cwd "~/10to8/Native/native/src/apps/colin"
+;;   :path '("/usr/local/bin/")
+;;   :kill-signal 'sigkill
+;;   :kill-process-buffer-on-stop t
+;;   :tags '(10to8))
 
 (prodigy-define-service
   :name "jeltz - build etags"

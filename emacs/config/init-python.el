@@ -218,4 +218,6 @@
 ;;      ;; TODO: Search the current VCS checkout for it.
 ;;      (find-file template-name)))
 
+(add-hook 'inferior-python-mode-hook 'auto-complete-mode)
+
 (provide 'init-python)
