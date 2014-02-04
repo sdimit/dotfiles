@@ -146,9 +146,6 @@
 
 (powerline-center-evil-theme)
 
-(setq scroll-conservatively 10000
-      scroll-step 1)
-
 ;; Nicer scrolling with mouse wheel/trackpad.
 (unless (and (boundp 'mac-mouse-wheel-smooth-scroll) mac-mouse-wheel-smooth-scroll)
   (global-set-key [wheel-down] (lambda () (interactive) (scroll-up-command 1)))
@@ -168,5 +165,19 @@
   (interactive)
   (let ((faded-color (face-attribute 'font-lock-comment-face :foreground)))
     (set-face-foreground 'default faded-color)))
+
+; Font lock mode variations to maybe speed up scrolling
+(setq redisplay-dont-pause t
+  scroll-margin 1
+  scroll-step 1
+  scroll-conservatively 10000
+  scroll-preserve-screen-position 1
+  jit-lock-defer-time 0.05
+  font-lock-support-mode 'jit-lock-mode)
+(setq-default scroll-up-aggressively 0.01 scroll-down-aggressively 0.01)
+
+;If you never expect to have to display bidirectional scripts, like
+;Arabic, you can make that the default:
+(setq-default bidi-paragraph-direction 'left-to-right)
 
 (provide 'init-appearance)

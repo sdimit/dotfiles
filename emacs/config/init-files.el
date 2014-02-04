@@ -184,6 +184,11 @@
   (interactive)
   (find-file "~/.zsh_history"))
 
+(defun inbox-dired ()
+  (interactive)
+  (dired "~/Inbox"))
+
+
 ;; Stop creating backup~ and #auto-save# files
 
 (setq make-backup-files nil)
@@ -197,5 +202,37 @@
      (kill-buffer buffer))
    (buffer-list))
   (delete-other-windows))
+
+  (setq-default locate-command "mdfind")
+
+(defun nuke-useless-buffers ()
+  "git, dired, emacs temp buffers"
+  )
+
+(defun append-region-to-config-file (start end)
+  "takes current region, and writes it to one emacs config file.
+   makes sure to keep the (provide 'feature) line at the bottom of file"
+  (interactive "r")
+  (let ((filename (ido-read-file-name "Append to: " "~/.emacs.d/config/")))
+    (write-region start end filename t)
+    (with-current-buffer (find-file-noselect filename)
+      (goto-char (point-min))
+      (search-forward "(provide '")
+      (goto-char (line-beginning-position))
+      (kill-line 1)
+      (goto-char (point-max))
+      (newline)
+      (yank))))
+
+
+(defun kill-and-append-region-to-file (start end)
+  "function takes current region, and writes it to specified file"
+  (interactive "r")
+  (let ((filename (ido-read-file-name "Kill and append to: ")))
+    (write-region start end filename t)
+    (kill-region start end)))
+
+(setq recentf-max-saved-items 100)
+(recentf-mode)
 
 (provide 'init-files)

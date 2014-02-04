@@ -76,6 +76,8 @@
 (require 'init-javascript)
 (require 'init-experimental)
 (require 'init-irc)
+(require 'init-mail)
+(require 'init-deft)
 
 
 (when window-system

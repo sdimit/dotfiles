@@ -310,4 +310,6 @@
   (let ((current-prefix-arg '(4)))
     (call-interactively 'magit-status)))
 
+ (set ediff-window-setup-function 'ediff-setup-windows-plain)
+
 (provide 'init-git)

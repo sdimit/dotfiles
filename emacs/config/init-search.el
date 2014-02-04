@@ -75,7 +75,18 @@
     (evil-ex (concat "'<,'>s/" (if (= 0 (length old)) "" "\\<\\(") old (if (= 0 (length old)) "" "\\)\\>/"))))
   )
 
-(defun change-symbol-in-whole-buffer()
+(defun change-symbol-in-whole-buffer ()
+  "mark the region in whole buffer and use string replacing UI in evil-mode
+  to replace the symbol under cursor"
+  (interactive)
+  (let ((old (thing-at-point 'symbol)))
+    (unless (evil-visual-state-p)
+      (evil-visual-state))
+    (evil-ex (concat "%s/" (if (= 0 (length old)) "" "\\<\\(") old (if (= 0 (length old)) "" "\\)\\>//")))
+    (left-char))
+  )
+
+(defun change-symbol-in-region ()
   "mark the region in whole buffer and use string replacing UI in evil-mode
   to replace the symbol under cursor"
   (interactive)

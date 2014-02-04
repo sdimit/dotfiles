@@ -24,6 +24,8 @@
 
 (define-key prodigy-mode-map (kbd "j") 'prodigy-next)
 (define-key prodigy-mode-map (kbd "k") 'prodigy-prev)
+(define-key prodigy-mode-map (kbd "S") 'prodigy-start)
+(define-key prodigy-mode-map (kbd "K") 'prodigy-stop)
 (define-key prodigy-mode-map (kbd "RET") 'prodigy-display-process)
 
 (defun delete-process-at-point ()

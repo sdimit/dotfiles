@@ -38,7 +38,11 @@
 
 (setq evil-want-C-u-scroll t
       evil-cross-lines t
-      evil-move-cursor-back nil)
+      evil-move-cursor-back nil
+      evil-ex-complete-emacs-commands t
+      evil-ex-substitute-global t
+      evil-shift-width 2
+      evil-symbol-word-search t) ;; use symbol, not word for */#)
 
 (defmacro bind (&rest commands)
   "Convience macro which creates a lambda interactive command."

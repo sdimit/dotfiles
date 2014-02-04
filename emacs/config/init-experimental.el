@@ -48,8 +48,6 @@
           (lambda ()
             (font-lock-add-keywords nil
                                     '(("\\<\\(FIXME\\|TODO\\|BUG\\|XXX\\):" 1 font-lock-warning-face t)))))
-
-;; TODO: add to all prog mode
 (add-hook 'python-mode-hook
           (lambda ()
             (font-lock-add-keywords nil
@@ -85,26 +83,7 @@
     (insert-file-contents file)
     (buffer-string)))
 
-;; Quick switch to scratch buffers
-
-(defmacro scratch-key (key buffer-name mode)
-  `(global-set-key ,key (lambda ()
-                          (interactive)
-                          (switch-to-buffer ,buffer-name)
-                          (unless (eq major-mode ',mode)
-                            (,mode)))))
-
-(scratch-key (kbd "C-S-s") "*scratch*"    emacs-lisp-mode)
-(scratch-key (kbd "C-S-d") "*javascript*" js2-mode)
-(scratch-key (kbd "C-S-a") "*lisp*"       lisp-mode)
-;; (scratch-key (kbd "C-S-c") "*clojure*"    clojure-mode)
-(scratch-key (kbd "C-S-x") "*css*"        css-mode)
-(scratch-key (kbd "C-S-h") "*html*"       html-mode)
-
-(setq deft-extension "org"
-      deft-text-mode 'org-mode
-      deft-auto-save-interval 10.0)
-
+;; TODO
 (defun get-last-message ()
   "ideally some kill-ring navigation. or helm??"
   (get-buffer "*Messages*")
@@ -113,55 +92,6 @@
 
 ;;  ideal keybinding
 ;;  C-k C-k kill buffer
-
-(defun nuke-useless-buffers ()
-  "git, dired, emacs temp buffers"
-  )
-
-(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
-
-(defun esk-remove-elc-on-save ()
-  "If you're saving an elisp file, likely the .elc is no longer valid."
-  (make-local-variable 'after-save-hook)
-  (add-hook 'after-save-hook
-            (lambda ()
-              (if (file-exists-p (concat buffer-file-name "c"))
-                  (delete-file (concat buffer-file-name "c"))))))
-
-
-(defun append-region-to-config-file (start end)
-  "takes current region, and writes it to one emacs config file.
-   makes sure to keep the (provide 'feature) line at the bottom of file"
-  (interactive "r")
-  (let ((filename (ido-read-file-name "Append to: " "~/.emacs.d/config/")))
-    (write-region start end filename t)
-    (with-current-buffer (find-file-noselect filename)
-      (goto-char (point-min))
-      (search-forward "(provide '")
-      (goto-char (line-beginning-position))
-      (kill-line 1)
-      (goto-char (point-max))
-      (newline)
-      (yank))))
-
-
-(defun select-current-line ()
-  "Select the current line"
-  (interactive)
-                                        ; move to end of line
-  )
-
-(defun kill-and-append-region-to-file (start end)
-  "function takes current region, and writes it to specified file"
-  (interactive "r")
-  (let ((filename (ido-read-file-name "Kill and append to: ")))
-    (write-region start end filename t)
-    (kill-region start end)))
-
-(nmap (kbd "C-c 1") 'append-region-to-file)
-(setq recentf-max-saved-items 100)
-(recentf-mode)
 
 (defun recentf-ido-find-file ()
   "Find a recent file using ido."
@@ -173,53 +103,10 @@
 (global-set-key (kbd "C-x f") 'recentf-ido-find-file)
 
 
-(defun yank-annotated ()
-  "Yanks the region, puts a filename and line numbers. Lots of fun"
-  (interactive)
-  (let* ((start-pos (save-excursion (goto-char (region-beginning))
-                                    (beginning-of-line)
-                                    (point)))
-         (end-pos (save-excursion (goto-char (region-end))
-                                  (end-of-line)
-                                  (point)))
-         (start-line (line-number-at-pos (region-beginning)))
-         (content (buffer-substring start-pos end-pos))
-         (filename buffer-file-name)
-         (r (with-temp-buffer
-              (insert content)
-              (newline)
-              (while (line-move -1 t)
-                (beginning-of-line)
-                (insert (format "%4d | " (+ (line-number-at-pos) start-line -1))))
-
-              (goto-char (point-min))
-              (insert filename)
-              (newline)
-              (newline)
-              (buffer-string))))
-    ;; (message "%s %s %d %d %d" filename content start-pos end-pos start-line)
-    (message "%s" r)
-    (kill-new r)
-    (deactivate-mark)))
-
 ;; Mac-like key defaults
 (global-set-key (kbd "M-n") 'create-new-buffer)
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
-
-;; (setq speedbar-hide-button-brackets-flag t
-;;       speedbar-show-unknown-files t
-;;       speedbar-smart-directory-expand-flag t
-;;       speedbar-directory-button-trim-method 'trim
-;;       speedbar-use-images nil
-;;       speedbar-indentation-width 2
-;;       speedbar-use-imenu-flag t
-;;       speedbar-file-unshown-regexp "flycheck-.*"
-;;       sr-speedbar-width 40
-;;       sr-speedbar-width-x 40
-;;       sr-speedbar-auto-refresh nil
-;;       sr-speedbar-skip-other-window-p t
-;;       sr-speedbar-right-side nil)
 
 (setq next-error-recenter 20)
 
@@ -264,70 +151,32 @@
   (split-window-horizontally)
   (other-window 1))
 
-(defun ido-invoke-in-other-window ()
-  "signals ido mode to switch to (or create) another window after exiting"
+(defun delete-last-char-on-line ()
   (interactive)
-  (setq ido-exit-minibuffer-target-window 'other)
-  (ido-exit-minibuffer))
+  (save-excursion
+    (end-of-line)
+    (delete-char -1)))
 
-(defun ido-invoke-in-horizontal-split ()
-  "signals ido mode to split horizontally and switch after exiting"
-  (interactive)
-  (setq ido-exit-minibuffer-target-window 'horizontal)
-  (ido-exit-minibuffer))
-
-(defun ido-invoke-in-vertical-split ()
-  "signals ido mode to split vertically and switch after exiting"
-  (interactive)
-  (setq ido-exit-minibuffer-target-window 'vertical)
-  (ido-exit-minibuffer))
-
-(defun ido-invoke-in-new-frame ()
-  "signals ido mode to create a new frame after exiting"
-  (interactive)
-  (setq ido-exit-minibuffer-target-window 'frame)
-  (ido-exit-minibuffer))
-
-(defadvice ido-read-internal (around ido-read-internal-with-minibuffer-other-window activate)
-  (let* (ido-exit-minibuffer-target-window
-         (this-buffer (current-buffer))
-         (result ad-do-it))
-    (cond
-     ((equal ido-exit-minibuffer-target-window 'other)
-      (if (= 1 (count-windows))
-          (split-window-horizontally-and-switch)
-        (other-window 1)))
-     ((equal ido-exit-minibuffer-target-window 'horizontal)
-      (split-window-horizontally-and-switch))
-
-     ((equal ido-exit-minibuffer-target-window 'vertical)
-      (split-window-vertically-and-switch))
-     ((equal ido-exit-minibuffer-target-window 'frame)
-      (make-frame)))
-    (switch-to-buffer this-buffer) ;; why? Some ido commands, such as textmate.el's textmate-goto-symbol don't switch the current buffer
-    result))
-
-(defadvice ido-init-completion-maps (after ido-init-completion-maps-with-other-window-keys activate)
-  (mapcar (lambda (map)
-            (define-key map (kbd "C-o") 'ido-invoke-in-other-window)
-            (define-key map (kbd "C-2") 'ido-invoke-in-vertical-split)
-            (define-key map (kbd "C-3") 'ido-invoke-in-horizontal-split)
-            (define-key map (kbd "C-v") 'ido-invoke-in-vertical-split)
-            (define-key map (kbd "C-s") 'ido-invoke-in-horizontal-split)
-            (define-key map (kbd "C-4") 'ido-invoke-in-other-window)
-            (define-key map (kbd "C-5") 'ido-invoke-in-new-frame))
-          (list ido-buffer-completion-map
-                ido-common-completion-map
-                ido-file-completion-map
-                ido-file-dir-completion-map)))
-
-;; (defun delete-last-char-on-line ()
-;;   (interactive)
-;;   (end-of-line)
-;;   (backward-char)
-;;   (delete-char 1)
-;;   (beginning-of-line))
-;;
 ;; (nmap (kbd "M-d C-.") 'delete-last-char-on-line)
+
+;; (evil-leader/set-key ":" 'helm-complex-command-history)
+;(helm-mode 1)
+;; (global-set-key (kbd "s-.") 'helm-complete-file-name-at-point)
+;; ; http://stackoverflow.com/questions/683425/globally-override-key-binding-in-emacs
+;; (defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
+
+;; (define-key my-keys-minor-mode-map (kbd "C-.") 'execute-extended-command)
+
+;; (define-minor-mode my-keys-minor-mode
+;;   "A minor mode so that my key settings override annoying major modes."
+;;   t " my-keys" 'my-keys-minor-mode-map)
+
+;; (my-keys-minor-mode 1)
+
+; do not do this in minibuffer
+;; (defun my-minibuffer-setup-hook ()
+;;   (my-keys-minor-mode 0))
+
+;; (add-hook 'minibuffer-setup-hook 'my-minibuffer-setup-hook)
 
 (provide 'init-experimental)

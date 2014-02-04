@@ -388,7 +388,7 @@
 
 (prodigy-define-service
   :name "new db"
-  :command "./newdb.sh"
+  :command "~/10to8/scripts/newdb.sh"
   :path '("~/10to8/scripts/")
   :kill-signal 'sigkill
   :kill-process-buffer-on-stop t
@@ -405,11 +405,12 @@
   :init (lambda () (venv-workon "Native"))
   :tags '(10to8))
 
-;; (require 'butler)
-;;
-;; (add-to-list butler-servers
-;;              '(jenkins "10to8"
-;;                        (server-address . "https://jenkins.10to8.com/")
-;;                        (auth-file . "~/.authinfo")))
+(require 'butler)
+
+(setq butler-server-list
+      '((jenkins "jenkins.10to8.com"
+                 (server-address . "https://jenkins.10to8.com/")
+                 (auth-file . "~/.authinfo"))))
+
 
 (provide 'init-10to8)

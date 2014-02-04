@@ -42,4 +42,8 @@
   (call-interactively 'sgml-pretty-print)
   (html-mode))
 
+  (require 'rainbow-mode)
+  (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
+    (add-hook hook 'rainbow-mode))
+
 (provide 'init-web-mode)
