@@ -95,11 +95,15 @@
 
 (setq evil-default-cursor t)
 
-(set-face-attribute 'default nil
-                    :family "PragmataPro"
-                    :height 180
-                    :weight 'semi-light
-                    :width 'normal)
+(defun set-default-font ()
+  (interactive)
+  (set-face-attribute 'default nil
+                      :family "PragmataPro"
+                      :height 180
+                      :weight 'semi-light
+                      :width 'normal))
+
+(set-default-font)
 
 (setq line-spacing 2)
 
@@ -172,8 +176,9 @@
   scroll-step 1
   scroll-conservatively 10000
   scroll-preserve-screen-position 1
-  jit-lock-defer-time 0.05
+;;  jit-lock-defer-time 0.05
   font-lock-support-mode 'jit-lock-mode)
+
 (setq-default scroll-up-aggressively 0.01 scroll-down-aggressively 0.01)
 
 ;If you never expect to have to display bidirectional scripts, like

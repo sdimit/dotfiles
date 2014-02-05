@@ -413,4 +413,17 @@
                  (auth-file . "~/.authinfo"))))
 
 
+(defun start-10to8-jabber ()
+  (interactive)
+  (call-interactively 'jabber-connect-all)
+  (call-interactively 'jabber-muc-autojoin)
+  (global-set-key (kbd "C-x C-j d") (bind (switch-to-buffer-other-window "*-jabber-groupchat-10to8dev@chatrooms.10to8.com-*")))
+  (global-set-key (kbd "C-x C-j e") (bind (switch-to-buffer-other-window "*-jabber-groupchat-10to8everyone@chatrooms.10to8.com-*")))
+  )
+
+(defun jeltz-servers-start ()
+  "make toggle menu instead (using ido-prodigy-menu)"
+  (interactive)
+  (prodigy-start-services-with-tag "jeltz-dev"))
+
 (provide 'init-10to8)

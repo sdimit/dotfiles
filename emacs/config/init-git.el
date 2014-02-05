@@ -7,6 +7,10 @@
 (setq magit-stage-all-confirm nil)
 (setq magit-unstage-all-confirm nil)
 
+(setq magit-default-tracking-name-function
+      (lambda (remote branch)
+        (concat remote "/" branch)))
+
 (add-hook 'magit-log-edit-mode-hook
           (lambda ()
             (set-fill-column 72)
@@ -200,7 +204,7 @@
 
 (defun git-purr ()
   (interactive)
-  (magit-run-git "git pull --rebase"))
+  (magit-run-git "pull --rebase"))
 
 (defun 10to8-git-flow-command (flow-command ticket-number)
   (let* ((branch-suffix (concat "TTE-" ticket-number))
@@ -210,7 +214,7 @@
                                    flow-command
                                    " "
                                    branch-suffix)))
-    (magit-git-command complete-command)))
+    (magit-run-git complete-command)))
 
 
 ;;  options: fetch from origin, and keep branch

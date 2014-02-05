@@ -209,12 +209,13 @@
   "git, dired, emacs temp buffers"
   )
 
-(defun append-region-to-config-file (start end)
+(defun kill-region-to-config-file (start end)
   "takes current region, and writes it to one emacs config file.
    makes sure to keep the (provide 'feature) line at the bottom of file"
   (interactive "r")
   (let ((filename (ido-read-file-name "Append to: " "~/.emacs.d/config/")))
     (write-region start end filename t)
+    (kill-region start end)
     (with-current-buffer (find-file-noselect filename)
       (goto-char (point-min))
       (search-forward "(provide '")
@@ -223,6 +224,13 @@
       (goto-char (point-max))
       (newline)
       (yank))))
+
+(defun save-region-into-emacs-inbox (start end)
+  "takes current region, and writes it to one emacs config file.
+   makes sure to keep the (provide 'feature) line at the bottom of file"
+  (interactive "r")
+  (let ((filename "~/Inbox/Emacs/inbox.el"))
+    (write-region start end filename t)))
 
 
 (defun kill-and-append-region-to-file (start end)
@@ -234,5 +242,12 @@
 
 (setq recentf-max-saved-items 100)
 (recentf-mode)
+
+;; Ignore case when completing...filenames too
+(setq completion-ignore-case t
+      read-file-name-completion-ignore-case t)
+;; Scroll with the compilation output
+(setq compilation-scroll-output t)
+(setq compilation-window-height 18)
 
 (provide 'init-files)

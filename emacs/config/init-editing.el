@@ -2,6 +2,11 @@
 (require 'thingatpt)
 (require 'imenu)
 
+(provide 'acme-search)
+
+(global-set-key [(mouse-3)] 'acme-search-forward)
+(global-set-key [(shift mouse-3)] 'acme-search-backward)
+
 (require 'sentence-highlight)
 
 (defface sentence-highlight-face
@@ -310,6 +315,22 @@
            (* 100 (frame-char-width)))
         2))))
 
+(defun set-prose-font ()
+  (set-face-attribute 'default nil
+                      :family "Calibri"
+                      :height 210
+                      :width 'semi-expanded))
+
+(defvar prose-mode nil)
+(define-minor-mode prose-mode
+  :init-value nil
+  :global t
+  :variable prose-mode
+  :group 'editing-basics
+  (if (not prose-mode)
+      (set-default-font)
+    (set-prose-font)))
+
 (defun turn-on-writing-mode ()
   (interactive)
   (hidden-mode-line-mode 1)
@@ -360,5 +381,8 @@ markdown documment"
     (message "%s" r)
     (kill-new r)
     (deactivate-mark)))
+
+;; inserting text while the mark is active causes the selected text to be deleted first.
+(delete-selection-mode t)
 
 (provide 'init-editing)

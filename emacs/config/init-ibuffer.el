@@ -59,4 +59,6 @@
                               (mode 16 16 :left :elide)
                               " " filename-and-process)))
 
+    (setq ibuffer-show-empty-filter-groups nil)
+
 (provide 'init-ibuffer)

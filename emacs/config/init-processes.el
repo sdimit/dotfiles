@@ -55,6 +55,25 @@
            (split-window-vertically)
            (set-window-buffer (next-window) proc-buffer)))))
 
+(defun ido-prodigy-menu ()
+  (interactive)
+  (let* ((ido-prodigy-choices (mapcar (lambda (serv)
+                                        (let* ((status (prodigy-service-started-p serv))
+                                               (service-name (cadr serv))
+                                               (stopped-label service-name)
+                                               (started-label  (upcase service-name)))
+                                          (if status started-label
+                                            stopped-label)))
+                                      prodigy-services)))
+    (ido-completing-read "Service: " ido-prodigy-choices)))
 
+(defun prodigy-apply-to-services (services fn)
+  (prodigy-with-refresh
+   (-each services fn)))
+
+(defun prodigy-start-services-with-tag (tag)
+  (prodigy-apply-to-services
+   (prodigy-services-tagged-with (intern tag))
+   'prodigy-start-service))
 
 (provide 'init-processes)
