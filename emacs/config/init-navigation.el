@@ -8,6 +8,8 @@
 
 (require 'direx)
 
+(require 'acme-search "~/.emacs.d/src/acme-search.el")
+
 (nmap " 1" 'direx:jump-to-directory-other-window)
 
 (define-key direx:direx-mode-map (kbd "RET") 'direx:find-item-other-window)

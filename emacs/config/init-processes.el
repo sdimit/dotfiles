@@ -71,6 +71,10 @@
   (prodigy-with-refresh
    (-each services fn)))
 
+(defun prodigy-stop-all-services ()
+  (prodigy-apply-to-services prodigy-services
+                             'prodigy-stop-service))
+
 (defun prodigy-start-services-with-tag (tag)
   (prodigy-apply-to-services
    (prodigy-services-tagged-with (intern tag))

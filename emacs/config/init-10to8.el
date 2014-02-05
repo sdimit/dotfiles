@@ -392,7 +392,8 @@
   :path '("~/10to8/scripts/")
   :kill-signal 'sigkill
   :kill-process-buffer-on-stop t
-  :init (lambda () (venv-workon "Native"))
+  :init (lambda () (-each prodigy-services 'prodigy-stop-service)
+              (venv-workon "Native"))
   :tags '(10to8))
 
 (prodigy-define-service
@@ -403,6 +404,13 @@
   :kill-signal 'sigkill
   :kill-process-buffer-on-stop t
   :init (lambda () (venv-workon "Native"))
+  ;; :init-sync (lambda (done)
+  ;;           (venv-workon "Native")
+  ;;           (let ((rabbit-matches (-filter (lambda (s)
+  ;;                                      (string= "deepthought - rabbit" (cadr s)))
+  ;;                                       prodigy-services))
+  ;;                 (rabbit-service (car rabbit-matches)))
+  ;;             (prodigy-start-service rabbit-service done)))
   :tags '(10to8))
 
 (require 'butler)
@@ -426,4 +434,16 @@
   (interactive)
   (prodigy-start-services-with-tag "jeltz-dev"))
 
+(setq jiralib-url "https://tento8.atlassian.net")
+(setq jiralib-user-login-name "stephane.reissfelder")
+
 (provide 'init-10to8)
+
+(defun 10to8-switch-to-branch-new-db ()
+  (interactive)
+  (let ((default-directory "~/10to8/Native/native/src"))
+    (magit-checkout))
+  (prodigy-stop-all-services)
+  ;; new db
+  ;; ...
+  )

@@ -103,6 +103,7 @@
 (nmap "Q" 'kill-current-buffer)
 (global-set-key (kbd "C-S-k") 'kill-current-buffer)
 (nmap "q" 'delete-window)
+(global-set-key (kbd "C-q") 'bury-buffer)
 
 ;; (nvmap " vf" 'mark-defun)
 

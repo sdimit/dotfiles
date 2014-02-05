@@ -77,4 +77,12 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 
 (add-hook 'term-mode-hook 'auto-complete-mode)
 
+(defun grab-quoted-text-and-yank ()
+  "in shell, grab the string in `[text]' quote above point
+   and paste it at point"
+  (interactive)
+  (save-excursion
+    (re-search-backward "`\\(.*\\)'"))
+  (insert (match-string 1)))
+
 (provide 'init-terminal)

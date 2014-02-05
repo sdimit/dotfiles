@@ -2,7 +2,7 @@
 (require 'thingatpt)
 (require 'imenu)
 
-(provide 'acme-search)
+(require 'acme-search)
 
 (global-set-key [(mouse-3)] 'acme-search-forward)
 (global-set-key [(shift mouse-3)] 'acme-search-backward)
@@ -335,6 +335,7 @@
   (interactive)
   (hidden-mode-line-mode 1)
   (wide-fringe-mode 1)
+  (prose-mode)
   (git-gutter-mode -1))
 
 (defun paste-text ()

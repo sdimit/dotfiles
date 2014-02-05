@@ -46,6 +46,7 @@
 (require 'init-smartparens)
 (require 'init-appearance)
 (require 'init-editing)
+(require 'init-chords)
 (require 'init-command-mode)
 (require 'init-navigation)
 (require 'init-search)

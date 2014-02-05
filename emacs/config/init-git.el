@@ -8,8 +8,7 @@
 (setq magit-unstage-all-confirm nil)
 
 (setq magit-default-tracking-name-function
-      (lambda (remote branch)
-        (concat remote "/" branch)))
+      (lambda (remote branch) branch))
 
 (add-hook 'magit-log-edit-mode-hook
           (lambda ()
@@ -106,6 +105,14 @@
 
 (require 'helm-open-github)
 
+(defun -get-github-url-for-file-region (file &optional start end)
+  (let ((host (helm-open-github--host))
+        (remote-url (helm-open-github--remote-url))
+        (branch (helm-open-github--branch))
+        (marker (helm-open-github--highlight-marker start end)))
+    (helm-open-github--file-url host remote-url branch file marker)))
+
+
 (defun yank-github-url-for-region ()
   "copies url of current selected region into clipboard (for easy sharing in IM)
       depends on helm-open-github)"
@@ -121,12 +128,10 @@
            (end-line (line-number-at-pos end)))
       (kill-new (-get-github-url-for-file-region repo-path start-line end-line)))))
 
-(defun -get-github-url-for-file-region (file &optional start end)
-  (let ((host (helm-open-github--host))
-        (remote-url (helm-open-github--remote-url))
-        (branch (helm-open-github--branch))
-        (marker (helm-open-github--highlight-marker start end)))
-    (helm-open-github--file-url host remote-url branch file marker)))
+;; (defun navigate-to-commit-on-github ()
+;;   (interactive)
+;;   (yank-github-url-for-commit-at-point)
+;;   (browse-url (yank)))
 
 ;; magit
 (evil-add-hjkl-bindings magit-branch-manager-mode-map 'emacs
@@ -189,13 +194,12 @@
 ;;  (define-key smerge-mode-map (kbd "<f9>") 'smerge-next)
 
 (setq magit-completing-read-function 'magit-ido-completing-read)
-(setq magit-default-tracking-name-function 'magit-default-tracking-name-branch-only)
 
 (defun show-commit-at-point ()
   (interactive)
   (let* ((file (buffer-file-name))
          (line (line-number-at-pos))
-         (commit-info (git-messenger:commit-info-at-line file line))
+         (commit-info (git-messenger:commit-info-at-line file line nil))
          (commit-id (car commit-info)))
     (magit-show-commit commit-id)
     (switch-to-buffer-other-window "*magit-commit*")))
