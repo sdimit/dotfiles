@@ -65,8 +65,8 @@
 ;; FIXME
 ;; (global-set-key (kbd "C-f") 'focus-minibuffer)
 
-(require 'zlc)
-(setq zlc-select-completion-immediately t)
+;; (require 'zlc)
+;; (setq zlc-select-completion-immediately t)
 
 ;; no duplicates in command history
 (setq comint-input-ignoredups t)

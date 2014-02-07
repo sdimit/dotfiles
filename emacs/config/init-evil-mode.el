@@ -63,6 +63,7 @@
 (nmap (kbd "<RET>")       'evil-scroll-down)
 (nmap (kbd "<backspace>") 'evil-scroll-up)
 (nmap (kbd "`")           'universal-argument)
+(nmap (kbd "C-`")         'universal-argument)
 ;;   (nmap (kbd "M-`")         'repeat-complex-command)
 
 ;;  (global-set-key "\\" 'evil-execute-in-normal-state)

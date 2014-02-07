@@ -22,11 +22,12 @@
 (tooltip-mode -1)
 (setq tooltip-use-echo-area t)
 
-(setq light-symbol-face 'hi-yellow)
-(light-symbol-mode)
+(defface light-symbol-custom-face
+  '(:inherit nil
+    :underline t) "")
+(setq light-symbol-face 'light-symbol-custom-face)
 
-;; (set-face-background  'hi-blue "Grey30")
-;; (set-face-foreground  'hi-blue "Grey99")
+(light-symbol-mode)
 
 (require 'highlight-sexp)
 
@@ -148,7 +149,7 @@
 (add-to-list 'sml/replacer-regexp-list '("^~/10to8/Native/native/src/apps/jeltz/app/"      ":Jeltz:"))
 (add-to-list 'sml/replacer-regexp-list '("^~/10to8/Native/native/src/apps/colin/app"     ":Colin:"))
 
-(powerline-center-evil-theme)
+;; (powerline-center-evil-theme)
 
 ;; Nicer scrolling with mouse wheel/trackpad.
 (unless (and (boundp 'mac-mouse-wheel-smooth-scroll) mac-mouse-wheel-smooth-scroll)
@@ -184,5 +185,11 @@
 ;If you never expect to have to display bidirectional scripts, like
 ;Arabic, you can make that the default:
 (setq-default bidi-paragraph-direction 'left-to-right)
+
+(require 'page-break-lines)
+(global-page-break-lines-mode)
+
+;; Turn off 3d modeline
+(set-face-attribute 'mode-line nil :box nil)
 
 (provide 'init-appearance)

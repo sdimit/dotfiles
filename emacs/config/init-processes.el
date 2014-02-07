@@ -67,6 +67,11 @@
                                       prodigy-services)))
     (ido-completing-read "Service: " ido-prodigy-choices)))
 
+(defun find-prodigy-service-with-name (service-name)
+  (let ((matches (-filter (lambda (s) (string= service-name (cadr s)))
+                          prodigy-services)))
+    (car matches)))
+
 (defun prodigy-apply-to-services (services fn)
   (prodigy-with-refresh
    (-each services fn)))

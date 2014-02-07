@@ -1,4 +1,6 @@
 
+(require 'org)
+
 ;;  The following displays the contents of code blocks in Org-mode files
 ;;  using the major-mode of the code.  It also changes the behavior of
 ;;  =TAB= to as if it were used in the appropriate major mode.  This means
@@ -47,10 +49,6 @@
             (add-to-list 'org-tab-first-hook
                          'yas-org-very-safe-expand)
             ))
-
-;;  Nice Bulleted Lists
-(require 'org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 (define-minor-mode evil-org-mode
   "Buffer local minor mode for evil-org"
@@ -119,12 +117,11 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 
-(require 'org-bullets)
-(add-hook 'org-mode-hook (lambda ()
-                           (org-bullets-mode 1)
-                           (turn-on-font-lock)
-                           ;;  (define-key evil-normal-state-map " o" 'helm-org-headlines)
-                           ))
+;; (require 'org-bullets)
+;; (add-hook 'org-mode-hook (lambda ()
+;;                            (org-bullets-mode 1)
+;;                            (turn-on-font-lock)
+;;                            ))
 
 ;;  When in an org-mode buffer, bind TeX-insert-quote to =C-c "=. Turned off by default.
 
@@ -141,5 +138,9 @@
 ;;  Configure org-mode so that when you edit source code in an indirect buffer (with C-c '), the buffer is opened in the current window. That way, your window organization isn't broken when switching.
 
 (setq org-src-window-setup 'current-window)
+
+;; (require 'org-mac-link)
+
+(nmap (kbd "C-x C-o l") 'org-mac-chrome-insert-frontmost-url)
 
 (provide 'init-org-mode)

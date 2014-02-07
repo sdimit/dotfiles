@@ -39,6 +39,7 @@
         ("*[Django: core (core.settings)] ./manage.py shell*" :height 30 :stick t)
         ("*Django: core (core.settings)" :height 20 :stick t)
         (direx:direx-mode :position left :width 30 :dedicated t)
+        (jabber-chat-mode :position bottom :height 20 :dedicated t)
         ("*git-gutter+-diff*" :height 10 :stick t)))
 
 (provide 'init-popwin)

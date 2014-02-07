@@ -218,7 +218,7 @@
     (kill-region start end)
     (with-current-buffer (find-file-noselect filename)
       (goto-char (point-min))
-      (search-forward "(provide '")
+      (re-search-forward "^(provide '")
       (goto-char (line-beginning-position))
       (kill-line 1)
       (goto-char (point-max))
@@ -226,8 +226,7 @@
       (yank))))
 
 (defun save-region-into-emacs-inbox (start end)
-  "takes current region, and writes it to one emacs config file.
-   makes sure to keep the (provide 'feature) line at the bottom of file"
+  "takes current region, and writes it to one emacs config file."
   (interactive "r")
   (let ((filename "~/Inbox/Emacs/inbox.el"))
     (write-region start end filename t)))
@@ -249,5 +248,43 @@
 ;; Scroll with the compilation output
 (setq compilation-scroll-output t)
 (setq compilation-window-height 18)
+
+(defun auto-chmod ()
+  "If we're in a script buffer, then chmod +x that script."
+  (and (save-excursion
+         (save-restriction
+           (widen)
+           (goto-char (point-min))
+           (save-match-data
+             (looking-at "^#!"))))
+       (shell-command (concat "chmod u+x " buffer-file-name))
+       (message (concat "Saved as script: " buffer-file-name))))
+
+(defun dss/ido-choose-from-recentf ()
+  ;;from http://www.xsteve.at/prg/emacs/power-user-tips.html
+  "Use ido to select a recently opened file from the `recentf-list'"
+  (interactive)
+  (let ((home (expand-file-name (getenv "HOME"))))
+    (find-file
+     (ido-completing-read "Recentf open: "
+                          (mapcar (lambda (path)
+                                    (replace-regexp-in-string
+                                     (concat home "/") "~/"
+                                     path))
+                                  recentf-list)
+                          nil t))))
+
+(setq tramp-default-method "ssh")
+
+(defun open-html-from-url ()
+  "Open a new buffer containing the contents of URL."
+  (interactive)
+  (let* ((default (thing-at-point-url-at-point))
+         (url (read-from-minibuffer "URL: " default)))
+    (switch-to-buffer (url-retrieve-synchronously url))
+    (rename-buffer url t)
+    ;; TODO: switch to nxml/nxhtml mode
+    (cond ((search-forward "<?xml" nil t) (xml-mode))
+          ((search-forward "<html" nil t) (html-mode)))))
 
 (provide 'init-files)

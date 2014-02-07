@@ -3,7 +3,7 @@
 (key-chord-mode 1)
 
 ;; (key-chord-define-global "dj" 'ido-find-file)
-;; (key-chord-define-global "dk" 'ibuffer-other-window)
+;; (key-chord-define-global "dk" 'ido-switch-buffer)
 ;; (key-chord-define-global "dl" 'magit-status)
 
 ;; ;; (key-chord-define-global "vg"     'eval-region)

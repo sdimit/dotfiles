@@ -218,6 +218,23 @@
 ;;      ;; TODO: Search the current VCS checkout for it.
 ;;      (find-file template-name)))
 
-(add-hook 'inferior-python-mode-hook 'auto-complete-mode)
+(defun elpy-end-of-class-point ()
+  (if (save-excursion
+        (re-search-forward "^ *\\(class\\) " nil t))
+      (match-beginning 1)
+    (point-max)))
+
+(defun elpy-beginning-of-class-point ()
+  (if (save-excursion
+        (re-search-backward "^ *\\(class\\) " nil t))
+      (match-beginning 1)
+    (point-min)))
+
+(defun elpy-narrow-to-class ()
+  (interactive)
+  (narrow-to-region (elpy-beginning-of-class-point)
+                    (elpy-end-of-class-point)))
+
+(define-key python-mode-map (kbd "C-x n c") 'elpy-narrow-to-class)
 
 (provide 'init-python)

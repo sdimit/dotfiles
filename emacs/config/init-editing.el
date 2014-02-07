@@ -59,10 +59,10 @@
   (set (make-local-variable 'comment-auto-fill-only-comments) t)
   (auto-fill-mode t))
 
-(defun turn-on-hl-line-mode ()
-  (require 'hl-line+)
-  (toggle-hl-line-when-idle 1)
-  (global-hl-line-mode nil))
+;; (defun turn-on-hl-line-mode ()
+;;   (require 'hl-line+)
+;;   (toggle-hl-line-when-idle 1)
+;;   (global-hl-line-mode nil))
 
 (defun turn-on-save-place-mode ()
   (setq save-place t))
@@ -174,8 +174,6 @@
 
 (require 'surround)
 (global-surround-mode 1)
-
-(idle-highlight t)
 
 (defun lorem ()
   "Insert a lorem ipsum."
@@ -331,12 +329,22 @@
       (set-default-font)
     (set-prose-font)))
 
-(defun turn-on-writing-mode ()
-  (interactive)
-  (hidden-mode-line-mode 1)
-  (wide-fringe-mode 1)
-  (prose-mode)
-  (git-gutter-mode -1))
+(defvar writing-mode nil)
+
+(define-minor-mode writing-mode
+  :init-value nil
+  :global t
+  :variable writing-mode
+  :group 'editing-basics
+  (if (not writing-mode)
+      (progn (hidden-mode-line-mode 1)
+             (wide-fringe-mode 1)
+             (prose-mode)
+             (git-gutter-mode -1))
+      (progn (hidden-mode-line-mode -1)
+             (wide-fringe-mode -1)
+             (prose-mode -1)
+             (git-gutter-mode t))))
 
 (defun paste-text ()
   (interactive)
@@ -385,5 +393,10 @@ markdown documment"
 
 ;; inserting text while the mark is active causes the selected text to be deleted first.
 (delete-selection-mode t)
+
+(defun enable-follow-mode ()
+  (interactive)
+  (evil-window-vsplit)
+  (follow-mode 1))
 
 (provide 'init-editing)

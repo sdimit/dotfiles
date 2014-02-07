@@ -34,6 +34,9 @@
                              (mode . css-mode)
                              (mode . less-mode)
                              (mode . style-mode)))
+               ("comms" (or
+                         (mode . rcirc-mode)
+                         (mode . jabber-chat-mode)))
                ("emacs" (or
                          (name . "^.+\\.el$")
                          (name . "^\\*.+\\*$")))))))

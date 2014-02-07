@@ -19,8 +19,6 @@
 
 (define-abbrev-table 'clojure-mode-abbrev-table '())
 
-(define-abbrev-table 'coffee-mode-abbrev-table '())
-
 (define-abbrev-table 'comint-mode-abbrev-table '())
 
 (define-abbrev-table 'completion-list-mode-abbrev-table '())
@@ -41,11 +39,10 @@
 
 (define-abbrev-table 'git-gutter+-commit-mode-abbrev-table '())
 
-(define-abbrev-table 'git-rebase-mode-abbrev-table '())
-
 (define-abbrev-table 'global-abbrev-table
   '(
-    ("tempalte" "template" nil 1)
+    ("atr" "attributes" nil 0)
+    ("tempalte" "template" nil 0)
    ))
 
 (define-abbrev-table 'grep-mode-abbrev-table '())
@@ -66,29 +63,7 @@
 
 (define-abbrev-table 'log-edit-mode-abbrev-table '())
 
-(define-abbrev-table 'magit-branch-manager-mode-abbrev-table '())
-
-(define-abbrev-table 'magit-cherry-mode-abbrev-table '())
-
-(define-abbrev-table 'magit-commit-mode-abbrev-table '())
-
-(define-abbrev-table 'magit-diff-mode-abbrev-table '())
-
-(define-abbrev-table 'magit-log-mode-abbrev-table '())
-
-(define-abbrev-table 'magit-mode-abbrev-table '())
-
-(define-abbrev-table 'magit-process-mode-abbrev-table '())
-
-(define-abbrev-table 'magit-reflog-mode-abbrev-table '())
-
-(define-abbrev-table 'magit-status-mode-abbrev-table '())
-
-(define-abbrev-table 'magit-wazzup-mode-abbrev-table '())
-
 (define-abbrev-table 'nrepl-connections-buffer-mode-abbrev-table '())
-
-(define-abbrev-table 'nxml-mode-abbrev-table '())
 
 (define-abbrev-table 'occur-edit-mode-abbrev-table '())
 
@@ -102,13 +77,7 @@
 
 (define-abbrev-table 'process-menu-mode-abbrev-table '())
 
-(define-abbrev-table 'prodigy-mode-abbrev-table '())
-
-(define-abbrev-table 'prodigy-view-mode-abbrev-table '())
-
 (define-abbrev-table 'prog-mode-abbrev-table '())
-
-(define-abbrev-table 'python-django-mode-abbrev-table '())
 
 (define-abbrev-table 'python-mode-abbrev-table
   '(
@@ -124,17 +93,7 @@
 
 (define-abbrev-table 'special-mode-abbrev-table '())
 
-(define-abbrev-table 'speedbar-mode-abbrev-table '())
-
-(define-abbrev-table 'sql-mode-abbrev-table
-  '(
-   ))
-
 (define-abbrev-table 'tabulated-list-mode-abbrev-table '())
-
-(define-abbrev-table 'term-mode-abbrev-table '())
-
-(define-abbrev-table 'tetris-mode-abbrev-table '())
 
 (define-abbrev-table 'text-mode-abbrev-table '())
 

@@ -73,10 +73,12 @@
 
 (nmap (kbd "C-c d") 'describe-thing-in-popup)
 
-(defun search-config-files (string)
-  (interactive (list
-                (read-from-minibuffer "Search: " (ag/dwim-at-point))))
-  (ag/search string "~/.emacs.d/config" t))
+(defun search-config-files (from-point)
+  "use universal-argument to take symbol at point"
+  (interactive "P")
+  (let* ((search-prompt (if from-point (ag/dwim-at-point) ""))
+         (search-term (read-from-minibuffer "Search: " search-prompt)))
+    (ag/search search-term "~/.emacs.d/config" t)))
 
 (global-set-key (kbd "C-c e e") 'search-config-files)
 

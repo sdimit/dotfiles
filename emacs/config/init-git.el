@@ -1,5 +1,4 @@
 (setq ediff-highlight-all-diffs nil)
-;;  (add-hook 'ediff-cleanup-hook (lambda () (ediff-janitor nil nil)))
 
 (set-variable 'magit-emacsclient-executable "/usr/local/Cellar/emacs-mac/emacs-24.3-mac-4.5/bin/emacsclient")
 
@@ -43,10 +42,10 @@
   "Show file on current magit line and prompt for deletion."
   (interactive)
   (let* ((current-branch (shell-command-as-string "git rev-parse --abbrev-ref HEAD"))
-        (remote-branch (concat "push origin :" current-branch)))
-    (magit-run-git (list remote-branch))))
+        (remote-branch (concat ":" current-branch)))
+    (magit-run-git (list "push" "origin" remote-branch))))
 
-;;  (define-key magit-status-mode-map (kbd "C-x C-k") 'magit-kill-file-on-line)
+;; (define-key magit-status-mode-map (kbd "C-x C-k") 'magit-kill-file-on-line)
 
 ;; close popup when commiting
 
@@ -79,7 +78,7 @@
 (nmap " mD" (bind (call-interactively 'magit-diff)
                   (switch-to-buffer "*magit-diff*")
                   (delete-other-windows)))
-(nmap " mv" 'magit-checkout)
+(nmap " mv" 'magit-interactive-checkout)
 (nmap " mV" 'magit-branch-manager)
 (nmap " ms" 'magit-status)
 (nmap " `" 'magit-status)
@@ -213,13 +212,13 @@
 (defun 10to8-git-flow-command (flow-command ticket-number)
   (let* ((branch-suffix (concat "TTE-" ticket-number))
          (flow-prefix "flow")
+         (default-directory "~/10to8/Native/native/src")
          (complete-command (concat flow-prefix
                                    " "
                                    flow-command
                                    " "
                                    branch-suffix)))
-    (magit-run-git complete-command)))
-
+    (magit-git-command complete-command default-directory)))
 
 ;;  options: fetch from origin, and keep branch
 ;;  cf https://github.com/nvie/gitflow/wiki/Command-Line-Arguments
@@ -262,7 +261,7 @@
       (let* ((second-part (cadr (split-string branch-ref "/")))
              (trimmed-ref (replace-regexp-in-string "b?\n$" "" second-part)))
         trimmed-ref)
-    nil))
+    branch-ref))
 
 (defun get-current-ticket-name ()
   (let* ((branch-ref (shell-command-as-string "git rev-parse --abbrev-ref head") )
@@ -271,7 +270,9 @@
 
 (defun -open-jira-ticket (ticket-ref)
   (if (not (eq nil ticket-ref))
-      (browse-url (concat "https://tento8.atlassian.net/browse/" ticket-ref))))
+      (progn
+        (call-process "~/10to8/scripts/browser.sh")
+        (browse-url (concat "https://tento8.atlassian.net/browse/" ticket-ref)))))
 
 (defun open-jira-ticket (ticket-ref)
   (interactive "MTicket number: ")
@@ -286,7 +287,6 @@
   (interactive)
   (let* ((at-point (substring-no-properties (thing-at-point 'symbol)))
          (ticket-name (extract-jira-ticket-ref at-point)))
-    (message at-point)
     (-open-jira-ticket ticket-name)))
 
 (defun magit-oops ()
@@ -320,4 +320,29 @@
 
  (set ediff-window-setup-function 'ediff-setup-windows-plain)
 
+(defun magit-interactive-checkout ()
+  (interactive)
+  (let* ((revision (magit-read-rev "Switch to")))
+    (magit-run-git "checkout" revision)))
+
+(require 's)
+(defun kill-ediff-buffers ()
+  (let ((ediff-buffers (-filter (lambda (buffer) (s-matches? "~" (buffer-name buffer)))
+                                (buffer-list))))
+    (-each ediff-buffers 'kill-buffer)))
+
+(add-hook 'ediff-cleanup-hook 'kill-ediff-buffers)
+
 (provide 'init-git)
+(defun magit-switch-buffer ()
+  "Interactively switch to another magit-status buffer."
+  (interactive)
+  (switch-to-buffer
+   (format
+    "*magit: %s*"
+    (ido-completing-read
+     "Magit buffer: "
+     (loop for buffer in (buffer-list)
+           as name = (buffer-name buffer)
+           when (string-match "^\\*magit: \\(.+\\)\\*$" name)
+           collect (match-string 1 name))))))

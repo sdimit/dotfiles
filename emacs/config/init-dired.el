@@ -120,4 +120,14 @@ if no files marked, always operate on current line in dired-mode
      (setq dired-recursive-deletes 'top)
      ))
 
+(defun dired-open-in-mac ()
+  "Remap 'o' in dired mode to open a file"
+  (interactive)
+  (let ((file-name (dired-get-file-for-visit)))
+    (if (file-exists-p file-name)
+        (call-process "/usr/bin/open" nil 0 nil file-name))))
+
+(define-key dired-mode-map "r" 'wdired-change-to-wdired-mode)
+(define-key dired-mode-map "o" 'dired-open-in-mac)
+
 (provide 'init-dired)

@@ -73,24 +73,28 @@
 ;;       (send-to-10to8-shell (buffer-substring-no-properties (buffer-string))))))
 
 
-(defun search-deep-thought (string)
-  (interactive (list
-                (read-from-minibuffer "Search: " (ag/dwim-at-point))))
-  (ag/search string "~/10to8/Native/native/src/core" t))
+(defun search-deep-thought (from-point)
+  "use universal-argument to take symbol at point"
+  (interactive "P")
+  (let* ((search-prompt (if from-point (ag/dwim-at-point) ""))
+         (search-term (read-from-minibuffer "Search: " search-prompt)))
+    (ag/search search-term "~/10to8/Native/native/src/core" t)))
 
-(defun search-jeltz (string)
-  "follow symlinks"
-  (interactive (list
-                (read-from-minibuffer "Search: " (ag/dwim-at-point))))
-  (let* ((ag-arguments (cons "--follow" ag-arguments)))
-    (ag/search string "~/10to8/Native/native/src/apps/jeltz/app" t)))
+(defun search-jeltz (from-point)
+  "use universal-argument to take symbol at point"
+  (interactive "P")
+  (let* ((search-prompt (if from-point (ag/dwim-at-point) ""))
+         (search-term (read-from-minibuffer "Search: " search-prompt))
+         (ag-arguments (cons "--follow" ag-arguments)))
+    (ag/search search-term "~/10to8/Native/native/src/apps/jeltz/app" t)))
 
-(defun search-colin (string)
-  "follow symlinks"
-  (interactive (list
-                (read-from-minibuffer "Search: " (ag/dwim-at-point))))
-  (let ((ag-arguments (cons "--follow" ag-arguments)))
-    (ag/search string "~/10to8/Native/native/src/apps/colin/app" t)))
+(defun search-colin (from-point)
+  "use universal-argument to take symbol at point"
+  (interactive "P")
+  (let* ((search-prompt (if from-point (ag/dwim-at-point) ""))
+         (search-term (read-from-minibuffer "Search: " search-prompt))
+         (ag-arguments (cons "--follow" ag-arguments)))
+    (ag/search search-term "~/10to8/Native/native/src/apps/colin/app" t)))
 
 (require 'nose)
 (add-to-list 'nose-project-root-files ".project")
@@ -427,6 +431,8 @@
   (call-interactively 'jabber-muc-autojoin)
   (global-set-key (kbd "C-x C-j d") (bind (switch-to-buffer-other-window "*-jabber-groupchat-10to8dev@chatrooms.10to8.com-*")))
   (global-set-key (kbd "C-x C-j e") (bind (switch-to-buffer-other-window "*-jabber-groupchat-10to8everyone@chatrooms.10to8.com-*")))
+  (nmap " ]d" (bind (switch-to-buffer-other-window "*-jabber-groupchat-10to8dev@chatrooms.10to8.com-*")))
+  (nmap " ]e" (bind (switch-to-buffer-other-window "*-jabber-groupchat-10to8everyone@chatrooms.10to8.com-*")))
   )
 
 (defun jeltz-servers-start ()
@@ -437,13 +443,28 @@
 (setq jiralib-url "https://tento8.atlassian.net")
 (setq jiralib-user-login-name "stephane.reissfelder")
 
-(provide 'init-10to8)
 
 (defun 10to8-switch-to-branch-new-db ()
   (interactive)
-  (let ((default-directory "~/10to8/Native/native/src"))
-    (magit-checkout))
-  (prodigy-stop-all-services)
-  ;; new db
-  ;; ...
-  )
+  (let* ((default-directory "~/10to8/Native/native/src")
+         (revision (magit-read-rev "Switch to"))
+         (new-db-task (find-prodigy-service-with-name "new db"))
+         (rabbit-task (find-prodigy-service-with-name "deepthought - rabbit"))
+         (gen-data-task (find-prodigy-service-with-name "new db - gen data")))
+    (magit-run-git "checkout" revision)
+    (prodigy-stop-all-services)
+    (prodigy-start-service new-db-task (lambda () (prodigy-start-service gen-data-task)))))
+
+(defun 10to8-show-commit-from-clipboard ()
+  (interactive)
+  (let ((ref-from-killring (substring-no-properties (car kill-ring)))
+        (default-directory "~/10to8/Native/native/src"))
+    (magit-show-commit (read-from-minibuffer "Commit: " ref-from-killring))))
+
+(defun 10to8-show-commit-from-point ()
+  (interactive)
+  (let ((ref-from-point (ag/dwim-at-point))
+        (default-directory "~/10to8/Native/native/src"))
+    (magit-show-commit ref-from-point)))
+
+(provide 'init-10to8)
