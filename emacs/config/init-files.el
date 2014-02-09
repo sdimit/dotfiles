@@ -260,7 +260,9 @@
        (shell-command (concat "chmod u+x " buffer-file-name))
        (message (concat "Saved as script: " buffer-file-name))))
 
-(defun dss/ido-choose-from-recentf ()
+(setq tramp-default-method "ssh")
+
+(defun recentf-ido-find-file ()
   ;;from http://www.xsteve.at/prg/emacs/power-user-tips.html
   "Use ido to select a recently opened file from the `recentf-list'"
   (interactive)
@@ -274,7 +276,6 @@
                                   recentf-list)
                           nil t))))
 
-(setq tramp-default-method "ssh")
 
 (defun open-html-from-url ()
   "Open a new buffer containing the contents of URL."
@@ -286,5 +287,9 @@
     ;; TODO: switch to nxml/nxhtml mode
     (cond ((search-forward "<?xml" nil t) (xml-mode))
           ((search-forward "<html" nil t) (html-mode)))))
+
+(defun kill-current-buffer ()
+  (interactive)
+  (kill-buffer (current-buffer)))
 
 (provide 'init-files)

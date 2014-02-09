@@ -45,7 +45,7 @@
       evil-symbol-word-search t) ;; use symbol, not word for */#)
 
 (defmacro bind (&rest commands)
-  "Convience macro which creates a lambda interactive command."
+  "Convenience macro which creates a lambda interactive command."
   `(lambda () (interactive) ,@commands))
 
 (defmacro after (feature &rest body)
@@ -68,21 +68,12 @@
 
 ;;  (global-set-key "\\" 'evil-execute-in-normal-state)
 
-(defun kill-current-buffer ()
-  (interactive)
-  (kill-buffer (current-buffer)))
-
-(defun start-shell ()
-  (interactive)
-  (ansi-term explicit-shell-file-name))
-
 ;;  (define-key evil-normal-state-map ":l" 'cycle-buffer)
 
 (nmap " k" 'helm-bookmarks)
 (nmap " p" 'helm-browse-project)
-(nmap " g" 'helm-buffers-list)
-(nmap " T" 'helm-etags-select)
-(nmap " f" 'helm-mini)
+(nmap " g" 'helm-git-grep)
+(nmap " t" 'helm-etags-select)
 (nmap " h" 'highlight-regexp)
 (nmap " H" 'highlight-from-isearch)
 (nmap " u" 'unhighlight-regexp)
@@ -97,9 +88,8 @@
 (nmap " e" 'helm-find-files)
 (nmap " i" 'deft)
 (nmap "  " 'ido-switch-buffer)
-(nmap " ll" 'align-regexp)
-(nmap " LL" 'align-cljlet)
 (nmap "gu" 'browse-url)
+;; (nmap "GU" 'browse-url-with-chrome)
 (vmap "gu" 'google-region)
 (nmap "Q" 'kill-current-buffer)
 (global-set-key (kbd "C-S-k") 'kill-current-buffer)
@@ -107,13 +97,14 @@
 (global-set-key (kbd "C-q") 'bury-buffer)
 
 ;; (nvmap " vf" 'mark-defun)
+; TODO: as evil motion
 
 (nmap " yf" 'copy-filename-of-current-buffer)
 (nmap " yp" 'copy-full-path-of-current-buffer)
 
 (nmap (kbd "SPC RET") 'ido-find-file)
 (nmap (kbd "SPC TAB") 'ibuffer-other-window)
-(nmap (kbd "SPC \\") 'helm-recentf)
+(nmap (kbd "SPC \\") 'recentf-ido-find-file)
 
 (nmap "j" 'evil-next-visual-line)
 (nmap "k" 'evil-previous-visual-line)
@@ -125,7 +116,7 @@
 (nmap (kbd "[ RET") (bind (evil-insert-newline-above) (forward-line)))
 (nmap (kbd "] RET") (bind (evil-insert-newline-below) (forward-line -1)))
 (nmap (kbd "[ SPC") (bind (evil-insert -1) (insert " ") (evil-normal-state)))
-(nmap (kbd "] SPC") (bind (evil-append   1) (insert " ") (evil-backward-char 2) (evil-normal-state)))
+(nmap (kbd "] SPC") (bind (evil-append 1) (insert " ") (evil-backward-char 2) (evil-normal-state)))
 ;;  (nmap (kbd "C-w") 'subword-backward-kill)
 (nmap (kbd "M-<backspace>") 'delete-till-nonblank-char)
 (nmap (kbd "[ e") (kbd "ddkP"))

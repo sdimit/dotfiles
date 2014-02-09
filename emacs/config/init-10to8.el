@@ -114,9 +114,11 @@
   (interactive)
   (let* ((pmt-command "cd ~/10to8/Native/native/src && source ~/.virtualenvs/Native/bin/activate && python manage.py test")
          (pmt-options "--noinput --nocapture --failfast --verbosity=0")
-         (command (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable))))
+         (command     (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable))))
     (save-buffer)
     (async-shell-command command "*nose-test*")
+    ;; (with-current-buffer "*nose-test*"
+    ;;   (compilation-mode))
     (evil-normal-state)))
 
 (defun run-nose-test-watch ()
@@ -124,7 +126,7 @@
   (interactive)
   (let* ((pmt-command "cd ~/10to8/Native/native/src && source ~/.virtualenvs/Native/bin/activate && python manage.py test")
          (pmt-options "--noinput --nocapture --failfast --with-watch --verbosity=0")
-         (command (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable))))
+         (command     (format "%s %s %s:%s" pmt-command pmt-options buffer-file-name (nose-py-testable))))
     (save-buffer)
     (async-shell-command command "*nose-test*")
     (evil-normal-state)))
@@ -466,5 +468,7 @@
   (let ((ref-from-point (ag/dwim-at-point))
         (default-directory "~/10to8/Native/native/src"))
     (magit-show-commit ref-from-point)))
+
+(venv-workon "Native")
 
 (provide 'init-10to8)

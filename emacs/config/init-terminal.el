@@ -85,4 +85,8 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
     (re-search-backward "`\\(.*\\)'"))
   (insert (match-string 1)))
 
+(defun start-shell ()
+  (interactive)
+  (ansi-term explicit-shell-file-name))
+
 (provide 'init-terminal)

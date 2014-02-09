@@ -399,4 +399,8 @@ markdown documment"
   (evil-window-vsplit)
   (follow-mode 1))
 
+(nmap " ll" 'align-regexp)
+
+(put 'narrow-to-region 'disabled nil)
+
 (provide 'init-editing)

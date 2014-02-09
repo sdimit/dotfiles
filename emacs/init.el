@@ -9,7 +9,7 @@
 
 (setq dotfiles-dir (file-name-directory (or load-file-name (buffer-file-name))))
 
-; don't launch GUI
+;; don't launch GUI
 (x-focus-frame nil)
 
 ;; Common Lisp compatability
@@ -24,20 +24,24 @@
 
 ;; Load up Org Mode and Babel
 ;; load up the main file
-;; org-mode windmove compatibility
 
+;; org-mode windmove compatibility
 (setq org-replace-disputed-keys t)
 (require 'org)
 
-  (setq dotfiles-dir (file-name-directory
-                      (or load-file-name (buffer-file-name))))
-
-  (add-to-list 'load-path dotfiles-dir)
-  (setq autoload-file (concat dotfiles-dir "loaddefs.el"))
-  (setq package-user-dir (concat dotfiles-dir "elpa"))
-  (setq custom-file (concat dotfiles-dir "custom.el"))
+(add-to-list 'load-path dotfiles-dir)
+(setq autoload-file (concat dotfiles-dir "loaddefs.el"))
+(setq package-user-dir (concat dotfiles-dir "elpa"))
+(setq custom-file (concat dotfiles-dir "custom.el"))
 
 (org-babel-load-file (expand-file-name "starter-kit.org" dotfiles-dir))
+
+(require 'cl)
+(require 'saveplace)
+(require 'ffap)
+(require 'uniquify)
+(require 'ansi-color)
+(require 'recentf)
 
 
 (require 'init-elpa)
@@ -79,18 +83,3 @@
 (require 'init-irc)
 (require 'init-mail)
 (require 'init-deft)
-
-
-(when window-system
-  (let ((elapsed (float-time (time-subtract (current-time)
-                                            emacs-start-time))))
-    (message "Loading %s...done (%.3fs)" load-file-name elapsed))
-
-  (add-hook 'after-init-hook
-            `(lambda ()
-               (let ((elapsed (float-time (time-subtract (current-time)
-                                                         emacs-start-time))))
-                 (message "Loading %s...done (%.3fs) [after-init]"
-                          ,load-file-name elapsed)))
-            t))
-(put 'narrow-to-region 'disabled nil)

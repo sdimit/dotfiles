@@ -1,16 +1,11 @@
-
 (require 'org)
+(require 'org-mac-link "/Users/admin/dotfiles/emacs/elpa/org-mac-link-20140107.519/org-mac-link.el")
 
-;;  The following displays the contents of code blocks in Org-mode files
-;;  using the major-mode of the code.  It also changes the behavior of
-;;  =TAB= to as if it were used in the appropriate major mode.  This means
-;;  that reading and editing code form inside of your Org-mode files is
-;;  much more like reading and editing of code using its major mode.
+
 (setq org-src-fontify-natively t)
 (setq org-src-tab-acts-natively t)
 
 ;;  Don't ask for confirmation on every =C-c C-c= code-block compile.
-
 (setq org-confirm-babel-evaluate nil)
 
 (org-babel-do-load-languages
@@ -18,26 +13,14 @@
  '((emacs-lisp . t)
    (sh . t)
    (R . t)
-   (ruby . t)
-   (python . t)
-   (js . t)
-   (haskell . t)
    (clojure . t)
+   (js . t)
+   (python . t)
    ))
-
-(org-babel-lob-ingest
- (expand-file-name
-  "library-of-babel.org"
-  (expand-file-name
-   "babel"
-   (expand-file-name
-    "contrib"
-    (expand-file-name
-     "org"
-     (expand-file-name "src" dotfiles-dir))))))
 
 (setq org-completion-use-ido t)
 (require 'org-special-blocks)
+
 (if window-system (require 'org-mouse))
 
 (defun yas-org-very-safe-expand ()
@@ -74,9 +57,9 @@
 ;; regular normal state shortcuts.
 (evil-define-key 'normal evil-org-mode-map
   "gh" 'outline-up-heading
-  "gj" 'org-forward-same-level
-  "gk" 'org-backward-same-level
-  "gl" 'outline-next-visible-heading
+  "gj" 'outline-next-visible-heading
+  "gk" 'outline-previous-visible-heading
+;;  "gl" 'outline-
   "H" 'org-beginning-of-line
   "L" 'org-end-of-line
   "t" 'org-todo
@@ -106,41 +89,17 @@
       org-src-fontify-natively t
       org-confirm-babel-evaluate nil)
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-   (clojure . t)))
-
 (setq org-default-notes-file "~/Inbox/notes.org")
 
 (global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-cL" 'org-mac-chrome-insert-frontmost-url)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 
-;; (require 'org-bullets)
-;; (add-hook 'org-mode-hook (lambda ()
-;;                            (org-bullets-mode 1)
-;;                            (turn-on-font-lock)
-;;                            ))
-
-;;  When in an org-mode buffer, bind TeX-insert-quote to =C-c "=. Turned off by default.
-
-;;  (add-hook 'org-mode-hook 'smart-quote-keys)
-
-;;  (defun smart-quote-keys ()
-;;    (require 'typopunct)
-;;    (typopunct-change-language 'english)
-;;    (local-set-key (kbd "C-c \'") 'typopunct-insert-single-quotation-mark)
-;;    (local-set-key (kbd "C-c \"") 'typopunct-insert-quotation-mark)
-;;    )
-
-
-;;  Configure org-mode so that when you edit source code in an indirect buffer (with C-c '), the buffer is opened in the current window. That way, your window organization isn't broken when switching.
-
+;;  Configure org-mode so that when you edit source code in an
+;;  indirect buffer (with C-c '), the buffer is opened in the current
+;;  window. That way, your window organization isn't broken when
+;;  switching.
 (setq org-src-window-setup 'current-window)
-
-;; (require 'org-mac-link)
-
-(nmap (kbd "C-x C-o l") 'org-mac-chrome-insert-frontmost-url)
 
 (provide 'init-org-mode)

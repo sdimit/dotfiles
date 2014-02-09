@@ -73,7 +73,7 @@
 
 (nmap " mbb" 'magit-blame-mode)
 (nmap " mbl" 'magit-blame-locate-commit)
-(nmap " mdd" 'ediff-current-file-on-git)
+(nmap " mdd" 'magit-prompt-diff)
 (nmap " mdm" 'ediff-current-file-with-master)
 (nmap " mD" (bind (call-interactively 'magit-diff)
                   (switch-to-buffer "*magit-diff*")
@@ -171,6 +171,11 @@
 (defun ediff-current-file-on-git ()
   (interactive)
   (ediff-revision (buffer-file-name (current-buffer))))
+
+(defun magit-prompt-diff ()
+  (interactive)
+  (let* ((revision (magit-read-rev "Diff with: " "master")))
+    (ediff-vc-internal revision "HEAD")))
 
 (defun ediff-current-file-with-master ()
   (interactive)
@@ -289,6 +294,12 @@
          (ticket-name (extract-jira-ticket-ref at-point)))
     (-open-jira-ticket ticket-name)))
 
+(defun open-jira-ticket-from-region (start end)
+  (interactive "R")
+  (let* ((at-point (substring-no-properties (buffer-substring start end)))
+         (ticket-name (extract-jira-ticket-ref at-point)))
+    (-open-jira-ticket ticket-name)))
+
 (defun magit-oops ()
   (interactive)
   (save-window-excursion
@@ -333,7 +344,6 @@
 
 (add-hook 'ediff-cleanup-hook 'kill-ediff-buffers)
 
-(provide 'init-git)
 (defun magit-switch-buffer ()
   "Interactively switch to another magit-status buffer."
   (interactive)
@@ -346,3 +356,5 @@
            as name = (buffer-name buffer)
            when (string-match "^\\*magit: \\(.+\\)\\*$" name)
            collect (match-string 1 name))))))
+
+(provide 'init-git)

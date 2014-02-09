@@ -93,16 +93,6 @@
 ;;  ideal keybinding
 ;;  C-k C-k kill buffer
 
-(defun recentf-ido-find-file ()
-  "Find a recent file using ido."
-  (interactive)
-  (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
-    (when file
-      (find-file file))))
-
-(global-set-key (kbd "C-x f") 'recentf-ido-find-file)
-
-
 ;; Mac-like key defaults
 (global-set-key (kbd "M-n") 'create-new-buffer)
 (global-set-key (kbd "M-[") 'previous-buffer)

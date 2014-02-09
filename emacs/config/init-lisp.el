@@ -2,6 +2,15 @@
 (defun scratch ()
   (switch-to-buffer "*scratch*"))
 
+(defun my-align-let ()
+  (interactive)
+  (if (eq major-mode 'clojure-mode)
+      (align-cljlet)
+    (align-let)))
+
+(load-file "~/.emacs.d/src/align-let.el")
+(nmap " LL" 'my-align-let)
+
 ;; (global-set-key (kbd "C-c e e") 'eval-and-replace)
 ;; (global-set-key (kbd "C-c e r") 'eval-region)
 ;; (global-set-key (kbd "C-c e f") 'eval-defun)

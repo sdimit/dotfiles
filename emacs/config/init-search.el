@@ -130,4 +130,9 @@
         (buffer-substring (region-beginning) (region-end))
       (read-string "Google: ")))))
 
+(defun browse-url-with-chrome (args)
+  ;; TODO
+  (let ((browse-url-browser-function (quote browse-url)))
+    (browse-url)))
+
 (provide 'init-search)
