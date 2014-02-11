@@ -1,5 +1,5 @@
 #!/bin/bash -e
-networksetup -setairportpower en1 off
+networksetup -setairportpower en0 off
 sleep 1
 dscacheutil -flushcache
-networksetup -setairportpower en1 on
+networksetup -setairportpower en0 on

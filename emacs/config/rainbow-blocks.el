@@ -3,8 +3,6 @@
 (defgroup rainbow-blocks nil
   "Highlight nested parentheses, brackets, and braces according to their depth."
   :prefix "rainbow-blocks-"
-  :link '(url-link :tag "Website for rainbow-blocks (EmacsWiki)"
-                   "http://www.emacswiki.org/emacs/RainbowBlocks")
   :group 'applications)
 
 (defgroup rainbow-blocks-faces nil
@@ -236,16 +234,16 @@ Sets text properties:
     (let* ((delim-face (if (<= depth 0)
                           'rainbow-blocks-unmatched-face
                         (rainbow-blocks-depth-face depth)))
-          (loc-start (if (= 0 loc)
-                         0
-                       (1- loc)))
-          (end-pos (save-excursion (goto-char loc)
+
+           (loc-start loc) ;; (if (= 0 loc) 0 (1- loc)))
+          (end-pos (save-excursion (goto-char loc-start)
                                    (forward-sexp)
                                    (point)))
           (loc-end (if (= (point-max) end-pos)
                          (point-max)
-                       end-pos)))
+                     (1+ end-pos))))
       ;; (when (eq depth -1) (message "Unmatched delimiter at char %s." loc))
+          (message (format "%s: depth %d" delim-face depth))
           (add-text-properties loc-start loc-end
                            `(font-lock-face ,delim-face
                              rear-nonsticky t)))))
@@ -314,8 +312,8 @@ LOC is location of character (delimiter) to be colorized."
 ;;; JIT-Lock functionality
 
 ;; Used to skip delimiter-by-delimiter `rainbow-blocks-propertize-region'.
-(defconst rainbow-blocks-delim-regex "\\(\(\\|\)\\|\\[\\|\\]\\|\{\\|\}\\)"
-  "Regex matching all opening and closing blocks the mode highlights.")
+(defconst rainbow-blocks-delim-regex "\("
+  "Regex matching just opening blocks the mode highlights.")
 
 ;; main function called by jit-lock:
 (defun rainbow-blocks-propertize-region (start end)
@@ -393,6 +391,22 @@ Used by jit-lock for dynamic highlighting."
 ;;;###autoload
 (define-globalized-minor-mode global-rainbow-blocks-mode
   rainbow-blocks-mode rainbow-blocks-mode-enable)
+
+(defun reset-text-properties ()
+  "for debugging mostly"
+  (interactive)
+  (set-text-properties (point-min)
+                       (point-max)
+                       nil))
+
+(defun blocks-do-region ()
+  (interactive)
+  (rainbow-blocks-propertize-region (point-min)
+                                    (point-max)))
+
+(defun sexp-depth ()
+  (interactive)
+  (message "%d" (rainbow-blocks-depth (point))))
 
 (provide 'rainbow-blocks)
 

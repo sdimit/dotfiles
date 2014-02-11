@@ -353,16 +353,6 @@
                    (prodigy-set-status service 'ready)))
   :tags '(10to8 colin-dev))
 
-;; (prodigy-define-service
-;;   :name "colin - test runner"
-;;   :command "/usr/local/bin/cake"
-;;   :args '("test:once")
-;;   :cwd "~/10to8/Native/native/src/apps/colin"
-;;   :path '("/usr/local/bin/")
-;;   :kill-signal 'sigkill
-;;   :kill-process-buffer-on-stop t
-;;   :tags '(10to8))
-
 (prodigy-define-service
   :name "jeltz - build etags"
   :command "build-coffee-etags.sh"

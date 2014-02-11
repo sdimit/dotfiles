@@ -22,9 +22,6 @@
 (require 'fill-column-indicator)
 (fci-mode)
 
-(setq visible-bell nil)
-(setq ring-bell-function 'ignore)
-
 ;; (eval-after-load "flyspell"
 ;;  '(defun flyspell-mode (&optional arg)))
 
@@ -49,6 +46,7 @@
 (set-language-environment 'utf-8)
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
 
 (defun local-column-number-mode ()
@@ -104,12 +102,6 @@
         (search-forward string nil t)))))
 
 (setq ns-function-modifier 'hyper)
-
-(prefer-coding-system 'utf-8)
-(set-language-environment 'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-selection-coding-system 'utf-8)
 
 ;; default tab-width is two spaces
 (setq-default tab-width 2

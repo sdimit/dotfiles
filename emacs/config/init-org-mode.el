@@ -9,10 +9,14 @@
 
 (setq org-src-fontify-natively   t
       org-startup-indented       t
+      org-directory              "~/Notes"
       org-src-tab-acts-natively  t
       org-completion-use-ido     t
       org-confirm-babel-evaluate nil
       org-edit-src-content-indentation 0)
+
+;; (require 'org-journal)
+;; (setq org-journal-dir "~/Notes/journal/")
 
 ;;  Configure org-mode so that when you edit source code in an
 ;;  indirect buffer (with C-c '), the buffer is opened in the current
@@ -98,5 +102,9 @@
 (global-set-key "\C-cL" 'org-mac-chrome-insert-frontmost-url)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
+
+(add-hook 'org-mode-hook 'auto-fill-mode)
+;; Use-enter-to-follow-links
+(setq org-return-follows-link t)
 
 (provide 'init-org-mode)

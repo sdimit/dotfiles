@@ -14,7 +14,6 @@
 
 (setq initial-scratch-message "")
 (setq inhibit-splash-screen t)
-(setq inhibit-startup-message t)
 (setq redisplay-dont-pause t)
 (set-scroll-bar-mode nil)
 ;;  (menu-bar-mode -1)
@@ -33,11 +32,12 @@
 
 (defun light-theme ()
   (interactive)
-  (let ((theme 'solarized-light))
+  (let ((theme 'leuven))
     (load-theme theme t)
     (setq current-theme theme)
     (setq hl-sexp-background-color "#eee8d5")
-    (highlight-sexp-mode t)
+    (highlight-sexp-mode nil)
+    (global-hl-line-mode nil)
     (setq evil-emacs-state-cursor '("red" box))
     (setq evil-normal-state-cursor '("black" box))
     (setq evil-visual-state-cursor '("orange" box))
@@ -54,12 +54,6 @@
     (setq evil-visual-state-cursor '("orange" box))
     (setq evil-insert-state-cursor '("white" bar))))
 
-(defun toggle-dark-light-theme ()
-  "Switch between dark and light theme."
-  (interactive)
-  (if (eq (frame-parameter (next-frame) 'background-mode) 'dark)
-      (light-theme)
-    (dark-theme)))
 
 (setq evil-normal-state-tag   (propertize "<N>" 'face '((:background "black"  :foreground "grey" )))
       evil-visual-state-tag   (propertize "<V>" 'face '((:background "orange" :foreground "black")))
@@ -83,6 +77,9 @@
                                           prodigy-view-mode
                                           calendar-mode
                                           bs-mode ; for ace-jump-line
+                                          mu4e-headers-mode
+                                          mu4e-compose-mode
+                                          mu4e-view-mode
                                           gnus-article-mode
                                           gnus-summary-mode
                                           Custom-mode
@@ -175,19 +172,19 @@
   (let ((faded-color (face-attribute 'font-lock-comment-face :foreground)))
     (set-face-foreground 'default faded-color)))
 
-; Font lock mode variations to maybe speed up scrolling
+                                        ; Font lock mode variations to maybe speed up scrolling
 (setq redisplay-dont-pause t
-  scroll-margin 1
-  scroll-step 1
-  scroll-conservatively 10000
-  scroll-preserve-screen-position 1
-;;  jit-lock-defer-time 0.05
-  font-lock-support-mode 'jit-lock-mode)
+      scroll-margin 1
+      scroll-step 1
+      scroll-conservatively 10000
+      scroll-preserve-screen-position 1
+      ;;  jit-lock-defer-time 0.05
+      font-lock-support-mode 'jit-lock-mode)
 
 (setq-default scroll-up-aggressively 0.01 scroll-down-aggressively 0.01)
 
-;If you never expect to have to display bidirectional scripts, like
-;Arabic, you can make that the default:
+                                        ;If you never expect to have to display bidirectional scripts, like
+                                        ;Arabic, you can make that the default:
 (setq-default bidi-paragraph-direction 'left-to-right)
 
 (require 'page-break-lines)
@@ -200,39 +197,33 @@
 
 (auto-compression-mode t)
 
-  (when window-system
-    (setq frame-title-format '(buffer-file-name "%f" ("%b")))
-    (tooltip-mode -1)
-    (tool-bar-mode -1)
-    (blink-cursor-mode -1))
-    (menu-bar-mode -1)
+(when window-system
+  (setq frame-title-format '(buffer-file-name "%f" ("%b")))
+  (tooltip-mode -1)
+  (tool-bar-mode -1)
+  (blink-cursor-mode -1))
+(menu-bar-mode -1)
 
-  (mouse-wheel-mode t)
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8)
+(mouse-wheel-mode t)
 
-  (setq visible-bell t
-        echo-keystrokes 0.1
-        font-lock-maximum-decoration t
-        font-lock-verbose nil
-        inhibit-startup-message t
-        transient-mark-mode t
-      ;;  color-theme-is-global t
-        delete-by-moving-to-trash t
-        shift-select-mode nil
-        truncate-partial-width-windows nil
-        uniquify-buffer-name-style 'forward
-        whitespace-style '(trailing lines space-before-tab
-                                    indentation space-after-tab)
-        whitespace-line-column 100
-        ediff-window-setup-function 'ediff-setup-windows-plain
-        ediff-split-window-function 'split-window-horizontally
-        oddmuse-directory (concat dotfiles-dir "oddmuse")
-        xterm-mouse-mode t
-        save-place-file (concat dotfiles-dir "places"))
+(setq visible-bell t
+      ring-bell-function 'ignore
+      echo-keystrokes 0.1
+      font-lock-maximum-decoration t
+      font-lock-verbose nil
+      inhibit-startup-message t
+      transient-mark-mode t
+      color-theme-is-global t
+      delete-by-moving-to-trash t
+      shift-select-mode nil
+      truncate-partial-width-windows nil
+      uniquify-buffer-name-style 'forward
+      whitespace-style '(trailing lines space-before-tab
+                                  indentation space-after-tab)
+      whitespace-line-column 100
+      xterm-mouse-mode t)
 
-  (add-to-list 'custom-theme-load-path "~/.emacs.d/elpa")
-  (setq custom-safe-themes t)
+(add-to-list 'custom-theme-load-path "~/.emacs.d/elpa")
+(setq custom-safe-themes t)
 
 (provide 'init-appearance)

@@ -44,17 +44,14 @@
           (lambda () (setq dash-at-point-docset "coffee")))
 
 
-(defun howdoi (beg end)
-  "Replace the region from BEG to END with the howdoi search results for that text."
-  (interactive "r")
-  (let ((terms (buffer-substring beg end)))
-    (shell-command-on-region
-     beg
-     end
-     (format "%s %s" "howdoi" (shell-quote-argument terms))
-     t)))
-
-
+(defun howdoi (search)
+  (interactive "MHow do I: ")
+  (let ((result-buffer (generate-new-buffer-name "*howdoi*")))
+    (shell-command (format "%s %s" "howdoi" (shell-quote-argument search))
+                   result-buffer
+                   nil)
+    (switch-to-buffer result-buffer nil t)
+    (toggle-truncate-lines 1)))
 
 (require 'popup)
 
@@ -73,10 +70,10 @@
 
 (nmap (kbd "C-c d") 'describe-thing-in-popup)
 
-(defun search-config-files (from-point)
+(defun search-config-files (not-from-point)
   "use universal-argument to take symbol at point"
   (interactive "P")
-  (let* ((search-prompt (if from-point (ag/dwim-at-point) ""))
+  (let* ((search-prompt (if not-from-point "" (ag/dwim-at-point)))
          (search-term (read-from-minibuffer "Search: " search-prompt)))
     (ag/search search-term "~/.emacs.d/config" t)))
 

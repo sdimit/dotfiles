@@ -329,8 +329,6 @@
   (let ((current-prefix-arg '(4)))
     (call-interactively 'magit-status)))
 
- (set ediff-window-setup-function 'ediff-setup-windows-plain)
-
 (defun magit-interactive-checkout ()
   (interactive)
   (let* ((revision (magit-read-rev "Switch to")))
@@ -366,5 +364,8 @@
     '(progn
        (set-face-foreground 'magit-diff-add "green3")
        (set-face-foreground 'magit-diff-del "red3")))
+
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(setq ediff-split-window-function 'split-window-horizontally)
 
 (provide 'init-git)
