@@ -22,9 +22,9 @@
 (tooltip-mode -1)
 (setq tooltip-use-echo-area t)
 
-(defface light-symbol-custom-face
-  '(:inherit nil
-    :underline t) "")
+;; (defface light-symbol-custom-face
+;;  '(:inherit nil
+;;    :underline t) "")
 (setq light-symbol-face 'light-symbol-custom-face)
 
 (light-symbol-mode)
@@ -81,6 +81,7 @@
                                           inferior-python-mode
                                           compilation-mode
                                           prodigy-view-mode
+                                          calendar-mode
                                           bs-mode ; for ace-jump-line
                                           gnus-article-mode
                                           gnus-summary-mode
@@ -194,5 +195,44 @@
 
 ;; Turn off 3d modeline
 (set-face-attribute 'mode-line nil :box nil)
+
+(global-font-lock-mode t)
+
+(auto-compression-mode t)
+
+  (when window-system
+    (setq frame-title-format '(buffer-file-name "%f" ("%b")))
+    (tooltip-mode -1)
+    (tool-bar-mode -1)
+    (blink-cursor-mode -1))
+    (menu-bar-mode -1)
+
+  (mouse-wheel-mode t)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+
+  (setq visible-bell t
+        echo-keystrokes 0.1
+        font-lock-maximum-decoration t
+        font-lock-verbose nil
+        inhibit-startup-message t
+        transient-mark-mode t
+      ;;  color-theme-is-global t
+        delete-by-moving-to-trash t
+        shift-select-mode nil
+        truncate-partial-width-windows nil
+        uniquify-buffer-name-style 'forward
+        whitespace-style '(trailing lines space-before-tab
+                                    indentation space-after-tab)
+        whitespace-line-column 100
+        ediff-window-setup-function 'ediff-setup-windows-plain
+        ediff-split-window-function 'split-window-horizontally
+        oddmuse-directory (concat dotfiles-dir "oddmuse")
+        xterm-mouse-mode t
+        save-place-file (concat dotfiles-dir "places"))
+
+  (add-to-list 'custom-theme-load-path "~/.emacs.d/elpa")
+  (setq custom-safe-themes t)
 
 (provide 'init-appearance)

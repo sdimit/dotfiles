@@ -113,4 +113,6 @@
                   (delete-file (concat buffer-file-name "c"))))))
 
 
+(show-paren-mode 1)
+
 (provide 'init-lisp)

@@ -1,12 +1,13 @@
+(require 'ido)
+(require 'flx-ido)
+
+(ido-mode t)
+(ido-vertical-mode t)
+(ido-everywhere 1)
+(flx-ido-mode 1)
 
 (define-key ido-file-completion-map (kbd "C-w") 'ido-delete-backward-updir)
 
-(ido-vertical-mode t)
-
-(require 'flx-ido)
-(ido-mode 1)
-(ido-everywhere 1)
-(flx-ido-mode 1)
 ;; disable ido faces to see flx highlights.
 ;; (setq ido-use-faces nil)
 

@@ -1,5 +1,6 @@
 #name : function template
 # --
 (defun ${name} ()
+  (interactive)
   "${doc}"
-    $0
+    $0)

@@ -70,4 +70,15 @@
 (define-abbrev global-abbrev-table "tempalte" "template")
 (abbrev-mode 1)
 
+  (when (> emacs-major-version 21)
+    (ido-mode t)
+    (setq ido-enable-prefix nil
+          ido-enable-flex-matching t
+          ido-create-new-buffer 'always
+          ido-use-filename-at-point nil
+          ido-max-prospects 10))
+
+(delete 'try-expand-line hippie-expand-try-functions-list)
+(delete 'try-expand-list hippie-expand-try-functions-list)
+
 (provide 'init-completion)

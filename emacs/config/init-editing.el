@@ -25,8 +25,8 @@
 (setq visible-bell nil)
 (setq ring-bell-function 'ignore)
 
-(eval-after-load "flyspell"
-  '(defun flyspell-mode (&optional arg)))
+;; (eval-after-load "flyspell"
+;;  '(defun flyspell-mode (&optional arg)))
 
 (setq c-basic-offset 2)
 
@@ -402,5 +402,14 @@ markdown documment"
 (nmap " ll" 'align-regexp)
 
 (put 'narrow-to-region 'disabled nil)
+
+  (add-hook 'text-mode-hook 'turn-on-auto-fill)
+  (set-default 'indent-tabs-mode nil)
+  (set-default 'indicate-empty-lines t)
+  (set-default 'imenu-auto-rescan t)
+
+(global-font-lock-mode t)
+
+  (defalias 'yes-or-no-p 'y-or-n-p)
 
 (provide 'init-editing)

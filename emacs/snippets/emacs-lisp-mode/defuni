@@ -3,4 +3,4 @@
 (defun ${name} ()
   "${doc}"
   (interactive)
-    $0
+    $0)

@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: emacs_lisp_source
+# key: lisp
+# binding: direct-keybinding
+# type: lisp
+# --
+
+\#+srcname: $0
+\#+begin_src emacs-lisp
+  $1
+\#+end_src

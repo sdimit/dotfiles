@@ -292,4 +292,14 @@
   (interactive)
   (kill-buffer (current-buffer)))
 
+(recentf-mode 1)
+
+(auto-compression-mode t)
+
+  (if (eq system-type 'darwin)
+      (setq system-name (car (split-string system-name "\\."))))
+
+(setq backup-directory-alist `(("." . ,(expand-file-name
+                                        (concat dotfiles-dir "backups")))))
+
 (provide 'init-files)

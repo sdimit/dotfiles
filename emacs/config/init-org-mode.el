@@ -1,24 +1,36 @@
 (require 'org)
 (require 'org-mac-link "/Users/admin/dotfiles/emacs/elpa/org-mac-link-20140107.519/org-mac-link.el")
 
+(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+(global-set-key "\C-cC" 'org-capture)
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
 
-(setq org-src-fontify-natively t)
-(setq org-src-tab-acts-natively t)
+(setq org-src-fontify-natively   t
+      org-startup-indented       t
+      org-src-tab-acts-natively  t
+      org-completion-use-ido     t
+      org-confirm-babel-evaluate nil
+      org-edit-src-content-indentation 0)
 
-;;  Don't ask for confirmation on every =C-c C-c= code-block compile.
-(setq org-confirm-babel-evaluate nil)
+;;  Configure org-mode so that when you edit source code in an
+;;  indirect buffer (with C-c '), the buffer is opened in the current
+;;  window. That way, your window organization isn't broken when
+;;  switching.
+(setq org-src-window-setup 'current-window)
+
+
 
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((emacs-lisp . t)
-   (sh . t)
-   (R . t)
-   (clojure . t)
-   (js . t)
-   (python . t)
-   ))
+   (sh         . t)
+   (R          . t)
+   (clojure    . t)
+   (js         . t)
+   (python     . t)))
 
-(setq org-completion-use-ido t)
 (require 'org-special-blocks)
 
 (if window-system (require 'org-mouse))
@@ -27,12 +39,6 @@
   (let ((yas-fallback-behavior 'return-nil))
     (and (fboundp 'yas-expand) (yas-expand))))
 
-(add-hook 'org-mode-hook
-          (lambda ()
-            (add-to-list 'org-tab-first-hook
-                         'yas-org-very-safe-expand)
-            ))
-
 (define-minor-mode evil-org-mode
   "Buffer local minor mode for evil-org"
   :init-value nil
@@ -40,7 +46,9 @@
   :keymap (make-sparse-keymap) ; defines evil-org-mode-map
   :group 'evil-org)
 
-(add-hook 'org-mode-hook 'evil-org-mode) ;; only load with org-mode
+(add-hook 'org-mode-hook (lambda ()
+            (add-to-list 'org-tab-first-hook 'yas-org-very-safe-expand)
+            (evil-org-mode)))
 
 (defun evil-org-new-line ()
   (interactive)
@@ -84,22 +92,11 @@
             (kbd "M-K") 'org-shiftmetaup
             (kbd "M-J") 'org-shiftmetadown)) '(normal insert))
 
-(setq org-edit-src-content-indentation 0
-      org-src-tab-acts-natively t
-      org-src-fontify-natively t
-      org-confirm-babel-evaluate nil)
-
-(setq org-default-notes-file "~/Inbox/notes.org")
+(setq org-default-notes-file "~/Notes/inbox.org")
 
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-cL" 'org-mac-chrome-insert-frontmost-url)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
-
-;;  Configure org-mode so that when you edit source code in an
-;;  indirect buffer (with C-c '), the buffer is opened in the current
-;;  window. That way, your window organization isn't broken when
-;;  switching.
-(setq org-src-window-setup 'current-window)
 
 (provide 'init-org-mode)
