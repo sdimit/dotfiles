@@ -161,6 +161,25 @@
   (let ((command "cd ~/10to8/Native/native/src/apps/colin && cake build:test:once"))
     (async-shell-command command "*cake-test*")))
 
+(defun get-paragraph-bounds ()
+  (save-excursion
+    (let ((beg (progn (backward-paragraph) (point)))
+          (end (progn (forward-paragraph) (point))))
+      (cons beg end))))
+
+(defun insert-require-and-realign (dir)
+  (prompt-to-insert-require-statement-from-project dir)
+  ;;(let* ((par-bounds (get-paragraph-bounds))
+  ;;       (beg (car par-bounds))
+  ;;       (end (cdr par-bounds)))
+  ;;  (align-regexp beg end "="))
+  )
+
+;; (defun insert-require-and-realign (dir)
+;;   (prompt-to-insert-require-statement-from-project dir)
+;;   (mark-paragraph)
+;;   (align-regexp (region-beginning) (region-end) "\="))
+
 (global-set-key (kbd "C-c k k") 'search-deep-thought)
 
 (global-set-key (kbd "C-c j m") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/jeltz/app/models/")))
@@ -174,6 +193,8 @@
 (global-set-key (kbd "C-c j j") 'search-jeltz)
 (global-set-key (kbd "C-x j") (bind (cd "~/10to8/Native/native/src/apps/jeltz/app/")))
 
+(global-set-key (kbd "C-c j r") (bind (insert-require-and-realign "~/10to8/Native/native/src/apps/jeltz/app")))
+
 (global-set-key (kbd "C-c c m") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/models/")))
 (global-set-key (kbd "C-c c v") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/views/")))
 (global-set-key (kbd "C-c c C") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/controllers/")))
@@ -184,6 +205,8 @@
 (global-set-key (kbd "C-c c a") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/apps/colin/app/")))
 (global-set-key (kbd "C-c c c") 'search-colin)
 (global-set-key (kbd "C-x c") (bind (cd "~/10to8/Native/native/src/apps/colin/app")))
+
+(global-set-key (kbd "C-c c r") (bind (insert-require-and-realign "~/10to8/Native/native/src/apps/colin/app")))
 
 (global-set-key (kbd "C-x x") (bind (cd "~/10to8/Native/native/src/core")))
 (global-set-key (kbd "C-c k a") (bind (ido-find-file-in-dir "~/10to8/Native/native/src/core/")))

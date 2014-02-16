@@ -164,16 +164,6 @@
 
 ;; (add-hook 'minibuffer-setup-hook 'my-minibuffer-setup-hook)
 
-(defun search-require-in-jeltz ()
-  (interactive)
-  (let* ((term (ag/dwim-at-point))
-         (full-term (concat term ".*" "require")))
-   (save-excursion
-     (ag/search full-term "~/10to8/Native/native/src/apps/jeltz/app" t)
-     (sleep-for 2)
-     (next-error)
-     (kill-line)
-     (yank))
-   (yank)))
+
 
 (provide 'init-experimental)

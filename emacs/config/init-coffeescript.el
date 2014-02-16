@@ -45,4 +45,17 @@
 ;; Start the server when we first open a coffee file and start checking
 (setq coffeelintnode-autostart 'true)
 
+(defun prompt-to-insert-require-statement-from-project (dir)
+  "provide a choice to insert a 'require' statement at the current point,
+   based on the existing lines from 'coffeescript' project at DIR"
+  (let* ((find-command     (concat "find " dir " -name '*.coffee'"))
+         (require-regexp   "'^[^@]* = require'")
+         (grep-command     (concat "grep --no-filename --recursive " require-regexp))
+         (post-processing  "sed 's/ *=/ =/' | sort | uniq")
+         (complete-command (concat find-command " | xargs " grep-command " | " post-processing))
+         (raw-results      (shell-command-to-string complete-command))
+         (choices          (split-string raw-results "\n"))
+         (selection        (ido-completing-read "Require: " choices)))
+    (insert selection)))
+
 (provide 'init-coffeescript)

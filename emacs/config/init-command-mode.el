@@ -160,4 +160,6 @@
                 ido-file-completion-map
                 ido-file-dir-completion-map)))
 
+(eldoc-in-minibuffer-mode 1)
+
 (provide 'init-command-mode)
