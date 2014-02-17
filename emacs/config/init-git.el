@@ -268,6 +268,14 @@
         trimmed-ref)
     branch-ref))
 
+(defun extract-jira-ticket-number (branch-ref)
+  (if (s-contains? "/" branch-ref)
+      (let* ((second-part (cadr (split-string branch-ref "/")))
+             (trimmed-ref (replace-regexp-in-string "b?\n$" "" second-part))
+             (result      (string-match "[^0-9]*\\([0-9]*\\)[^0-9]*" trimmed-ref))
+             (return-val  (match-string 1 trimmed-ref)))
+        return-val)))
+
 (defun get-current-ticket-name ()
   (let* ((branch-ref (shell-command-as-string "git rev-parse --abbrev-ref head") )
          (ticket-name (extract-jira-ticket-ref branch-ref)))

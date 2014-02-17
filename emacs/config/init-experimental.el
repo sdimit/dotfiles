@@ -109,8 +109,6 @@
 
 ;;  (nmap (kbd "M-d C-.") 'delete-last-char-on-line)
 
-;;;###autoload
-
 (defadvice find-tag (around find-tag-around)
   "Before calling `find-tag', set correct TAGS-files."
   (tags-reset-tags-tables)
@@ -118,7 +116,6 @@
     ad-do-it))
 (ad-activate 'find-tag)
 
-;;;###autoload
 (defun find-file-up (file-name &optional dir)
   (let ((f (expand-file-name file-name (or dir default-directory)))
         (parent (file-truename (expand-file-name ".." dir))))
@@ -164,6 +161,22 @@
 
 ;; (add-hook 'minibuffer-setup-hook 'my-minibuffer-setup-hook)
 
+(defun wot ()
+  (interactive)
+  (shell-command "afplay ~/Documents/say_what.mp4"))
 
+(defun year-fact (year)
+  "could use request.el, but almost overkill"
+  (let ((year-n (string-to-number year)))
+    (if (and (not (eq nil year-n)) (> year-n 0))
+        (let* ((api-root "http://numbersapi.com")
+               (url (concat api-root "/" year "/year"))
+               (curl-command (concat "curl --silent " url)))
+          (shell-command-as-string curl-command))
+      (message "Can't read year"))))
+
+(defun year-fact-from-git-branch ()
+  (interactive)
+  (message (year-fact (extract-jira-ticket-number (shell-command-as-string "git rev-parse --abbrev-ref head")))))
 
 (provide 'init-experimental)
