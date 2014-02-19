@@ -30,3 +30,4 @@ emacs/saved-places
 /zsh/build/
 bin/clojurescript
 /emacs/.cache/
+/bin/offlineimap.pyc

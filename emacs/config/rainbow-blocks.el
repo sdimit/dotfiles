@@ -241,9 +241,7 @@ Sets text properties:
                                    (point)))
           (loc-end (if (= (point-max) end-pos)
                          (point-max)
-                     (1+ end-pos))))
-      ;; (when (eq depth -1) (message "Unmatched delimiter at char %s." loc))
-          (message (format "%s: depth %d" delim-face depth))
+                     end-pos)))
           (add-text-properties loc-start loc-end
                            `(font-lock-face ,delim-face
                              rear-nonsticky t)))))
@@ -312,8 +310,8 @@ LOC is location of character (delimiter) to be colorized."
 ;;; JIT-Lock functionality
 
 ;; Used to skip delimiter-by-delimiter `rainbow-blocks-propertize-region'.
-(defconst rainbow-blocks-delim-regex "\("
-  "Regex matching just opening blocks the mode highlights.")
+(defconst rainbow-blocks-delim-regex "\\(\(\\|\)\\|\\[\\|\\]\\|\{\\|\}\\)"
+  "Regex matching all opening and closing delimiters the mode highlights.")
 
 ;; main function called by jit-lock:
 (defun rainbow-blocks-propertize-region (start end)
@@ -335,21 +333,21 @@ Used by jit-lock for dynamic highlighting."
                    (setq depth (1+ depth))
                    (rainbow-blocks-apply-color "paren" depth (point)))
                   ((eq ?\) delim)
-                   (rainbow-blocks-apply-color "paren" depth (point))
+                   ;;(rainbow-blocks-apply-color "paren" depth (point))
                    (setq depth (or (and (<= depth 0) 0) ; unmatched paren
                                    (1- depth))))
                   ((eq ?\[ delim)
                    (setq depth (1+ depth))
                    (rainbow-blocks-apply-color "bracket" depth (point)))
                   ((eq ?\] delim)
-                   (rainbow-blocks-apply-color "bracket" depth (point))
+                   ;;(rainbow-blocks-apply-color "bracket" depth (point))
                    (setq depth (or (and (<= depth 0) 0) ; unmatched bracket
                                    (1- depth))))
                   ((eq ?\{ delim)
                    (setq depth (1+ depth))
                    (rainbow-blocks-apply-color "brace" depth (point)))
                   ((eq ?\} delim)
-                   (rainbow-blocks-apply-color "brace" depth (point))
+                   ;;(rainbow-blocks-apply-color "brace" depth (point))
                    (setq depth (or (and (<= depth 0) 0) ; unmatched brace
                                    (1- depth)))))))
         ;; move past delimiter so re-search-forward doesn't pick it up again

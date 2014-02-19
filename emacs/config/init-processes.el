@@ -86,7 +86,7 @@
    'prodigy-start-service))
 
 (defun run-bin-script ()
-  "prompts to run a CLI scripts for user bin folder"
+  "prompts to run a CLI script from user bin folder"
   (interactive)
   (let* ((bin-scripts (directory-files "~/bin"))
          (script (ido-completing-read "Script: " bin-scripts)))

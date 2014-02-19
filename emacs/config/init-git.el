@@ -6,6 +6,7 @@
 (setq magit-stage-all-confirm nil)
 (setq magit-unstage-all-confirm nil)
 
+
 (setq magit-default-tracking-name-function
       (lambda (remote branch) branch))
 

@@ -48,7 +48,8 @@
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
 
-(global-rainbow-delimiters-mode)
+;; (global-rainbow-delimiters-mode)
+(global-rainbow-blocks-mode)
 
 (add-hook 'clojure-mode-hook 'highlight-sexp-mode)
 (add-hook 'emacs-lisp-mode-hook 'highlight-sexp-mode)
