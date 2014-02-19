@@ -50,7 +50,10 @@
     (shell-command (format "%s %s" "howdoi" (shell-quote-argument search))
                    result-buffer
                    nil)
-    (switch-to-buffer result-buffer nil t)
+    (pop-to-buffer result-buffer nil t)
+    (org-mode)
+    (whitespace-cleanup)
+    (remove-dos-eol)
     (toggle-truncate-lines 1)))
 
 (require 'popup)

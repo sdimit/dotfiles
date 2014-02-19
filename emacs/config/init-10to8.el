@@ -361,7 +361,7 @@
   :on-output (lambda (service output)
                  (when (s-matches? "compiled" output)
                    (prodigy-set-status service 'ready)))
-  :tags '(10to8 full))
+  :tags '(10to8))
 
 (prodigy-define-service
   :name "colin - watch"

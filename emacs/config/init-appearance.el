@@ -37,7 +37,7 @@
     (setq current-theme theme)
     (setq hl-sexp-background-color "#eee8d5")
     (highlight-sexp-mode nil)
-    (global-hl-line-mode nil)
+    ;;(global-hl-line-mode nil)
     (setq evil-emacs-state-cursor '("red" box))
     (setq evil-normal-state-cursor '("black" box))
     (setq evil-visual-state-cursor '("orange" box))
@@ -110,7 +110,7 @@
 (setq line-spacing 2)
 
 ;; No current line highlighting
-(global-hl-line-mode nil)
+;; (global-hl-line-mode nil)
 
 (custom-set-faces
  '(region ((t (:background "alternateSelectedControlColor" :foreground "white" :background "#073642")))))

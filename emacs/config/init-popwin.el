@@ -30,6 +30,7 @@
         ("^\*Helm.+\*$" :regexp t :height 12)
         ("*Compile-Log*" :height 30 :stick t)
         ("*HTTP Response*" :height 20 :stick t)
+        ("*prodigy*" :height 20 :stick t)
         ("*nose-test*" :height 10 :stick t)
         ("*cake-test*" :height 10 :stick t)
         ("^\\*direx-jedi.*\\*$" :regexp t :width 35 :position left :stick t)

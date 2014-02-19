@@ -220,6 +220,11 @@
 
 (imap (kbd "C-t") (bind (my-transpose-chars)))
 
+(setq rotate-text-symbols
+      '(("true" "false")
+        ("True" "False")
+        ("->" "=>")))
+
 (nmap (kbd "-") 'rotate-text)
 
 (require 'multiple-cursors)
@@ -402,6 +407,11 @@ markdown documment"
 
 (global-font-lock-mode t)
 
-  (defalias 'yes-or-no-p 'y-or-n-p)
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+(defun remove-dos-eol ()
+  "Do not show ^M in files containing mixed UNIX and DOS line endings."
+  (setq buffer-display-table (make-display-table))
+  (aset buffer-display-table ?\^M []))
 
 (provide 'init-editing)

@@ -85,4 +85,12 @@
    (prodigy-services-tagged-with (intern tag))
    'prodigy-start-service))
 
+(defun run-bin-script ()
+  "prompts to run a CLI scripts for user bin folder"
+  (interactive)
+  (let* ((bin-scripts (directory-files "~/bin"))
+         (script (ido-completing-read "Script: " bin-scripts)))
+    (call-process script)))
+
+
 (provide 'init-processes)

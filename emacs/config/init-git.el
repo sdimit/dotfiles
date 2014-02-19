@@ -262,19 +262,16 @@
 (defun extract-jira-ticket-ref (branch-ref)
   "takes the part after feature/ or hotfix/,
      if applicable"
-  (if (s-contains? "/" branch-ref)
-      (let* ((second-part (cadr (split-string branch-ref "/")))
-             (trimmed-ref (replace-regexp-in-string "b?\n$" "" second-part)))
-        trimmed-ref)
-    branch-ref))
+  (concat "TTE-" (extract-jira-ticket-number branch-ref)))
 
 (defun extract-jira-ticket-number (branch-ref)
-  (if (s-contains? "/" branch-ref)
-      (let* ((second-part (cadr (split-string branch-ref "/")))
-             (trimmed-ref (replace-regexp-in-string "b?\n$" "" second-part))
+  (let* ((ref (if (s-contains? "/" branch-ref)
+                           (cadr (split-string branch-ref "/"))
+                         branch-ref))
+             (trimmed-ref (replace-regexp-in-string "b?\n$" "" ref))
              (result      (string-match "[^0-9]*\\([0-9]*\\)[^0-9]*" trimmed-ref))
              (return-val  (match-string 1 trimmed-ref)))
-        return-val)))
+        return-val))
 
 (defun get-current-ticket-name ()
   (let* ((branch-ref (shell-command-as-string "git rev-parse --abbrev-ref head") )

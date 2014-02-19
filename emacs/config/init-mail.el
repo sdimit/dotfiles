@@ -16,10 +16,14 @@
 
 ;; setup some handy shortcuts
 (setq mu4e-maildir-shortcuts
-      '(("/gmail/INBOX"     . ?i)
-        ("/gmail/sent_mail" . ?s)
-        ("/gmail/all_mail"  . ?a)
-        ("/gmail/trash"     . ?t)))
+      '(("/gmail/INBOX"      . ?i)
+        ("/gmail/sent_mail"  . ?s)
+        ("/gmail/all_mail"   . ?a)
+        ("/gmail/trash"      . ?t)
+        ("/tento8/INBOX"     . ?I)
+        ("/tento8/sent_mail" . ?S)
+        ("/tento8/all_mail"  . ?A)
+        ("/tento8/trash"     . ?T)))
 
 ;; allow for updating mail using 'U' in the main view:
 (setq mu4e-get-mail-command "offlineimap")
@@ -53,5 +57,11 @@
              '("View in browser" . mu4e-msgv-action-view-in-browser) t)
 
 (setq mu4e-compose-signature "")
+
+(setq message-send-mail-function 'smtpmail-send-it
+     smtpmail-stream-type 'starttls
+     smtpmail-default-smtp-server "smtp.gmail.com"
+     smtpmail-smtp-server "smtp.gmail.com"
+     smtpmail-smtp-service 587)
 
 (provide 'init-mail)

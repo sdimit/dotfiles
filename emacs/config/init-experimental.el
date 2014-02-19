@@ -179,4 +179,16 @@
   (interactive)
   (message (year-fact (extract-jira-ticket-number (shell-command-as-string "git rev-parse --abbrev-ref head")))))
 
+(defun align-colon-in-indent ()
+  (interactive)
+  (let ((beg (car (evil-indent--same-indent-range)))
+       (end (cadr (evil-indent--same-indent-range))))
+   (align-regexp beg end ":")))
+
+(defun align-colon-in-region (beg end)
+  (interactive "r")
+  (align-regexp beg end ":"))
+
+(global-set-key (kbd "C-c :") 'align-colon-in-indent)
+
 (provide 'init-experimental)
