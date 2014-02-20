@@ -10,6 +10,7 @@
 ;; minimize fringe
 (setq-default indicate-empty-lines nil)
 (put 'upcase-region 'disabled nil)
+
 (fringe-mode 4)
 
 (setq initial-scratch-message "")
@@ -208,24 +209,34 @@
 
 (mouse-wheel-mode t)
 
-(setq visible-bell t
-      ring-bell-function 'ignore
-      echo-keystrokes 0.1
-      font-lock-maximum-decoration t
-      font-lock-verbose nil
-      inhibit-startup-message t
-      transient-mark-mode t
-      color-theme-is-global t
-      delete-by-moving-to-trash t
-      shift-select-mode nil
+(setq visible-bell                   t
+      ring-bell-function             'ignore
+      echo-keystrokes                0.1
+      font-lock-maximum-decoration   t
+      font-lock-verbose              nil
+      inhibit-startup-message        t
+      transient-mark-mode            t
+      color-theme-is-global          t
+      delete-by-moving-to-trash      t
+      shift-select-mode              nil
       truncate-partial-width-windows nil
-      uniquify-buffer-name-style 'forward
-      whitespace-style '(trailing lines space-before-tab
-                                  indentation space-after-tab)
-      whitespace-line-column 100
-      xterm-mouse-mode t)
+      uniquify-buffer-name-style     'forward
+      whitespace-style               '(trailing lines space-before-tab
+                                       indentation space-after-tab)
+      whitespace-line-column         100
+      xterm-mouse-mode               t)
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/elpa")
 (setq custom-safe-themes t)
+
+(defun reset-fringe ()
+  (interactive)
+  (set-fringe-mode nil))
+
+(defun increase-fringe ()
+  (interactive)
+  (message fringe-mode)
+  (let ((new-value (+ 4 (or fringe-mode 0))))
+    (set-fringe-mode new-value)))
 
 (provide 'init-appearance)

@@ -82,6 +82,8 @@ ARCHIVE is the string name of the package archive.")
 (setq package-user-dir (concat dotfiles-dir "elpa"))
 (setq custom-file (concat dotfiles-dir "custom.el"))
 
+(require 'rainbow-blocks)
+
 (require 'cl)
 (require 'saveplace)
 (require 'ffap)
@@ -130,6 +132,7 @@ ARCHIVE is the string name of the package archive.")
 (require 'init-experimental)
 (require 'init-irc)
 (require 'init-mail)
+(require 'init-w3m)
 (require 'init-deft)
 
 (load custom-file 'noerror)

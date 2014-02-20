@@ -118,7 +118,11 @@
 
 (defun create-new-buffer ()
   (interactive)
-  (switch-to-buffer-other-window (generate-new-buffer-name "*new*")))
+  (let ((new-buffer (generate-new-buffer-name "*new*")))
+    (switch-to-buffer-other-window new-buffer)
+    (if (region-active-p)
+        (let ((content (buffer-substring (region-beginning) (region-end))))
+          (insert content)))))
 
 (defun create-new-buffer-in-same-window ()
   (interactive)

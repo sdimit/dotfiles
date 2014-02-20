@@ -1,3 +1,7 @@
+;;; rainbow-blocks.el --- Highlights nested lisp blocks in rainbow colors.
+;;; Forked from rainbow-delimiters (by Jemery Rayman <opensource@jeremyrayman.com>)
+;;; with very minor changes
+
 (eval-when-compile (require 'cl))
 
 (defgroup rainbow-blocks nil
@@ -142,7 +146,7 @@ For example: 'rainbow-blocks-depth-1-face'."
             (or
              ;; Our nesting depth has a face defined for it.
              (and (<= depth rainbow-blocks-max-face-count)
-                  depth)
+                depth)
              ;; Deeper than # of defined faces; cycle back through to
              ;; `rainbow-blocks-outermost-only-face-count' + 1.
              ;; Return face # that corresponds to current nesting level.
@@ -232,19 +236,14 @@ Sets text properties:
 `rear-nonsticky' to prevent color from bleeding into subsequent characters typed by the user."
   (with-silent-modifications
     (let* ((delim-face (if (<= depth 0)
-                          'rainbow-blocks-unmatched-face
-                        (rainbow-blocks-depth-face depth)))
-
-           (loc-start loc) ;; (if (= 0 loc) 0 (1- loc)))
-          (end-pos (save-excursion (goto-char loc-start)
-                                   (forward-sexp)
-                                   (point)))
-          (loc-end (if (= (point-max) end-pos)
-                         (point-max)
-                     end-pos)))
-          (add-text-properties loc-start loc-end
+                           'rainbow-blocks-unmatched-face
+                         (rainbow-blocks-depth-face depth)))
+           (end-pos    (save-excursion (goto-char loc)
+                                    (forward-sexp)
+                                    (point))))
+      (add-text-properties loc end-pos
                            `(font-lock-face ,delim-face
-                             rear-nonsticky t)))))
+                                            rear-nonsticky t)))))
 
 
 (defun rainbow-blocks-unpropertize-delimiter (loc)
@@ -304,7 +303,7 @@ LOC is location of character (delimiter) to be colorized."
    (symbol-value (intern-soft
                   (concat "rainbow-blocks-highlight-" delim "s-p")))
    (rainbow-blocks-propertize-delimiter loc
-                                            depth)))
+                                        depth)))
 
 
 ;;; JIT-Lock functionality
@@ -389,22 +388,6 @@ Used by jit-lock for dynamic highlighting."
 ;;;###autoload
 (define-globalized-minor-mode global-rainbow-blocks-mode
   rainbow-blocks-mode rainbow-blocks-mode-enable)
-
-(defun reset-text-properties ()
-  "for debugging mostly"
-  (interactive)
-  (set-text-properties (point-min)
-                       (point-max)
-                       nil))
-
-(defun blocks-do-region ()
-  (interactive)
-  (rainbow-blocks-propertize-region (point-min)
-                                    (point-max)))
-
-(defun sexp-depth ()
-  (interactive)
-  (message "%d" (rainbow-blocks-depth (point))))
 
 (provide 'rainbow-blocks)
 

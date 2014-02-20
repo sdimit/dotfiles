@@ -12,6 +12,7 @@
 
 (setq mu4e-html2text-command "w3m -dump -T text/html")
 (setq mu4e-use-fancy-chars t)
+(setq mu4e-confirm-quit nil)
 (setq mu4e-view-fields '(:from :to :cc :subject :date :mailing-list :attachments))
 
 ;; setup some handy shortcuts
@@ -26,7 +27,7 @@
         ("/tento8/trash"     . ?T)))
 
 ;; allow for updating mail using 'U' in the main view:
-(setq mu4e-get-mail-command "offlineimap")
+(setq mu4e-get-mail-command "~/bin/mailrun.sh")
 
 ;; don't save message to Sent Messages, GMail/IMAP will take care of this
 (setq mu4e-sent-messages-behavior 'delete)

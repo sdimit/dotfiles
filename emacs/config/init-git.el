@@ -283,7 +283,7 @@
   (if (not (eq nil ticket-ref))
       (progn
         (call-process "~/10to8/scripts/browser.sh")
-        (browse-url (concat "https://tento8.atlassian.net/browse/" ticket-ref)))))
+        (browse-url-default-browser (concat "https://tento8.atlassian.net/browse/" ticket-ref)))))
 
 (defun open-jira-ticket (ticket-ref)
   (interactive "MTicket number: ")
