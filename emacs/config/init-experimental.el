@@ -182,8 +182,15 @@
 (defun align-colon-in-indent ()
   (interactive)
   (let ((beg (car (evil-indent--same-indent-range)))
-       (end (cadr (evil-indent--same-indent-range))))
+        (end (cadr (evil-indent--same-indent-range))))
+   (mark-region beg end)
    (align-regexp beg end ":")))
+
+(defun mark-region (beg end)
+  (interactive)
+    (goto-char beg)
+    (push-mark)
+    (goto-char end))
 
 (defun align-colon-in-region (beg end)
   (interactive "r")
@@ -191,34 +198,57 @@
 
 (global-set-key (kbd "C-c :") 'align-colon-in-indent)
 
+;; (defun w3m-create-imenu ()
+;;   "Create imenu index from pod2html output."
+;;   (save-excursion
+;;     (goto-char (point-min))
+;;     (when (looking-at "Location: \\(about://perldoc/[^#]+\\)")
+;;       (let ((base (match-string 1))
+;;             beg end
+;;             list)
+;;         (w3m-view-source)
+;;         (search-forward "<!-- INDEX BEGIN -->")
+;;         (setq beg (point))
+;;         (search-forward "<!-- INDEX END -->")
+;;         (setq end (point))
+;;         (goto-char beg)
+;;         (while (re-search-forward "<a href=\"\\(#[^\"]+\\)\">\\([^<]+\\)" end t)
+;;           (push (cons (match-string 2) (match-string 1)) list))
+;;         (w3m-view-source)
+;;         (nreverse list)))))
 
+;; (defun w3m-goto-function (name anchor)
+;;   (if (string-match "^about://perldoc/" w3m-current-url)
+;;       (w3m-goto-url (concat w3m-current-url anchor))
+;;     (imenu-default-goto-function name anchor)))
 
-(defun w3m-create-imenu ()
-  "Create imenu index from pod2html output."
-  (save-excursion
-    (goto-char (point-min))
-    (when (looking-at "Location: \\(about://perldoc/[^#]+\\)")
-      (let ((base (match-string 1))
-            beg end
-            list)
-        (w3m-view-source)
-        (search-forward "<!-- INDEX BEGIN -->")
-        (setq beg (point))
-        (search-forward "<!-- INDEX END -->")
-        (setq end (point))
-        (goto-char beg)
-        (while (re-search-forward "<a href=\"\\(#[^\"]+\\)\">\\([^<]+\\)" end t)
-          (push (cons (match-string 2) (match-string 1)) list))
-        (w3m-view-source)
-        (nreverse list)))))
+;; (defun w3m-install-imenu ()
+;;   (setq imenu-create-index-function 'w3m-create-imenu
+;;         imenu-default-goto-function 'w3m-goto-function))
 
-(defun w3m-goto-function (name anchor)
-  (if (string-match "^about://perldoc/" w3m-current-url)
-      (w3m-goto-url (concat w3m-current-url anchor))
-    (imenu-default-goto-function name anchor)))
+(defvar readability-token "5c4d8e64788a2ff5484b42fc351bbf3fa2b9d370"
+  "API token")
 
-(defun w3m-install-imenu ()
-  (setq imenu-create-index-function 'w3m-create-imenu
-        imenu-default-goto-function 'w3m-goto-function))
+(defun readability-parse (url)
+  (let* ((api-root    "http://readability.com/api/content/v1/parser")
+         (url-param   (concat "?url=" url))
+         (token-param (concat "&token=" readability-token)))
+    (concat api-root url-param token-param)))
+
+(defun w3m-readability-current-page ()
+  (interactive)
+  (let* ((url w3m-current-url))
+    (browse-url (readability-parse url))))
+
+;; (require 'request)
+;; (request
+;;  (readability-parse "http://www.theguardian.com/books/2014/feb/20/edward-snowden-files-nsa-gchq-luke-harding")
+;;  :parser 'json-read
+;;  :success (function*
+;;            (lambda (&key data &allow-other-keys)
+;;              (let* ((content-url (assoc-default 'short_url data)))
+;;                (browse-url content-url)))))
+
+;; (readability-parse "http://blog.readability.com/2011/02/step-up-be-heard-readability-ideas/" "")
 
 (provide 'init-experimental)

@@ -31,3 +31,4 @@ emacs/saved-places
 bin/clojurescript
 /emacs/.cache/
 *.pyc
+/emacs/pinboard-tags-cache

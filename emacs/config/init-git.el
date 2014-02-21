@@ -72,8 +72,9 @@
 (nmap "[g" 'git-gutter+-next-hunk)
 (nmap "]g" 'git-gutter+-previous-hunk)
 
-(nmap " mbb" 'magit-blame-mode)
-(nmap " mbl" 'magit-blame-locate-commit)
+(nmap " mb" 'git-checkout)
+(nmap " mBb" 'magit-blame-mode)
+(nmap " mBl" 'magit-blame-locate-commit)
 (nmap " mdd" 'magit-prompt-diff)
 (nmap " mdm" 'ediff-current-file-with-master)
 (nmap " mD" (bind (call-interactively 'magit-diff)
@@ -87,6 +88,7 @@
 (nmap " ml" 'magit-log-current-file)
 (nmap " mA" 'magit-log)
 (nmap " mc" 'magit-commit)
+(nmap " mm" 'magit-merge)
 (nmap " mO" 'magit-oops)
 (nmap " mL" (bind (magit-show-commit "HEAD")))
 (nmap " mr" 'magit-rebase-step)
@@ -136,6 +138,7 @@
 ;; magit
 (evil-add-hjkl-bindings magit-branch-manager-mode-map 'emacs
   "K" 'magit-discard-item
+  (kbd "C-x K") (bind (magit-delete-branch (thing-at-point 'symbol) t))
   "L" 'magit-key-mode-popup-logging)
 
 (evil-add-hjkl-bindings magit-status-mode-map 'emacs
@@ -373,5 +376,24 @@
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq ediff-split-window-function 'split-window-horizontally)
+
+(add-hook 'git-commit-mode-hook (lambda ()
+                                  (insert (get-current-ticket-name))))
+
+(defun git-checkout (revision)
+  "allow to invoke magit-checkout outside of status window.."
+  (interactive
+   (list (let ((current-branch (magit-get-current-branch)))
+           (magit-read-rev (format "Switch from '%s' to" current-branch)))))
+  (magit-run-git "checkout" revision))
+
+;; (add-hook 'magit-status-mode-hook
+;;           (lambda ()
+;;             (save-excursion
+;;               (let ((inhibit-read-only t))
+;;                 (goto-char (point-min))
+;;                 (re-search-forward "^Tag")
+;;                 (beginning-of-line)
+;;                 (kill-line)))))
 
 (provide 'init-git)

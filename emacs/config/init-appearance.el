@@ -90,6 +90,7 @@
 (nmap (kbd "C-c C-w") 'whitespace-cleanup)
 
 (dark-theme)
+;; (light-theme)
 
 ;; more readable camelCase
 (glasses-mode)

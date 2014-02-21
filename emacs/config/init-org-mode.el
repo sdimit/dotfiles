@@ -46,13 +46,14 @@
 (define-minor-mode evil-org-mode
   "Buffer local minor mode for evil-org"
   :init-value nil
-  :lighter " EvilOrg"
+  :lighter " "
   :keymap (make-sparse-keymap) ; defines evil-org-mode-map
   :group 'evil-org)
 
 (add-hook 'org-mode-hook (lambda ()
             (add-to-list 'org-tab-first-hook 'yas-org-very-safe-expand)
-            (evil-org-mode)))
+            (evil-org-mode)
+            (setq mode-name " ꙮ ")))
 
 (defun evil-org-new-line ()
   (interactive)
@@ -106,5 +107,14 @@
 (add-hook 'org-mode-hook 'auto-fill-mode)
 ;; Use-enter-to-follow-links
 (setq org-return-follows-link t)
+
+;; (org-entry-get 'property)
+;; ;; get all properties in buffer
+;; (org-buffer-property-keys)
+;; (org-property-action)
+;; (org-set-property)
+;; (org-delete-property)
+;; (org-delete-property-globally)
+;; (org-compute-property-at-point)
 
 (provide 'init-org-mode)

@@ -1,3 +1,4 @@
+(require 'evil-indent-textobject)
 
 (evil-mode 1)
 
@@ -72,7 +73,7 @@
 
 (nmap " k" 'helm-bookmarks)
 (nmap " p" 'helm-browse-project)
-(nmap " g" 'helm-git-grep)
+(nmap " g" 'w3m-search)
 (nmap " t" 'helm-etags-select)
 (nmap " h" 'highlight-regexp)
 (nmap " H" 'highlight-from-isearch)
@@ -105,7 +106,8 @@
 
 (nmap (kbd "SPC RET") 'ido-find-file)
 (nmap (kbd "SPC TAB") 'ibuffer-other-window)
-(nmap (kbd "SPC \\") 'recentf-ido-find-file)
+;; (nmap (kbd "SPC \\") 'recentf-ido-find-file)
+(nmap (kbd "SPC \\") 'helm-recentf)
 
 (nmap "j" 'evil-next-visual-line)
 (nmap "k" 'evil-previous-visual-line)

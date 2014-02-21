@@ -26,8 +26,10 @@
         ("*cider-doc*" :height 15 :stick t)
         ("*nrepl-macroexpansion*" :height 30 :stick t)
         ("*Kill Ring*" :height 30)
-        ("^\*helm.+\*$" :regexp t :height 12)
-        ("^\*Helm.+\*$" :regexp t :height 12)
+
+        ("^\*helm.*\*$" :regexp t :height 12)
+        ("^\*Helm.*\*$" :regexp t :height 12)
+
         ("*Compile-Log*" :height 30 :stick t)
         ("*HTTP Response*" :height 20 :stick t)
         ("*prodigy*" :height 20 :stick t)

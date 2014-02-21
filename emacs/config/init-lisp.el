@@ -47,12 +47,13 @@
 
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
+(add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name " ξ ")))
 
-;; (global-rainbow-delimiters-mode)
-(global-rainbow-blocks-mode)
+(global-rainbow-delimiters-mode)
 
 (add-hook 'clojure-mode-hook 'highlight-sexp-mode)
 (add-hook 'emacs-lisp-mode-hook 'highlight-sexp-mode)
+(add-hook 'emacs-lisp-mode-hook 'rainbow-blocks-mode)
 
 ;; (add-hook 'ielm-mode-hook 'ielm-auto-complete)
 

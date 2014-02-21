@@ -105,10 +105,10 @@
 (smex-initialize)
 
 (nvmap ":" 'smex)
+;;(nvmap ":" 'helm-M-x)
 
 (global-set-key (kbd "M-x") 'smex) ; for emacs-mode
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
-
 (nvmap (kbd "SPC :") 'evil-ex)
 
 (setq smex-show-unbound-commands t)

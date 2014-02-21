@@ -7,8 +7,10 @@
 
 (global-set-key (kbd "C-h m") 'describe-major-mode)
 
-(require 'discover)
-(global-discover-mode 1)
+(global-set-key (kbd "C-h M") 'helm-man-woman)
+
+;; (require 'discover)
+;; (global-discover-mode 1)
 
 (global-set-key (kbd "C-h a") 'apropos)
 ;;  same as C-h f
@@ -33,6 +35,9 @@
 (nmap " d" 'dash-at-point)
 ;;  TODO use ido completion
 (nmap " D" 'dash-at-point-with-docset)
+
+;; shortcut for underscore/lodash
+(nmap " _" (bind (dash-at-point-run-search (thing-at-point 'symbol) "_")))
 
 (add-hook 'js3-mode-hook
           (lambda () (setq dash-at-point-docset "js")))

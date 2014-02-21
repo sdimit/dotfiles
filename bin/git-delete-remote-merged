@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# Delete all remote branches that have been merged into HEAD. Stolen from
+
+git branch -r --merged | grep -v master | grep -v staging | sed 's/origin\//:/' | xargs -n 1 git push origin

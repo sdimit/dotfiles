@@ -1,11 +1,14 @@
 
 (require 'thingatpt)
 (require 'imenu)
+(require 'undo-tree)
 
 (require 'acme-search)
 
 (global-set-key [(mouse-3)] 'acme-search-forward)
 (global-set-key [(shift mouse-3)] 'acme-search-backward)
+
+(global-undo-tree-mode)
 
 (require 'sentence-highlight)
 

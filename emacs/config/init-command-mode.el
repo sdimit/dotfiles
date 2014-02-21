@@ -151,8 +151,8 @@
             (define-key map (kbd "C-o") 'ido-invoke-in-other-window)
             (define-key map (kbd "C-2") 'ido-invoke-in-vertical-split)
             (define-key map (kbd "C-3") 'ido-invoke-in-horizontal-split)
-            (define-key map (kbd "C-v") 'ido-invoke-in-vertical-split)
-            (define-key map (kbd "C-s") 'ido-invoke-in-horizontal-split)
+            (define-key map (kbd "C-s") 'ido-invoke-in-vertical-split)
+            (define-key map (kbd "C-v") 'ido-invoke-in-horizontal-split)
             (define-key map (kbd "C-4") 'ido-invoke-in-other-window)
             (define-key map (kbd "C-5") 'ido-invoke-in-new-frame))
           (list ido-buffer-completion-map

@@ -58,7 +58,8 @@
 
 (setq-default js3-global-externs
               '("module" "exports" "require" "__dirname" "process" "console" "define"
-                "JSON" "$" "_" "Backbone" "buster" "sinon" "moment" "Date" "React"))
+                "setTimeout" "clearTimeout" "JSON" "$" "_" "Backbone" "buster" "sinon" "moment" "Date" "React"
+                "chrome" "localStorage"))
 
 ;; (setq grunt-cmd "grunt --no-color --config ~/grunt.js")
 (setq grunt-cmd "grunt --no-color --config")
