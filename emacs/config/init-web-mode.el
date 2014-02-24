@@ -2,6 +2,7 @@
 (require 'web-mode)
 
 (add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.liquid$" . html-mode))
 
 (define-key web-mode-map (kbd "C-n") 'web-mode-tag-match)
 (define-key web-mode-map (kbd "C-f") 'web-mode-fold-or-unfold)
@@ -45,5 +46,15 @@
   (require 'rainbow-mode)
   (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
     (add-hook hook 'rainbow-mode))
+
+;; auto-complete for CSS
+(defvar ac-source-css-property-names
+  '((candidates . (cl-loop for property in ac-css-property-alist
+                           collect (car property)))))
+
+(defun my-css-mode-hook ()
+  (add-to-list 'ac-sources 'ac-source-css-property)
+  (add-to-list 'ac-sources 'ac-source-css-property-names))
+(add-hook 'css-mode-hook 'my-css-mode-hook)
 
 (provide 'init-web-mode)

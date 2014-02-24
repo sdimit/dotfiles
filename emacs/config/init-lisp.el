@@ -53,7 +53,7 @@
 
 (add-hook 'clojure-mode-hook 'highlight-sexp-mode)
 (add-hook 'emacs-lisp-mode-hook 'highlight-sexp-mode)
-(add-hook 'emacs-lisp-mode-hook 'rainbow-blocks-mode)
+;;(add-hook 'emacs-lisp-mode-hook 'rainbow-blocks-mode)
 
 ;; (add-hook 'ielm-mode-hook 'ielm-auto-complete)
 
@@ -116,5 +116,15 @@
 
 
 (show-paren-mode 1)
+
+(defun ielm-other-window ()
+  "Run ielm on other window"
+  (interactive)
+  (switch-to-buffer-other-window
+   (get-buffer-create "*ielm*"))
+  (call-interactively 'ielm))
+
+(define-key emacs-lisp-mode-map (kbd "C-c C-z") 'ielm-other-window)
+(define-key lisp-interaction-mode-map (kbd "C-c C-z") 'ielm-other-window)
 
 (provide 'init-lisp)

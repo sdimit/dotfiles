@@ -34,8 +34,8 @@
                  (sixth (file-attributes (concat ido-current-directory a)))))))
   (ido-to-end  ;; move . files to end (again)
    (delq nil (mapcar
-            (lambda (x) (and (char-equal (string-to-char x) ?.) x))
-            ido-temp-list))))
+              (lambda (x) (and (char-equal (string-to-char x) ?.) x))
+              ido-temp-list))))
 (add-hook 'ido-make-file-list-hook 'ido-sort-mtime)
 (add-hook 'ido-make-dir-list-hook 'ido-sort-mtime)
 
@@ -140,7 +140,7 @@
 (global-set-key (kbd "C-c C-n") 'create-new-buffer-in-same-window)
 (global-set-key (kbd "C-c n") 'create-new-buffer)
 ;;(global-set-key (kbd "C-c C-n") (bind (create-new-buffer) (delete-other-windows)))
-;(global-set-key (kbd "C-c N") 'new-emacs-instance)
+                                        ;(global-set-key (kbd "C-c N") 'new-emacs-instance)
 
 
 (require 'f)
@@ -178,7 +178,7 @@
 (nmap (kbd "] f") 'next-file-in-dir)
 (nmap (kbd "[ f") 'previous-file-in-dir)
 
-(setq default-major-mode 'text-mode)
+;;(setq default-major-mode 'text-mode)
 
 (defun zshrc ()
   (interactive)
@@ -203,11 +203,12 @@
   (interactive)
   (mapc
    (lambda (buffer)
-     (kill-buffer buffer))
+     (if (not (string-match "jabber" (buffer-name buffer)))
+         (kill-buffer buffer)))
    (buffer-list))
   (delete-other-windows))
 
-  (setq-default locate-command "mdfind")
+(setq-default locate-command "mdfind")
 
 (defun nuke-useless-buffers ()
   "git, dired, emacs temp buffers"
@@ -296,12 +297,20 @@
   (interactive)
   (kill-buffer (current-buffer)))
 
+(defun emacs-libs ()
+  (interactive)
+  (ido-find-file-in-dir "~/.emacs.d/elpa/"))
+
+(defun daily-memo ()
+  (interactive)
+  (find-file (expand-file-name "~/Notes/memo.org")))
+
 (recentf-mode 1)
 
 (auto-compression-mode t)
 
-  (if (eq system-type 'darwin)
-      (setq system-name (car (split-string system-name "\\."))))
+(if (eq system-type 'darwin)
+    (setq system-name (car (split-string system-name "\\."))))
 
 (setq backup-directory-alist `(("." . ,(expand-file-name
                                         (concat dotfiles-dir "backups")))))

@@ -1,7 +1,6 @@
 
 (defun describe-major-mode ()
   "Show inline doc for current major-mode."
-  ;; code by Kevin Rodgers. 2009-02-25
   (interactive)
   (describe-function major-mode))
 
@@ -9,15 +8,15 @@
 
 (global-set-key (kbd "C-h M") 'helm-man-woman)
 
+(global-set-key (kbd "C-h b") 'helm-descbinds)
+
 ;; (require 'discover)
 ;; (global-discover-mode 1)
 
 (global-set-key (kbd "C-h a") 'apropos)
 ;;  same as C-h f
 (global-set-key (kbd "C-h C-f") 'describe-function)
-(global-set-key (kbd "C-h C-s") 'find-function)
-(global-set-key (kbd "C-h C-f") 'describe-function)
-(global-set-key (kbd "C-h C-s") 'find-function)
+(global-set-key (kbd "C-h C-s") 'find-function-other-window)
 (global-set-key (kbd "C-h W") 'find-function-on-key)
 ;;   (global-set-key (kbd "C-h C-s") 'smex-find-function)
 
@@ -88,5 +87,6 @@
 (global-set-key (kbd "C-c e e") 'search-config-files)
 
 (global-set-key (kbd "C-h C-c") (bind (ido-find-file-in-dir "~/.emacs.d/config")))
+(nmap " 9" (bind (ido-find-file-in-dir "~/.emacs.d/config")))
 
 (provide 'init-help)

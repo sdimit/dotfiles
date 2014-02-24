@@ -4,6 +4,8 @@
 ;; Auto refresh dired, but be quiet about it
 (setq global-auto-revert-non-file-buffers t)
 (setq auto-revert-verbose nil)
+(setq dired-recursive-deletes 'always)
+(setq dired-recursive-copies 'always)
 
 (put 'dired-find-alternate-file 'disabled nil)
 

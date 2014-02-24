@@ -237,4 +237,10 @@
 
 (define-key python-mode-map (kbd "C-x n c") 'elpy-narrow-to-class)
 
+(eval-after-load "python"
+  '(progn
+     (define-key python-mode-map (kbd "C-c C-d") 'helm-pydoc)
+     (define-key python-mode-map (kbd "C-c C-h") 'jedi:show-doc)
+     ))
+
 (provide 'init-python)

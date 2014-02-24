@@ -241,6 +241,7 @@ Sets text properties:
            (end-pos    (save-excursion (goto-char loc)
                                     (forward-sexp)
                                     (point))))
+      ;;(remove-text-properties loc end-pos)
       (add-text-properties loc end-pos
                            `(font-lock-face ,delim-face
                                             rear-nonsticky t)))))

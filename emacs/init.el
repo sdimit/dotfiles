@@ -133,6 +133,8 @@ ARCHIVE is the string name of the package archive.")
 (require 'init-irc)
 (require 'init-mail)
 (require 'init-w3m)
+(require 'init-markdown)
 (require 'init-deft)
+(require 'init-utils)
 
 (load custom-file 'noerror)

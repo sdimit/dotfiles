@@ -43,15 +43,11 @@
      (t (message "Neither function nor variable found!"))))
   (setq ac-disable-faces nil))
 
-;; TODO: add to all prog mode
-(add-hook 'coffee-mode-hook
+(add-hook 'prog-mode-hook
           (lambda ()
             (font-lock-add-keywords nil
                                     '(("\\<\\(FIXME\\|TODO\\|BUG\\|XXX\\):" 1 font-lock-warning-face t)))))
-(add-hook 'python-mode-hook
-          (lambda ()
-            (font-lock-add-keywords nil
-                                    '(("\\<\\(FIXME\\|TODO\\|BUG\\|XXX\\):" 1 font-lock-warning-face t)))))
+
 
 (defun buffer-mode (buffer-or-string)
   "Returns the major mode associated with a buffer."
@@ -250,5 +246,10 @@
 ;;                (browse-url content-url)))))
 
 ;; (readability-parse "http://blog.readability.com/2011/02/step-up-be-heard-readability-ideas/" "")
+
+(defun insert-result-from-shell-command ()
+  (interactive)
+  (let ((cmd (read-string "Shell command: ")))
+    (insert (shell-command-to-string cmd))))
 
 (provide 'init-experimental)

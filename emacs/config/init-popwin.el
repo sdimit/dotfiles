@@ -14,6 +14,7 @@
         ("*ag*" :noselect t :height 14)
         ("*Occur*" :height 14)
         ("*Python Doc*" :height 10)
+        ("*jedi:doc*" :height 10)
         ("\\*ansi-term\\*.*" :regexp t :height 30)
         ("*shell*" :height 30)
         ("*gists*" :height 30)

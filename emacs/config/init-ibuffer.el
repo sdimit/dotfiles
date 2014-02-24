@@ -66,4 +66,19 @@
 
     (setq ibuffer-show-empty-filter-groups nil)
 
+(defun ibuffer-menu-grep-delete (str)
+  (interactive
+   (list (read-string "Delete Mark Regexp: ")))
+  (save-excursion
+    (goto-char (point-min))
+    (forward-line 2)
+    (while (re-search-forward str nil t)
+      (save-excursion
+        (ibuffer-mark-for-delete nil))
+      (end-of-line))))
+
+(eval-after-load "ibuffer"
+  '(progn
+     (define-key ibuffer-mode-map "R" 'ibuffer-menu-grep-delete)))
+
 (provide 'init-ibuffer)
