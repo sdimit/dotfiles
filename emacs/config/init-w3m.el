@@ -29,6 +29,20 @@
   (interactive)
   (browse-url "http://news.ycombinator.com"))
 
+;; (defvar w3m-site-specific-hooks nil
+;;   "alist of URL pattern vs. function to execute")
+
+;; (add-to-list w3m-site-specific-hooks '())
+
+(add-hook 'w3m-display-hook
+          (lambda (url)
+            (let ((buffer-read-only nil)
+                  (on-hacker-news (string-match "news.ycombinator.com/$" url))
+                  (on-reddit (string-match "reddit.com" url)))
+              (delete-trailing-whitespace)
+              (if (on-hacker-news (keep-lines-in-buffer "[:digits:]\. ")))
+              (if (on-reddit (flush-lines-in-buffer "points"))))))
+
 (defun reddit (reddit)
   "Opens the REDDIT in w3m-new-session"
   (interactive (list
@@ -195,12 +209,14 @@
   (w3m-browse-url url t))
 
 (defun browse-on-mac (url &rest ignored)
-  (let ((browse-url-browser-function (quote browse-url-generic))
-	(browse-url-generic-program "open"))
+  (let ((browse-url-browser-function 'browse-url-default-macosx-browser))
     (browse-url url)))
 
 (setq browse-url-browser-function '(("twitter\\|youtube" . browse-on-mac)
 				    ("." . w3m-browse-url-in-new-session)))
 
+(nmap " g" 'w3m-search)
+(nmap " G" 'w3m-browse-url)
+(nmap " K" 'helm-w3m-bookmarks)
 
 (provide 'init-w3m)

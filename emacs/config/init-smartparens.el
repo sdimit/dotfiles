@@ -10,6 +10,12 @@
          (sp-forward-slurp-sexp)
          (evil-insert 1)))
 
+(defun sp-wrap-next-quote ()
+  (interactive)
+  (progn (insert "\"\"")
+         (evil-backward-char 1)
+         (sp-forward-slurp-sexp)))
+
 (define-key sp-keymap (kbd "C-M-n") 'sp-down-sexp)
 (define-key sp-keymap (kbd "C-M-p") 'sp-backward-up-sexp)
 (define-key sp-keymap (kbd "C-M-j") 'sp-next-sexp)
@@ -19,6 +25,7 @@
 (define-key sp-keymap (kbd "C-M-a") 'sp-beginning-of-sexp)
 (define-key sp-keymap (kbd "C-M-e") 'sp-end-of-sexp)
 (define-key sp-keymap (kbd "C-M-w") 'sp-wrap-next-sexp)
+(define-key sp-keymap (kbd "C-M-\"") 'sp-wrap-next-quote)
 (define-key sp-keymap (kbd "C-M-t") 'sp-transpose-sexp)
 (define-key sp-keymap (kbd "C-M-n") 'sp-next-sexp)
 (define-key sp-keymap (kbd "C-M-p") 'sp-previous-sexp)

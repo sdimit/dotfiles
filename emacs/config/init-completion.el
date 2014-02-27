@@ -34,7 +34,7 @@
                            ac-source-filename))
 
 (require 'yasnippet)
-(yas-global-mode 1)
+; (yas-global-mode 1)
 
 (define-key yas-minor-mode-map (kbd "C-c C-j") 'yas-expand)
 

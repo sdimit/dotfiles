@@ -387,6 +387,14 @@
            (magit-read-rev (format "Switch from '%s' to" current-branch)))))
   (magit-run-git "checkout" revision))
 
+
+
+(defadvice helm-open-github--from-commit-open-url (around
+                                                   use-default-browser-for-github)
+   (let ((browse-url-browser-function 'browse-url-default-browser))
+     ad-do-it))
+
+
 ;; (add-hook 'magit-status-mode-hook
 ;;           (lambda ()
 ;;             (save-excursion

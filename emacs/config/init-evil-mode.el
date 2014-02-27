@@ -2,6 +2,7 @@
 
 (evil-mode 1)
 
+
 ;; don't use evil in the following mode
 (mapc (lambda (mode) (evil-set-initial-state mode 'emacs))
       '(inferior-emacs-lisp-mode
@@ -71,9 +72,8 @@
 
 ;;  (define-key evil-normal-state-map ":l" 'cycle-buffer)
 
-(nmap " k" 'helm-bookmarks)
 (nmap " p" 'helm-browse-project)
-(nmap " g" 'w3m-search)
+(nmap " k" 'helm-bookmarks)
 (nmap " t" 'helm-etags-select)
 (nmap " h" 'highlight-regexp)
 (nmap " H" 'highlight-from-isearch)

@@ -71,6 +71,12 @@
 (defun turn-on-whitespace ()
   (whitespace-mode t))
 
+(require 'whitespace)
+
+;; (global-whitespace-mode t)
+;; (setq whitespace-line-column 79)
+;; (setq whitespace-style '(face lines-tail))
+
 (nmap (kbd "[ m") 'flymake-goto-prev-error)
 (nmap (kbd "] m") 'flymake-goto-next-error)
 

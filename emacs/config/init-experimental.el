@@ -79,13 +79,6 @@
     (insert-file-contents file)
     (buffer-string)))
 
-;; TODO
-(defun get-last-message ()
-  "ideally some kill-ring navigation. or helm??"
-  (get-buffer "*Messages*")
-  ;; grab last line and put into kill-ring
-  )
-
 ;;  ideal keybinding
 ;;  C-k C-k kill buffer
 
@@ -138,7 +131,7 @@
 ;; (nmap (kbd "M-d C-.") 'delete-last-char-on-line)
 
 ;; (evil-leader/set-key ":" 'helm-complex-command-history)
-;(helm-mode 1)
+                                        ;(helm-mode 1)
 ;; (global-set-key (kbd "s-.") 'helm-complete-file-name-at-point)
 ;; ; http://stackoverflow.com/questions/683425/globally-override-key-binding-in-emacs
 ;; (defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
@@ -151,7 +144,7 @@
 
 ;; (my-keys-minor-mode 1)
 
-; do not do this in minibuffer
+                                        ; do not do this in minibuffer
 ;; (defun my-minibuffer-setup-hook ()
 ;;   (my-keys-minor-mode 0))
 
@@ -179,14 +172,14 @@
   (interactive)
   (let ((beg (car (evil-indent--same-indent-range)))
         (end (cadr (evil-indent--same-indent-range))))
-   (mark-region beg end)
-   (align-regexp beg end ":")))
+    (mark-region beg end)
+    (align-regexp beg end ":")))
 
 (defun mark-region (beg end)
   (interactive)
-    (goto-char beg)
-    (push-mark)
-    (goto-char end))
+  (goto-char beg)
+  (push-mark)
+  (goto-char end))
 
 (defun align-colon-in-region (beg end)
   (interactive "r")
@@ -251,5 +244,31 @@
   (interactive)
   (let ((cmd (read-string "Shell command: ")))
     (insert (shell-command-to-string cmd))))
+
+(defun turn-on-reading-mode ()
+  (interactive)
+  (delete-other-windows)
+  (evil-window-vsplit)
+  (follow-mode)
+  (beginning-of-buffer))
+
+(defun turn-off-reading-mode ()
+  (interactive)
+  (delete-other-windows)
+  (follow-mode -1))
+
+(defun flush-lines-in-buffer (pattern)
+  (interactive (list (read-input "Flush lines matching: ")))
+  (save-excursion
+    (beginning-of-buffer)
+    (let ((inhibit-read-only t))
+      (flush-lines pattern))))
+
+(defun keep-lines-in-buffer (pattern)
+  (interactive (list (read-input "Keep lines matching: ")))
+  (save-excursion
+    (beginning-of-buffer)
+    (let ((inhibit-read-only t))
+      (keep-lines pattern))))
 
 (provide 'init-experimental)

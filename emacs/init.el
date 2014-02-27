@@ -1,5 +1,6 @@
 (defconst emacs-start-time (current-time))
 
+(x-focus-frame nil)
 ;; (require 'cask "~/.emacs.d/Cask")
 ;; (cask-initialize)
 

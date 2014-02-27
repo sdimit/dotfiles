@@ -4,6 +4,10 @@
 
 (require 'pretty-symbols)
 
+(require 'sublimity)
+(sublimity-global-mode)
+(sublimity-map)
+
 ;; Less flickery display
 (setq redisplay-dont-pause t)
 
@@ -22,9 +26,11 @@
 (tooltip-mode -1)
 (setq tooltip-use-echo-area t)
 
+;; (require 'light-symbol-mode)
 ;; (defface light-symbol-custom-face
 ;;  '(:inherit nil
-;;    :underline t) "")
+;;    :foreground "white") "")
+
 (setq light-symbol-face 'light-symbol-custom-face)
 
 (light-symbol-mode)

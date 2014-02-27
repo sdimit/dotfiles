@@ -1,4 +1,3 @@
-
 ;;make sure ansi colour character escapes are honoured
 (require 'ansi-color)
 
@@ -88,5 +87,12 @@ If you do not like default setup, modify it, with (KEY . COMMAND) format."
 (defun start-shell ()
   (interactive)
   (ansi-term explicit-shell-file-name))
+
+(require 'multi-term)
+(global-set-key (kbd "<f1>") (bind (if (multi-term-dedicated-exist-p)
+                                       (multi-term-dedicated-close)
+                                     (progn
+                                       (multi-term-dedicated-open)
+                                       (select-window (get-buffer-window "*MULTI-TERM-DEDICATED*"))))))
 
 (provide 'init-terminal)

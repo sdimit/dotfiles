@@ -16,6 +16,7 @@
 (global-set-key (kbd "C-h a") 'apropos)
 ;;  same as C-h f
 (global-set-key (kbd "C-h C-f") 'describe-function)
+(global-set-key (kbd "C-h C-r") (bind (ido-find-file-in-dir "~/Reference")))
 (global-set-key (kbd "C-h C-s") 'find-function-other-window)
 (global-set-key (kbd "C-h W") 'find-function-on-key)
 ;;   (global-set-key (kbd "C-h C-s") 'smex-find-function)
@@ -37,6 +38,7 @@
 
 ;; shortcut for underscore/lodash
 (nmap " _" (bind (dash-at-point-run-search (thing-at-point 'symbol) "_")))
+(nmap " $" (bind (dash-at-point-run-search (thing-at-point 'symbol) "jquery")))
 
 (add-hook 'js3-mode-hook
           (lambda () (setq dash-at-point-docset "js")))

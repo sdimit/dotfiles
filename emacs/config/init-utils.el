@@ -27,4 +27,17 @@ Requires dash.el"
 
 (nmap " 0" 'helm-paste-message)
 
+(defun copy-into-scratch ()
+  "copies content of current region or entire buffer into scratch
+and activate same major-mode"
+  (interactive)
+  (let* ((start       (if (region-active-p) (region-beginning) (point-min)))
+         (end         (if (region-active-p) (region-end) (point-max)))
+         (source-mode (symbol-name major-mode))
+         (source      (buffer-substring start end))
+         (new-scratch (generate-new-buffer "*scratch*")))
+    (switch-to-buffer-other-window new-scratch)
+    (insert source)
+    (funcall (intern source-mode))))
+
 (provide 'init-utils)

@@ -1,5 +1,6 @@
 
 (require 'web-mode)
+(require 'jade-mode)
 
 (add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.liquid$" . html-mode))
@@ -7,6 +8,12 @@
 (define-key web-mode-map (kbd "C-n") 'web-mode-tag-match)
 (define-key web-mode-map (kbd "C-f") 'web-mode-fold-or-unfold)
 (define-key web-mode-map (kbd "C-'") 'web-mode-mark-and-expand)
+
+(define-key jade-mode-map (kbd "C-c C-r")
+  (lambda ()
+    (shell-command-on-region (region-beginning)
+                             (region-end)
+                             "jade")))
 
 (set-face-attribute 'web-mode-html-tag-face nil :foreground "DarkViolet")
 
